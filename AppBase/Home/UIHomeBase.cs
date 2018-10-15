@@ -60,7 +60,7 @@ public class UIHomeBase : UIView
                 if (Config.main.channel == Source.GP)
                 {
                     //GP市场不显示
-                    btnAdVideo.gameObject.SetActive(false);
+                    //btnAdVideo.gameObject.SetActive(false);
                 }
             }
         }
