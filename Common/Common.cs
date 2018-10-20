@@ -42,6 +42,23 @@ public class Common
         }
     }
 
+    static public bool isMonoPlayer
+    {
+        get
+        {
+            bool ret = false;
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+        ret = true;
+#endif
+
+#if UNITY_STANDALONE_OSX && !UNITY_EDITOR
+        ret = true;
+#endif
+
+            return ret;
+        }
+    }
+
     static public bool isiOS
     {
         get
@@ -108,7 +125,7 @@ public class Common
     static public bool isWinUWP
     {
         get
-        { 
+        {
             bool ret = false;
 #if UNITY_WSA && !UNITY_EDITOR
         ret = true;
