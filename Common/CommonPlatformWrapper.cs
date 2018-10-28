@@ -29,14 +29,14 @@ internal class CommonBasePlatformWrapper
 
     public virtual string GetAppName()
     {
-        return Application.installerName;
+        return Application.productName;
     }
     public virtual string GetCachePath()
     {
         string dirRoot = Application.temporaryCachePath ;
-        if(Common.isWin){
-            dirRoot = Application.persistentDataPath;
-        }
+        // if(Common.isWin){
+        //     dirRoot = Application.persistentDataPath;
+        // }
         string ret = dirRoot + "/AppCache";
         //创建文件夹
         Directory.CreateDirectory(ret);

@@ -165,6 +165,11 @@ public class TextureUtil : MonoBehaviour
     static public void UpdateImageTexture(Image image, string filepath, bool isUpdateSize, Vector4 border)
     {
         Texture2D tex = TextureCache.main.Load(filepath);
+        UpdateImageTexture(image, tex, isUpdateSize, border);
+    }
+
+    static public void UpdateImageTexture(Image image, Texture2D tex, bool isUpdateSize, Vector4 border)
+    {
         if (tex)
         {
             Sprite sp = LoadTexture.CreateSprieFromTex(tex, border);
@@ -177,6 +182,7 @@ public class TextureUtil : MonoBehaviour
 
         }
     }
+
 
 
 

@@ -19,8 +19,23 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
     {
 
         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+
+        if (Common.isWeb)
+        {
+            string filePath = Application.streamingAssetsPath + "/" + AppRes.IMAGE_HOME_BG;
+            StartCoroutine(WWWReadData(filePath));
+        }
+        else
+        {
+            TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        }
         string appname = Common.GetAppNameDisplay();
+        // appname = "appname";
+        string dirRoot = Application.temporaryCachePath;//webgl: /tmp
+        Debug.Log("cache dirRoot=" + dirRoot + " appname=" + appname);
+
+        // string str = Language.main.GetString(AppString.STR_SETTING);
+        // Debug.Log("str STR_SETTING=" + str);
         TextName.text = appname;
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         if (ret)
@@ -73,7 +88,20 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
 
         LayoutChildBase();
     }
+    IEnumerator WWWReadData(string filePath)
+    {
+        // if (filePath.Contains("://"))
+        {
+            WWW www = new WWW(filePath);
+            yield return www;
+            byte[] data = www.bytes;
+            Texture2D tex = LoadTexture.LoadFromData(data);
+            TextureUtil.UpdateImageTexture(imageBg, tex, true, Vector4.zero);
+            LayOut();
 
+        }
+
+    }
 
     void UpdateGold()
     {

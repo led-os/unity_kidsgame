@@ -8,7 +8,7 @@ public class AppCommon
     //string
     public const string STR_LANGUAGE_REPLACE = "xxx";
     //audio 
-    public const string AUDIO_BTN_CLICK = "Audio/BtnClick";
+    public const string AUDIO_BTN_CLICK = "App/Audio/BtnClick";
 
     //prefab
     public const string PREFAB_UICELLBASE = "Common/Prefab/TableView/UICellBase";
