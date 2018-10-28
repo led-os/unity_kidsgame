@@ -15,6 +15,8 @@ public class MeshTexture : MonoBehaviour
     public float width = 2f;
     public float height = 2f;
     BoxCollider boxCollider;
+    MeshCollider meshCollider;
+    Vector2 size = Vector2.zero;
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -28,13 +30,17 @@ public class MeshTexture : MonoBehaviour
         Material mat = new Material(Shader.Find(strshader));
         meshRender.material = mat;
         AddPoint(Vector3.zero);
-        boxCollider = this.gameObject.AddComponent<BoxCollider>();
+        //  boxCollider = this.gameObject.AddComponent<BoxCollider>();
 
+        //读取 RaycastHit.textureCoord 必须使用MeshCollider 否则返回zero
+        meshCollider = this.gameObject.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = mesh;
+        //meshCollider.convex = true;
     }
     // Use this for initialization
     void Start()
     {
-
+        // meshCollider.convex = false;
         // Draw();
     }
 
@@ -81,7 +87,7 @@ public class MeshTexture : MonoBehaviour
     public void UpdateTexture(Texture tex)
     {
         meshRender.material.SetTexture("_MainTex", tex);
-        UpdateSize(tex.width/100f,tex.height/100f);
+        UpdateSize(tex.width / 100f, tex.height / 100f);
         Draw();
     }
 
@@ -89,7 +95,11 @@ public class MeshTexture : MonoBehaviour
     {
         width = w;
         height = h;
-        boxCollider.size = new Vector2(w, h);
+        if (boxCollider != null)
+        {
+            boxCollider.size = new Vector2(w, h);
+        }
+
         Draw();
     }
     public void Draw()

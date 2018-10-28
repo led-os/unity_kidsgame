@@ -11,7 +11,7 @@ public class AppScene : AppSceneBase
 
          InitAd();
          
-        if (Common.isPC)
+        if (Common.isMonoPlayer)//isPC
         {
             SetRootViewController(ScreenShotViewController.main);
         }

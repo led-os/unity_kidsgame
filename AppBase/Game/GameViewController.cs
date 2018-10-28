@@ -8,7 +8,8 @@ public class GameViewController : PopViewController
     public const string STR_KEYNAME_VIEWALERT_COMMENT = "STR_KEYNAME_VIEWALERT_COMMENT";
     public UIGameBase gameBasePrefab;
     static private bool isShowComment = false;
-
+    static public string gameType = Common.appType;
+    static public string dirRootPrefab = "App/Prefab/Game";
     static private GameViewController _main = null;
     public static GameViewController main
     {
@@ -72,12 +73,12 @@ public class GameViewController : PopViewController
     public void CreateUI()
     {
 
-        GotoGame(Common.appType);
+        GotoGame(gameType);
     }
 
     static public string GetGamePrefabName()
     {
-        string name = Common.appType;
+        string name = gameType;
         //首字母大写
         // string strFirst = name.Substring(0, 1);
         // strFirst.ToUpper();
@@ -91,8 +92,8 @@ public class GameViewController : PopViewController
     }
     void LoadGame()
     {
-        string name = Common.appType;
-        string strPrefab = "App/Prefab/Game/" + GetGamePrefabName();
+        string name = gameType;
+        string strPrefab = dirRootPrefab + "/" + GetGamePrefabName();
 
         Debug.Log("strPrefab=" + strPrefab);
         //Resources.Load 文件可以不区分大小写字母
@@ -156,7 +157,7 @@ public class GameViewController : PopViewController
 
         Vector2 pt = rctran.offsetMin;
         pt.y = adBannerHeight;
-        if (Common.appType == AppType.NONGCHANG)
+        if (gameType == AppType.NONGCHANG)
         {
             pt.y = 0;
         }

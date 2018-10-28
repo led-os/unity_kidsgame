@@ -22,7 +22,7 @@ public class Source
     public const string TAPTAP = "taptap";
     public const string HUAWEI = "huawei";
     public const string GP = "gp";//google play
-
+    public const string FACEBOOK = "fb";
     //ad
     public const string INMOB = "inmobi";
     public const string ADMOB = "admob";

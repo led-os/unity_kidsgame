@@ -229,7 +229,7 @@ public class UIHomeAppCenter : UIView
                 filepath = Common.rootDirAppCenter + "/" + AD_JSON_FILE_KIDS;
             }
 
-            byte[] dataApp = FileUtil.ReadDataAsset(filepath);
+            byte[] dataApp = FileUtil.ReadDataFromResources(filepath);
             if (dataApp != null)
             {
                 parserAppList(dataApp);

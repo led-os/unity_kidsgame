@@ -274,7 +274,10 @@ public class Config
             {
                 ret = GetStringJson(rootJsonChannel, "channel_android", Source.XIAOMI);
             }
-
+            if (Common.isWeb)
+            {
+                ret = Source.FACEBOOK;
+            }
             return ret;
         }
     }
@@ -372,16 +375,21 @@ public class Config
             return;
         }
 
-        string strDir = Common.GAME_DATA_DIR + "/config";
+        //string strDir = Common.GAME_DATA_DIR + "/config";
+        string strDir = Common.RES_CONFIG_DATA + "/config";
         string fileName = "config_common";
         fileName += ".json";
 
-        string json = FileUtil.ReadStringAsset(strDir + "/" + fileName);
+        string json = FileUtil.ReadStringFromResources(strDir + "/" + fileName);
         rootJsonCommon = JsonMapper.ToObject(json);
     }
 
     void ParseJsonChannel()
     {
+        if (Common.isWeb)
+        {
+            return;
+        }
         if (rootJsonChannel != null)
         {
             return;
@@ -420,7 +428,9 @@ public class Config
             return;
         }
 
-        string strDir = Common.GAME_DATA_DIR + "/config";
+        //string strDir = Common.GAME_DATA_DIR + "/config";
+        string strDir = Common.RES_CONFIG_DATA + "/config";
+
         string fileName = "config_ios";
 
         //Defualt
@@ -454,7 +464,7 @@ public class Config
         }
         fileName += ".json";
 
-        string json = FileUtil.ReadStringAsset(strDir + "/" + fileName);
+        string json = FileUtil.ReadStringFromResources(strDir + "/" + fileName);//ReadStringAsset
         rootJson = JsonMapper.ToObject(json);
 
         //appid

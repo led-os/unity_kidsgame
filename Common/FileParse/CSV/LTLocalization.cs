@@ -16,7 +16,7 @@ public class LTLocalization
     public const string LANGUAGE_SPANISH = "SP";
 
 
-    public  string csvFilePath;
+    public string csvFilePath;
 
     private const string KEY_CODE = "KEY";
     private const string FILE_PATH = "Language/test_utf8";// test_utf8 LTLocalization/localization
@@ -24,7 +24,7 @@ public class LTLocalization
     private SystemLanguage language = SystemLanguage.Chinese;
     private Dictionary<string, string> textData = new Dictionary<string, string>();
 
-   //private static LTLocalization mInstance;
+    //private static LTLocalization mInstance;
 
     // private LTLocalization()
     // {
@@ -98,9 +98,13 @@ public class LTLocalization
     {
         textData.Clear();
         //string fileName = Application.dataPath + "/Resources/LTLocalization/localization.csv";
-       //FILE_PATH
-       // string csvStr = ((TextAsset)Resources.Load(csvFilePath, typeof(TextAsset))).text;
-       string csvStr = FileUtil.ReadStringAsset(csvFilePath);
+        //FILE_PATH
+        // string csvStr = ((TextAsset)Resources.Load(csvFilePath, typeof(TextAsset))).text;
+        string csvStr = FileUtil.ReadStringFromResources(csvFilePath);
+        if (csvStr == null)
+        {
+            csvStr = FileUtil.ReadStringAsset(csvFilePath);
+        }
         //Debug.Log(csvStr);
         LTCSVLoader loader = new LTCSVLoader();
         // loader.ReadFile(fileName);
@@ -123,13 +127,13 @@ public class LTLocalization
         this.language = language;
         this.ReadData();
     }
-  public SystemLanguage GetLanguage()
+    public SystemLanguage GetLanguage()
     {
-       return this.language;
-        
+        return this.language;
+
     }
- 
-    public  string GetText(string key)
+
+    public string GetText(string key)
     {
 
         // if (null == mInstance)
@@ -140,11 +144,11 @@ public class LTLocalization
         //Debug.Log("LTLocalization ContainsKey");
         if (this.textData.ContainsKey(key))
         {
-             //Debug.Log("LTLocalization ContainsKey yes");
+            //Debug.Log("LTLocalization ContainsKey yes");
             return this.textData[key];
         }
 
-         //Debug.Log("LTLocalization ContainsKey NO");
+        //Debug.Log("LTLocalization ContainsKey NO");
         return "[NoDefine]" + key;
     }
 

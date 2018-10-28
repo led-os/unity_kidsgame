@@ -114,7 +114,14 @@ public class UIViewController
         rctran.offsetMin = new Vector2(0, 0);
         rctran.offsetMax = new Vector2(0, 0);
     }
+    public void AddView(UIView view)
+    {
+        if (objController != null)
+        {
+            view.gameObject.transform.parent = objController.transform;
+        }
 
+    }
     public void UpdateName(string str)
     {
         name = str;

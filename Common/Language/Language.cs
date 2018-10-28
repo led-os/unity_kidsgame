@@ -21,13 +21,14 @@ public class Language
 
 
                 _common = new Language();
-                string fileName = Common.GAME_DATA_DIR_COMMON + "/language/language.csv";
+                string fileName = Common.RES_CONFIG_DATA_COMMON + "/language/language.csv";
                 _common.Init(fileName);
                 //_common.SetLanguage(SystemLanguage.Chinese);
 
                 _main = new Language();
                 // _main.Init("Language/Language");
-                fileName = Common.GAME_DATA_DIR + "/language/language.csv";
+                //fileName = Common.GAME_DATA_DIR + "/language/language.csv";
+                fileName = Common.RES_CONFIG_DATA + "/language/language.csv";
                 _main.Init(fileName);
                 _main.SetLanguage(SystemLanguage.Chinese);
 

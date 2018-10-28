@@ -122,7 +122,16 @@ public class FileUtil : MonoBehaviour
         }
         return ReadData(filePath);
     }
-
+    static public byte[] ReadDataFromResources(string file)
+    {
+        TextAsset text = Resources.Load(GetFileBeforeExtWithOutDot(file)) as TextAsset;
+        if (text == null)
+        {
+            return null;
+        }
+        byte[] data = text.bytes;
+        return data;
+    }
 
     static public string ReadStringAsset(string file)
     {
@@ -132,6 +141,31 @@ public class FileUtil : MonoBehaviour
             return null;
         }
         string str = Encoding.UTF8.GetString(data);
+        return str;
+    }
+    static public string ReadStringFromResources(string file)
+    {
+        TextAsset text = Resources.Load(GetFileBeforeExtWithOutDot(file)) as TextAsset;
+        if (text == null)
+        {
+            return null;
+        }
+        string str = text.text;
+        // byte[] data = text.bytes;
+        // if (data == null)
+        // {
+        //     return null;
+        // }
+        // string str = Encoding.UTF8.GetString(data);
+        return str;
+    }
+    static public string ReadString2(string file)
+    {
+        string str = ReadStringAsset(file);
+        if (str == null)
+        {
+            return null;
+        }
         return str;
     }
 
@@ -201,7 +235,7 @@ public class FileUtil : MonoBehaviour
         return ret;
     }
 
-    //除去文件后缀
+    //除去文件后缀 
     static public string GetFileBeforeExt(string filepath)
     {
         string ret = filepath;
@@ -209,6 +243,17 @@ public class FileUtil : MonoBehaviour
         if (idx >= 0)
         {
             ret = filepath.Substring(0, idx + 1);
+        }
+        return ret;
+    }
+    //除去文件后缀  并去除.
+    static public string GetFileBeforeExtWithOutDot(string filepath)
+    {
+        string ret = filepath;
+        int idx = filepath.LastIndexOf(".");
+        if (idx >= 0)
+        {
+            ret = filepath.Substring(0, idx);
         }
         return ret;
     }

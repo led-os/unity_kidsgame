@@ -71,6 +71,14 @@ public class AppVersion
             {
                 ret = true;
             }
+            if (Common.isWinUWP)
+            {
+                if (Common.GetAppName().ToLower().Contains("hd"))
+                {
+                    ret = true;
+                }
+
+            }
 
             return ret;
         }

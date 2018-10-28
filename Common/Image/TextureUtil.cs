@@ -146,6 +146,17 @@ public class TextureUtil : MonoBehaviour
     }
 
 
+    static public void UpdateSpriteTexture(GameObject obj, string pic)
+    {
+        Texture2D tex = TextureCache.main.Load(pic);
+        SpriteRenderer render = obj.GetComponent<SpriteRenderer>();
+        if (render != null)
+        {
+            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+        }
+
+    }
+
     static public void UpdateImageTexture(Image image, string filepath, bool isUpdateSize)
     {
         UpdateImageTexture(image, filepath, isUpdateSize, Vector4.zero);

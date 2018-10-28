@@ -8,7 +8,9 @@ namespace Moonma.AdKit.AdVideo
 	internal class iOSWrapper : BasePlatformWrapper
 	{
 		[DllImport ("__Internal")]
-		public static extern void AdVideo_SetType(int type);	 
+		public static extern void AdVideo_SetType(int type); 
+		[DllImport ("__Internal")]
+		public static extern void AdVideo_PreLoad(string source);	
 		[DllImport ("__Internal")]
 		public static extern void AdVideo_InitAd(string source);
 		[DllImport ("__Internal")]
@@ -27,7 +29,10 @@ namespace Moonma.AdKit.AdVideo
 		{
 			AdVideo_SetType(type);
 		}
-		
+		public override void PreLoad(string source)
+		{  
+			AdVideo_PreLoad(source);
+		}
 		public override void InitAd(string source)
 		{
 			 AdVideo_InitAd( source);

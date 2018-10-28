@@ -382,9 +382,9 @@ public class AdConfigParser
             key = COUNTRY_OTHER;
         }
 
-        string filepath = Common.GAME_DATA_DIR_COMMON + "/adconfig/" + key + "/" + filename;
+        string filepath = Common.RES_CONFIG_DATA_COMMON + "/adconfig/" + key + "/" + filename;
 
-        byte[] data = FileUtil.ReadDataAsset(filepath);
+        byte[] data = FileUtil.ReadDataFromResources(filepath);
 
         string str = Encoding.UTF8.GetString(data);
         JsonData root = JsonMapper.ToObject(str);
@@ -443,8 +443,8 @@ public class AdConfigParser
         {
             key = COUNTRY_OTHER;
         }
-        string filepath = Common.GAME_DATA_DIR_COMMON + "/adconfig/" + key + "/" + filename;
-        byte[] data = FileUtil.ReadDataAsset(filepath);
+        string filepath = Common.RES_CONFIG_DATA_COMMON + "/adconfig/" + key + "/" + filename;
+        byte[] data = FileUtil.ReadDataFromResources(filepath);
 
         string str = Encoding.UTF8.GetString(data);
         JsonData root = JsonMapper.ToObject(str);
@@ -531,9 +531,9 @@ public class AdConfigParser
                 }
             }
 
-            string filepath = Common.GAME_DATA_DIR + "/adconfig/" + filename;
+            string filepath = Common.RES_CONFIG_DATA + "/adconfig/" + filename;
 
-            byte[] datatmp = FileUtil.ReadDataAsset(filepath);
+            byte[] datatmp = FileUtil.ReadDataFromResources(filepath);
             ParseData(datatmp);
 
         }

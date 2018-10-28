@@ -25,6 +25,8 @@ public class Common
     public const string GAME_DATA_DIR = "GameData";//游戏配置等数据
     public const string GAME_DATA_DIR_COMMON = Common.GAME_DATA_DIR + "/common";
     public const string GAME_RES_DIR = "GameRes";//游戏图片等资源
+    public const string RES_CONFIG_DATA = "App/ConfigData";//Resources 下的 配置等数据
+    public const string RES_CONFIG_DATA_COMMON = "App/ConfigDataCommon";//Resources 下的 配置等数据
     public const string THUMB_SUFFIX = "_thumb";//小图片后缀
 
     public const float TOUCH_MOVE_STEP_MIN = 3.0f;//6.0f
@@ -33,11 +35,11 @@ public class Common
     {
         get
         {
-            string str = Common.GAME_DATA_DIR + "/app_center";
-            if (!Directory.Exists(str))
-            {
-                str = Common.GAME_DATA_DIR_COMMON + "/app_center";
-            }
+            string str = Common.RES_CONFIG_DATA + "/app_center";
+            // if (!Directory.Exists(str))
+            // {
+            //     str = Common.GAME_DATA_DIR_COMMON + "/app_center";
+            // }
             return str;
         }
     }
@@ -78,6 +80,18 @@ public class Common
         {
             bool ret = false;
 #if UNITY_ANDROID && !UNITY_EDITOR
+            ret = true;
+#endif
+            return ret;
+        }
+    }
+
+    static public bool isWeb
+    {
+        get
+        {
+            bool ret = false;
+#if UNITY_WEBGL && !UNITY_EDITOR
             ret = true;
 #endif
             return ret;
@@ -638,7 +652,10 @@ public class Common
 
     static public void CleanCache()
     {
-
+        if (Common.isWeb)
+        {
+            return;
+        }
         string path = GetCachePath();
         if (BlankString(path))
         {
