@@ -12,21 +12,21 @@ public class HttpRequest
     public bool isReadFromCatch;
     public int index;
     HTTPRequest reqHttp;
+    public string strUrl;
     public OnHttpRequestFinishedDelegate Callback { get; set; }
 
     public HttpRequest(OnHttpRequestFinishedDelegate callback)
     {
         this.Callback = callback;
     }
-
+    static public string GetWebUrlOfAsset(string filePath)
+    {
+        return Application.streamingAssetsPath + "/" + filePath;
+    }
     bool EnableReadFromCache()
     {
         bool ret = false;
-        // return ret;
-#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
-        ret = true;
-#endif
-        if (Common.isWinUWP)
+        if (Common.isWinUWP || Common.isiOS || Common.isAndroid)
         {
             ret = true;
         }
@@ -36,7 +36,7 @@ public class HttpRequest
     {
         // Debug.Log("HttpRequest Get");
         string filePath = GetCatchFilePathOfUrl(url);
-
+        strUrl = url;
         isReadFromCatch = false;
         if (EnableReadFromCache())
         {

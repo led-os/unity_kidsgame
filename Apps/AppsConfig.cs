@@ -18,5 +18,5 @@ public class AppsConfig
         }
     }
     public const string ROOT_DIR_PC_MAC = "/Users/moon/sourcecode/unity/product/kidsgame";
-    public const string ROOT_DIR_PC_WIN = "D:/sourcecode/unity/product/kidsgame";
+    public const string ROOT_DIR_PC_WIN = "E:/sourcecode/unity/product/kidsgame";
 }

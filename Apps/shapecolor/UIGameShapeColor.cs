@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using LitJson;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -62,6 +63,9 @@ public class UIGameShapeColor : UIGameBase
 
     int totalRow = 0;
     int totalCol = 0;
+    public HttpRequest httpReqBgJson;
+    public HttpRequest httpReqGuankaJsonShape;
+    public HttpRequest httpReqGuankaJsonColor;
     void Awake()
     {
         mainCamera = AppSceneBase.main.mainCamera;
@@ -146,11 +150,41 @@ public class UIGameShapeColor : UIGameBase
         LoadGame(gameMode);
         //必须在LoadGame之后执行
         LoadBg();
-        LayOut();
+
         ShowUserGuide();
         OnUIDidFinish();
     }
-    static public void InitLanguage()
+    void InitLanguage()
+    {
+        string filepath = Common.GAME_RES_DIR + "/language/language.csv";
+        if (Common.isWeb)
+        {
+            httpReqLanguage = new HttpRequest(OnHttpRequestFinished);
+            httpReqLanguage.Get(HttpRequest.GetWebUrlOfAsset(filepath));
+        }
+        else
+        {
+            byte[] data = FileUtil.ReadDataAuto(filepath);
+            OnGetLanguageFileDidFinish(FileUtil.FileIsExistAsset(filepath), data, true);
+        }
+
+
+    }
+
+    void OnGetBgJsonDidFinish(bool isSuccess, byte[] data, bool isLocal)
+    {
+        if (isSuccess)
+        {
+            ParseBgList(data);
+            if (!isLocal)
+            {
+                LoadBg();
+            }
+
+        }
+    }
+
+    void OnGetLanguageFileDidFinish(bool isSuccess, byte[] data, bool isLocal)
     {
         if (languageGame != null)
         {
@@ -158,10 +192,45 @@ public class UIGameShapeColor : UIGameBase
             return;
         }
         languageGame = new Language();
-        languageGame.Init(Common.GAME_RES_DIR + "/language/language.csv");
+        languageGame.Init(data);
         languageGame.SetLanguage(Language.main.GetLanguage());
     }
 
+    void OnGetGuankaJsonShapeDidFinish(bool isSuccess, byte[] data, bool isLocal)
+    {
+        if (isSuccess)
+        {
+            ParseShape(data);
+        }
+    }
+    void OnGetGuankaJsonColorDidFinish(bool isSuccess, byte[] data, bool isLocal)
+    {
+        if (isSuccess)
+        {
+            ParseColor(data);
+        }
+    }
+
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqLanguage)
+        {
+            OnGetLanguageFileDidFinish(isSuccess, data, false);
+        }
+        if (req == httpReqGuankaJsonShape)
+        {
+            OnGetGuankaJsonShapeDidFinish(isSuccess, data, false);
+        }
+        if (req == httpReqGuankaJsonColor)
+        {
+            OnGetGuankaJsonColorDidFinish(isSuccess, data, false);
+        }
+        if (req == httpReqBgJson)
+        {
+            OnGetBgJsonDidFinish(isSuccess, data, false);
+        }
+
+    }
     void onTouchDown()
     {
 
@@ -310,7 +379,7 @@ public class UIGameShapeColor : UIGameBase
     {
         foreach (ShapeColorItemInfo info in listItem)
         {
-            GameObject obj = info.obj; 
+            GameObject obj = info.obj;
             Rect rc = GetRectItem(info.i, info.j, totalRow, totalCol);
             float scale = GetItmeScaleInRect(rc, obj);
             obj.transform.localScale = new Vector3(scale, scale, 1f);
@@ -370,6 +439,7 @@ public class UIGameShapeColor : UIGameBase
 
         ShapeColorItemInfo info = GetItemInfoShapeColor(rdm, listBgNew);
         AppSceneBase.main.UpdateWorldBg(info.pic);
+        LayOut();
     }
 
     static public string StringOfGameStatus(int status)
@@ -390,27 +460,35 @@ public class UIGameShapeColor : UIGameBase
 
         return str;
     }
-    static public string GameStatusOfShape(ShapeColorItemInfo info)
+    public string GameStatusOfShape(ShapeColorItemInfo info)
     {
         int status = PlayerPrefs.GetInt(STR_KEY_GAME_STATUS_SHAPE + info.id);
         string str = StringOfGameStatus(status);
         return str;
     }
-    static public string GameStatusOfColor(ShapeColorItemInfo info)
+    public string GameStatusOfColor(ShapeColorItemInfo info)
     {
         int status = PlayerPrefs.GetInt(STR_KEY_GAME_STATUS_COLOR + info.id);
         string str = StringOfGameStatus(status);
         return str;
     }
-    static public string ShapeTitleOfItem(ShapeColorItemInfo info)
+    public string ShapeTitleOfItem(ShapeColorItemInfo info)
     {
-        InitLanguage();
+        // InitLanguage();
+        if (languageGame == null)
+        {
+            return null;
+        }
         string str = languageGame.GetString("SHAPE_TITLE_" + info.id);
         return str;
     }
-    static public string ColorTitleOfItem(ShapeColorItemInfo info)
+    public string ColorTitleOfItem(ShapeColorItemInfo info)
     {
-        InitLanguage();
+        //InitLanguage();
+        if (languageGame == null)
+        {
+            return null;
+        }
         string str = languageGame.GetString("COLOR_TITLE_" + info.id);
         return str;
     }
@@ -518,16 +596,14 @@ public class UIGameShapeColor : UIGameBase
         }
     }
 
-    void ParseBgList()
+    void ParseBgList(byte[] data)
     {
         if ((listBg != null) && (listBg.Count != 0))
         {
             return;
         }
         listBg = new List<object>();
-        string fileName = Common.GAME_RES_DIR + "/image/bg/bg.json";
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(fileName);//((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
+        string json = Encoding.UTF8.GetString(data);
         JsonData root = JsonMapper.ToObject(json);
         JsonData items = root["list"];
         for (int i = 0; i < items.Count; i++)
@@ -549,7 +625,7 @@ public class UIGameShapeColor : UIGameBase
             listBg.Add(info);
         }
     }
-    static public void ParseShape()
+    static public void ParseShape(byte[] data)
     {
         if ((listShape != null) && (listShape.Count != 0))
         {
@@ -558,9 +634,7 @@ public class UIGameShapeColor : UIGameBase
 
         listShape = new List<object>();
         int idx = GameManager.placeLevel;
-        string fileName = Common.GAME_RES_DIR + "/guanka/shape.json";
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(fileName);//((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
+        string json = Encoding.UTF8.GetString(data);
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
         JsonData items = root["list"];
@@ -578,7 +652,7 @@ public class UIGameShapeColor : UIGameBase
 
     }
 
-    static public void ParseColor()
+    static public void ParseColor(byte[] data)
     {
         if ((listColor != null) && (listColor.Count != 0))
         {
@@ -587,9 +661,7 @@ public class UIGameShapeColor : UIGameBase
 
         listColor = new List<object>();
         int idx = GameManager.placeLevel;
-        string fileName = Common.GAME_RES_DIR + "/guanka/color.json";
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(fileName);//((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
+        string json = Encoding.UTF8.GetString(data);
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
         JsonData items = root["list"];
@@ -607,10 +679,62 @@ public class UIGameShapeColor : UIGameBase
 
     public override int ParseGuanka()
     {
-        ParseBgList();
-        ParseShape();
-        ParseColor();
-        int count = GUANKA_NUM_PER_ITEM * listShape.Count;
+        //ParseBgList();
+        {
+
+            string filepath = Common.GAME_RES_DIR + "/image/bg/bg.json";
+            if (Common.isWeb)
+            {
+                httpReqBgJson = new HttpRequest(OnHttpRequestFinished);
+                httpReqBgJson.Get(HttpRequest.GetWebUrlOfAsset(filepath));
+            }
+            else
+            {
+                byte[] data = FileUtil.ReadDataAuto(filepath);
+                OnGetBgJsonDidFinish(true, data, true);
+            }
+
+        }
+
+
+
+        //  ParseShape();
+        {
+
+            string filepath = Common.GAME_RES_DIR + "/guanka/shape.json";
+            if (Common.isWeb)
+            {
+                httpReqGuankaJsonShape = new HttpRequest(OnHttpRequestFinished);
+                httpReqGuankaJsonShape.Get(HttpRequest.GetWebUrlOfAsset(filepath));
+            }
+            else
+            {
+                byte[] data = FileUtil.ReadDataAuto(filepath);
+                OnGetGuankaJsonShapeDidFinish(true, data, true);
+            }
+
+        }
+        // ParseColor();
+        {
+
+            string filepath = Common.GAME_RES_DIR + "/guanka/color.json";
+            if (Common.isWeb)
+            {
+                httpReqGuankaJsonColor = new HttpRequest(OnHttpRequestFinished);
+                httpReqGuankaJsonColor.Get(HttpRequest.GetWebUrlOfAsset(filepath));
+            }
+            else
+            {
+                byte[] data = FileUtil.ReadDataAuto(filepath);
+                OnGetGuankaJsonColorDidFinish(true, data, true);
+            }
+
+        }
+        int count = 0;
+        if (listShape != null)
+        {
+            count = GUANKA_NUM_PER_ITEM * listShape.Count;
+        }
         return count;
 
     }
@@ -729,18 +853,25 @@ public class UIGameShapeColor : UIGameBase
         GameObject obj = new GameObject(name);
         obj.transform.parent = AppSceneBase.main.objMainWorld.transform;
 
-        obj.AddComponent<RectTransform>();
-        RectTransform rcTran = obj.GetComponent<RectTransform>();
-        obj.AddComponent<SpriteRenderer>();
-        SpriteRenderer objSR = obj.GetComponent<SpriteRenderer>();
+        RectTransform rcTran = obj.AddComponent<RectTransform>();
+        SpriteRenderer objSR = obj.AddComponent<SpriteRenderer>();
         string pic = info.picOuter;
         if (isInner)
         {
             pic = info.picInner;
         }
-        Sprite sprite = LoadTexture.CreateSprieFromAsset(pic);
-        sprite.name = info.id;
-        objSR.sprite = sprite;
+        //Sprite sprite = LoadTexture.CreateSprieFromAsset(pic);
+
+        if (Common.isWeb)
+        {
+            TextureUtil texutil = new TextureUtil();
+            texutil.UpdateSpriteTextureWeb(obj, HttpRequest.GetWebUrlOfAsset(pic));
+        }
+        else
+        {
+            TextureUtil.UpdateSpriteTexture(obj, pic);
+        }
+        objSR.sprite.name = info.id;
         //rcTran.sizeDelta = new Vector2(objSR.size.x, objSR.size.y);
 
         obj.transform.position = new Vector3(0, 0, itemPosZ);
@@ -891,7 +1022,7 @@ public class UIGameShapeColor : UIGameBase
 
 
             ShapeColorItemInfo infoitem = AddItem(rc, infoshape, infocolor, obj, isInner, true);
-            infoitem.i = i; 
+            infoitem.i = i;
             infoitem.j = j;
         }
 
@@ -1180,7 +1311,10 @@ public class UIGameShapeColor : UIGameBase
     void ShowUserGuide()
     {
 
-
+        if (Common.isMonoPlayer)
+        {
+            return;
+        }
         string pkey = AppString.STR_KEY_USER_GUIDE + Common.GetAppVersion();
         bool isshowplay = Common.GetBool(pkey);
         if (isshowplay == true)
@@ -1212,7 +1346,7 @@ public class UIGameShapeColor : UIGameBase
         string str = "";
         TTS.Speek(str);
 
-        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
+
     }
     void OnUIViewAlertFinished(UIViewAlert alert, bool isYes)
     {

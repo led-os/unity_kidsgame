@@ -28,7 +28,20 @@ public class TextureCache
     {
         dicItem = new Dictionary<string, Texture2D>();
     }
-
+    public bool IsInCache(string filepath)
+    {
+        return dicItem.ContainsKey(filepath);
+    }
+    public void AddCache(string key, Texture2D tex)
+    {
+        if (!IsInCache(key))
+        {
+            if (tex != null)
+            {
+                dicItem.Add(key, tex);
+            }
+        }
+    }
     public Texture2D Load(string filepath)
     {
         Texture2D tex = null;

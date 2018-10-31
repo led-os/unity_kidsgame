@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 public class LTLocalization
 {
@@ -16,8 +17,8 @@ public class LTLocalization
     public const string LANGUAGE_SPANISH = "SP";
 
 
-    public string csvFilePath;
-
+    //public string csvFilePath;
+    byte[] dataContent;
     private const string KEY_CODE = "KEY";
     private const string FILE_PATH = "Language/test_utf8";// test_utf8 LTLocalization/localization
 
@@ -94,17 +95,16 @@ public class LTLocalization
         return LANGUAGE_CHINESE;
     }
 
+    public void Init(byte[] data)
+    {
+        dataContent = data;
+    }
     private void ReadData()
     {
         textData.Clear();
         //string fileName = Application.dataPath + "/Resources/LTLocalization/localization.csv";
-        //FILE_PATH
-        // string csvStr = ((TextAsset)Resources.Load(csvFilePath, typeof(TextAsset))).text;
-        string csvStr = FileUtil.ReadStringFromResources(csvFilePath);
-        if (csvStr == null)
-        {
-            csvStr = FileUtil.ReadStringAsset(csvFilePath);
-        }
+        //FILE_PATH 
+        string csvStr = Encoding.UTF8.GetString(dataContent);
         //Debug.Log(csvStr);
         LTCSVLoader loader = new LTCSVLoader();
         // loader.ReadFile(fileName);

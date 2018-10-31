@@ -32,6 +32,9 @@ public class UIHomeBase : UIView
     public void Init()
     {
         Debug.Log("UIMainBase Init");
+        //提前加载
+        GameManager.main.ParsePlaceList();
+
         audioClipBtnPlay = AudioCache.main.Load(AppCommon.AUDIO_BTN_CLICK);
         uiHomeAppCenter.gameObject.SetActive(true);
         if (!AppVersion.appCheckHasFinished)

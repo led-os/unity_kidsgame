@@ -22,6 +22,7 @@ public class AppSceneBase : ScriptBase
     public static AppSceneBase main;
 
     bool isReLayout = false;
+    HttpRequest httpReqBg;
 
     void Awake()
     {
@@ -273,7 +274,8 @@ public class AppSceneBase : ScriptBase
                 Texture2D tex = sp.texture;
                 float w = tex.width / 100f;//render.size.x;
                 float h = tex.height / 100f;//render.size.y;
-                if ((w != 0) && (h != 0)){
+                if ((w != 0) && (h != 0))
+                {
                     float scalex = worldsize.x / w;
                     float scaley = worldsize.y / h;
                     float scale = Mathf.Max(scalex, scaley);
@@ -285,13 +287,51 @@ public class AppSceneBase : ScriptBase
 
         }
     }
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqBg)
+        {
+            Texture2D tex = LoadTexture.LoadFromData(data);
+            OnGetBgFileDidFinish(isSuccess, tex, false, req.strUrl);
 
+        }
+    }
+    void OnGetBgFileDidFinish(bool isSuccess, Texture2D tex, bool isLocal, string filepath)
+    {
+        if (isSuccess && (tex != null))
+        {
+            TextureCache.main.AddCache(filepath, tex);
+            SpriteRenderer render = objSpriteBg.GetComponent<SpriteRenderer>();
+            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+            LayoutChild();
+        }
+
+    }
     public void UpdateWorldBg(string pic)
     {
-        Texture2D tex = TextureCache.main.Load(pic);
-        SpriteRenderer render = objSpriteBg.GetComponent<SpriteRenderer>();
-        render.sprite = LoadTexture.CreateSprieFromTex(tex);
-        LayoutChild();
+        bool is_cache = TextureCache.main.IsInCache(pic);
+        if (is_cache)
+        {
+            Texture2D tex = TextureCache.main.Load(pic);
+            OnGetBgFileDidFinish(true, tex, true, pic);
+        }
+        else
+        {
+            if (Common.isWeb)
+            {
+                httpReqBg = new HttpRequest(OnHttpRequestFinished);
+                httpReqBg.Get(HttpRequest.GetWebUrlOfAsset(pic));
+            }
+            else
+            {
+                byte[] data = FileUtil.ReadDataAuto(pic);
+                Texture2D tex = LoadTexture.LoadFromData(data);
+                OnGetBgFileDidFinish(true, tex, true, pic);
+            }
+        }
+
+
+
     }
 
     public void AddObjToMainWorld(GameObject obj)

@@ -10,7 +10,7 @@ public class LoadTexture : MonoBehaviour
     static public Texture2D LoadFromFile(string filePath)
     {
         Texture2D tex = null;
-        byte[] data = FileUtil.ReadData(filePath);
+        byte[] data = FileUtil.ReadDataFromFile(filePath);
         if (data != null)
         {
             tex = LoadFromData(data);
@@ -85,6 +85,6 @@ public class LoadTexture : MonoBehaviour
         Texture2D tex = LoadFromAsset(file);
         Sprite sp = CreateSprieFromTex(tex);
         return sp;
-    } 
- 
+    }
+
 }

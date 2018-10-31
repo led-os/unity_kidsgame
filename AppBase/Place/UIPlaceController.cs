@@ -31,7 +31,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     {
         LoadPrefab();
         heightCell = 512;
-
+        listItem = GameManager.main.ParsePlaceList();
         //bg
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GAME_BG, true);
 
@@ -68,7 +68,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         {
             oneCellNum = 2;
         }
-        listItem = GameManager.ParsePlaceList();
+
         int total = listItem.Count;
         totalItem = total;
         Debug.Log("total:" + total);
@@ -173,7 +173,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 
             if (Common.appType == AppType.STICKER)
             {
-                GameManager.ParseGuanka();
+                GameManager.main.ParseGuanka();
                 navi.Push(GameViewController.main);
             }
             else

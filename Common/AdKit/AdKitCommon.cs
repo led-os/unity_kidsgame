@@ -46,7 +46,7 @@ public class AdKitCommon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
- 
+
     }
 
 
@@ -127,7 +127,7 @@ public class AdKitCommon : MonoBehaviour
             AdVideo.SetType(AdVideo.ADVIDEO_TYPE_REWARD);
             int type = AdConfigParser.SOURCE_TYPE_VIDEO;
             string source = AdConfig.main.GetAdSource(type);
-            Debug.Log("InitAdVideo AdVideo.InitAd ="+source);
+            Debug.Log("InitAdVideo AdVideo.InitAd =" + source);
             AdVideo.InitAd(source);
         }
     }
@@ -175,6 +175,7 @@ public class AdKitCommon : MonoBehaviour
         AdInsert.ShowAd();
     }
 
+    //c++调用c#的回调
     public void AdBannerCallbackUnity(string source, string method, int w, int h)
     {
         Debug.Log("AdBannerCallbackUnity method=" + method + "  w=" + w + " h=" + h);
@@ -228,7 +229,17 @@ public class AdKitCommon : MonoBehaviour
         }
     }
 
-
+    public void AdBannerDidClick(string adsource)
+    {
+        Debug.Log("AdBannerDidClick adsource=" + adsource);
+        if (adsource == Source.MOBVISTA)
+        {
+            //点击MobVista banner 弹出视频
+            // AdKitCommon.main.ShowAdVideo();
+            AdKitCommon.main.ShowAdInsert(100);
+        }
+    }
+    //c++调用c#的回调
     public void AdInsertCallbackUnity(string source, string method)
     {
 

@@ -33,8 +33,8 @@ public class UILearnProgressCellItem : UICellItemBase
     {
         string strshader = "Custom/ShapeColor";
         shaderColor = Shader.Find(strshader);
-
-        UIGameShapeColor.ParseShape();
+        UIGameShapeColor game = GameViewController.main.gameBase as UIGameShapeColor;
+        game.ParseGuanka();
         indexShape = Random.Range(0, UIGameShapeColor.listShape.Count);
     }
 
@@ -76,15 +76,16 @@ public class UILearnProgressCellItem : UICellItemBase
 
         imageIcon.material = new Material(shaderColor);
         Material mat = imageIcon.material;
-
+        UIGameShapeColor game = GameViewController.main.gameBase as UIGameShapeColor;
         switch (itemType)
         {
             case ITEM_TYPE_SHAPE:
                 {
                     imageIcon.sprite = LoadTexture.CreateSprieFromAsset(info.pic);
-                    string str = UIGameShapeColor.ShapeTitleOfItem(info);
+
+                    string str = game.ShapeTitleOfItem(info);
                     textTitle.text = str;
-                    textDetail.text = UIGameShapeColor.GameStatusOfShape(info);
+                    textDetail.text = game.GameStatusOfShape(info);
                     mat.SetColor("_ColorShape", colorSel);
                 }
 
@@ -95,9 +96,9 @@ public class UILearnProgressCellItem : UICellItemBase
                     indexShape = UIGameShapeColor.listShape.Count / 2;
                     ShapeColorItemInfo infoshape = UIGameShapeColor.listShape[indexShape] as ShapeColorItemInfo;
                     imageIcon.sprite = LoadTexture.CreateSprieFromAsset(infoshape.pic);
-                    string str = UIGameShapeColor.ColorTitleOfItem(info);
+                    string str = game.ColorTitleOfItem(info);
                     textTitle.text = str;
-                    textDetail.text = UIGameShapeColor.GameStatusOfColor(info);
+                    textDetail.text = game.GameStatusOfColor(info);
                     mat.SetColor("_ColorShape", info.color);
 
                 }

@@ -62,14 +62,18 @@ public class Language
         // }
         // instance = new Language();
 
-        ltLocalization = new LTLocalization();
-        //csv需要在pc上先转换成utf8格式
-        ltLocalization.csvFilePath = file;//Resources 不要后缀
-                                          // mInstance.SetLanguage(SystemLanguage.Chinese);
-                                          // mInstance.ReadData();
 
+        //csv需要在pc上先转换成utf8格式
+
+        byte[] data = FileUtil.ReadDataAuto(file);
+        Init(data);
     }
 
+    public void Init(byte[] data)
+    {
+        ltLocalization = new LTLocalization();
+        ltLocalization.Init(data);
+    }
     public void SetLanguage(SystemLanguage lan)
     {
         // Init();
@@ -103,7 +107,7 @@ public class Language
     }
 
 
-//
+    //
     public string GetReplaceString(string key, string replace, string strnew)
     {
         string str = GetString(key);

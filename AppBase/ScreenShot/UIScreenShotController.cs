@@ -44,6 +44,10 @@ public class UIScreenShotController : UIView
     public const int SCREEN_HEIGHT_1080P = 1080;
     public const string DEVICE_NAME_1080P = "1080p";
 
+    //
+    public const int SCREEN_WIDTH_480P = 800;
+    public const int SCREEN_HEIGHT_480P = 480;
+    public const string DEVICE_NAME_480P = "480p";
 
     //weibo
     public const int SCREEN_WIDTH_WEIBO = 450;
@@ -181,6 +185,9 @@ public class UIScreenShotController : UIView
 
             //  1080p
             CreateDevice(DEVICE_NAME_1080P, SCREEN_WIDTH_1080P, SCREEN_HEIGHT_1080P, true, false);
+            //  480p
+            CreateDevice(DEVICE_NAME_480P, SCREEN_WIDTH_480P, SCREEN_HEIGHT_480P, true, true);
+
 
             //   weibo
             CreateDevice(DEVICE_NAME_WEIBO, SCREEN_WIDTH_WEIBO, SCREEN_HEIGHT_WEIBO, false, true);
@@ -744,9 +751,15 @@ public class UIScreenShotController : UIView
         isClickNextPreDevice = true;
         indexDevice = FindDeviceByName(DEVICE_NAME_ICON);
         GotoDevice(indexDevice);
-
-
     }
+
+    public void OnClickBtnCopyRight()
+    {
+        isClickNextPreDevice = true;
+        indexDevice = FindDeviceByName(DEVICE_NAME_COPY_RIGHT_HUAWEI);
+        GotoDevice(indexDevice);
+    }
+
     public void OnClickBtnIconConVert()
     {
         iconConvert.OnConvertAll();

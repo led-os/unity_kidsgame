@@ -416,7 +416,7 @@ public class Config
         }
         if (FileUtil.FileIsExist(filePath))
         {
-            string json = FileUtil.ReadString(filePath);
+            string json = FileUtil.ReadStringFromFile(filePath);
             rootJsonAppname = JsonMapper.ToObject(json);
         }
     }

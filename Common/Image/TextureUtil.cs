@@ -4,6 +4,8 @@ using System.IO;
 using UnityEngine.UI;
 public class TextureUtil : MonoBehaviour
 {
+    public HttpRequest httpReqSprite;
+    GameObject objSprite;
     static public Rect GetRectNotAlpha(Texture2D tex)
     {
         int fillXLeft = tex.width;
@@ -145,18 +147,59 @@ public class TextureUtil : MonoBehaviour
         System.IO.File.WriteAllBytes(filepath, bytes);
     }
 
-
-    static public void UpdateSpriteTexture(GameObject obj, string pic)
+    static public void UpdateSpriteTexture(GameObject obj, string filepath)
     {
-        Texture2D tex = TextureCache.main.Load(pic);
-        SpriteRenderer render = obj.GetComponent<SpriteRenderer>();
-        if (render != null)
+
+        SpriteRenderer rd = obj.GetComponent<SpriteRenderer>();
+        if (rd != null)
         {
-            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+            Texture2D tex = TextureCache.main.Load(filepath);
+            rd.sprite = LoadTexture.CreateSprieFromTex(tex);
         }
 
     }
 
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqSprite)
+        {
+            Texture2D tex = LoadTexture.LoadFromData(data);
+            OnGetSpriteDidFinish(isSuccess, tex, false, req.strUrl);
+
+        }
+    }
+    void OnGetSpriteDidFinish(bool isSuccess, Texture2D tex, bool isLocal, string filepath)
+    {
+        if (isSuccess && (tex != null))
+        {
+            TextureCache.main.AddCache(filepath, tex);
+            SpriteRenderer render = objSprite.GetComponent<SpriteRenderer>();
+            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+
+        }
+
+    }
+    public void UpdateSpriteTextureWeb(GameObject obj, string url)
+    {
+        objSprite = obj;
+        bool is_cache = TextureCache.main.IsInCache(url);
+        if (is_cache)
+        {
+            Texture2D tex = TextureCache.main.Load(url);
+            OnGetSpriteDidFinish(true, tex, true, url);
+        }
+        else
+        {
+            if (Common.isWeb)
+            {
+                httpReqSprite = new HttpRequest(OnHttpRequestFinished);
+                httpReqSprite.Get(url);
+            }
+
+        }
+
+
+    }
     static public void UpdateImageTexture(Image image, string filepath, bool isUpdateSize)
     {
         UpdateImageTexture(image, filepath, isUpdateSize, Vector4.zero);
@@ -167,7 +210,6 @@ public class TextureUtil : MonoBehaviour
         Texture2D tex = TextureCache.main.Load(filepath);
         UpdateImageTexture(image, tex, isUpdateSize, border);
     }
-
     static public void UpdateImageTexture(Image image, Texture2D tex, bool isUpdateSize, Vector4 border)
     {
         if (tex)
@@ -182,7 +224,6 @@ public class TextureUtil : MonoBehaviour
 
         }
     }
-
 
 
 

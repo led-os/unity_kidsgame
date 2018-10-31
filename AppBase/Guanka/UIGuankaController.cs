@@ -24,6 +24,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     static public long tick;
 
     Language languagePlace;
+    HttpRequest httpReqLanguage;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -42,43 +43,25 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
                 break;
         }
 
+
+
         //bg
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
-
         string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
-        if (FileUtil.FileIsExistAsset(strlan))
+        if (Common.isWeb)
         {
-            languagePlace = new Language();
-            languagePlace.Init(strlan);
-            languagePlace.SetLanguage(Language.main.GetLanguage());
+            httpReqLanguage = new HttpRequest(OnHttpRequestFinished);
+            httpReqLanguage.Get(HttpRequest.GetWebUrlOfAsset(strlan));
         }
         else
         {
-            languagePlace = Language.main;
+            byte[] data = FileUtil.ReadDataAuto(strlan);
+            OnGetLanguageFileDidFinish(FileUtil.FileIsExistAsset(strlan), data, true);
         }
 
 
-        {
-            textTitle.text = Language.main.GetString("STR_GUANKA");
-            int idx = GameManager.placeLevel;
-            if (idx < GameManager.placeTotal)
-            {
-                ItemInfo info = GameManager.GetPlaceItemInfo(idx);
-                Debug.Log(info.title);
-                string str = languagePlace.GetString(info.title);
-                textTitle.text = str;
-                int fontsize = textTitle.fontSize;
-                float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
-                RectTransform rctran = imageBar.transform as RectTransform;
-                Vector2 sizeDelta = rctran.sizeDelta;
-                float oft = 0;
-                sizeDelta.x = str_w + fontsize + oft * 2;
-                rctran.sizeDelta = sizeDelta;
-            }
 
-
-        }
-        GameManager.ParseGuanka();
+        GameManager.main.ParseGuanka();
         listItem = UIGameBase.listGuanka;
         UpdateTable(false);
         tableView.dataSource = this;
@@ -97,6 +80,48 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             OnClickBtnBack();
+        }
+    }
+
+    void OnGetLanguageFileDidFinish(bool isSuccess, byte[] data, bool isLocal)
+    {
+
+        {
+            //web
+            if (isSuccess)
+            {
+                languagePlace = new Language();
+                languagePlace.Init(data);
+                languagePlace.SetLanguage(Language.main.GetLanguage());
+            }
+            else
+            {
+                languagePlace = Language.main;
+            }
+        }
+
+        {
+            //textTitle.text = Language.main.GetString("STR_GUANKA");
+            int idx = GameManager.placeLevel;
+            Debug.Log("GameManager.placeTotal=" + GameManager.placeTotal + " idx=" + idx);
+            if (idx < GameManager.placeTotal)
+            {
+                ItemInfo info = GameManager.main.GetPlaceItemInfo(idx);
+                Debug.Log(info.title);
+                string str = languagePlace.GetString(info.title);
+                textTitle.text = str;
+
+                int fontsize = textTitle.fontSize;
+                float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
+                RectTransform rctran = imageBar.transform as RectTransform;
+                Vector2 sizeDelta = rctran.sizeDelta;
+                float oft = 0;
+                sizeDelta.x = str_w + fontsize + oft * 2;
+                Debug.Log("guanka title=" + str+" str_w="+str_w+" fontsize="+fontsize);
+                rctran.sizeDelta = sizeDelta;
+            }
+
+
         }
     }
     void LoadPrefab()
@@ -136,6 +161,14 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         UpdateTable(true);
     }
 
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqLanguage)
+        {
+            OnGetLanguageFileDidFinish(isSuccess, data, false);
+
+        }
+    }
 
     void ShowShop()
     {
@@ -168,7 +201,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     void GotoGame(int idx)
     {
         GameManager.gameLevel = idx;
-        GameManager.GotoGame(this.controller);
+        GameManager.main.GotoGame(this.controller);
     }
     public void OnCellItemDidClick(UICellItemBase item)
     {

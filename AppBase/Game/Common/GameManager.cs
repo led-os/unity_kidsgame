@@ -4,11 +4,28 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using LitJson;
+using System.Text;
 
 public class GameManager
 {
     static List<object> listPlace;
     static public int placeLevel;
+    HttpRequest httpReqPlaceList;
+
+
+    static private GameManager _main = null;
+    public static GameManager main
+    {
+        get
+        {
+            if (_main == null)
+            {
+                _main = new GameManager();
+            }
+            return _main;
+        }
+    }
+
     static public int placeTotal
     {
         get
@@ -16,7 +33,7 @@ public class GameManager
             int ret = 0;
             // if (GameScene.gameBase != null)
             {
-                GameManager.ParsePlaceList();
+                GameManager.main.ParsePlaceList();
                 ret = GameManager.listPlace.Count;//GameScene.gameBase.GetPlaceTotal();
             }
 
@@ -101,24 +118,50 @@ public class GameManager
             return ret;
         }
     }
-
-    static public List<object> ParsePlaceList()
+    void StartParsePlaceList()
     {
-        int count = 0;
+
+        if (GameManager.listPlace == null)
+        {
+            GameManager.listPlace = new List<object>();
+        }
+        string filepath = Common.GAME_RES_DIR + "/place/place_list.json";
+        if (Common.isWeb)
+        {
+            httpReqPlaceList = new HttpRequest(OnHttpRequestFinished);
+            httpReqPlaceList.Get(HttpRequest.GetWebUrlOfAsset(filepath));
+        }
+        else
+        {
+            byte[] data = FileUtil.ReadDataAuto(filepath);
+            OnGetPlaceListDidFinish(FileUtil.FileIsExistAsset(filepath), data, true);
+        }
+    }
+
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqPlaceList)
+        {
+            OnGetPlaceListDidFinish(isSuccess, data, false);
+
+        }
+    }
+    void OnGetPlaceListDidFinish(bool isSuccess, byte[] data, bool isLocal)
+    {
+        if (isSuccess)
+        {
+            ParsePlaceList(data);
+        }
+    }
+
+    void ParsePlaceList(byte[] data)
+    {
         if ((GameManager.listPlace != null) && (GameManager.listPlace.Count != 0))
         {
-            return GameManager.listPlace;
+            return;
         }
-        GameManager.listPlace = new List<object>();
-        //string fileName = "Place/PlaceList";
-        string fileName = Common.GAME_RES_DIR + "/place/place_list.json";
-        if (!FileUtil.FileIsExistAsset(fileName))
-        {
-            return GameManager.listPlace;
-        }
-        //FILE_PATH
-        //string json = ((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
-        string json = FileUtil.ReadStringAsset(fileName);
+
+        string json = Encoding.UTF8.GetString(data);
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
         JsonData items = root["places"];
@@ -130,24 +173,28 @@ public class GameManager
             info.title = (string)item["title"];
             info.pic = Common.GAME_RES_DIR + "/" + (string)item["pic"];
             info.icon = info.pic;
-           // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
+            // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
             info.index = i;
             GameManager.listPlace.Add(info);
         }
+    }
 
+    public List<object> ParsePlaceList()
+    {
+        StartParsePlaceList();
         return GameManager.listPlace;
     }
-    static public void CleanGuankaList()
+    public void CleanGuankaList()
     {
         GameViewController.main.gameBase.CleanGuankaList();
     }
-    static public ItemInfo GetPlaceItemInfo(int idx)
+    public ItemInfo GetPlaceItemInfo(int idx)
     {
         ParsePlaceList();
         int index = 0;
         foreach (ItemInfo info in GameManager.listPlace)
         {
-          //  if (info.tag == PlaceScene.PLACE_ITEM_TYPE_GAME)
+            //  if (info.tag == PlaceScene.PLACE_ITEM_TYPE_GAME)
             {
                 if (index == idx)
                 {
@@ -160,13 +207,13 @@ public class GameManager
         return null;
     }
 
-    static public void ParseGuanka()
+    public void ParseGuanka()
     {
         CleanGuankaList();
         GameViewController.main.gameBase.ParseGuanka();
     }
 
-    static public void GotoGame(UIViewController fromController)
+    public void GotoGame(UIViewController fromController)
     {
 
         //GameViewController.main.ShowOnController(AppSceneBase.main.rootViewController);
@@ -185,7 +232,7 @@ public class GameManager
         GameManager.gameLevel--;
         if (GameManager.gameLevel < 0)
         {
-            GameManager.GotoPrePlace();
+            GameManager.main.GotoPrePlace();
             return;
 
         }
@@ -193,7 +240,7 @@ public class GameManager
         GameViewController.main.gameBase.UpdateGuankaLevel(GameManager.gameLevel);
 
     }
-    static public void GotoNextLevel()
+    public void GotoNextLevel()
     {
         Debug.Log("gameLevel=" + GameManager.gameLevel + " maxGuankaNum=" + GameManager.maxGuankaNum);
         GameManager.gameLevel++;
@@ -201,7 +248,7 @@ public class GameManager
         if (GameManager.gameLevel >= GameManager.maxGuankaNum)
         {
             Debug.Log("GotoNextPlace:gameLevel=" + GameManager.gameLevel + " maxGuankaNum=" + GameManager.maxGuankaNum);
-            GameManager.GotoNextPlace();
+            GotoNextPlace();
             return;
 
         }
@@ -226,7 +273,7 @@ public class GameManager
 
     }
 
-    static public void GotoPrePlace()
+    public void GotoPrePlace()
     {
 
         GameManager.placeLevel--;
@@ -244,7 +291,7 @@ public class GameManager
         GameViewController.main.gameBase.UpdateGuankaLevel(GameManager.gameLevel);
 
     }
-    static public void GotoNextPlace()
+    public void GotoNextPlace()
     {
 
         GameManager.placeLevel++;
@@ -263,7 +310,7 @@ public class GameManager
 
     }
 
-    static public List<object> GetGuankaListOfAllPlace()
+    public List<object> GetGuankaListOfAllPlace()
     {
         List<object> listRet = new List<object>();
         for (int i = 0; i < placeTotal; i++)

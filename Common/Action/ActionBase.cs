@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//动画
 public delegate void OnActionCompleteDelegate(GameObject obj);
 public class ActionBase : MonoBehaviour
 {
     public GameObject target;
     public float percentage;
     public float duration;//总时间
+    public int index;
+    public bool isLoop = false;
+    public bool isUpdateByPercent = true;
     float runningTime;
 
 
@@ -24,6 +27,8 @@ public class ActionBase : MonoBehaviour
         percentage = 0;
         reverse = false;
         isPaused = true;
+        isLoop = false;
+        isUpdateByPercent = true;
         InitAction();
     }
     // Use this for initialization
@@ -37,9 +42,16 @@ public class ActionBase : MonoBehaviour
     {
         if (!isPaused)
         {
-            UpdatePercentage();
+            if (isUpdateByPercent)
+            {
+                UpdatePercentage();
+            }
+
             UpdateAction();
-            OnFinish();
+            if (percentage > 1f)
+            {
+                OnFinish();
+            }
         }
 
     }
@@ -59,7 +71,7 @@ public class ActionBase : MonoBehaviour
             {
                 percentage = runningTime / duration;
             }
-            //Debug.Log("UpdatePercentage:percentage=" + percentage);
+            Debug.Log("UpdatePercentage:percentage=" + percentage);
 
         }
 
@@ -69,16 +81,21 @@ public class ActionBase : MonoBehaviour
 
     public void OnFinish()
     {
-        if (percentage > 1f)
+
+        if (isLoop)
         {
-            Pause();
-            OnActionComplete();
-            if (callbackComplete != null)
-            {
-                callbackComplete(this.gameObject);
-            }
-            Destroy(this);
+            runningTime = 0;
+            percentage = 0;
+            return;
         }
+        Pause();
+        OnActionComplete();
+        if (callbackComplete != null)
+        {
+            callbackComplete(this.gameObject);
+        }
+        Destroy(this);
+
     }
 
     public void Pause()

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UIGameBase : UIView
 {
 
-    public const int GAME_AD_INSERT_SHOW_STEP = 3;
+    public const int GAME_AD_INSERT_SHOW_STEP = 2;
     public const string STR_KEYNAME_VIEWALERT_USER_GUIDE = "keyname_viewalert_user_guide";
     public const string STR_KEYNAME_VIEWALERT_GAME_FINISH = "keyname_viewalert_game_finish";
     public const string STR_KEYNAME_VIEWALERT_GOLD = "keyname_viewalert_gold";
@@ -23,7 +23,7 @@ public class UIGameBase : UIView
     static public Language languageGame;
     static public int heightAdBanner;
     static public float heightAdBannerWorld;
-
+    public HttpRequest httpReqLanguage;
     private int _gameMode;
 
 
@@ -167,6 +167,7 @@ public class UIGameBase : UIView
         {
             navi.Pop();
         }
+        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
     }
 
     public virtual void AdBannerDidReceiveAd(int w, int h)
