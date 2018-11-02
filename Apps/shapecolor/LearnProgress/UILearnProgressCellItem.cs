@@ -12,6 +12,7 @@ public class UILearnProgressCellItem : UICellItemBase
     public const int ITEM_TYPE_COLOR = 1;
     public Image imageBg;
     public Image imageIcon;
+    public GameObject objIconContent;
     public Text textTitle;
     public Text textDetail;
     public float itemWidth;
@@ -49,6 +50,31 @@ public class UILearnProgressCellItem : UICellItemBase
         return false;//imageBgLock.gameObject.activeSelf;
     }
 
+    public override void LayOut()
+    {
+        if (imageIcon.sprite == null)
+        {
+            return;
+        }
+        if (imageIcon.sprite.texture == null)
+        {
+            return;
+        }
+        int width = imageIcon.sprite.texture.width;
+        int height = imageIcon.sprite.texture.height;
+        RectTransform rctran = objIconContent.transform as RectTransform;
+        if ((width != 0) && (height != 0))
+        {
+            float w_icon = rctran.rect.width;
+            float h_icon = rctran.rect.height;
+            float radio = 0.9f;
+            float scalex = w_icon / width;
+            float scaley = h_icon / height;
+            float scale = Mathf.Min(scalex, scaley) * radio;
+            imageIcon.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+    }
     public void SetItemType(int type)
     {
         itemType = type;
@@ -74,19 +100,29 @@ public class UILearnProgressCellItem : UICellItemBase
 
         //color
 
-        imageIcon.material = new Material(shaderColor);
-        Material mat = imageIcon.material;
+        // imageIcon.material = new Material(shaderColor);
+        // Material mat = imageIcon.material;
         UIGameShapeColor game = GameViewController.main.gameBase as UIGameShapeColor;
         switch (itemType)
         {
             case ITEM_TYPE_SHAPE:
                 {
-                    imageIcon.sprite = LoadTexture.CreateSprieFromAsset(info.pic);
-
+                    if (Common.isWeb)
+                    {
+                        TextureUtil texutil = new TextureUtil();
+                        ShapeColorItemInfo infohttp = new ShapeColorItemInfo();
+                        infohttp.color = colorSel;
+                        texutil.UpdateImageTextureWeb(imageIcon, HttpRequest.GetWebUrlOfAsset(info.pic), OnTextureHttpRequestFinished, infohttp, false);
+                    }
+                    else
+                    {
+                        Texture2D tex = TextureCache.main.Load(info.pic);
+                        UpdateIcon(tex, colorSel);
+                    }
                     string str = game.ShapeTitleOfItem(info);
                     textTitle.text = str;
                     textDetail.text = game.GameStatusOfShape(info);
-                    mat.SetColor("_ColorShape", colorSel);
+                    //  mat.SetColor("_ColorShape", colorSel);
                 }
 
                 break;
@@ -95,26 +131,63 @@ public class UILearnProgressCellItem : UICellItemBase
 
                     indexShape = UIGameShapeColor.listShape.Count / 2;
                     ShapeColorItemInfo infoshape = UIGameShapeColor.listShape[indexShape] as ShapeColorItemInfo;
-                    imageIcon.sprite = LoadTexture.CreateSprieFromAsset(infoshape.pic);
+                    // imageIcon.sprite = LoadTexture.CreateSprieFromAsset(infoshape.pic);
+
+                    if (Common.isWeb)
+                    {
+                        TextureUtil texutil = new TextureUtil();
+                        ShapeColorItemInfo infohttp = new ShapeColorItemInfo();
+                        infohttp.color = info.color;
+                        texutil.UpdateImageTextureWeb(imageIcon, HttpRequest.GetWebUrlOfAsset(infoshape.pic), OnTextureHttpRequestFinished, infohttp, false);
+                    }
+                    else
+                    {
+                        Texture2D tex = TextureCache.main.Load(infoshape.pic);
+                        UpdateIcon(tex, info.color);
+                    }
                     string str = game.ColorTitleOfItem(info);
                     textTitle.text = str;
                     textDetail.text = game.GameStatusOfColor(info);
-                    mat.SetColor("_ColorShape", info.color);
+                    //  mat.SetColor("_ColorShape", info.color);
 
                 }
                 break;
         }
+        LayOut();
 
 
-        int width = imageIcon.sprite.texture.width;
-        int height = imageIcon.sprite.texture.height;
-        RectTransform rctran = imageIcon.transform as RectTransform;
-        float w_icon = rctran.rect.width;
-        float h_icon = rctran.rect.height;
-        float scalex = w_icon / width;
-        float scaley = h_icon / height;
-        float scale = Mathf.Min(scalex, scaley);
-        imageIcon.transform.localScale = new Vector3(scale, scale, 1f);
+    }
+
+    Texture2D GetIconFillColor(Texture2D tex, Color color)
+    {
+        int w = tex.width;
+        int h = tex.height;
+        RenderTexture rt = new RenderTexture(w, h, 0);
+        Material mat = new Material(shaderColor);
+        mat.SetColor("_ColorShape", color);
+        Graphics.Blit(tex, rt, mat);
+        Texture2D texRet = TextureUtil.RenderTexture2Texture2D(rt, tex.format, new Rect(0, 0, rt.width, rt.height));
+        return texRet;
+    }
+
+    void UpdateIcon(Texture2D tex, Color color)
+    {
+        Debug.Log("UpdateIcon color=" + color);
+        Texture2D texNew = GetIconFillColor(tex, color);
+        imageIcon.sprite = LoadTexture.CreateSprieFromTex(texNew);
+        RectTransform rctan = imageIcon.GetComponent<RectTransform>();
+        rctan.sizeDelta = new Vector2(texNew.width, texNew.height);
+    }
+    public void OnTextureHttpRequestFinished(bool isSuccess, Texture2D tex, object data)
+    {
+        //  if (isSuccess && (tex != null))
+        {
+            Debug.Log("OnTextureHttpRequestFinished data  start");
+            ShapeColorItemInfo info = data as ShapeColorItemInfo;
+            Debug.Log("OnTextureHttpRequestFinished data  end");
+            UpdateIcon(tex, info.color);
+        }
+        LayOut();
     }
 
 }

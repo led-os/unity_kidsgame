@@ -2,10 +2,21 @@
 using System.Collections;
 using System.IO;
 using UnityEngine.UI;
+
+public delegate void OnTextureHttpRequestFinishedDelegate(bool isSuccess, Texture2D tex, object data);
 public class TextureUtil : MonoBehaviour
 {
     public HttpRequest httpReqSprite;
+    public HttpRequest httpReqImage;
     GameObject objSprite;
+    object dataSprite;
+
+    Image imageHttp;
+    object dataImage;
+    bool isAutoUpdateImage;
+
+
+    public OnTextureHttpRequestFinishedDelegate callbackHttp { get; set; }
     static public Rect GetRectNotAlpha(Texture2D tex)
     {
         int fillXLeft = tex.width;
@@ -167,6 +178,13 @@ public class TextureUtil : MonoBehaviour
             OnGetSpriteDidFinish(isSuccess, tex, false, req.strUrl);
 
         }
+        if (req == httpReqImage)
+        {
+            Texture2D tex = LoadTexture.LoadFromData(data);
+            OnGetImageDidFinish(isSuccess, tex, false, req.strUrl);
+
+        }
+
     }
     void OnGetSpriteDidFinish(bool isSuccess, Texture2D tex, bool isLocal, string filepath)
     {
@@ -177,11 +195,42 @@ public class TextureUtil : MonoBehaviour
             render.sprite = LoadTexture.CreateSprieFromTex(tex);
 
         }
+        if (!isLocal)
+        {
+            if (this.callbackHttp != null)
+            {
+                this.callbackHttp(isSuccess, tex, dataSprite);
+            }
+        }
 
     }
-    public void UpdateSpriteTextureWeb(GameObject obj, string url)
+    void OnGetImageDidFinish(bool isSuccess, Texture2D tex, bool isLocal, string filepath)
     {
+        if (isSuccess && (tex != null))
+        {
+            TextureCache.main.AddCache(filepath, tex);
+            if (isAutoUpdateImage)
+            {
+                imageHttp.sprite = LoadTexture.CreateSprieFromTex(tex);
+            }
+
+
+        }
+
+        //if (!isLocal)
+        {
+            if (this.callbackHttp != null)
+            {
+                this.callbackHttp(isSuccess, tex, dataImage);
+            }
+        }
+
+    }
+    public void UpdateSpriteTextureWeb(GameObject obj, string url, OnTextureHttpRequestFinishedDelegate callback, object data)
+    {
+        this.callbackHttp = callback;
         objSprite = obj;
+        dataSprite = data;
         bool is_cache = TextureCache.main.IsInCache(url);
         if (is_cache)
         {
@@ -198,6 +247,34 @@ public class TextureUtil : MonoBehaviour
 
         }
 
+
+    }
+    public void UpdateImageTextureWeb(Image image, string url, OnTextureHttpRequestFinishedDelegate callback, object data)
+    {
+        UpdateImageTextureWeb(image, url, callback, data, true);
+    }
+
+    public void UpdateImageTextureWeb(Image image, string url, OnTextureHttpRequestFinishedDelegate callback, object data, bool isAutoUpdate)
+    {
+        this.callbackHttp = callback;
+        imageHttp = image;
+        dataImage = data;
+        isAutoUpdateImage = isAutoUpdate;
+        bool is_cache = TextureCache.main.IsInCache(url);
+        if (is_cache)
+        {
+            Texture2D tex = TextureCache.main.Load(url);
+            OnGetImageDidFinish(true, tex, true, url);
+        }
+        else
+        {
+            if (Common.isWeb)
+            {
+                httpReqImage = new HttpRequest(OnHttpRequestFinished);
+                httpReqImage.Get(url);
+            }
+
+        }
 
     }
     static public void UpdateImageTexture(Image image, string filepath, bool isUpdateSize)

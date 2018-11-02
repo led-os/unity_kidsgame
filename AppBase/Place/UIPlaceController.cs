@@ -132,6 +132,10 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 
     }
 
+    public override void PreLoadDataForWeb()
+    {
+    }
+
 
     void ShowShop()
     {

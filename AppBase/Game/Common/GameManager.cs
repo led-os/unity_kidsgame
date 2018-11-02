@@ -125,6 +125,11 @@ public class GameManager
         {
             GameManager.listPlace = new List<object>();
         }
+        if (GameManager.listPlace.Count > 0)
+        {
+            //已经解析完成
+            return;
+        }
         string filepath = Common.GAME_RES_DIR + "/place/place_list.json";
         if (Common.isWeb)
         {
@@ -334,6 +339,27 @@ public class GameManager
 
         }
         return listRet;
+
+    }
+
+    //webgl 异步加载需要提前加载一些配置数据
+    public void PreLoadDataForWeb()
+    {
+        //place list
+        StartParsePlaceList();
+
+        //place
+        PlaceViewController.main.PreLoadDataForWeb();
+
+        //guanka 
+        GuankaViewController.main.PreLoadDataForWeb();
+
+        //game
+        UIGameBase game = GameViewController.main.gameBase;
+        if (game != null)
+        {
+            game.PreLoadDataForWeb();
+        }
 
     }
 }

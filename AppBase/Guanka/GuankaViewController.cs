@@ -33,8 +33,11 @@ public class GuankaViewController : UIViewController
         {
             obj = PrefabCache.main.Load(strPrefabDefault);
         }
+        if (obj != null)
+        {
+            uiGuankaPrefab = obj.GetComponent<UIGuankaBase>();
+        }
 
-        uiGuankaPrefab = obj.GetComponent<UIGuankaBase>();
     }
 
     public override void ViewDidLoad()
@@ -64,5 +67,18 @@ public class GuankaViewController : UIViewController
         uiGuanka.indexPlace = indexPlace;
         uiGuanka.SetController(this);
         ViewControllerManager.ClonePrefabRectTransform(uiGuankaPrefab.gameObject, uiGuanka.gameObject);
+    }
+
+    public void PreLoadDataForWeb()
+    {
+        UIGuankaBase ui = uiGuanka;
+        if (ui == null)
+        {
+            ui = uiGuankaPrefab;
+        }
+        if (ui != null)
+        {
+            ui.PreLoadDataForWeb();
+        }
     }
 }

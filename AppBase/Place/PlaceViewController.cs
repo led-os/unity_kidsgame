@@ -33,8 +33,10 @@ public class PlaceViewController : UIViewController
         {
             obj = PrefabCache.main.Load(strPrefabDefault);
         }
-
-        uiPrefab = obj.GetComponent<UIPlaceBase>();
+        if (obj != null)
+        {
+            uiPrefab = obj.GetComponent<UIPlaceBase>();
+        }
     }
 
     public override void ViewDidLoad()
@@ -65,5 +67,17 @@ public class PlaceViewController : UIViewController
         ui = (UIPlaceBase)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
         ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+    }
+    public void PreLoadDataForWeb()
+    {
+        UIPlaceBase uiplace = ui;
+        if (uiplace == null)
+        {
+            uiplace = uiPrefab;
+        }
+        if (uiplace != null)
+        {
+            uiplace.PreLoadDataForWeb();
+        }
     }
 }

@@ -131,6 +131,9 @@ public class UIGameBase : UIView
     public virtual void UpdatePlaceLevel(int level)
     {
     }
+    public virtual void PreLoadDataForWeb()
+    {
+    }
 
     public void LayoutChildBase()
     {

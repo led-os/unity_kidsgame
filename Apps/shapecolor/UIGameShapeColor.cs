@@ -16,6 +16,7 @@ public class ShapeColorItemInfo : ItemInfo
     public string colorid;
     public int i;
     public int j;
+    public bool textureHasLoad;//web 纹理是否下载完成
     public List<object> listColorFilter;
 
 }
@@ -143,7 +144,10 @@ public class UIGameShapeColor : UIGameBase
         }
     }
 
-
+    public override void PreLoadDataForWeb()
+    {
+        ParseGuanka();
+    }
     public override void UpdateGuankaLevel(int level)
     {
         AppSceneBase.main.ClearMainWorld();
@@ -289,7 +293,7 @@ public class UIGameShapeColor : UIGameBase
         Vector3 posword = posItemWorld + posStepWorld;
 
         //将选中item暂时置顶
-        posword.z = itemPosZ - 1;
+        posword.z = itemPosZ - 2;
         itemInfoSel.obj.transform.position = posword;
 
 
@@ -373,27 +377,53 @@ public class UIGameShapeColor : UIGameBase
         Vector3 pos = itemInfoSel.obj.transform.position;
         itemInfoSel.obj.transform.position = pos;
     }
-
+    public ShapeColorItemInfo GetItemInfoById(string strid)
+    {
+        ShapeColorItemInfo inforet = null;
+        foreach (ShapeColorItemInfo info in listItem)
+        {
+            if (info.id == strid)
+            {
+                inforet = info;
+                break;
+            }
+        }
+        return inforet;
+    }
 
     public override void LayOut()
     {
         foreach (ShapeColorItemInfo info in listItem)
         {
+            // if (Common.isWeb)
+            {
+                if (!info.textureHasLoad)
+                {
+                    //  continue;
+                }
+            }
+
             GameObject obj = info.obj;
+
+            SpriteRenderer objSR = obj.GetComponent<SpriteRenderer>();
+            if (objSR.sprite == null)
+            {
+                continue;
+            }
             Rect rc = GetRectItem(info.i, info.j, totalRow, totalCol);
             float scale = GetItmeScaleInRect(rc, obj);
             obj.transform.localScale = new Vector3(scale, scale, 1f);
 
 
-            SpriteRenderer objSR = obj.GetComponent<SpriteRenderer>();
+
             Bounds bd = objSR.bounds;
             float offsetx = bd.size.x / 2;
             //offsetx =0;
             float offsety = bd.size.y / 2;
             //offsety=0;
             Vector2 pt = RandomPointOfRect(rc, offsetx, offsety);
-            // Debug.Log("CreateItem:i=" + i + " j=" + j + " rc=" + rc + " pt=" + pt + " bd=" + bd.size);
-            obj.transform.position = new Vector3(pt.x, pt.y, obj.transform.position.z);
+            Debug.Log("LayOut:i=" + info.i + " j=" + info.j + " rc=" + rc + " pt=" + pt + " bd=" + bd.size);
+            obj.transform.position = new Vector3(pt.x, pt.y, itemPosZ);
 
         }
     }
@@ -840,7 +870,19 @@ public class UIGameShapeColor : UIGameBase
 
         return idxTmp;
     }
-
+    public void OnTextureHttpRequestFinished(bool isSuccess,Texture2D tex, object data)
+    {
+        ShapeColorItemInfo info = data as ShapeColorItemInfo;
+        if (info != null)
+        {
+            // ShapeColorItemInfo infoitem = GetItemInfoById(info.id);
+            // if (infoitem != null)
+            // {
+            //     infoitem.textureHasLoad = true;
+            // }
+        }
+        LayOut();
+    }
     GameObject CreateItem(ShapeColorItemInfo info, bool isInner, Color color)
     {
         float x, y, w, h;
@@ -865,14 +907,17 @@ public class UIGameShapeColor : UIGameBase
         if (Common.isWeb)
         {
             TextureUtil texutil = new TextureUtil();
-            texutil.UpdateSpriteTextureWeb(obj, HttpRequest.GetWebUrlOfAsset(pic));
+            info.textureHasLoad = false;
+            texutil.UpdateSpriteTextureWeb(obj, HttpRequest.GetWebUrlOfAsset(pic), OnTextureHttpRequestFinished, info);
         }
         else
         {
             TextureUtil.UpdateSpriteTexture(obj, pic);
+            info.textureHasLoad = true;
+            objSR.sprite.name = info.id;
         }
-        objSR.sprite.name = info.id;
-        //rcTran.sizeDelta = new Vector2(objSR.size.x, objSR.size.y);
+
+
 
         obj.transform.position = new Vector3(0, 0, itemPosZ);
 
@@ -943,6 +988,7 @@ public class UIGameShapeColor : UIGameBase
         infoItem.isMain = isMain;
         infoItem.isInner = isInner;
         infoItem.colorid = infocolor.id;
+        infoItem.textureHasLoad = infoshape.textureHasLoad;
 
         if (isInner)
         {

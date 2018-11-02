@@ -82,7 +82,12 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             OnClickBtnBack();
         }
     }
-
+    public override void PreLoadDataForWeb()
+    {
+        string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
+        httpReqLanguage = new HttpRequest(OnHttpRequestFinished);
+        httpReqLanguage.Get(HttpRequest.GetWebUrlOfAsset(strlan));
+    }
     void OnGetLanguageFileDidFinish(bool isSuccess, byte[] data, bool isLocal)
     {
 
@@ -117,7 +122,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
                 Vector2 sizeDelta = rctran.sizeDelta;
                 float oft = 0;
                 sizeDelta.x = str_w + fontsize + oft * 2;
-                Debug.Log("guanka title=" + str+" str_w="+str_w+" fontsize="+fontsize);
+                Debug.Log("guanka title=" + str + " str_w=" + str_w + " fontsize=" + fontsize);
                 rctran.sizeDelta = sizeDelta;
             }
 

@@ -54,7 +54,10 @@ public class AppSceneBase : ScriptBase
         }
 
 
-
+        if (Common.isWeb)
+        {
+            GameManager.main.PreLoadDataForWeb();
+        }
     }
 
     // Use this for initialization

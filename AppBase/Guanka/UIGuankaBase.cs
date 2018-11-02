@@ -6,4 +6,7 @@ using UnityEngine.UI;
 public class UIGuankaBase : UIView
 {
     public int indexPlace = 0;
+    public virtual void PreLoadDataForWeb()
+    {
+    }
 }
