@@ -11,11 +11,19 @@ public class FileUtil : MonoBehaviour
         byte[] data = FileUtil.ReadDataFromResources(filePath);
         if (data == null)
         {
-            data = FileUtil.ReadDataAsset(filePath);
+            if (FileUtil.FileIsExistAsset(filePath))
+            {
+                data = FileUtil.ReadDataAsset(filePath);
+            }
+
         }
         if (data == null)
         {
-            data = FileUtil.ReadDataFromFile(filePath);
+            if (FileUtil.FileIsExist(filePath))
+            {
+                data = FileUtil.ReadDataFromFile(filePath);
+            }
+
         }
         return data;
     }

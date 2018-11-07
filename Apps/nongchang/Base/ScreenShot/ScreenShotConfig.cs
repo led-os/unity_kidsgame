@@ -33,11 +33,9 @@ public class ScreenShotConfig
             switch (idx)
             {
                 case 0:
-                    GameManager.gameLevel = 0;
-                    controller = GameViewController.main;
+                    controller = PlaceViewController.main;
                     break;
                 case 1:
-                    GameManager.gameLevel = 1;
                     controller = GameViewController.main;
                     break;
                 case 2:

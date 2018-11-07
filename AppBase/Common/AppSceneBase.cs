@@ -327,8 +327,8 @@ public class AppSceneBase : ScriptBase
             }
             else
             {
-                byte[] data = FileUtil.ReadDataAuto(pic);
-                Texture2D tex = LoadTexture.LoadFromData(data);
+                Texture2D tex = LoadTexture.LoadFileAuto(pic);
+                Debug.Log("UpdateWorldBg::pic=" + pic + " w=" + tex.width + " h=" + tex.height);
                 OnGetBgFileDidFinish(true, tex, true, pic);
             }
         }

@@ -633,13 +633,14 @@ public class Common
             appname = Config.main.GetAppNameJson(Device.isLandscape);
         }
         //string appname = Language.main.GetString(AppString.APP_NAME);
+        
         //去除hd
-        int idxtmp = appname.IndexOf("HD");
-        if (idxtmp > 0)
-        {
-            string strtmp = appname.Substring(0, idxtmp);
-            appname = strtmp;
-        }
+        // int idxtmp = appname.IndexOf("HD");
+        // if (idxtmp > 0)
+        // {
+        //     string strtmp = appname.Substring(0, idxtmp);
+        //     appname = strtmp;
+        // }
 
         return appname;
     }

@@ -37,7 +37,7 @@ public class HttpRequest
         // Debug.Log("HttpRequest Get");
         string filePath = GetCatchFilePathOfUrl(url);
         strUrl = url;
-        isReadFromCatch = false;
+        isReadFromCatch = false; 
         if (EnableReadFromCache())
         {
             bool isExist = File.Exists(filePath);
