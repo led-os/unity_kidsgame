@@ -40,7 +40,7 @@ public class UIHomeTopBar : UIView
             if (Config.main.channel == Source.HUAWEI)
             {
                 //华为市场不显示
-                // btnMore.gameObject.SetActive(false);
+                btnMore.gameObject.SetActive(false);
             }
         }
         if (Common.isWinUWP)

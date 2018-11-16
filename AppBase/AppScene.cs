@@ -9,8 +9,8 @@ public class AppScene : AppSceneBase
     {
         base.RunApp();
 
-         InitAd();
-         
+        InitAd();
+
         if (Common.isMonoPlayer)//isPC
         {
             SetRootViewController(ScreenShotViewController.main);
@@ -19,7 +19,7 @@ public class AppScene : AppSceneBase
         {
             SetRootViewController(MainViewController.main);
         }
-       
+
     }
 
 
@@ -37,20 +37,33 @@ public class AppScene : AppSceneBase
         if (EnableAdVideo())
         {
             //提前加载unity广告, 解决unity视频第一次不显示的问题
-                   AdVideo.SetType(AdVideo.ADVIDEO_TYPE_REWARD); 
+            AdVideo.SetType(AdVideo.ADVIDEO_TYPE_REWARD);
             {
                 AdVideo.PreLoad(Source.UNITY);
                 AdVideo.PreLoad(Source.MOBVISTA);
             }
 
-         
+
         }
         // AdKitCommon.main.InitAdBanner();
+        bool isshow_adinsert = true;
+
         AdKitCommon.main.InitAdInsert();
         //AdKitCommon.main.InitAdVideo();
 
+        if (Common.isAndroid)
+        {
+            if (Config.main.channel == Source.HUAWEI)
+            {
+                isshow_adinsert = false;
+            }
+        }
         // 显示开机插屏
-        AdKitCommon.main.ShowAdInsert(100);
+        if (isshow_adinsert)
+        {
+            AdKitCommon.main.ShowAdInsert(100);
+        }
+
 
     }
 }

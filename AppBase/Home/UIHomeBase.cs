@@ -43,7 +43,7 @@ public class UIHomeBase : UIView
         }
         if (Common.isAndroid)
         {
-            if (Config.main.channel == Source.GP)
+            if ((Config.main.channel == Source.GP) || (Config.main.channel == Source.HUAWEI))
             {
                 //GP市场不显示
                 uiHomeAppCenter.gameObject.SetActive(false);

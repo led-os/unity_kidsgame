@@ -160,11 +160,17 @@ public class TextureUtil : MonoBehaviour
 
     static public void UpdateSpriteTexture(GameObject obj, string filepath)
     {
+        Texture2D tex = TextureCache.main.Load(filepath);
+        UpdateSpriteTexture(obj, tex);
+
+    }
+
+    static public void UpdateSpriteTexture(GameObject obj, Texture2D tex)
+    {
 
         SpriteRenderer rd = obj.GetComponent<SpriteRenderer>();
         if (rd != null)
         {
-            Texture2D tex = TextureCache.main.Load(filepath);
             rd.sprite = LoadTexture.CreateSprieFromTex(tex);
         }
 

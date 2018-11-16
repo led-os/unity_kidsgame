@@ -214,25 +214,25 @@ public class Common
 
     }
 
-    static public float GetBestFitScale(float w, float h, float w_rect, float h_rect)
+    static public float GetBestFitScale(float w_content, float h_content, float w_rect, float h_rect)
     {
         if ((w_rect == 0) || (h_rect == 0))
         {
             return 1f;
         }
-        float scalex = w_rect / w;
-        float scaley = h_rect / h;
+        float scalex = w_rect / w_content;
+        float scaley = h_rect / h_content;
         float scale = Mathf.Min(scalex, scaley);
         return scale;
     }
-    static public float GetMaxFitScale(float w, float h, float w_rect, float h_rect)
+    static public float GetMaxFitScale(float w_content, float h_content, float w_rect, float h_rect)
     {
         if ((w_rect == 0) || (h_rect == 0))
         {
             return 1f;
         }
-        float scalex = w_rect / w;
-        float scaley = h_rect / h;
+        float scalex = w_rect / w_content;
+        float scaley = h_rect / h_content;
         float scale = Mathf.Max(scalex, scaley);
         return scale;
     }

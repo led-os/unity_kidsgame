@@ -177,5 +177,12 @@ public class MeshTexture : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
+
+        //刷新碰撞区
+        if (meshCollider != null)
+        {
+            meshCollider.sharedMesh = mesh;
+        }
+
     }
 }
