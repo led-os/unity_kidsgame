@@ -14,9 +14,9 @@ public class MeshTexture : MonoBehaviour
     public List<Vector3> listPoint;
     public float width = 2f;
     public float height = 2f;
-    BoxCollider boxCollider;
+    //BoxCollider boxCollider;
     MeshCollider meshCollider;
-    Vector2 size = Vector2.zero;
+    public Material matDefault;
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -26,21 +26,21 @@ public class MeshTexture : MonoBehaviour
         mesh = GetComponent<MeshFilter>().mesh;
         meshRender = GetComponent<MeshRenderer>();
 
-        string strshader = "Custom/MeshTexture";
-        Material mat = new Material(Shader.Find(strshader));
-        meshRender.material = mat;
+        matDefault = new Material(Shader.Find("Custom/MeshTexture"));
+        meshRender.material = matDefault;
         AddPoint(Vector3.zero);
-        //  boxCollider = this.gameObject.AddComponent<BoxCollider>();
 
-        //读取 RaycastHit.textureCoord 必须使用MeshCollider 否则返回zero
+
+        //boxCollider = this.gameObject.AddComponent<BoxCollider>();
+        //设置网格碰撞体才能通过射线实时获取纹理的uv坐标
         meshCollider = this.gameObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
-        //meshCollider.convex = true;
+
     }
     // Use this for initialization
     void Start()
     {
-        // meshCollider.convex = false;
+
         // Draw();
     }
 
@@ -84,28 +84,39 @@ public class MeshTexture : MonoBehaviour
         return v;
     }
 
+    public void UpdateMaterial(Material mat)
+    {
+        if (meshRender != null)
+        {
+            meshRender.material = mat;
+        }
+    }
     public void UpdateTexture(Texture tex)
     {
-        meshRender.material.SetTexture("_MainTex", tex);
-        UpdateSize(tex.width / 100f, tex.height / 100f);
-        Draw();
+        if (meshRender != null)
+        {
+            meshRender.material.SetTexture("_MainTex", tex);
+            UpdateSize(tex.width / 100f, tex.height / 100f);
+            Draw();
+        }
+
     }
 
     public void UpdateSize(float w, float h)
     {
         width = w;
         height = h;
-        if (boxCollider != null)
-        {
-            boxCollider.size = new Vector2(w, h);
-        }
-
+        //boxColliderboxCollider.size = new Vector2(w, h);
         Draw();
     }
     public void Draw()
     {
 
         if (listPoint == null)
+        {
+            return;
+        }
+        if (mesh == null)
         {
             return;
         }
@@ -178,11 +189,7 @@ public class MeshTexture : MonoBehaviour
         mesh.triangles = triangles;
         mesh.uv = uvs;
 
-        //刷新碰撞区
-        if (meshCollider != null)
-        {
-            meshCollider.sharedMesh = mesh;
-        }
-
+        //需要同步更新网格碰撞体 才能通过射线实时获取纹理的uv坐标
+        meshCollider.sharedMesh = mesh;
     }
 }
