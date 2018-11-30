@@ -14,6 +14,7 @@ public class UIFillColor : UIView
     int layerLine = 10;
     Material matFillColor;
     ColorImage colorImageMask;
+    public bool isHasPaint = false;
     void Awake()
     {
         mainCam.cullingMask &= ~(1 << layerLine); // 关闭层x
@@ -29,7 +30,7 @@ public class UIFillColor : UIView
         Renderer rd = objSpriteMask.GetComponent<Renderer>();
         rd.material = matFillColor;
 
-
+        isHasPaint = false;
     }
     // Use this for initialization
     void Start()
@@ -114,7 +115,7 @@ public class UIFillColor : UIView
         matFillColor.SetInt("_IsClear", 0);
         matFillColor.SetColor("_ColorMask", colorMask);
         matFillColor.SetColor("_ColorFill", colorFill);
-
+        isHasPaint = true;
     }
 
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)

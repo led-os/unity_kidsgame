@@ -24,38 +24,37 @@ public class GamePaint : UIView
     public const int MODE_ERASE = 4;//擦除
     public const int MODE_STRAW = 5;
 
-    public GameObject objSpriteStraw;//颜色吸管
+    public GameObject objSpriteStraw;//颜色吸管 
     public GameObject objSpriteErase;
+
     public GameObject objSpriteBg;
     public GameObject objPaint;
-    public GameObject objLayerGamePic;
-    public GameObject objSpritePic;
+    public UIGameImage uiGameImage;
     public UIFillColor uiFillColor;
     public MeshTexture meshTex;
     //paint
     public RenderTexture rtMainPaint;
-    public Rect rectMain;//world中的显示区域
-
-    public Camera cameraPic;
+    public Rect rectMain;//world中的显示区域 local position
     public Texture2D texPic;
     public Texture2D texPicOrign;//原始图片
+
+    public Texture2D texPicBlank;//空白图片
     Texture2D texPicFromFile;
     public Texture2D texPicMask;
 
 
     Material matPenColor;
-    Material matPaint;
-    Material matSign;
-
+    Material matErase;
+    Material matPaintMeshTex;
     public bool enableMove = false;
     public bool isFreeDraw = false;
 
 
-    int mode;
+    public int mode;
     public int modePre;
 
     public ColorItemInfo colorInfo;
-    public Color colorPaint;
+
     public Color colorStraw;
 
     ColorImage colorImage;
@@ -104,8 +103,29 @@ public class GamePaint : UIView
 
     PaintLine paintLinePrefab;
     PaintLine paintLine;
-
+    Color _colorPaint;
     public OnPaintColorEraseDelegate callBackErase { get; set; }
+
+
+    public Color colorPaint
+    {
+        get
+        {
+            return _colorPaint;
+        }
+        set
+        {
+            _colorPaint = value;
+            if (paintLine != null)
+            {
+                paintLine.UpdateColor(_colorPaint);
+            }
+            if (uiFillColor != null)
+            {
+                uiFillColor.colorFill = _colorPaint;
+            }
+        }
+    }
     public int lineWidthPixsel//线宽 像素
     {
         get
@@ -124,11 +144,14 @@ public class GamePaint : UIView
         isPainColorClickDown = false;
 
         matPenColor = new Material(Shader.Find("Custom/PenColor"));
-        matPaint = new Material(Shader.Find("Custom/PaintLine"));
+        matPaintMeshTex = new Material(Shader.Find("Custom/PaintMeshTex"));
+        //matErase = new Material(Shader.Find("Custom/EraseBlit"));
+        matErase = new Material(Shader.Find("Custom/Erase"));
 
         objSpriteStraw.SetActive(false);
         objSpriteErase.SetActive(false);
 
+        texPicBlank = TextureCache.main.Load("App/UI/Game/Blank");
         //  ParseGuanka(); 
         //  AppSceneBase.main.AddObjToMainWorld(objSpritePaintBoardMid);
         //AppSceneBase.main.AddObjToMainWorld(objPaint);
@@ -144,6 +167,8 @@ public class GamePaint : UIView
         paintLine = (PaintLine)GameObject.Instantiate(paintLinePrefab);
         paintLine.transform.SetParent(this.transform);
         paintLine.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+
 
 
     }
@@ -167,13 +192,7 @@ public class GamePaint : UIView
             scale = Common.ScreenToWorldWidth(mainCam, w_screen) / (sprender.sprite.texture.width / 100f);
             objSpriteStraw.transform.localScale = new Vector3(scale, scale, 1f);
         }
-        //objSpriteErase
-        {
-            SpriteRenderer sprender = objSpriteErase.GetComponent<SpriteRenderer>();
-            float w_screen = sprender.sprite.texture.width * AppCommon.scaleBase;
-            scale = Common.ScreenToWorldWidth(mainCam, w_screen) / (sprender.sprite.texture.width / 100f);
-            objSpriteErase.transform.localScale = new Vector3(scale, scale, 1f);
-        }
+
 
 
         //bg
@@ -212,10 +231,10 @@ public class GamePaint : UIView
         //sprite pic
         {
             scale = Common.GetBestFitScale(texPic.width / 100f, texPic.height / 100f, rectMain.width, rectMain.height);
-            z = objSpritePic.transform.localPosition.z;
-            objSpritePic.transform.localPosition = new Vector3(rectMain.center.x, rectMain.center.y, z);
+            z = uiGameImage.objSpritePic.transform.localPosition.z;
+            uiGameImage.objSpritePic.transform.localPosition = new Vector3(rectMain.center.x, rectMain.center.y, z);
 
-            objSpritePic.transform.localScale = new Vector3(scale, scale, 1f);
+            uiGameImage.objSpritePic.transform.localScale = new Vector3(scale, scale, 1f);
 
             //uifillcolor
             if (uiFillColor != null)
@@ -226,7 +245,11 @@ public class GamePaint : UIView
             }
         }
 
-
+        if (uiGameImage != null)
+        {
+            uiGameImage.rectMain = rectMain;
+            uiGameImage.LayOut();
+        }
 
     }
 
@@ -256,18 +279,18 @@ public class GamePaint : UIView
     }
     public void InitSign()
     {
-        matSign = new Material(Shader.Find("Custom/PaintSign"));
-        matSign.SetTexture("_MainTex", rtMainPaint);
-        matSign.SetTexture("_Brush", texBrush);
-        matSign.SetTexture("_TexMask", texPicMask);
-        //_BrushW，_BrushH:图片的完整像素为0.5f
-        float brush_w = 0.04f;
-        float brush_h = brush_w;
-        //brushSize = brush_w;
-        matSign.SetFloat("_BrushW", brush_w);//0.5f
-        matSign.SetFloat("_BrushH", brush_h);
-        //在位置设置为中心点
-        matSign.SetVector("_PaintUV", new Vector4(0.5f, 0.5f, 0, 0));
+        // matSign = new Material(Shader.Find("Custom/PaintSign"));
+        // matSign.SetTexture("_MainTex", rtMainPaint);
+        // matSign.SetTexture("_Brush", texBrush);
+        // matSign.SetTexture("_TexMask", texPicMask);
+        // //_BrushW，_BrushH:图片的完整像素为0.5f
+        // float brush_w = 0.04f;
+        // float brush_h = brush_w;
+        // //brushSize = brush_w;
+        // matSign.SetFloat("_BrushW", brush_w);//0.5f
+        // matSign.SetFloat("_BrushH", brush_h);
+        // //在位置设置为中心点
+        // matSign.SetVector("_PaintUV", new Vector4(0.5f, 0.5f, 0, 0));
     }
     public void Init()
     {
@@ -307,38 +330,89 @@ public class GamePaint : UIView
 
         // Texture2D texScale = TextureUtil.ConvertSize(texPic, w, h);
         //Graphics.Blit(texPic, rtMainPaint);
-        TextureUtil.UpdateSpriteTexture(objSpritePic, texPic);
+        TextureUtil.UpdateSpriteTexture(uiGameImage.objSpritePic, texPic);
 
 
         UpdateMainPaintScale();
-        //   UpdateLineWidth();
+        UpdateLineWidth();
         InitSign();
         InitFillColor();
-
+        meshTex.EnableTouch(true);
+        meshTex.UpdateMaterial(matPaintMeshTex);
+        matPaintMeshTex = meshTex.GetMaterial();
         meshTex.UpdateTexture(rtMainPaint);
         Vector2 worldsize = Common.GetWorldSize(mainCam);
         meshTex.UpdateSize(worldsize.x, worldsize.y);
+
+        //只显示绘图区域
+        // float uv_dispx = (rectMain.x + worldsize.x / 2) / worldsize.x;
+        // float uv_dispy = (rectMain.y + worldsize.y / 2) / worldsize.y;
+        // float uv_dispw = rectMain.width / worldsize.x;
+        // float uv_disph = rectMain.height / worldsize.y;
+        Rect rc_uv = GetUVRectOfPaint();
+        matPaintMeshTex.SetFloat("_DispX", rc_uv.x);
+        matPaintMeshTex.SetFloat("_DispY", rc_uv.y);
+        matPaintMeshTex.SetFloat("_DispW", rc_uv.width);
+        matPaintMeshTex.SetFloat("_DispH", rc_uv.height);
 
         if (paintLine != null)
         {
             paintLine.rtMain = rtMainPaint;
             paintLine.Init();
             paintLine.UpdateRect(rectMain);
-            paintLine.UpdateColor(Color.yellow);
+            paintLine.UpdateColor(colorPaint);
         }
 
-        cameraPic.targetTexture = rtMainPaint;
-        int layerLine = 9;
-        mainCam.cullingMask &= ~(1 << layerLine); // 关闭层x
-        // mainCam.cullingMask |= (1 << layer);  // 打开层x
-
-        cameraPic.cullingMask = (1 << layerLine);
-        objSpritePic.layer = layerLine;
+        if (uiGameImage != null)
+        {
+            uiGameImage.rtMain = rtMainPaint;
+            uiGameImage.Init();
+        }
 
         //uifillcolor
         uiFillColor.cam.targetTexture = rtMainPaint;
         uiFillColor.UpdateMask(texPicMask);
-        // uiFillColor.colorFill = colorPaint;
+        uiFillColor.colorFill = colorPaint;
+
+        if (isFreeDraw)
+        {
+            uiFillColor.gameObject.SetActive(false);
+            uiGameImage.objSpritePic.SetActive(false);
+        }
+        else
+        {
+            uiFillColor.gameObject.SetActive(true);
+            uiGameImage.objSpritePic.SetActive(true);
+        }
+
+        matPaintMeshTex.SetTexture("_TexErase", texBrush);
+    }
+
+    void UpdateErase()
+    {
+
+        float x, y, w, h;
+
+
+        // w = (texBrush.width) * 1f / (rtMainPaint.width);
+        // h = (texBrush.height) * 1f / (rtMainPaint.height);
+
+        // matPaintMeshTex.SetFloat("_EraseW", w);//0.5f
+        // matPaintMeshTex.SetFloat("_EraseH", h);
+        // matPaintMeshTex.SetTexture("_TexErase", texBrush);
+
+        // Vector3 posworld = Common.GetInputPositionWorld(mainCam);
+        // Vector3 poslocal = this.transform.InverseTransformPoint(posworld);
+        // w = meshTex.width;
+        // h = meshTex.height;
+        // x = (poslocal.x + w / 2) / w;
+        // y = (poslocal.y + h / 2) / h;
+
+        // matPaintMeshTex.SetFloat("_EraseUvX", x);
+        // matPaintMeshTex.SetFloat("_EraseUvY", y);
+
+
+        uiGameImage.UpdateErase();
     }
     public void UpdateLineWidth()
     {
@@ -348,8 +422,11 @@ public class GamePaint : UIView
         float brush_w = (line_width_world / sizeMainPaint.x) / 2;
         float brush_h = brush_w;
         brushSize = brush_w;
-        Debug.Log("scale:brush_w=" + brush_w + " brush_h=" + brush_h);
-
+        //  Debug.Log("scale:brush_w=" + brush_w + " brush_h=" + brush_h);
+        if (paintLine != null)
+        {
+            paintLine.UpdateLineWidth(lineWidthPixsel * AppCommon.scaleBase);
+        }
     }
 
 
@@ -361,7 +438,7 @@ public class GamePaint : UIView
         float brush_w = (line_width_world / sizeMainPaint.x) / 2;
         float brush_h = brush_w;
         brushSize = brush_w;
-        Debug.Log("scale:brush_w=" + brush_w + " brush_h=" + brush_h);
+        //  Debug.Log("scale:brush_w=" + brush_w + " brush_h=" + brush_h);
 
     }
     void UpdateMainPaintScale()
@@ -384,13 +461,54 @@ public class GamePaint : UIView
     {
         //  matPaint.SetInt("_isFreeDraw", enable ? 1 : 0);
     }
-
+    Rect GetUVRectOfPaint()
+    {
+        LayOut();
+        Vector2 worldsize = Common.GetWorldSize(mainCam);
+        Rect world_rect = AppSceneBase.main.GetRectMainWorld().rect;
+        //Vector3 posworld = this.transform.TransformPoint(new Vector3(rectMain.x, rectMain.y, 0)); 
+        SpriteRenderer rd = objSpriteBg.GetComponent<SpriteRenderer>();
+        float x = (rd.bounds.center.x - rd.bounds.size.x / 2) + world_rect.size.x / 2;
+        float y = (rd.bounds.center.y - rd.bounds.size.y / 2) + world_rect.size.y / 2;
+        Debug.Log("worldsize=" + worldsize + " world_rect=" + world_rect + " y=" + y);
+        //只显示绘图区域
+        float uv_x = x / worldsize.x;
+        float uv_y = y / worldsize.y;
+        float uv_w = rd.bounds.size.x / worldsize.x;
+        float uv_h = rd.bounds.size.y / worldsize.y;
+        return new Rect(uv_x, uv_y, uv_w, uv_h);
+    }
     public void SaveImage(string filePath)
     {
         Texture2D texSave = TextureUtil.RenderTexture2Texture2D(rtMainPaint);
         if (texSave)
         {
-            TextureUtil.SaveTextureToFile(texSave, filePath);
+            Rect rc_uv = GetUVRectOfPaint();
+            int oft = 1;//四舍五入
+            float x = rc_uv.x * rtMainPaint.width + oft;
+            float y = rc_uv.y * rtMainPaint.height;
+            float w = rc_uv.width * rtMainPaint.width;
+            float h = rc_uv.height * rtMainPaint.height;
+            if (x > (int)x)
+            {
+                //四舍五入
+                x += oft;
+                w -= 2 * oft;
+            }
+            if (y > (int)y)
+            {
+                //四舍五入
+                y -= oft;
+                h -= 2 * oft;
+            }
+            Rect rc = new Rect(x, y, w, h);
+            Debug.Log("SaveImage:rc=" + rc + " rc_uv=" + rc_uv + " filePath=" + filePath + " rtMainPaint.width=" + rtMainPaint.width + " rtMainPaint.height=" + rtMainPaint.height);
+            // rc.y = 40;
+
+            //顶点为y坐标0
+            rc.y = rtMainPaint.height - (rc.y + rc.height);
+            Texture2D tex = TextureUtil.GetSubTexture(texSave, rc);
+            TextureUtil.SaveTextureToFile(tex, filePath);
         }
 
         isHasSave = true;
@@ -576,13 +694,20 @@ public class GamePaint : UIView
 
                 break;
             case MODE_ERASE:
-
+                uiFillColor.Clear();
+                paintLine.Clear();
                 break;
             case MODE_SIGN:
-
+                uiFillColor.Clear();
+                paintLine.Clear();
                 break;
 
 
+        }
+
+        if (uiGameImage != null)
+        {
+            uiGameImage.UpdateMode(m);
         }
     }
 
@@ -599,7 +724,7 @@ public class GamePaint : UIView
             case MODE_FILLCOLR:
                 if (status == UITouchEvent.STATUS_TOUCH_UP)
                 {
-                    //isHasPaint = true;
+                    isHasPaint = true;
                     // onFillColor(pt);
                 }
 
@@ -613,7 +738,7 @@ public class GamePaint : UIView
                 {
                     EnbaleErase(true);
                     UpdateEraseLineWidth();
-                    onErase(pt);
+                    onErase(pt, status);
                 }
                 break;
             case MODE_SIGN:
@@ -664,57 +789,153 @@ public class GamePaint : UIView
     void onSign(Vector2 pt)
     {
 
-        RaycastHit hitInfo;
-        Vector2 uv = Vector2.zero;
-        var ray = mainCam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hitInfo))
+        if (uiGameImage != null)
         {
-            uv = hitInfo.textureCoord;
+            uiGameImage.UpdateSignPic();
+            uiGameImage.UpdateSignColor(colorPaint);
         }
-        int idx = Random.Range(0, 3);
-        //idx =0;
-        matSign.SetVector("_ControlColor", new Vector4(colorPaint.r, colorPaint.g, colorPaint.b, colorPaint.a));
-        Texture2D texSign = LoadTexture.LoadFromResource("APP/UI/Game/Sign/icon_sign" + idx);
-        matSign.SetTexture("_Brush", texSign);
-        Renderer render = objPaint.GetComponent<Renderer>();
-        sizeMainPaint = render.bounds.size;
-        float line_width_world = Common.ScreenToWorldWidth(mainCam, texSign.width * AppCommon.scaleBase);
-        float brush_w = (line_width_world / sizeMainPaint.x) / 2;
-        float brush_h = brush_w;
-        //brushSize = brush_w;
-        matSign.SetFloat("_BrushW", brush_w);//0.5f
-        matSign.SetFloat("_BrushH", brush_h);
-        //在位置设置为中心点
-        matSign.SetVector("_PaintUV", new Vector4(uv.x, uv.y, 0, 0));
+        /* 
+                RaycastHit hitInfo;
+                Vector2 uv = Vector2.zero;
+                var ray = mainCam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hitInfo))
+                {
+                    uv = hitInfo.textureCoord;
+                }
+                int idx = Random.Range(0, 3);
+                //idx =0;
+                matSign.SetVector("_ControlColor", new Vector4(colorPaint.r, colorPaint.g, colorPaint.b, colorPaint.a));
+                Texture2D texSign = LoadTexture.LoadFromResource("APP/UI/Game/Sign/icon_sign" + idx);
+                matSign.SetTexture("_Brush", texSign);
+                Renderer render = objPaint.GetComponent<Renderer>();
+                sizeMainPaint = render.bounds.size;
+                float line_width_world = Common.ScreenToWorldWidth(mainCam, texSign.width * AppCommon.scaleBase);
+                float brush_w = (line_width_world / sizeMainPaint.x) / 2;
+                float brush_h = brush_w;
+                //brushSize = brush_w;
+                matSign.SetFloat("_BrushW", brush_w);//0.5f
+                matSign.SetFloat("_BrushH", brush_h);
+                //在位置设置为中心点
+                matSign.SetVector("_PaintUV", new Vector4(uv.x, uv.y, 0, 0));
 
-        float rotation_min = -30f;
-        float rotation_max = 30f;
-        int rdm = Random.Range(0, 100);
-        float rotation = rotation_min + (rotation_max - rotation_min) * rdm / 100;
-        matSign.SetFloat("_BrushRotate", rotation);
+                float rotation_min = -30f;
+                float rotation_max = 30f;
+                int rdm = Random.Range(0, 100);
+                float rotation = rotation_min + (rotation_max - rotation_min) * rdm / 100;
+                matSign.SetFloat("_BrushRotate", rotation);
 
-        var rtTmp = RenderTexture.GetTemporary(rtMainPaint.width, rtMainPaint.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-        Graphics.Blit(rtMainPaint, rtTmp, matSign);
-        Graphics.Blit(rtTmp, rtMainPaint);
-        RenderTexture.ReleaseTemporary(rtTmp);
+                var rtTmp = RenderTexture.GetTemporary(rtMainPaint.width, rtMainPaint.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                Graphics.Blit(rtMainPaint, rtTmp, matSign);
+                Graphics.Blit(rtTmp, rtMainPaint);
+                RenderTexture.ReleaseTemporary(rtTmp);
+                */
     }
 
-    void onErase(Vector2 pt)
+    void onErase(Vector2 pt, int status)
     {
-        onPaint(pt, UITouchEvent.STATUS_TOUCH_DOWN);
-
-
-        if (callBackErase != null)
+        float x, y, w, h;
+        if (status == UITouchEvent.STATUS_TOUCH_DOWN)
         {
-            callBackErase();
+
+
+
+            w = (texBrush.width) * 1f / (rtMainPaint.width);
+            h = (texBrush.height) * 1f / (rtMainPaint.height);
+
+            matErase.SetFloat("_EraseW", w);//0.5f
+            matErase.SetFloat("_EraseH", h);
+            matErase.SetTexture("_TexErase", texBrush);
+
         }
+
+        uiGameImage.UpdateEraseMaterial(matErase);
+        matErase = uiGameImage.GetEraseMaterial();
+
+        Vector3 posworld = Common.GetInputPositionWorld(mainCam);
+        Vector3 poslocal = objPaint.transform.InverseTransformPoint(posworld);
+        w = meshTex.width;
+        h = meshTex.height;
+        x = (poslocal.x + w / 2) / w;
+        y = (poslocal.y + h / 2) / h;
+
+        matErase.SetFloat("_EraseUvX", x);
+        matErase.SetFloat("_EraseUvY", y);
+        matErase.SetTexture("_TexContent", rtMainPaint);
+
+        posworld.z = uiGameImage.objSpriteErase.transform.position.z;
+        uiGameImage.objSpriteErase.transform.position = posworld;
+        // UpdateErase();
+        Debug.Log("onErase  uv x=" + x + " y=" + y);
+    }
+
+    //blit touch move的时候不流畅
+    void onEraseByBlit(Vector2 pt, int status)
+    {
+        float x, y, w, h;
+        if (status == UITouchEvent.STATUS_TOUCH_DOWN)
+        {
+
+
+
+            w = (texBrush.width) * 1f / (rtMainPaint.width);
+            h = (texBrush.height) * 1f / (rtMainPaint.height);
+
+            matErase.SetFloat("_EraseW", w);//0.5f
+            matErase.SetFloat("_EraseH", h);
+            matErase.SetTexture("_TexErase", texBrush);
+
+        }
+
+
+        // onPaint(pt, UITouchEvent.STATUS_TOUCH_DOWN);
+
+        //uiGameImage.UpdateEraseMaterial(matErase);
+        // matErase = uiGameImage.GetEraseMaterial();
+
+        Vector3 posworld = Common.GetInputPositionWorld(mainCam);
+        Vector3 poslocal = objPaint.transform.InverseTransformPoint(posworld);
+        w = meshTex.width;
+        h = meshTex.height;
+        x = (poslocal.x + w / 2) / w;
+        y = (poslocal.y + h / 2) / h;
+
+        matErase.SetFloat("_EraseUvX", x);
+        matErase.SetFloat("_EraseUvY", y);
+
+
+        posworld.z = uiGameImage.objSpriteErase.transform.position.z;
+        // uiGameImage.objSpriteErase.transform.position = posworld;
+
+        //Graphics.Blit(texBrush, rtMainPaint, matErase);
+        long tick = Common.GetCurrentTimeMs();
+        var rtTmp = RenderTexture.GetTemporary(rtMainPaint.width, rtMainPaint.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+        Graphics.Blit(rtMainPaint, rtTmp, matErase);
+        Graphics.Blit(rtTmp, rtMainPaint);
+        RenderTexture.ReleaseTemporary(rtTmp);
+        tick = Common.GetCurrentTimeMs() - tick;
+        if (status == UITouchEvent.STATUS_TOUCH_MOVE)
+        {
+            Debug.Log("onErase texBrush uv w=" + w + " h=" + h + " tick=" + tick + "ms");
+        }
+        // if (callBackErase != null)
+        // {
+        //     callBackErase();
+        // }
     }
     public void EraseAll()
     {
         isHasPaint = false;
         isHasSave = false;
         //恢复
-        Graphics.Blit(texPicOrign, rtMainPaint);
+        Graphics.Blit(texPicBlank, rtMainPaint);
+        if (uiFillColor != null)
+        {
+            uiFillColor.Clear();
+        }
+        if (paintLine != null)
+        {
+            paintLine.Clear();
+        }
     }
 
 
@@ -809,7 +1030,7 @@ public class GamePaint : UIView
         if (mode == MODE_FILLCOLR)
         {
             uiFillColor.OnUITouchEvent(ev, eventData, status);
-            return;
+            // return;
         }
         switch (status)
         {

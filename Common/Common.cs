@@ -619,6 +619,13 @@ public class Common
         }
         return pos;
     }
+    static public Vector3 GetInputPositionWorld(Camera cam)
+    {
+        Vector2 pos = GetInputPosition();
+        Vector3 posWorld = cam.ScreenToWorldPoint(pos);
+        return posWorld;
+    }
+
 
     static public string GetAppName()
     {
@@ -633,7 +640,7 @@ public class Common
             appname = Config.main.GetAppNameJson(Device.isLandscape);
         }
         //string appname = Language.main.GetString(AppString.APP_NAME);
-        
+
         //去除hd
         // int idxtmp = appname.IndexOf("HD");
         // if (idxtmp > 0)

@@ -9,7 +9,7 @@ public class PaintLine : UIView
     //UITouchEventWithMove uiTouchEvent;
     VectorLine lineCur;
     List<Vector3> listPointCur;
-    float lineWidth = 20f;
+    float lineWidth = 20f;//屏幕像素单位
     BoxCollider boxCollider;
     public Rect rectMain;
     public MeshTexture meshTex;
@@ -36,8 +36,10 @@ public class PaintLine : UIView
     // Use this for initialization
     void Start()
     {
-
-
+        objLine = lineCur.GetObj();
+        objLine.transform.SetParent(this.gameObject.transform);
+        objLine.transform.localPosition = Vector3.zero;
+        objLine.layer = layerLine;
     }
 
     // Update is called once per frame
@@ -75,6 +77,17 @@ public class PaintLine : UIView
             meshTex.UpdateSize(worldsize.x, worldsize.y);
         }
     }
+
+    //单位：屏幕像素
+    public void UpdateLineWidth(float w)
+    {
+        lineWidth = w;
+        if (lineCur != null)
+        {
+            lineCur.lineWidth = lineWidth;
+        }
+    }
+
     public void UpdateRect(Rect rc)
     {
         // if (boxCollider != null)
@@ -86,7 +99,8 @@ public class PaintLine : UIView
     public void UpdateColor(Color cr)
     {
         colorLine = cr;
-        SetLineColor(cr);
+        //在draw的时候再更新颜色，防止已经画好的线改变颜色
+        //SetLineColor(cr);
     }
     public void Clear()
     {
@@ -94,10 +108,7 @@ public class PaintLine : UIView
         {
             listPointCur.Clear();
         }
-        if (lineCur != null)
-        {
-            lineCur.Draw3D();
-        }
+        Draw();
     }
     void SetLineColor(Color cr)
     {
@@ -118,17 +129,23 @@ public class PaintLine : UIView
         // listPointCur.Add(new Vector3(5, 0, 0));
 
         lineCur = new VectorLine("line", listPointCur, lineWidth);
+        //AppSceneBase.main.AddObjToMainWorld()
         lineCur.lineType = LineType.Continuous;
         //圆滑填充画线
         lineCur.joins = Joins.Fill;
-        lineCur.Draw3D();
-        objLine = lineCur.GetObj();
-        objLine.transform.SetParent(this.gameObject.transform);
-        objLine.transform.localPosition = Vector3.zero;
         lineCur.material = matLine;
         lineCur.color = colorLine;
         SetLineColor(colorLine);
-        objLine.layer = layerLine;
+
+        Draw();
+    }
+    public void Draw()
+    {
+        if (lineCur != null)
+        {
+            SetLineColor(colorLine);
+            lineCur.Draw3D();
+        }
     }
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
@@ -153,7 +170,7 @@ public class PaintLine : UIView
         Debug.Log("PaintLine AddPoint pos=" + pos);
         listPointCur.Add(GetTouchLocalPosition(pos));
         //listPointCur.Add(pos);
-        lineCur.Draw3D();
+        Draw();
     }
     Vector3 GetTouchLocalPosition(Vector3 pos)
     {

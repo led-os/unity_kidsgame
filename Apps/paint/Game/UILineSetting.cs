@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public delegate void OnUILineSettingLineWidthDelegate(int width);
 public class UILineSetting : UIView
 {
-    public  int LINE_WIDTH_PIXSEL_MIN = 8;
-    public  int LINE_WIDTH_PIXSEL_MAX = 900;//基于参考分辨率 2048x1536
+    public const int LINE_WIDTH_PIXSEL_MIN = 8;
+    public const int LINE_WIDTH_PIXSEL_MAX = 200;//基于参考分辨率 2048x1536
     public Slider slider;
     public Text textPixsel;
     public Text textTitle;
@@ -73,7 +73,7 @@ public class UILineSetting : UIView
         }
 
 
- 
+
     }
 
     public void OnValueChangedInputFieldPixsel()
@@ -123,7 +123,7 @@ public class UILineSetting : UIView
         {
             callBackSettingLineWidth(lineWidthPixsel);
         }
-        Debug.Log("OnSliderValueChanged:value=" + value + " lineWidthPixsel=" + lineWidthPixsel);
+        Debug.Log("OnSliderValueChanged:value=" + slider.value + " lineWidthPixsel=" + lineWidthPixsel + " LINE_WIDTH_PIXSEL_MIN=" + LINE_WIDTH_PIXSEL_MIN + " LINE_WIDTH_PIXSEL_MAX=" + LINE_WIDTH_PIXSEL_MAX);
     }
     public void OnClickBtnClose()
     {

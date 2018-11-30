@@ -365,16 +365,16 @@ public class UIGamePaint : UIGameBase
     void InitUI()
     {
         ColorItemInfo info = GetItemInfo();
-        // if (gameMode == GAME_MODE_FREE_DRAW)
-        // {
-        //     paintColor.isFreeDraw = true;
-        //     btnFill.gameObject.SetActive(false);
-        // }
-        // else
-        // {
-        //     paintColor.isFreeDraw = false;
-        //     btnFill.gameObject.SetActive(true);
-        // }
+        if (gameMode == GAME_MODE_FREE_DRAW)
+        {
+            gamePaint.isFreeDraw = true;
+            btnFill.gameObject.SetActive(false);
+        }
+        else
+        {
+            gamePaint.isFreeDraw = false;
+            btnFill.gameObject.SetActive(true);
+        }
         if (gamePaint == null)
         {
             return;
@@ -393,17 +393,15 @@ public class UIGamePaint : UIGameBase
         // paintColor.callBackClickStraw = OnPaintColorClickStraw;
         // paintColor.callBackErase = OnPaintColorErase;
 
-        InitPaintRect();//必须在paintColor.Init前面
+        InitPaintRect();//必须在paintColor.Init前面 
 
-        // gamePaint.Init();
+        UpdateColorCur();
 
-        // UpdateColorCur();
+        uiColorInput.UpdateInitColor(gamePaint.colorPaint);
 
-        // uiColorInput.UpdateInitColor(paintColor.colorPaint);
+        uiLineSetting.lineWidthPixsel = gamePaint.lineWidthPixsel;
 
-        // uiLineSetting.lineWidthPixsel = paintColor.lineWidthPixsel;
-
-        //InitPenColor();
+        InitPenColor();
 
         UpdateImagePenSelPosition();
         gamePaint.UpdateBg(AppRes.IMAGE_PAINT_BG);
@@ -437,7 +435,7 @@ public class UIGamePaint : UIGameBase
             float w_disp = w_pic * scale;
             float h_disp = h_pic * scale;
             x = -w_disp / 2;
-            y = -h_disp / 2-topbar_h_world/2;
+            y = -h_disp / 2 - topbar_h_world / 2;
             gamePaint.rectMain = new Rect(x, y, w_disp, h_disp);
 
         }
@@ -562,7 +560,7 @@ public class UIGamePaint : UIGameBase
     {
         Debug.Log("LoadGameTexture: gameMode=" + gameMode);
         ColorItemInfo info = GetItemInfo();
-        texBrush = LoadTexture.LoadFromResource("UI/Brush/brush_dot");
+        texBrush = TextureCache.main.Load("App/UI/Brush/brush_dot");
 
         string picfile = info.pic;
         if (gameMode == GAME_MODE_FREE_DRAW)
@@ -644,7 +642,7 @@ public class UIGamePaint : UIGameBase
     }
     void UpdateColorCur()
     {
-        //     btnColor.GetComponent<Image>().color = paintColor.colorPaint;
+        btnColor.GetComponent<Image>().color = gamePaint.colorPaint;
     }
 
     void InitPenColorFill()
@@ -684,39 +682,39 @@ public class UIGamePaint : UIGameBase
         Texture2D texNew = null;
         Texture2D tex = null;
         Texture2D texMask = null;
-        // switch (paintColor.mode)
-        // {
-        //     case PaintColor.MODE_PAINT:
-        //         {
-        //             tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_color_pen");
-        //             texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_color_pen_mask");
-        //             texNew = UpdateTextureColor(tex, texMask, color, Color.white);
-        //             btnPen.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
-        //         }
-        //         break;
-        //     case PaintColor.MODE_FILLCOLR:
-        //         {
-        //             tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_fill_pen");
-        //             texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_fill_pen_mask");
-        //             texNew = UpdateTextureColor(tex, texMask, color, Color.white);
-        //             btnFill.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
-        //         }
-        //         break;
-        //     case PaintColor.MODE_SIGN:
-        //         {
-        //             tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_sign_pen");
-        //             texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_sign_pen_mask");
-        //             texNew = UpdateTextureColor(tex, texMask, color, Color.white);
-        //             btnSign.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
-        //         }
-        //         break;
-        // }
+        switch (gamePaint.mode)
+        {
+            case GamePaint.MODE_PAINT:
+                {
+                    tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_color_pen");
+                    texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_color_pen_mask");
+                    texNew = UpdateTextureColor(tex, texMask, color, Color.white);
+                    btnPen.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
+                }
+                break;
+            case GamePaint.MODE_FILLCOLR:
+                {
+                    tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_fill_pen");
+                    texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_fill_pen_mask");
+                    texNew = UpdateTextureColor(tex, texMask, color, Color.white);
+                    btnFill.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
+                }
+                break;
+            case GamePaint.MODE_SIGN:
+                {
+                    tex = LoadTexture.LoadFromResource("APP/UI/Game/btn_sign_pen");
+                    texMask = LoadTexture.LoadFromResource("APP/UI/Game/btn_sign_pen_mask");
+                    texNew = UpdateTextureColor(tex, texMask, color, Color.white);
+                    btnSign.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(texNew);
+                }
+                break;
+        }
     }
 
     public void OnUILineSettingLineWidth(int width)
     {
-        // paintColor.lineWidthPixsel = width;
-        // paintColor.UpdateLineWidth();
+        gamePaint.lineWidthPixsel = width;
+        gamePaint.UpdateLineWidth();
 
     }
     public void OnPaintColorErase()
@@ -733,59 +731,59 @@ public class UIGamePaint : UIGameBase
     public void OnUIColorInputUpdateColor(Color color)
     {
 
-        // switch (paintColor.mode)
-        // {
-        //     case PaintColor.MODE_PAINT:
-        //         {
-        //             colorPen = color;
-        //         }
-        //         break;
-        //     case PaintColor.MODE_FILLCOLR:
-        //         {
-        //             colorFill = color;
-        //         }
-        //         break;
-        //     case PaintColor.MODE_SIGN:
-        //         {
-        //             colorSign = color;
-        //         }
-        //         break;
-        // }
-        // paintColor.colorPaint = color;
-        // UpdateColorCur();
-        // UpdatePenColor(color);
+        switch (gamePaint.mode)
+        {
+            case GamePaint.MODE_PAINT:
+                {
+                    colorPen = color;
+                }
+                break;
+            case GamePaint.MODE_FILLCOLR:
+                {
+                    colorFill = color;
+                }
+                break;
+            case GamePaint.MODE_SIGN:
+                {
+                    colorSign = color;
+                }
+                break;
+        }
+        gamePaint.colorPaint = color;
+        UpdateColorCur();
+        UpdatePenColor(color);
     }
     public void OnUIColorBoardDidClick(UIColorBoard ui, UIColorBoardCellItem item, bool isOutSide)
     {
-        // if (isOutSide)
-        // {
-        //     uiColorBoard.gameObject.SetActive(false);
-        // }
-        // else
-        // {
-        //     switch (paintColor.mode)
-        //     {
-        //         case PaintColor.MODE_PAINT:
-        //             {
-        //                 colorPen = item.color;
-        //             }
-        //             break;
-        //         case PaintColor.MODE_FILLCOLR:
-        //             {
-        //                 colorFill = item.color;
-        //             }
-        //             break;
-        //         case PaintColor.MODE_SIGN:
-        //             {
-        //                 colorSign = item.color;
-        //             }
-        //             break;
-        //     }
-        //     paintColor.colorPaint = item.color;
-        //     uiColorBoard.gameObject.SetActive(false);
-        //     UpdateColorCur();
-        //     UpdatePenColor(item.color);
-        // }
+        if (isOutSide)
+        {
+            uiColorBoard.gameObject.SetActive(false);
+        }
+        else
+        {
+            switch (gamePaint.mode)
+            {
+                case GamePaint.MODE_PAINT:
+                    {
+                        colorPen = item.color;
+                    }
+                    break;
+                case GamePaint.MODE_FILLCOLR:
+                    {
+                        colorFill = item.color;
+                    }
+                    break;
+                case GamePaint.MODE_SIGN:
+                    {
+                        colorSign = item.color;
+                    }
+                    break;
+            }
+            gamePaint.colorPaint = item.color;
+            uiColorBoard.gameObject.SetActive(false);
+            UpdateColorCur();
+            UpdatePenColor(item.color);
+        }
     }
     ColorItemInfo GetItemInfo()
     {
@@ -1218,29 +1216,29 @@ public class UIGamePaint : UIGameBase
     void DoClickBtnColorInput()
     {
         isFirstUseColorInput = false;
-        // uiColorInput.UpdateInitColor(paintColor.colorPaint);
-        // uiColorInput.gameObject.SetActive(!uiColorInput.gameObject.activeSelf);
-        // Color color = colorPen;
-        // switch (paintColor.mode)
-        // {
-        //     case PaintColor.MODE_PAINT:
-        //         {
-        //             color = colorPen;
-        //         }
-        //         break;
-        //     case PaintColor.MODE_FILLCOLR:
-        //         {
-        //             color = colorFill;
-        //         }
-        //         break;
-        //     case PaintColor.MODE_SIGN:
-        //         {
-        //             color = colorSign;
-        //         }
-        //         break;
-        // }
-        // uiColorInput.ColorNow = color;
-        // uiColorInput.UpdateColorNow();
+        uiColorInput.UpdateInitColor(gamePaint.colorPaint);
+        uiColorInput.gameObject.SetActive(!uiColorInput.gameObject.activeSelf);
+        Color color = colorPen;
+        switch (gamePaint.mode)
+        {
+            case GamePaint.MODE_PAINT:
+                {
+                    color = colorPen;
+                }
+                break;
+            case GamePaint.MODE_FILLCOLR:
+                {
+                    color = colorFill;
+                }
+                break;
+            case GamePaint.MODE_SIGN:
+                {
+                    color = colorSign;
+                }
+                break;
+        }
+        uiColorInput.ColorNow = color;
+        uiColorInput.UpdateColorNow();
     }
     void DoClickBtnColorInputAlert()
     {

@@ -17,6 +17,7 @@ public class MeshTexture : MonoBehaviour
     //BoxCollider boxCollider;
     MeshCollider meshCollider;
     public Material matDefault;
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -31,10 +32,7 @@ public class MeshTexture : MonoBehaviour
         AddPoint(Vector3.zero);
 
 
-        //boxCollider = this.gameObject.AddComponent<BoxCollider>();
-        //设置网格碰撞体才能通过射线实时获取纹理的uv坐标
-        meshCollider = this.gameObject.AddComponent<MeshCollider>();
-        meshCollider.sharedMesh = mesh;
+
 
     }
     // Use this for initialization
@@ -50,7 +48,21 @@ public class MeshTexture : MonoBehaviour
 
     }
 
+    public void EnableTouch(bool enable)
+    {
+        if (!enabled)
+        {
+            return;
+        }
+        if (meshCollider == null)
+        {
+            //boxCollider = this.gameObject.AddComponent<BoxCollider>();
+            //设置网格碰撞体才能通过射线实时获取纹理的uv坐标
+            meshCollider = this.gameObject.AddComponent<MeshCollider>();
+            meshCollider.sharedMesh = mesh;
+        }
 
+    }
     public void AddPoint(Vector3 vec)
     {
         if (listPoint == null)
@@ -82,6 +94,16 @@ public class MeshTexture : MonoBehaviour
 
 
         return v;
+    }
+
+    public Material GetMaterial()
+    {
+        Material mat = null;
+        if (meshRender != null)
+        {
+            mat = meshRender.material;
+        }
+        return mat;
     }
 
     public void UpdateMaterial(Material mat)
@@ -190,6 +212,10 @@ public class MeshTexture : MonoBehaviour
         mesh.uv = uvs;
 
         //需要同步更新网格碰撞体 才能通过射线实时获取纹理的uv坐标
-        meshCollider.sharedMesh = mesh;
+        if (meshCollider != null)
+        {
+            meshCollider.sharedMesh = mesh;
+        }
+
     }
 }
