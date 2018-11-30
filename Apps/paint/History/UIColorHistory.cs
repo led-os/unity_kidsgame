@@ -216,16 +216,33 @@ public class UIColorHistory : UIView, ITableViewDataSource
             if (listItem != null)
             {
                 listItem.Remove(info);
-                tableView.ReloadData();
+                if (tableView != null)
+                {
+                    tableView.ReloadData();
+                }
+
             }
         }
     }
     void ShowGamePaintSaveImage(ColorItemInfo info)
     {
 
-        UIHistorySaveImage uiRun = (UIHistorySaveImage)GameObject.Instantiate(uiHistorySaveImage);
-        uiRun.callBackDelete = OnUIHistorySaveImageDidDelete;
-        uiRun.UpdateItem(info);
+        // UIHistorySaveImage uiRun = (UIHistorySaveImage)GameObject.Instantiate(uiHistorySaveImage);
+        // uiRun.callBackDelete = OnUIHistorySaveImageDidDelete;
+        // uiRun.UpdateItem(info);
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            if (navi != null)
+            {
+                navi.source = AppRes.SOURCE_NAVI_HISTORY;
+                HistorySaveImageViewController controller = HistorySaveImageViewController.main;
+                controller.infoItem = info;
+                controller.callBackDelete = OnUIHistorySaveImageDidDelete;
+                navi.Push(controller);
+            }
+
+        }
     }
     void GotoGame(ColorItemInfo info)
     {
@@ -258,7 +275,8 @@ public class UIColorHistory : UIView, ITableViewDataSource
             return;
         }
         ColorItemInfo info = listItem[item.index] as ColorItemInfo;
-        GotoGame(info);
+        // GotoGame(info);
+        ShowGamePaintSaveImage(info);
     }
 
     #region ITableViewDataSource

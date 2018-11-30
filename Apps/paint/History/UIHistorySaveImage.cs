@@ -29,19 +29,14 @@ public class UIHistorySaveImage : UIView
     // Use this for initialization
     void Start()
     {
-        InitUI();
+        LayOut();
     }
 
     // Update is called once per frame
     void Update()
     {
     }
-    void InitUI()
-    {
-
-        LayoutChild();
-    }
-    void LayoutChild()
+    public override void LayOut()
     {
         float x = 0, y = 0, w = 0, h = 0;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
@@ -75,6 +70,7 @@ public class UIHistorySaveImage : UIView
             rctran.anchoredPosition = new Vector2(x, y);
 
         }
+        if (imagePic.sprite && imagePic.sprite.texture)
         {
             int width = imagePic.sprite.texture.width;
             int height = imagePic.sprite.texture.height;
@@ -101,11 +97,9 @@ public class UIHistorySaveImage : UIView
         itemInfo = info;
         if (FileUtil.FileIsExist(info.fileSave))
         {
-            Texture2D tex = LoadTexture.LoadFromFile(info.fileSave);
-            imagePic.sprite = LoadTexture.CreateSprieFromTex(tex);
-
+            TextureUtil.UpdateImageTexture(imagePic, info.fileSave, true);
         }
-        LayoutChild();
+        LayOut();
     }
 
     public void UpdateItemSaveWord(ColorItemInfo info)
@@ -117,14 +111,18 @@ public class UIHistorySaveImage : UIView
             imagePic.sprite = LoadTexture.CreateSprieFromTex(tex);
 
         }
-        LayoutChild();
+        LayOut();
     }
     public void OnClickBtnClose()
     {
-        PopViewController pop = (PopViewController)this.controller;
-        if (pop != null)
+        if (this.controller != null)
         {
-            pop.Close();
+            NaviViewController navi = this.controller.naviController;
+            if (navi != null)
+            {
+                navi.Pop();
+            }
+
         }
     }
     public void OnClickBtnDel()

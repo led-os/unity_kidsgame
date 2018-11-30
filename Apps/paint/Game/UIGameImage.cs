@@ -62,6 +62,23 @@ public class UIGameImage : UIView
 
             }
 
+        }
+
+
+        {
+            SpriteRenderer render = objSpriteSign.GetComponent<SpriteRenderer>();
+            if (render.sprite && render.sprite.texture)
+            {
+                w = render.sprite.texture.width / 100f;
+                h = render.sprite.texture.height / 100f;
+                if ((w != 0) && (h != 0))
+                {
+                    float scale = (rectMain.width / 5) / w;
+                    objSpriteSign.transform.localScale = new Vector3(scale, scale, 1f);
+                }
+
+
+            }
 
         }
     }
@@ -113,6 +130,7 @@ public class UIGameImage : UIView
         Vector3 poslocal = this.transform.InverseTransformPoint(posworld);
         poslocal.z = objSpriteSign.transform.localPosition.z;
         objSpriteSign.transform.localPosition = poslocal;
+        LayOut();
     }
 
     public void UpdateErase()
