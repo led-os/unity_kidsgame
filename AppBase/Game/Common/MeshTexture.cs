@@ -50,8 +50,13 @@ public class MeshTexture : MonoBehaviour
 
     public void EnableTouch(bool enable)
     {
-        if (!enabled)
+        if (!enable)
         {
+            if (meshCollider != null)
+            {
+                Destroy(meshCollider);
+                meshCollider = null;
+            }
             return;
         }
         if (meshCollider == null)

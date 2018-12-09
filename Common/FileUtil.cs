@@ -234,11 +234,12 @@ public class FileUtil : MonoBehaviour
     //文件名
     static public string GetFileName(string filepath)
     {
-        string ret = "";
+        string ret = filepath;
         int idx = filepath.LastIndexOf("/");
         if (idx >= 0)
         {
             string str = filepath.Substring(idx + 1);
+            ret = str;
             idx = str.LastIndexOf(".");
             if (idx >= 0)
             {

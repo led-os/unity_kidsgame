@@ -486,6 +486,10 @@ public class UIScreenShotController : UIView
     }
     void UpdateTotal()
     {
+        if (deviceInfoNow == null)
+        {
+            return;
+        }
         if ((deviceInfoNow.name == DEVICE_NAME_ICON) || (deviceInfoNow.name == DEVICE_NAME_AD) || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI))
         {
             totalScreenShot = 1;

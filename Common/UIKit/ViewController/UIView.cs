@@ -70,7 +70,11 @@ public class UIView : MonoBehaviour
     }
     public void OnUIDidFinish()
     {
+        DoUIFinish();
+    }
 
+    void DoUIFinish()
+    {
         if (this.controller != null)
         {
             if (controller.callbackUIFinish != null)

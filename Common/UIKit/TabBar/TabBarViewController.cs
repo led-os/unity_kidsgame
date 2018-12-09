@@ -48,7 +48,7 @@ public class TabBarViewController : UIViewController
         string classname = "Content";
         objContent = new GameObject(classname);
         RectTransform rctran = objContent.AddComponent<RectTransform>();
-        // objContent.transform.parent = objController.transform;
+        objContent.transform.parent = objController.transform;
         // rctran.sizeDelta = sizeCanvas;
 
         rctran.anchorMin = new Vector2(0, 0);

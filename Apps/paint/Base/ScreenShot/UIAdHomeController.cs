@@ -17,7 +17,7 @@ public class UIAdHomeController : UIShotBase
     void Awake()
     {
         string appname = Common.GetAppNameDisplay();
-        textTitle.text = appname; 
+        // textTitle.text = appname; 
 
     }
     /// <summary>
@@ -59,7 +59,7 @@ public class UIAdHomeController : UIShotBase
             y = rctran.rect.height;
             rctran.anchoredPosition = new Vector2(x, y);
         }
-
+        if (imageTitle != null)
         {
             x = this.frame.width / 4;
             RectTransform rctran = imageTitle.GetComponent<RectTransform>();

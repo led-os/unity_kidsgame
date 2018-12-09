@@ -309,14 +309,15 @@ public class UIGamePaint : UIGameBase
                 uiColorBoard.gameObject.SetActive(false);
                 // RectTransform rctranPrefab = uiColorBoardPrefab.transform as RectTransform;
                 // //AppSceneBase.main.AddObjToMainCanvas(uiColorBoard.gameObject);
-
+                uiColorBoard.transform.SetParent(this.transform);
                 // RectTransform rctran = uiColorBoard.transform as RectTransform;
                 // // 初始化rect
                 // rctran.offsetMin = rctranPrefab.offsetMin;
                 // rctran.offsetMax = rctranPrefab.offsetMax;
 
                 uiColorBoard.callBackClick = OnUIColorBoardDidClick;
-
+                uiColorBoard.transform.localScale = new Vector3(1f, 1f, 1f);
+                ViewControllerManager.ClonePrefabRectTransform(uiColorBoardPrefab.gameObject, uiColorBoard.gameObject);
             }
         }
         {
@@ -327,8 +328,10 @@ public class UIGamePaint : UIGameBase
                 uiColorInput = (UIColorInput)GameObject.Instantiate(uiColorInputPrefab);
                 uiColorInput.gameObject.SetActive(false);
 
-
+                uiColorInput.transform.SetParent(this.transform);
                 uiColorInput.callBackUpdateColor = OnUIColorInputUpdateColor;
+                uiColorInput.transform.localScale = new Vector3(1f, 1f, 1f);
+                ViewControllerManager.ClonePrefabRectTransform(uiColorInputPrefab.gameObject, uiColorInput.gameObject);
             }
         }
 
@@ -339,10 +342,11 @@ public class UIGamePaint : UIGameBase
                 uiLineSettingPrefab = obj.GetComponent<UILineSetting>();
                 uiLineSetting = (UILineSetting)GameObject.Instantiate(uiLineSettingPrefab);
                 uiLineSetting.gameObject.SetActive(false);
-
+                uiLineSetting.transform.SetParent(this.transform);
 
                 uiLineSetting.callBackSettingLineWidth = OnUILineSettingLineWidth;
-
+                uiLineSetting.transform.localScale = new Vector3(1f, 1f, 1f);
+                ViewControllerManager.ClonePrefabRectTransform(uiLineSettingPrefab.gameObject, uiLineSetting.gameObject);
             }
         }
 
@@ -410,8 +414,7 @@ public class UIGamePaint : UIGameBase
         gamePaint.UpdateGamePic(info.pic);
         LayOut();
 
-
-        OnUIDidFinish();
+        Invoke("OnUIDidFinish", 0.2f);
     }
 
     void InitPaintRect()
@@ -426,8 +429,15 @@ public class UIGamePaint : UIGameBase
 
             Vector2 world_size = AppSceneBase.main.GetRectMainWorld().rect.size;
             float ratio = 0.95f;
+            float oft_y = topbar_h_world;
+            if (!Device.isLandscape)
+            {
+                //topbar + 底部的工具条
+                oft_y = topbar_h_world * 2;
+            }
             w = world_size.x;
-            h = (world_size.y - topbar_h_world);
+            h = (world_size.y - oft_y);
+
             float w_pic = texPic.width / 100f;
             float h_pic = texPic.height / 100f;
             scale = Common.GetBestFitScale(w_pic, h_pic, w, h) * ratio;
@@ -435,7 +445,11 @@ public class UIGamePaint : UIGameBase
             float w_disp = w_pic * scale;
             float h_disp = h_pic * scale;
             x = -w_disp / 2;
-            y = -h_disp / 2 - topbar_h_world / 2;
+            y = -h_disp / 2 - oft_y / 2;
+            if (!Device.isLandscape)
+            {
+                y = -h_disp / 2;
+            }
             gamePaint.rectMain = new Rect(x, y, w_disp, h_disp);
 
         }
@@ -504,8 +518,13 @@ public class UIGamePaint : UIGameBase
                 w = (cellSize.x + 8) * total_btn;
                 rctran.sizeDelta = new Vector2(w, cellSize.y);
                 x = 0;
-                //  y = (-h_canvas / 2 - cellSize.y / 2 - oft) + Common.WorldToCanvasHeight(mainCam, sizeCanvas, objSpritePaintBoardMid.transform.position.y);
-                y -= cellSize.y / 2;
+                Vector3 ptlocal = new Vector3(0, gamePaint.rectMain.y, 0);
+                // Vector3 ptworld = mainCam.ScreenToWorldPoint(this.transform.TransformPoint(ptlocal));
+                Vector3 ptworld = gamePaint.transform.TransformPoint(ptlocal);
+                Vector2 ptcanvas = Common.WorldToCanvasPoint(mainCam, sizeCanvas, ptworld);
+                Debug.Log("ptcanvas=" + ptcanvas + " ptworld=" + ptworld + " ptlocal=" + ptlocal);
+                oft = cellSize.y + 8f;
+                y = -(sizeCanvas.y / 2 - ptcanvas.y) - oft;
             }
 
             rctran.anchoredPosition = new Vector2(x, y);
