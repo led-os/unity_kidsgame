@@ -293,6 +293,11 @@ public class TextureUtil : MonoBehaviour
         Texture2D tex = TextureCache.main.Load(filepath);
         UpdateImageTexture(image, tex, isUpdateSize, border);
     }
+    static public void UpdateImageTexture(Image image, Texture2D tex, bool isUpdateSize)
+    {
+        UpdateImageTexture(image, tex, isUpdateSize, Vector4.zero);
+    }
+
     static public void UpdateImageTexture(Image image, Texture2D tex, bool isUpdateSize, Vector4 border)
     {
         if (tex)

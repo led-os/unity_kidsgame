@@ -104,9 +104,9 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
     }
     void InitLanguage()
     {
-          if (languageGame != null)
+        if (languageGame != null)
         {
-            return ;
+            return;
         }
         string filepath = Common.GAME_RES_DIR + "/language/language.csv";
         if (Common.isWeb)
@@ -271,12 +271,7 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
         {
             return null;
         }
-        string key = info.id;
-                              if (Common.appKeyName == AppType.SHAPECOLOR)
-        {
-             key="SHAPE_TITLE_" + info.id;
-        }
-
+        string key = GameShapeColor.LanguageKeyOfShape(info);
         string str = languageGame.GetString(key);
         return str;
     }
@@ -351,7 +346,10 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
         {
             return;
         }
-
+        if (listGuanka == null)
+        {
+            listGuanka = new List<object>();
+        }
         listShape = new List<object>();
         int idx = GameManager.placeLevel;
         string json = Encoding.UTF8.GetString(data);
@@ -390,6 +388,7 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
                 info.picOuter = info.pic;
             }
             listShape.Add(info);
+            listGuanka.Add(info);
         }
 
     }
@@ -421,6 +420,7 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
 
     public override int ParseGuanka()
     {
+        Debug.Log("ParseGuanka UIGameShapeColor");
         //ParseBgList();
         {
 
@@ -444,7 +444,7 @@ public class UIGameShapeColor : UIGameBase, IGameShapeColorDelegate
         {
 
             string filepath = Common.GAME_RES_DIR + "/guanka/shape_list_place" + GameManager.placeLevel + ".json";
-            Debug.Log("filepath="+filepath);
+            Debug.Log("filepath=" + filepath);
             if (Common.isWeb)
             {
                 httpReqGuankaJsonShape = new HttpRequest(OnHttpRequestFinished);

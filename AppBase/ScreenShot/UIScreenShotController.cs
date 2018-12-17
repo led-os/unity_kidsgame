@@ -170,7 +170,7 @@ public class UIScreenShotController : UIView
 
 
             // //ICON
-            //    CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
+            CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
             //adhome
             CreateDevice(DEVICE_NAME_AD, 1024, 500, false, true);
             CreateDevice(DEVICE_NAME_AD, 1080, 480, false, true);
@@ -1133,10 +1133,21 @@ public class UIScreenShotController : UIView
         {
             texSave = TextureUtil.ConvertSize(texSave, deviceInfoNow.width, deviceInfoNow.height, texSave.format);
         }
-
-
+        bool isSaveFile = true;
+        //if (deviceInfoNow.name == DEVICE_NAME_ICON)
+        {
+            if (FileUtil.FileIsExist(filepath))
+            {
+                //不覆盖原来的文件
+                isSaveFile = false;
+            }
+        }
         // 最后将这些纹理数据，成一个png图片文件  
-        TextureUtil.SaveTextureToFile(texSave, filepath);
+        if (isSaveFile)
+        {
+            TextureUtil.SaveTextureToFile(texSave, filepath);
+        }
+
 
         //ScreenCapture.CaptureScreenshot(filepath);
 

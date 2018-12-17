@@ -500,10 +500,10 @@ public class GameShapeColor : UIGameBase
             objSR.sprite.name = info.id;
         }
 
-float z = itemPosZ;
-    if (isInner)
+        float z = itemPosZ;
+        if (isInner)
         {
-            z = itemPosZ-1;
+            z = itemPosZ - 1;
         }
         obj.transform.position = new Vector3(0, 0, z);
 
@@ -1080,11 +1080,21 @@ float z = itemPosZ;
     {
         iTween.ScaleTo(info.obj, new Vector3(0f, 0f, 0f), 1.5f);
     }
+
+    static public string LanguageKeyOfShape(ShapeColorItemInfo info)
+    {
+        string key = info.id;
+        if (Common.appKeyName == AppType.SHAPECOLOR)
+        {
+            key = "SHAPE_TITLE_" + info.id;
+        }
+        return key;
+    }
     string StringOfItem(ShapeColorItemInfo info)
     {
         string str = "";
         string strColor = languageGame.GetString("COLOR_TITLE_" + info.colorid);
-        string strShape = languageGame.GetString("SHAPE_TITLE_" + info.id);
+        string strShape = languageGame.GetString(LanguageKeyOfShape(info));
         str = strColor + strShape;
         switch (Language.main.GetLanguage())
         {

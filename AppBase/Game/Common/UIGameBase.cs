@@ -108,6 +108,7 @@ public class UIGameBase : UIView
     }
     public virtual int ParseGuanka()
     {
+        Debug.Log("ParseGuanka UIGameBase");
         return 0;
     }
 
