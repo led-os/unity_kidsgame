@@ -211,7 +211,7 @@ public class UIToolBar : UIView
     {
         if (UIGameXieHanzi.gameMode == GameXieHanzi.GAME_MODE_FREE_WRITE)
         {
-            if ((!uiGameXieHanzi.meshPaint.isHasSave) && (uiGameXieHanzi.meshPaint.isHasPaint))
+            if ((!uiGameXieHanzi.gameXieHanzi.isHasSave) && (uiGameXieHanzi.gameXieHanzi.isHasPaint))
             {
                 ShowSaveTipsAlert();
                 return;
@@ -257,7 +257,7 @@ public class UIToolBar : UIView
         info.id = "id_free_write_" + Common.GetCurrentTimeMs();
         string filePath = uiGameXieHanzi.GetSavePath();
 
-        uiGameXieHanzi.meshPaint.SaveImage(filePath);
+        uiGameXieHanzi.gameXieHanzi.SaveImage(filePath);
 
         if (info == null)
         {
@@ -267,7 +267,7 @@ public class UIToolBar : UIView
     }
     public void OnClickBtnSave()
     {
-        if (uiGameXieHanzi.meshPaint.isHasPaint)
+        if (uiGameXieHanzi.gameXieHanzi.isHasPaint)
         {
             ShowSaveAlert();
         }
@@ -275,12 +275,12 @@ public class UIToolBar : UIView
     }
     public void DoBtnDelete()
     {
-        uiGameXieHanzi.meshPaint.ClearAll();
+        uiGameXieHanzi.gameXieHanzi.ClearAll();
     }
     public void OnClickBtnDelete()
     {
 
-        if (uiGameXieHanzi.meshPaint.isHasPaint)
+        if (uiGameXieHanzi.gameXieHanzi.isHasPaint)
         {
             ShowDeleteAlert();
         }

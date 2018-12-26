@@ -9,17 +9,20 @@ public class PaintLine : UIView
     //UITouchEventWithMove uiTouchEvent;
     VectorLine lineCur;
     List<Vector3> listPointCur;
-    float lineWidth = 20f;
+    float lineWidth = 20f;//屏幕像素
     BoxCollider boxCollider;
     public Rect rectMain;
     public MeshTexture meshTex;
     public RenderTexture rtMain;
     public Camera camRender;
+    public bool isHasPaint = false;
     Material matLine;
     GameObject objLine;
     int layerLine = 8;
-    Color colorLine = Color.white;
+    Color colorLine = Color.red;
     float radio = 1f;
+    Texture2D texClear;
+    public bool isHasSave = false;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -30,15 +33,13 @@ public class PaintLine : UIView
         camRender.transform.position = new Vector3(0, 0, camRender.transform.position.z);
         Init();
         CreateLine();
-        UpdateMeshTex();
-
     }
 
     // Use this for initialization
     void Start()
     {
 
-
+        UpdateMeshTex();
     }
 
     // Update is called once per frame
@@ -48,6 +49,8 @@ public class PaintLine : UIView
     }
     public void Init()
     {
+        isHasPaint = false;
+        isHasSave = false;
         matLine = new Material(Shader.Find("Custom/PaintLine"));
         int w = (int)(Screen.width * radio);
         int h = (int)(Screen.height * radio);
@@ -67,6 +70,8 @@ public class PaintLine : UIView
 
         UITouchEventWithMove ev = this.gameObject.AddComponent<UITouchEventWithMove>();
         ev.callBackTouch = OnUITouchEvent;
+
+        texClear = new Texture2D(rtMain.width, rtMain.height, TextureFormat.ARGB32, false);
     }
 
     void UpdateMeshTex()
@@ -89,7 +94,39 @@ public class PaintLine : UIView
     public void UpdateColor(Color cr)
     {
         colorLine = cr;
-        SetLineColor(cr);
+    }
+    public void SetLineWidthPixsel(int w)
+    {
+        lineWidth = w;
+        if (lineCur != null)
+        {
+            lineCur.lineWidth = lineWidth;
+        }
+    }
+    public void SaveImage(string filePath)
+    {
+        float x = 0, y = 0, w = 0, h = 0;
+        w = Common.WorldToScreenWidth(mainCam, rectMain.size.x);
+        h = Common.WorldToScreenHeight(mainCam, rectMain.size.y);
+        if (rectMain == Rect.zero)
+        {
+            w = rtMain.width;
+            h = rtMain.height;
+        }
+        x = (rtMain.width - w) / 2;
+        y = (rtMain.height - h) / 2;
+        Rect rc = new Rect(x, y, w, h);
+        Texture2D tex = TextureUtil.RenderTexture2Texture2D(rtMain, rc);
+        TextureUtil.SaveTextureToFile(tex, filePath);
+
+        isHasSave = true;
+    }
+
+    public void ClearAll()
+    {
+        Clear();
+        Graphics.Blit(texClear, rtMain);
+        isHasPaint = false;
     }
     public void Clear()
     {
@@ -101,6 +138,7 @@ public class PaintLine : UIView
         {
             lineCur.Draw3D();
         }
+        isHasPaint = false;
     }
     void SetLineColor(Color cr)
     {
@@ -130,7 +168,7 @@ public class PaintLine : UIView
         objLine.transform.localPosition = Vector3.zero;
         lineCur.material = matLine;
         lineCur.color = colorLine;
-        SetLineColor(colorLine);
+        // SetLineColor(colorLine);
         objLine.layer = layerLine;
     }
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
@@ -172,17 +210,21 @@ public class PaintLine : UIView
     {
         // CreateLine(); 
         Clear();
+        SetLineColor(colorLine);
         Vector3 pos = Common.GetInputPositionWorld(mainCam);
-
+        AddPoint(pos);
     }
     void onTouchMove()
     {
-
+        Vector3 pos = Common.GetInputPositionWorld(mainCam);
+        AddPoint(pos);
+        isHasPaint = true;
+        isHasSave = false;
     }
     void onTouchUp()
     {
-        // Vector3 pos = GetTouchLocalPosition();
-
+        Vector3 pos = Common.GetInputPositionWorld(mainCam);
+        AddPoint(pos);
     }
 
 }

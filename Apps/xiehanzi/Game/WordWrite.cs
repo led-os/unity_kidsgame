@@ -9,15 +9,7 @@ git:
 https://github.com/krzysztofzablocki/KZLineDrawer
 
 */
-public enum WordWriteMode
-{
-    None,
-    WriteDemo,//演示自动书写
-    WriteWithOneWord,//显示整个字形
-    WriteWithOneBihua,//显示一个笔画
-    WriteWithNone,//不显示字和笔画
-    ShowBihua
-}
+
 
 [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
 public class WordWrite : MonoBehaviour

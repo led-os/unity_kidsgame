@@ -14,7 +14,7 @@ public class AudioPlay : MonoBehaviour
     void Awake()
     {
         audioSource = this.gameObject.AddComponent<AudioSource>();
-        main = this;
+        AudioPlay.main = this;
         /* 
                 if(instance==null){
                     instance = this;
@@ -72,7 +72,7 @@ public class AudioPlay : MonoBehaviour
         audioSource.PlayOneShot(clip);
     }
 
-     public void PlayFile(string audiofile)
+    public void PlayFile(string audiofile)
     {
         AudioClip clip = AudioCache.main.Load(audiofile);
         if (clip == null)

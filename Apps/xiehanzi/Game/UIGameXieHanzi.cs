@@ -46,8 +46,8 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
     public UILineSetting uiLineSetting;
     GameXieHanzi gameXieHanziPrefab;
     public GameXieHanzi gameXieHanzi;
-    MeshPaint meshPaintPrefab;
-    public MeshPaint meshPaint;
+    // MeshPaint meshPaintPrefab;
+    // public MeshPaint meshPaint;
 
     float gameScaleX = 1f;
     float gameScaleY = 1f;
@@ -247,16 +247,16 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
 
         }
 
-        if (gameMode == GameXieHanzi.GAME_MODE_FREE_WRITE)
-        {
-            GameObject obj = PrefabCache.main.Load("App/Prefab/Game/MeshPaint");
-            if (obj != null)
-            {
-                meshPaintPrefab = obj.GetComponent<MeshPaint>();
-                meshPaint = (MeshPaint)GameObject.Instantiate(meshPaintPrefab);
-                AppSceneBase.main.AddObjToMainWorld(meshPaint.gameObject);
-            }
-        }
+        // if (gameMode == GameXieHanzi.GAME_MODE_FREE_WRITE)
+        // {
+        //     GameObject obj = PrefabCache.main.Load("App/Prefab/Game/MeshPaint");
+        //     if (obj != null)
+        //     {
+        //         meshPaintPrefab = obj.GetComponent<MeshPaint>();
+        //         meshPaint = (MeshPaint)GameObject.Instantiate(meshPaintPrefab);
+        //         AppSceneBase.main.AddObjToMainWorld(meshPaint.gameObject);
+        //     }
+        // }
 
 
 
@@ -281,11 +281,11 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
 
         offsetTopbarY = 128 + 16 * 2;
         heightTopbarWorld = Common.CanvasToWorldHeight(mainCam, sizeCanvas, offsetTopbarY);
-        if (meshPaint != null)
-        {
-            uiLineSetting.lineWidthPixsel = meshPaint.lineWidthPixsel;
-            meshPaint.SetColor(uiToolBar.colorWord);
-        }
+        // if (meshPaint != null)
+        // {
+        //     uiLineSetting.lineWidthPixsel = meshPaint.lineWidthPixsel;
+        //     meshPaint.SetColor(uiToolBar.colorWord);
+        // }
 
 
         UpdateGold();
@@ -329,9 +329,15 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
             rctran.offsetMax = rctranPrefab.offsetMax;
 
             gameXieHanzi.transform.localPosition = Vector3.zero;
+            //屏幕居中显示
+            float z = gameXieHanzi.transform.position.z;
+            gameXieHanzi.transform.position = new Vector3(0, 0, z);
+
+
             gameXieHanzi.colorWord = uiToolBar.colorWord;
             gameXieHanzi.infoWord = infonow;
             gameXieHanzi.iDelegate = this;
+            gameXieHanzi.InitValue();
         }
         InitUI();
     }
@@ -365,9 +371,24 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
         }
         else
         {
-
+            ratio = 0.8f;
+            w = (rctranWorld.rect.width) * ratio;
+            float oft_y = Mathf.Max(heightTopbarWorld, heightAdBannerWorld);
+            h = (rctranWorld.rect.height - oft_y) * ratio;
+            x = 0 - w / 2;
+            y = 0 - h / 2;
         }
+        if (GameXieHanzi.GAME_MODE_FREE_WRITE == gameMode)
+        {
 
+            ratio = 0.8f;
+            w = (rctranWorld.rect.width) * ratio;
+            float oft_y = Mathf.Max(heightTopbarWorld, heightAdBannerWorld);
+            h = (rctranWorld.rect.height - oft_y) * ratio;
+            x = 0 - w / 2;
+            y = 0 - h / 2;
+            Rect rc = new Rect(x, y, w, h);
+        }
 
         gameXieHanzi.UpdateRect(new Rect(x, y, w, h));
 
@@ -492,6 +513,7 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
 
     public void OnUIColorBoardDidClick(UIColorBoard ui, UIColorBoardCellItem item, bool isOutSide)
     {
+        Debug.Log("OnUIColorBoardDidClick isOutSide=" + isOutSide + " item.color=" + item.color);
         if (isOutSide)
         {
 
@@ -512,15 +534,15 @@ public class UIGameXieHanzi : UIGameBase, IGameXieHanziDelegate
     public void OnUILineSettingLineWidth(int width)
     {
         Debug.Log("OnUILineSettingLineWidth w=" + width);
-        meshPaint.SetLineWidthPixsel(width);
+        gameXieHanzi.SetLineWidthPixsel(width);
 
     }
     void UpdateColorSelect()
     {
         uiToolBar.btnColorInput.GetComponent<Image>().color = uiToolBar.colorWord;
-        if (meshPaint != null)
+        if (gameXieHanzi != null)
         {
-            meshPaint.SetColor(uiToolBar.colorWord);
+            gameXieHanzi.UpdateColor(uiToolBar.colorWord);
         }
     }
     void UpdateGold()

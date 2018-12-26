@@ -9,6 +9,16 @@ public interface IGameXieHanziDelegate
     void OnGameXieHanziDidUpdateMode(GameXieHanzi game, WordWriteMode mode);
 
 }
+
+public enum WordWriteMode
+{
+    None,
+    WriteDemo,//演示自动书写
+    WriteWithOneWord,//显示整个字形
+    WriteWithOneBihua,//显示一个笔画
+    WriteWithNone,//不显示字和笔画
+    ShowBihua
+}
 public class ColorItemInfo : ItemInfo
 {
     public List<Color> listColor;
@@ -41,8 +51,8 @@ public class GameXieHanzi : UIView
     public IGameXieHanziDelegate iDelegate;
     public WordItemInfo infoWord;
     public Color colorWord;
-    WordWrite wordWritePrefab;
-    WordWrite wordWrite;
+    WordWrite2 wordWritePrefab;
+    WordWrite2 wordWrite;
     int indexWordWrite = 0;
     WordWriteMode writeModeCur;
     WordWriteMode writeModePre;//
@@ -52,6 +62,7 @@ public class GameXieHanzi : UIView
     public float letterImageZ = -20f;
     UITouchEventWithMove uiTouchEvent;
     BoxCollider boxCollider;
+
 
 
     public WordItemInfo infoFreeWrite;
@@ -96,21 +107,48 @@ public class GameXieHanzi : UIView
         }
     }
 
+    public bool isHasPaint
+    {
+        get
+        {
+            if (!paintLine)
+            {
+                return false;
+            }
+            return paintLine.isHasPaint;
+        }
+    }
+
+    public bool isHasSave
+    {
+        get
+        {
+            if (!paintLine)
+            {
+                return false;
+            }
+            return paintLine.isHasSave;
+        }
+    }
     void Awake()
     {
         uiTouchEvent = this.gameObject.AddComponent<UITouchEventWithMove>();
         uiTouchEvent.callBackTouch = OnUITouchEvent;
         boxCollider = this.gameObject.AddComponent<BoxCollider>();
         LoadPrefab();
-        gameMode = GameManager.gameMode;
-        listObjBihua = new List<GameObject>();
-        isShowBihuaImage = false;
-        isOnTimerWriteFail = false;
+
 
     }
     // Use this for initialization
     void Start()
     {
+        paintLine.gameObject.transform.localPosition = new Vector3(0, 0, letterImageZ - 4);
+        paintLine.gameObject.SetActive(false);
+        if (gameMode == GAME_MODE_FREE_WRITE)
+        {
+            paintLine.gameObject.SetActive(true);
+        }
+        paintLine.UpdateColor(colorWord);
         LayOut();
     }
 
@@ -120,28 +158,30 @@ public class GameXieHanzi : UIView
 
     }
 
+    public void InitValue()
+    {
+        gameMode = GameManager.gameMode;
+        listObjBihua = new List<GameObject>();
+        isShowBihuaImage = false;
+        isOnTimerWriteFail = false;
+    }
+
     void LoadPrefab()
     {
-        // {
-        //     GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/PaintLine");
-        //     if (obj != null)
-        //     {
-        //         paintLinePrefab = obj.GetComponent<PaintLine>();
-        //         paintLine = (PaintLine)GameObject.Instantiate(paintLinePrefab);
-
-        //         RectTransform rctranPrefab = paintLinePrefab.transform as RectTransform;
-        //         paintLine.gameObject.transform.SetParent(this.transform);
-        //         RectTransform rctran = paintLine.transform as RectTransform;
-        //         // 初始化rect
-        //         rctran.offsetMin = rctranPrefab.offsetMin;
-        //         rctran.offsetMax = rctranPrefab.offsetMax;
-
-        //     }
-        // }
+        {
+            GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/PaintLine");
+            if (obj != null)
+            {
+                paintLinePrefab = obj.GetComponent<PaintLine>();
+                paintLine = (PaintLine)GameObject.Instantiate(paintLinePrefab);
+                paintLine.gameObject.transform.SetParent(this.transform);
+                ViewControllerManager.ClonePrefabRectTransform(paintLinePrefab.gameObject, paintLine.gameObject);
+            }
+        }
 
         {
-            GameObject obj = PrefabCache.main.Load("App/Prefab/Game/WordWrite");
-            wordWritePrefab = obj.GetComponent<WordWrite>();
+            GameObject obj = PrefabCache.main.Load("App/Prefab/Game/WordWrite2");
+            wordWritePrefab = obj.GetComponent<WordWrite2>();
         }
 
     }
@@ -158,10 +198,12 @@ public class GameXieHanzi : UIView
         if (objLetter != null)
         {
             SpriteRenderer rd = objLetter.GetComponent<SpriteRenderer>();
-            scale = Common.GetBestFitScale(rd.sprite.texture.width / 100f, rd.sprite.texture.height / 100f, rectWordWrite.width, rectWordWrite.height);
-            objLetter.transform.localScale = new Vector3(scale, scale, 1f);
-            objLetter.transform.localPosition = new Vector3(rectWordWrite.center.x, rectWordWrite.center.y, letterImageZ);
-
+            if ((rd.sprite != null) && (rd.sprite.texture.width != 0))
+            {
+                scale = Common.GetBestFitScale(rd.sprite.texture.width / 100f, rd.sprite.texture.height / 100f, rectWordWrite.width, rectWordWrite.height);
+                objLetter.transform.localScale = new Vector3(scale, scale, 1f);
+                objLetter.transform.localPosition = new Vector3(rectWordWrite.center.x, rectWordWrite.center.y, letterImageZ);
+            }
         }
 
         {
@@ -173,7 +215,15 @@ public class GameXieHanzi : UIView
         }
     }
 
+    public void UpdateColor(Color cr)
+    {
+        colorWord = cr;
+        if (paintLine != null)
+        {
+            paintLine.UpdateColor(colorWord);
+        }
 
+    }
     Rect GetImageRect()
     {
         float x, y, w, h;
@@ -238,10 +288,20 @@ public class GameXieHanzi : UIView
 
         return new Vector2(x, y);
     }
-
+    public void SetLineWidthPixsel(int w)
+    {
+        if (paintLine != null)
+        {
+            paintLine.SetLineWidthPixsel(w);
+        }
+    }
     public void UpdateRect(Rect rc)
     {
         rectWordWrite = rc;
+        if (paintLine != null)
+        {
+            paintLine.UpdateRect(rc);
+        }
         LayOut();
 
     }
@@ -258,7 +318,7 @@ public class GameXieHanzi : UIView
     void CreateObjectWordWrite()
     {
 
-        wordWrite = (WordWrite)GameObject.Instantiate(wordWritePrefab);
+        wordWrite = (WordWrite2)GameObject.Instantiate(wordWritePrefab);
         wordWrite.gameObject.name = "WordWrite" + indexWordWrite;
         //AppSceneBase.main.AddObjToMainWorld(wordWrite.gameObject);
         wordWrite.gameObject.transform.SetParent(this.transform);
@@ -936,7 +996,21 @@ public class GameXieHanzi : UIView
 
     }
 
+    public void SaveImage(string filePath)
+    {
+        if (paintLine != null)
+        {
+            paintLine.SaveImage(filePath);
+        }
+    }
 
+    public void ClearAll()
+    {
+        if (paintLine != null)
+        {
+            paintLine.ClearAll();
+        }
+    }
 
     void CheckGameWin()
     {

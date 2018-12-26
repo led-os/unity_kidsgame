@@ -26,6 +26,10 @@ public class AppSceneBase : ScriptBase
 
     void Awake()
     {
+        if (AppSceneBase.main == null)
+        {
+            AppSceneBase.main = this;
+        }
         isReLayout = false;
         IPInfo.main.StartParserInfo();
         InitScalerMatch();
@@ -112,10 +116,7 @@ public class AppSceneBase : ScriptBase
     {
         bool isFirstRun = !Common.GetBool(AppString.STR_KEY_NOT_FIRST_RUN);
         mainCamera = Common.GetMainCamera();
-        if (main == null)
-        {
-            main = this;
-        }
+
 
         Tongji.Init(Config.main.GetString("APPTONGJI_ID", "0"));
         Device.InitOrientation();
@@ -244,6 +245,7 @@ public class AppSceneBase : ScriptBase
         w = size.x - oft_left - oft_right;
         h = size.y - adBannerHeight_world - oft_top - oft_bottom;
         y = mainCamera.orthographicSize - oft_top - h / 2;
+        //y = 0;
         x = 0;
         float z = rctranWorld.position.z;
         rctranWorld.sizeDelta = new Vector2(w, h);
