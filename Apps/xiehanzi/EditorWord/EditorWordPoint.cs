@@ -107,7 +107,7 @@ public class EditorWordPoint : UIGameBase
         listObjBihuaWordWrite = new List<GameObject>();
         listTouchPoint = new List<Vector3>();
         listJsonPoint = new List<EditorItemPoint>();
-        indexBihua = 0; 
+        indexBihua = 0;
         enableAjustline = false;
 
         rootDirImage = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image_new";
@@ -119,7 +119,7 @@ public class EditorWordPoint : UIGameBase
         dataJsonRoot["demo_point"] = dataJsonDemopoint;
         dataJsonRoot["guide_point"] = dataJsonGuidepoint;
 
-        GameObject obj = (GameObject)Resources.Load("Prefab/WordWrite");
+        GameObject obj = PrefabCache.main.Load("App/Prefab/Game/WordWrite");
         wordWritePrefab = obj.GetComponent<WordWrite>();
 
 
@@ -140,10 +140,10 @@ public class EditorWordPoint : UIGameBase
         //wordXmlPoint2Json = this.gameObject.AddComponent<WordXmlPoint2Json>();
 
 
-        UITouchEvent touch_ev = textWord.gameObject.AddComponent<UITouchEvent>();
+        UITouchEvent touch_ev = textWord.gameObject.AddComponent<UITouchEventWithMove>();
         touch_ev.callBackTouch = OnWordTouchEvent;
 
-        
+
 
     }
     // Use this for initialization
@@ -182,7 +182,7 @@ public class EditorWordPoint : UIGameBase
 
     void InitWord()
     {
-        float x, y, w, h; 
+        float x, y, w, h;
         Rect rc = (canvasWord.transform as RectTransform).rect;
         Vector2 sizeWordCanvas = new Vector2(rc.width, rc.height);
         int topbar_h = (int)(160 * AppCommon.scaleBase);
@@ -217,7 +217,7 @@ public class EditorWordPoint : UIGameBase
         }
         infoWord.id = "id_" + key;
     }
-    public void OnWordTouchEvent(UITouchEvent ev,PointerEventData eventData, int status)
+    public void OnWordTouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
 
         switch (status)
@@ -385,7 +385,7 @@ public class EditorWordPoint : UIGameBase
 
         int idx = 0;
         Vector3 pos;
-        lineRenderer.positionCount = 3; 
+        lineRenderer.positionCount = 3;
 
         pos = new Vector3(0f, 0f, -50f);
         lineRenderer.SetPosition(idx, pos);
@@ -394,7 +394,7 @@ public class EditorWordPoint : UIGameBase
         pos = new Vector3(5f, 0f, -50f);
         lineRenderer.SetPosition(idx, pos);
         idx++;
-        
+
 
         pos = new Vector3(0f, -5f, -50f);
         lineRenderer.SetPosition(idx, pos);

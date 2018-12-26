@@ -71,7 +71,21 @@ public class WordXmlPoint2Json : MonoBehaviour
 
     }
 
+    public Vector2 WordString2Point(string str)
+    {
+        float x, y;
+        string strtmp = str.Substring(str.IndexOf("{") + 1);
+        int idx = strtmp.IndexOf(",");
+        string strx = strtmp.Substring(0, idx);
+        float.TryParse(strx, out x);
 
+        string strtmpy = strtmp.Substring(idx + 1);
+        idx = strtmpy.IndexOf("}");
+        string stry = strtmpy.Substring(0, idx);
+        float.TryParse(stry, out y);
+
+        return new Vector2(x, y);
+    }
 
     string GetImageGuidePic(int type)
     {
@@ -206,6 +220,7 @@ public class WordXmlPoint2Json : MonoBehaviour
             Texture2D tex = GetTextureOfLetter(strfrom);
             Texture2D texSUb = TextureUtil.GetSubTexture(tex, rcOfLetter);
             //CopyFile(strfrom, strto);
+            FileUtil.CreateDir(FileUtil.GetFileDir(strto));
             TextureUtil.SaveTextureToFile(texSUb, strto);
         }
         //pic
@@ -213,6 +228,7 @@ public class WordXmlPoint2Json : MonoBehaviour
             Texture2D tex = texOfLetter;
             Texture2D texSUb = TextureUtil.GetSubTexture(tex, rcOfLetter);
             // CopyFile(infoFrom.pic, infoTo.pic);
+            FileUtil.CreateDir(FileUtil.GetFileDir(infoTo.pic));
             TextureUtil.SaveTextureToFile(texSUb, infoTo.pic);
         }
         //thumb
@@ -225,10 +241,10 @@ public class WordXmlPoint2Json : MonoBehaviour
         CopyFile(infoFrom.imageBihua, infoTo.imageBihua);
 
         //普通话
-        CopyFile(infoFrom.soundPutonghua, infoTo.soundPutonghua);
+        //  CopyFile(infoFrom.soundPutonghua, infoTo.soundPutonghua);
 
         //广东话
-        CopyFile(infoFrom.soundGuangdonghua, infoTo.soundGuangdonghua);
+        // CopyFile(infoFrom.soundGuangdonghua, infoTo.soundGuangdonghua);
 
     }
 
@@ -363,7 +379,7 @@ public class WordXmlPoint2Json : MonoBehaviour
                     //start_point 文件读取的点坐标是居于1024x768图片的坐标
                     string direction = dicItem["direction"] as string;
                     string start_point = dicItem["start_point"] as string;
-                    Vector2 ptStart = uiGameXieHanzi.gameXieHanzi.WordString2Point(start_point);
+                    Vector2 ptStart = WordString2Point(start_point);
                     string total_points = dicItem["total_points"] as string;
                     int total = Common.String2Int(total_points);
                     for (int i = 0; i < total; i++)
@@ -423,7 +439,7 @@ public class WordXmlPoint2Json : MonoBehaviour
                     string type = dicItem["type"] as string;
                     string position = dicItem["position"] as string;
 
-                    Vector2 ptStart = uiGameXieHanzi.gameXieHanzi.WordString2Point(position);
+                    Vector2 ptStart = WordString2Point(position);
 
                     int total = Common.String2Int(count);
                     for (int i = 0; i < total; i++)
@@ -492,7 +508,7 @@ public class WordXmlPoint2Json : MonoBehaviour
     {
         int count = 0;
         long tickGuanka = Common.GetCurrentTimeMs();
-        string fileName = GAME_RES_DIR + "/LetterStructure~ipad_bak.xml";
+        string fileName = GAME_RES_DIR + "/LetterStructure~ipad.xml";
 
         if ((listGuanka != null) && (listGuanka.Count != 0))
         {
