@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //图片帧动画
 public class ActionImage : ActionBase
@@ -20,13 +21,27 @@ public class ActionImage : ActionBase
     {
         if (index < listPic.Count)
         {
-            Debug.Log("UpdateImage:index=" + index + " listPic.Count=" + listPic.Count);
+            // Debug.Log("UpdateImage:index=" + index + " listPic.Count=" + listPic.Count);
             string pic = listPic[index];
             Texture2D tex = TextureCache.main.Load(pic);
+            if (tex == null)
+            {
+                Debug.Log("UpdateImage:index=" + index + " tex=null");
+            }
             SpriteRenderer rd = this.gameObject.GetComponent<SpriteRenderer>();
+            //sprite
             if ((rd != null) && (tex != null))
             {
+                //  Debug.Log("UpdateImage:index=" + index + " update sprite");
                 rd.sprite = LoadTexture.CreateSprieFromTex(tex);
+            }
+            //image
+            if ((rd == null) && (tex != null))
+            {
+                Image image = this.gameObject.GetComponent<Image>();
+                image.sprite = LoadTexture.CreateSprieFromTex(tex);
+                RectTransform rctran = image.GetComponent<RectTransform>();
+                rctran.sizeDelta = new Vector2(tex.width, tex.height);
             }
         }
     }

@@ -78,8 +78,10 @@ public class AppSceneBase : ScriptBase
             isHasStarted = false;
             InitUiScaler();
             UpdateMainWorldRect(0);
-            LayoutChild();
+            //LayoutChild();
             RunCheckApp();
+
+            OnResize();
         }
         if (Device.isScreenDidChange)
         {
@@ -91,20 +93,22 @@ public class AppSceneBase : ScriptBase
         if (isReLayout)
         {
             isReLayout = false;
-            //InitScalerMatch 和 InitUiScaler 异步执行
-            InitUiScaler();
-            UpdateMainWorldRect(_adBannerHeightCanvas);
-            LayoutChild();
-            if (rootViewController != null)
-            {
-                rootViewController.UpdateCanvasSize(sizeCanvas);
-            }
-            // Debug.Log("Device.isScreenDidChange:sizeCanvas = " + sizeCanvas);
-
+            OnResize();
         }
     }
 
-
+    void OnResize()
+    {
+        //InitScalerMatch 和 InitUiScaler 异步执行
+        InitUiScaler();
+        UpdateMainWorldRect(_adBannerHeightCanvas);
+        LayoutChild();
+        if (rootViewController != null)
+        {
+            rootViewController.UpdateCanvasSize(sizeCanvas);
+        }
+        // Debug.Log("Device.isScreenDidChange:sizeCanvas = " + sizeCanvas);
+    }
 
     void OnAppVersionFinished(AppVersion app)
     {
@@ -158,7 +162,7 @@ public class AppSceneBase : ScriptBase
         else
         {
             appVersion.callbackFinished = null;
-            RunApp();
+            RunApp(); 
         }
         appVersion.StartParseVersion();
     }
@@ -191,6 +195,8 @@ public class AppSceneBase : ScriptBase
         //rctran.anchoredPosition = new Vector2(x, y);
         rctran.offsetMin = new Vector2(oft_left, oft_bottom);
         rctran.offsetMax = new Vector2(-oft_right, -oft_top);
+
+        OnResize();
     }
 
     public void ClearMainWorld()

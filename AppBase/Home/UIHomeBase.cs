@@ -100,10 +100,10 @@ public class UIHomeBase : UIView
         appVersion.StartParseVersion();
 
     }
-    public override void LayOut()
-    {
-        LayoutChildBase();
-    }
+    // public override void LayOut()
+    // {
+    //     LayoutChildBase();
+    // }
 
 
     public void LayoutChildBase()

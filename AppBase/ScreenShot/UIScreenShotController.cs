@@ -64,6 +64,7 @@ public class UIScreenShotController : UIView
 
     //copy right huawei
     public const string DEVICE_NAME_COPY_RIGHT_HUAWEI = "copyright";
+    public const string DEVICE_NAME_COPY_RIGHT_HD_HUAWEI = "copyright_hd";
     public const int SCREEN_WIDTH_COPY_RIGHT_HUAWEI = 750;
     public const int SCREEN_HEIGHT_COPY_RIGHT_HUAWEI = 1334;
 
@@ -180,6 +181,8 @@ public class UIScreenShotController : UIView
             , true);
             //iphone
             CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
+
+
             //  ipad
             CreateDevice(DEVICE_NAME_IPAD, SCREEN_WIDTH_IPAD, SCREEN_HEIGHT_IPAD, true, false);
 
@@ -248,12 +251,16 @@ public class UIScreenShotController : UIView
 
         if (name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
         {
-            {
-                //copyright
-                ShotDeviceInfo info = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, false);
-                //copyright hd
-                ShotDeviceInfo infohd = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
-            }
+            //copyright
+            ShotDeviceInfo info = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, false);
+            ShotDeviceInfo infohd = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
+            return;
+        }
+
+        if (name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI)
+        {
+            //copyright hd
+            //ShotDeviceInfo infohd = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
             return;
         }
 
@@ -420,7 +427,7 @@ public class UIScreenShotController : UIView
                 ret += "hd";
             }
         }
-        else if (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
+        else if ((deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI) || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI))
         {
             ret = rootDir + "/" + info.name;
             if (info.isIconHd)
@@ -490,7 +497,10 @@ public class UIScreenShotController : UIView
         {
             return;
         }
-        if ((deviceInfoNow.name == DEVICE_NAME_ICON) || (deviceInfoNow.name == DEVICE_NAME_AD) || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI))
+        if ((deviceInfoNow.name == DEVICE_NAME_ICON) || (deviceInfoNow.name == DEVICE_NAME_AD)
+         || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
+          || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI)
+         )
         {
             totalScreenShot = 1;
         }
@@ -741,6 +751,15 @@ public class UIScreenShotController : UIView
         {
             GotoScrenShot(indexScreenShot);
         }
+        else
+        {
+
+            if ((deviceInfoNow.width == Screen.width) && (deviceInfoNow.height == Screen.height))
+            {
+                //分辨率没有变化
+                GotoScrenShot(indexScreenShot);
+            }
+        }
     }
 
     public void OnClickBtnWeibo()
@@ -759,9 +778,17 @@ public class UIScreenShotController : UIView
 
     public void OnClickBtnCopyRight()
     {
-        isClickNextPreDevice = true;
-        indexDevice = FindDeviceByName(DEVICE_NAME_COPY_RIGHT_HUAWEI);
-        GotoDevice(indexDevice);
+        indexScreenShot = 0;
+        indexDevice = 0;
+        listDevice.Clear();
+        {           //   copy right huawei
+            CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+            //CreateDevice(DEVICE_NAME_COPY_RIGHT_HD_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+        }
+        deviceInfoNow = listDevice[0];
+
+        SetScreen(deviceInfoNow.width, deviceInfoNow.height);
+        Invoke("OnClickSaveAuto", 2f);
     }
 
     public void OnClickBtnIconConVert()

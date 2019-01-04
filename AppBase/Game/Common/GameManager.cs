@@ -231,6 +231,11 @@ public class GameManager
 
     }
 
+    public void GotoPlayAgain()
+    {
+        GameViewController.main.gameBase.UpdateGuankaLevel(GameManager.gameLevel);
+    }
+
     static public void GotoPreLevel()
     {
 
@@ -318,7 +323,7 @@ public class GameManager
     public List<object> GetGuankaListOfAllPlace()
     {
         List<object> listRet = new List<object>();
-            Debug.Log("GetGuankaListOfAllPlace placeTotal="+placeTotal);
+        Debug.Log("GetGuankaListOfAllPlace placeTotal=" + placeTotal);
         for (int i = 0; i < placeTotal; i++)
         {
             GameManager.placeLevel = i;
