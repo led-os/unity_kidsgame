@@ -51,7 +51,7 @@ public class PlaceViewController : UIViewController
         Debug.Log("PlaceViewController LayOutView");
         if ((uiPrefab != null) && (ui != null))
         {
-            ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+            UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
             ui.LayOut();
         }
 
@@ -66,7 +66,7 @@ public class PlaceViewController : UIViewController
     {
         ui = (UIPlaceBase)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
     }
     public void PreLoadDataForWeb()
     {

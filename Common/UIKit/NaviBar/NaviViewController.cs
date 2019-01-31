@@ -70,7 +70,7 @@ public class NaviViewController : UIViewController
         uiNaviBar = (UINaviBar)GameObject.Instantiate(uiNaviBarPrefab);
         uiNaviBar.transform.parent = objController.transform;
         uiNaviBar.callbackBackClick = OnUINaviBarClickBack;
-        ViewControllerManager.ClonePrefabRectTransform(uiNaviBarPrefab.gameObject, uiNaviBar.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiNaviBarPrefab.gameObject, uiNaviBar.gameObject);
         //Debug.Log("rctran.offsetMin=" + rctran.offsetMin + " rctran.offsetMax=" + rctran.offsetMax);
 
     }

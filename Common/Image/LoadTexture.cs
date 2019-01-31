@@ -41,14 +41,40 @@ public class LoadTexture : MonoBehaviour
     static public Texture2D LoadFromAsset(string file)
     {
         Texture2D tex = null;
-        byte[] data = FileUtil.ReadDataAsset(file);
+        byte[] data = FileUtil.ReadRGBDataAsset(file);
         if (data != null)
         {
-            tex = LoadFromData(data);
+            if (Common.isAndroid)
+            {
+                int w, h;
+                using (var javaClass = new AndroidJavaClass(FileUtil.JAVA_CLASS_FILEUTIL))
+                {
+                    w = javaClass.CallStatic<int>("GetRGBDataWidth");
+                    h = javaClass.CallStatic<int>("GetRGBDataHeight");
+                }
+
+                tex = LoadFromRGBData(data, w, h);
+            }
+            else
+            {
+                tex = LoadFromData(data);
+            }
+
         }
         return tex;
     }
-
+    static public Texture2D LoadFromRGBData(byte[] data, int w, int h)
+    {
+        Texture2D tex = null;
+        tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        byte[] pixselImage = tex.GetRawTextureData();
+        int size = pixselImage.Length;
+        System.Array.Copy(data, pixselImage, size);
+        tex.LoadRawTextureData(pixselImage);
+        tex.Apply(false);
+        //tex.LoadImage(data);
+        return tex;
+    }
 
     static public Texture2D LoadFromData(byte[] data)
     {

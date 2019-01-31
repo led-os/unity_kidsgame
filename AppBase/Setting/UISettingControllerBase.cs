@@ -460,7 +460,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
         // string no = Language.main.GetString(AppString.STR_UIVIEWALERT_YES_SHOP_START_BUY);
         // viewAlert.SetText(title, msg, yes, no);
         // viewAlert.Show();
-        IAP.main.StartBuy(IAP.productIdNoAD);
+        IAP.main.StartBuy(IAP.productIdNoAD,false);
 
     }
 

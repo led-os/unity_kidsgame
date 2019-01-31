@@ -43,7 +43,7 @@ public class ScreenShotViewController : NaviViewController
         Debug.Log("ScreenShotViewController LayOutView");
         if ((uiPrefab != null) && (ui != null))
         {
-            ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+            UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
         }
 
     }
@@ -51,6 +51,6 @@ public class ScreenShotViewController : NaviViewController
     {
         ui = (UIScreenShotController)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
     }
 }

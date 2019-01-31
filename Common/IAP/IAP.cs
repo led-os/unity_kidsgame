@@ -61,11 +61,23 @@ namespace Moonma.IAP
         {
             BasePlatformWrapper platformWrapper = PlatformWrapper.platform;
             platformWrapper.SetSource(source);
+
+            if (source == Source.GP)
+            {
+                string appkey = Config.main.iapAppKeyGoogle;
+                platformWrapper.SetAppKey(appkey);
+            }
         }
-        public void StartBuy(string product)
+        //consume 消费类型
+        public void StartBuy(string product, bool isConsume)
         {
             BasePlatformWrapper platformWrapper = PlatformWrapper.platform;
-            platformWrapper.StartBuy(product);
+            platformWrapper.StartBuy(product,isConsume);
+        }
+
+        public void StartBuy(string product)
+        {
+            StartBuy(product,true);
         }
 
         public void RestoreBuy(string product)
@@ -82,19 +94,19 @@ namespace Moonma.IAP
 
 
 
-    void OnUIViewAlertFinished(UIViewAlert alert, bool isYes)
-    { 
-    }
+        void OnUIViewAlertFinished(UIViewAlert alert, bool isYes)
+        {
+        }
 
-    void ShowAlertRemoveAdFinish()
-    {
-        string title = Language.main.GetString("STR_UIVIEWALERT_TITLE_REMOVE_AD_FINISH");
-        string msg = Language.main.GetString("STR_UIVIEWALERT_MSG_REMOVE_AD_FINISH");
-        string yes = Language.main.GetString("STR_UIVIEWALERT_YES_REMOVE_AD_FINISH");
-        string no = "no";
-        ViewAlertManager.main.ShowFull(title, msg, yes, no, false, STR_KEYNAME_VIEWALERT_LOADING, OnUIViewAlertFinished);
+        void ShowAlertRemoveAdFinish()
+        {
+            string title = Language.main.GetString("STR_UIVIEWALERT_TITLE_REMOVE_AD_FINISH");
+            string msg = Language.main.GetString("STR_UIVIEWALERT_MSG_REMOVE_AD_FINISH");
+            string yes = Language.main.GetString("STR_UIVIEWALERT_YES_REMOVE_AD_FINISH");
+            string no = "no";
+            ViewAlertManager.main.ShowFull(title, msg, yes, no, false, STR_KEYNAME_VIEWALERT_LOADING, OnUIViewAlertFinished);
 
-    }
+        }
 
         public void IAPCallBackBase(string str)
         {

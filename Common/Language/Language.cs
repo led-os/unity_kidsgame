@@ -85,6 +85,16 @@ public class Language
         }
     }
 
+    public bool IsChinese()
+    {
+        SystemLanguage lan = GetLanguage();
+        if ((lan == SystemLanguage.Chinese)|| (lan == SystemLanguage.ChineseSimplified)|| (lan == SystemLanguage.ChineseTraditional))
+        {
+            return true;
+        }
+        return false; 
+    }
+
     public SystemLanguage GetLanguage()
     {
         return ltLocalization.GetLanguage();

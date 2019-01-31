@@ -135,7 +135,7 @@ public class UIViewController
     {
         float x, y;
         sizeCanvas = size;
-        ViewControllerManager.sizeCanvas = size;
+        //ViewControllerManager.sizeCanvas = size;
         if (objController != null)
         {
             // float oft_top = Common.ScreenToCanvasHeigt(sizeCanvas, Device.offsetTop);
@@ -147,6 +147,20 @@ public class UIViewController
 
         }
         LayOutView();
+    }
+
+       static public void ClonePrefabRectTransform(GameObject objPrefab,GameObject obj)
+    {
+
+        RectTransform rctranPrefab = objPrefab.GetComponent<RectTransform>();
+        //Debug.Log("rctranPrefab.offsetMin=" + rctranPrefab.offsetMin + " rctranPrefab.offsetMax=" + rctranPrefab.offsetMax);
+        
+        RectTransform rctran = obj.GetComponent<RectTransform>(); 
+        rctran.offsetMax = rctranPrefab.offsetMax; 
+        rctran.offsetMin = rctranPrefab.offsetMin; 
+        
+        //Debug.Log("rctran.offsetMin=" + rctran.offsetMin + " rctran.offsetMax=" + rctran.offsetMax);
+
     }
 
 

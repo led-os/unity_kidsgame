@@ -68,7 +68,7 @@ public class TabBarViewController : UIViewController
         uiTabBar = (UITabBar)GameObject.Instantiate(uiTabBarPrefab);
         uiTabBar.transform.parent = objController.transform;
         uiTabBar.callbackClick = OnUITabBarClick;
-        ViewControllerManager.ClonePrefabRectTransform(uiTabBarPrefab.gameObject, uiTabBar.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiTabBarPrefab.gameObject, uiTabBar.gameObject);
     }
     // Use this for initialization
     public void AddItem(TabBarItemInfo info)

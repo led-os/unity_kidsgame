@@ -63,7 +63,7 @@ public class HomeViewController : UIViewController
         }
         uiHome = (UIHomeBase)GameObject.Instantiate(uiHomePrefab);
         uiHome.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiHomePrefab.gameObject, uiHome.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiHomePrefab.gameObject, uiHome.gameObject);
         uiHome.Init();
     }
 

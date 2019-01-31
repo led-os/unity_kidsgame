@@ -26,7 +26,7 @@ namespace Moonma.IAP
 			 IAP_SetSource(source);
 		}
 
-		 public override void StartBuy(string product)
+		 public override void StartBuy(string product, bool isConsume)
 		{
 			 IAP_StartBuy(product);
 		}

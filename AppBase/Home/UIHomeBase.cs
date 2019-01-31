@@ -63,7 +63,7 @@ public class UIHomeBase : UIView
                 if (Config.main.channel == Source.GP)
                 {
                     //GP市场不显示
-                    //btnAdVideo.gameObject.SetActive(false);
+                    btnAdVideo.gameObject.SetActive(false);
                 }
             }
         }
@@ -287,7 +287,7 @@ public class UIHomeBase : UIView
     public void DoBtnNoADIAP()
     {
         IAP.main.SetObjectInfo(this.gameObject.name, "IAPCallBack");
-        IAP.main.StartBuy(IAP.productIdNoAD);
+        IAP.main.StartBuy(IAP.productIdNoAD,false);
     }
 
     public void OnUIShareDidClick(ItemInfo item)

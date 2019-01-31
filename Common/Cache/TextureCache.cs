@@ -7,7 +7,7 @@ using UnityEngine;
 public class TextureCache
 {
     Dictionary<string, Texture2D> dicItem;
-
+    Dictionary<string, Texture2D> dicItemMat;
     static private TextureCache _main = null;
     public static TextureCache main
     {
@@ -27,7 +27,9 @@ public class TextureCache
     void Init()
     {
         dicItem = new Dictionary<string, Texture2D>();
+        dicItemMat = new Dictionary<string, Texture2D>();
     }
+
     public bool IsInCache(string filepath)
     {
         return dicItem.ContainsKey(filepath);
@@ -41,6 +43,29 @@ public class TextureCache
                 dicItem.Add(key, tex);
             }
         }
+    }
+    public Texture2D Load(string filepath, Material mat)
+    {
+        Texture2D tex = null;
+        string key = filepath;
+        if (dicItemMat.ContainsKey(key))
+        {
+            tex = dicItemMat[key];
+        }
+        else
+        {
+            Texture2D texOld = Load(filepath);
+            RenderTexture rtTmp = new RenderTexture(texOld.width, texOld.height, 0);
+            Graphics.Blit(texOld, rtTmp, mat);
+            tex = TextureUtil.RenderTexture2Texture2D(rtTmp);
+
+            if (tex != null)
+            {
+                dicItemMat.Add(key, tex);
+            }
+
+        }
+        return tex;
     }
     public Texture2D Load(string filepath)
     {
@@ -94,6 +119,21 @@ public class TextureCache
         dicItem.Clear();
     }
 
+    public void DestoryAllItemMat()
+    {
+        foreach (KeyValuePair<string, Texture2D> item in dicItemMat)
+        {
+            string key = item.Key;
+            Texture2D tex = item.Value;
+            if (tex != null)
+            {
+                GameObject.DestroyImmediate(tex);
+                tex = null;
+            }
+        }
+        dicItemMat.Clear();
+    }
+
     public void DeleteItem(string key)
     {
         if (!dicItem.ContainsKey(key))
@@ -107,5 +147,21 @@ public class TextureCache
             tex = null;
         }
         dicItem.Remove(key);
+    }
+
+
+    public void DeleteItemMat(string key)
+    {
+        if (!dicItemMat.ContainsKey(key))
+        {
+            return;
+        }
+        Texture2D tex = dicItemMat[key];
+        if (tex != null)
+        {
+            GameObject.DestroyImmediate(tex);
+            tex = null;
+        }
+        dicItemMat.Remove(key);
     }
 }

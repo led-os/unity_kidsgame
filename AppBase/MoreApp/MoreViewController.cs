@@ -38,7 +38,7 @@ public class MoreViewController : PopViewController
 
         uiMoreApp = (UIMoreAppController)GameObject.Instantiate(uiMoreAppPrefab);
         uiMoreApp.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiMoreAppPrefab.gameObject, uiMoreApp.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiMoreAppPrefab.gameObject, uiMoreApp.gameObject);
     }
 
 }

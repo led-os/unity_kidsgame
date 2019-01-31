@@ -180,6 +180,11 @@ public class Config
             if (Common.isAndroid)
             {
                 ret = false;
+                if (Config.main.channel == Source.GP)
+                {
+                    //GP市场内购
+                    ret = true;
+                }
             }
             if (Common.isWinUWP)
             {
@@ -204,6 +209,12 @@ public class Config
                 if (!IPInfo.isInChina)
                 {
                     ret = Source.XIAOMI;
+                }
+
+                if (Config.main.channel == Source.GP)
+                {
+                    //GP市场内购
+                    ret = Source.GP;
                 }
 
             }
@@ -288,6 +299,15 @@ public class Config
         {
             //jsonShare
             string str = (string)rootJsonCommon["SHARE_APP_URL"];
+            return str;
+        }
+    }
+    public string iapAppKeyGoogle
+    {
+        get
+        {
+            //jsonShare
+            string str = GetString("IAP_APP_KEY_GOOGLE", "0");
             return str;
         }
     }

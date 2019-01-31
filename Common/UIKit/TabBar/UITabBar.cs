@@ -40,7 +40,7 @@ public class UITabBar : UIView
         uiTabBarItem = (UITabBarItem)GameObject.Instantiate(uiTabBarItemPrefab);
         uiTabBarItem.transform.parent = objLayoutItem.transform;
         uiTabBarItem.callbackClick = OnUITabBarItemClick;
-        ViewControllerManager.ClonePrefabRectTransform(uiTabBarItemPrefab.gameObject,uiTabBarItem.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiTabBarItemPrefab.gameObject,uiTabBarItem.gameObject);
     }
 
     public void AddItem(TabBarItemInfo info,int idx)

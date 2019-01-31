@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Moonma.IAP; 
+using Moonma.IAP;
 
 public class IAPCommon : MonoBehaviour
 {
@@ -18,6 +18,9 @@ public class IAPCommon : MonoBehaviour
             main = this;
         }
 
+        //IAP 初始化
+        IAP iap = IAP.main;
+
     }
 
     // Use this for initialization
@@ -32,6 +35,6 @@ public class IAPCommon : MonoBehaviour
 
     }
 
- 
+
 
 }

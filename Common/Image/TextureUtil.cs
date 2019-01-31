@@ -314,6 +314,28 @@ public class TextureUtil : MonoBehaviour
     }
 
 
+     static public void UpdateButtonTexture(Button btn, string filepath, bool isUpdateSize)
+    {
+        UpdateButtonTexture(btn, filepath, isUpdateSize, Vector4.zero);
+    }
+
+    static public void UpdateButtonTexture(Button btn, string filepath, bool isUpdateSize, Vector4 border)
+    {
+        Texture2D tex = TextureCache.main.Load(filepath);
+        UpdateButtonTexture(btn, tex, isUpdateSize, border);
+    }
+
+    static public void UpdateButtonTexture(Button btn, Texture2D tex, bool isUpdateSize)
+    {
+        UpdateButtonTexture(btn, tex, isUpdateSize, Vector4.zero);
+    }
+    static public void UpdateButtonTexture(Button btn, Texture2D tex, bool isUpdateSize, Vector4 border)
+    {
+        Image image = btn.GetComponent<Image>();
+        UpdateImageTexture(image, tex, isUpdateSize, border);
+    }
+
+
 
 
 }

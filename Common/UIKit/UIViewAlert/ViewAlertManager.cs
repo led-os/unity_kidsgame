@@ -54,7 +54,7 @@ public class ViewAlertManager
         ui.SetText(title, msg, yes, no);
         ui.SetViewParent(AppSceneBase.main.canvasMain.gameObject);
         //SetViewParent之后需要初始化位置
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
         
         ui.transform.SetAsLastSibling();
     }

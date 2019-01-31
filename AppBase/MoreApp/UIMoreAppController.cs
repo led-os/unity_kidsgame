@@ -112,7 +112,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
 
     public override void LayOut()
     {
-        Vector2 sizeCanvas = ViewControllerManager.sizeCanvas;
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
             RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
             float w_image = rectTransform.rect.width;

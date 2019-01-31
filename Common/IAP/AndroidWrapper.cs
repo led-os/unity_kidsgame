@@ -9,6 +9,14 @@ internal class AndroidWrapper : BasePlatformWrapper
 	{
 		public const string JAVA_CLASS = "com.moonma.common.IAPCommon";
     
+	      public override void SetAppKey(string key)
+        {
+          using(var javaClass = new AndroidJavaClass(JAVA_CLASS))
+				{
+					javaClass.CallStatic("SetAppKey",key);
+				}
+        }
+
 	  public override void SetObjectInfo(string objName, string objMethod)
         { 
             using(var javaClass = new AndroidJavaClass(JAVA_CLASS))
@@ -25,11 +33,11 @@ internal class AndroidWrapper : BasePlatformWrapper
 			 
 		}
 
-	 public override void StartBuy(string product)
+	 public override void StartBuy(string product, bool isConsume)
 		{
 			using(var javaClass = new AndroidJavaClass(JAVA_CLASS))
 				{
-					javaClass.CallStatic("StartBuy",product);
+					javaClass.CallStatic("StartBuy",product,isConsume);
 				}
 			 
 		}

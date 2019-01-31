@@ -66,7 +66,7 @@ public class GuankaViewController : UIViewController
         uiGuanka = (UIGuankaBase)GameObject.Instantiate(uiGuankaPrefab);
         uiGuanka.indexPlace = indexPlace;
         uiGuanka.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiGuankaPrefab.gameObject, uiGuanka.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiGuankaPrefab.gameObject, uiGuanka.gameObject);
     }
 
     public void PreLoadDataForWeb()

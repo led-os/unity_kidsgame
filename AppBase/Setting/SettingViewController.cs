@@ -43,7 +43,7 @@ public class SettingViewController : PopViewController
     {
         uiSetting = (UISettingControllerBase)GameObject.Instantiate(uiSettingPrefab);
         uiSetting.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiSettingPrefab.gameObject, uiSetting.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiSettingPrefab.gameObject, uiSetting.gameObject);
     }
 
 }

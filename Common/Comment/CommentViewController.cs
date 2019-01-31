@@ -44,7 +44,7 @@ public class CommentViewController : PopViewController
     {
         ui = (UIComment)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
         ui.callBackClick = OnUICommentDidClick;
     }
 

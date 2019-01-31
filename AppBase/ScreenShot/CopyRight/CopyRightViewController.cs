@@ -45,6 +45,6 @@ public class CopyRightViewController : UIViewController
     {
         ui = (UIView)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
     }
 }

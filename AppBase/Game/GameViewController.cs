@@ -65,7 +65,7 @@ public class GameViewController : PopViewController
         Debug.Log("GameViewController LayOutView");
         if ((gameBasePrefab != null) && (_gameBase != null))
         {
-            ViewControllerManager.ClonePrefabRectTransform(gameBasePrefab.gameObject, _gameBase.gameObject);
+            UIViewController.ClonePrefabRectTransform(gameBasePrefab.gameObject, _gameBase.gameObject);
             _gameBase.LayOut();
         }
 
@@ -139,7 +139,7 @@ public class GameViewController : PopViewController
         // _gameBaseRun.mainCamera = mainCamera;
         _gameBase.Init();
         _gameBase.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(gameBasePrefab.gameObject, _gameBase.gameObject);
+        UIViewController.ClonePrefabRectTransform(gameBasePrefab.gameObject, _gameBase.gameObject);
 
         RectTransform rctranParent = objController.transform.GetComponent<RectTransform>();
 

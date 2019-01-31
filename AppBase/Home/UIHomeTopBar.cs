@@ -17,6 +17,8 @@ public class UIHomeTopBar : UIView
     public Button btnShare;
     public Button btnSetting;
     public Button btnMore;
+    public Button btnAdVideo;
+
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -46,6 +48,24 @@ public class UIHomeTopBar : UIView
         if (Common.isWinUWP)
         {
             btnMore.gameObject.SetActive(false);
+        }
+
+
+        if (btnAdVideo != null)
+        {
+            btnAdVideo.gameObject.SetActive(true);
+            if ((Common.noad) || (!AppVersion.appCheckHasFinished))
+            {
+                btnAdVideo.gameObject.SetActive(false);
+            }
+            if (Common.isAndroid)
+            {
+                if (Config.main.channel == Source.GP)
+                {
+                    //GP市场不显示
+                    btnAdVideo.gameObject.SetActive(false);
+                }
+            }
         }
     }
     // Use this for initialization
@@ -209,7 +229,7 @@ public class UIHomeTopBar : UIView
         // string no = Language.main.GetString(AppString.STR_UIVIEWALERT_YES_SHOP_START_BUY);
         // viewAlert.SetText(title, msg, yes, no);
         // viewAlert.Show();
-        IAP.main.StartBuy(IAP.productIdNoAD);
+        IAP.main.StartBuy(IAP.productIdNoAD,false);
 
 
     }

@@ -24,15 +24,19 @@ namespace Moonma.IAP
     internal class BasePlatformWrapper
     {
 
+        public virtual void SetAppKey(string key)
+        {
+
+        }
         public virtual void SetObjectInfo(string objName, string objMethod)
         {
 
         }
         public virtual void SetSource(string source)
-		{ 
-			 
-		}
-        public virtual void StartBuy(string product)
+        {
+
+        }
+        public virtual void StartBuy(string product, bool isConsume)
         {
 
         }
@@ -41,10 +45,10 @@ namespace Moonma.IAP
         {
 
         }
-         public virtual void StopBuy( string product)
+        public virtual void StopBuy(string product)
         {
 
         }
-        
+
     }
 }

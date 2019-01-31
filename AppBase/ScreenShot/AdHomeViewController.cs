@@ -45,6 +45,6 @@ public class AdHomeViewController : UIViewController
     {
         ui = (UIShotBase)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
     }
 }

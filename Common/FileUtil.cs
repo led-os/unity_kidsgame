@@ -155,6 +155,37 @@ public class FileUtil : MonoBehaviour
         }
         return ReadDataFromFile(filePath);
     }
+
+
+     static public byte[] ReadRGBDataAsset(string file)
+    { 
+
+        //string fileDir = Application.dataPath + "/StreamingAssets";
+        string fileDir = Application.streamingAssetsPath;
+        if (Common.isAndroid)
+        {
+            byte[] data = null;
+            using (var javaClass = new AndroidJavaClass(JAVA_CLASS_FILEUTIL))
+            {
+
+                data = javaClass.CallStatic<byte[]>("ReadRGBDataAsset", file);
+            }
+            return data;
+        }
+        if (Common.isiOS)
+        {
+            //fileDir = Application.streamingAssetsPath;
+
+        }
+        string filePath = fileDir + "/" + file;
+        if (Common.isiOS)
+        {
+            //StreamAsseting目录 ios真机只读 不可写
+            return ReadDataAssetIos(filePath);
+        }
+        return ReadDataFromFile(filePath);
+    }
+
     static public byte[] ReadDataFromResources(string file)
     {
         TextAsset text = Resources.Load(GetFileBeforeExtWithOutDot(file)) as TextAsset;
