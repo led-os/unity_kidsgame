@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class NetImageListViewController : NaviViewController
 {
+
+    UINetImageList uiPrefab;
+    UINetImageList ui;//GuankaItemCell GameObject 
+    public int index;
     static private NetImageListViewController _main = null;
     public static NetImageListViewController main
     {
@@ -18,22 +22,40 @@ public class NetImageListViewController : NaviViewController
         }
     }
 
+
     void Init()
     {
-        this.title = "Main"; 
+
+        string strPrefab = "App/Prefab/NetImage/UINetImageList";
+        GameObject obj = PrefabCache.main.Load(strPrefab);
+        if (obj != null)
+        {
+            uiPrefab = obj.GetComponent<UINetImageList>();
+        }
+
     }
 
     public override void ViewDidLoad()
     {
-        //必须先调用基类方法以便初始化
         base.ViewDidLoad();
-
-        Debug.Log("MainViewController ViewDidLoad");
+        CreateUI();
     }
-    public override void ViewDidUnLoad()
+    public override void LayOutView()
     {
-        //必须先调用基类方法
-        base.ViewDidUnLoad();
+        base.LayOutView();
+        Debug.Log("HomeViewController LayOutView ");
+        if (ui != null)
+        {
+            ui.LayOut();
+        }
+    }
+    public void CreateUI()
+    {
+        ui = (UINetImageList)GameObject.Instantiate(uiPrefab);
+        ui.SetController(this);
+        ui.index = this.index;
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
     }
 
 }
+
