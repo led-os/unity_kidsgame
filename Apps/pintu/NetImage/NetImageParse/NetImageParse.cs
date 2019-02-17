@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Text;
 using LitJson;
+//必应美图
+//https://bing.lylares.com/
+//code:https://github.com/lylares/bingima
 
 public interface INetImageParseDelegate
 {
