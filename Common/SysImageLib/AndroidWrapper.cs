@@ -22,14 +22,14 @@ internal class AndroidWrapper : BasePlatformWrapper
         {
    				using(var javaClass = new AndroidJavaClass(JAVA_CLASS))
 				{
-					javaClass.CallStatic("OpenSystemImageLib",key);
+					javaClass.CallStatic("OpenSystemImageLib");
 				}
         }   
            public override void OpenCamera()
         {
    				using(var javaClass = new AndroidJavaClass(JAVA_CLASS))
 				{
-					javaClass.CallStatic("OpenSystemCameraApp",key);
+					javaClass.CallStatic("OpenSystemCameraApp");
 				}
         }  
 
