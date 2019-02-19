@@ -8,7 +8,7 @@ public class HomeViewController : UIViewController
     UIHomeBase uiHomePrefab;
     UIHomeBase uiHome;
 
-
+    public static bool isAdVideoHasFinish = false;
     static private HomeViewController _main = null;
     public static HomeViewController main
     {
@@ -40,10 +40,21 @@ public class HomeViewController : UIViewController
     {
         base.ViewDidLoad();
         CreateUI();
+        Debug.Log("HomeViewController ViewDidLoad");
+        if (!isAdVideoHasFinish)
+        {
+            //至少在home界面显示一次视频广告
+            AdKitCommon.main.callbackFinish = OnAdKitFinish;
+            if(uiHome!=null){
+                uiHome.OnClickBtnAdVideo();
+            }
+        }
+
     }
     public override void ViewDidUnLoad()
     {
         base.ViewDidUnLoad();
+        Debug.Log("HomeViewController ViewDidUnLoad");
     }
     public override void LayOutView()
     {
@@ -75,4 +86,14 @@ public class HomeViewController : UIViewController
         return name;
     }
 
+    public void OnAdKitFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
+    {
+        if (type == AdKitCommon.AdType.VIDEO)
+        {
+            if (status == AdKitCommon.AdStatus.SUCCESFULL)
+            {
+                isAdVideoHasFinish = true;
+            }
+        }
+    }
 }

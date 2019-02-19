@@ -59,10 +59,10 @@ public class AppScene : AppSceneBase
             }
         }
         // 显示开机插屏
-        if (isshow_adinsert)
-        {
-            AdKitCommon.main.ShowAdInsert(100);
-        }
+        // if (isshow_adinsert)
+        // {
+        //     AdKitCommon.main.ShowAdInsert(100);
+        // }
 
 
     }

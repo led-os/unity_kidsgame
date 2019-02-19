@@ -298,7 +298,7 @@ public class AdKitCommon : MonoBehaviour
 
     }
 
-
+    //c++调用c#的回调
     public void AdVideoCallbackUnity(string source, string method)
     {
 
