@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class HomeViewController : UIViewController
 {
-
+    public const int RUN_COUNT_SHOW_AD = 2;
     UIHomeBase uiHomePrefab;
     UIHomeBase uiHome;
 
     public static bool isAdVideoHasFinish = false;
+    public static int runCount = 0;
+
     static private HomeViewController _main = null;
     public static HomeViewController main
     {
@@ -39,17 +41,20 @@ public class HomeViewController : UIViewController
     public override void ViewDidLoad()
     {
         base.ViewDidLoad();
+
         CreateUI();
-        Debug.Log("HomeViewController ViewDidLoad");
-        if (!isAdVideoHasFinish)
+        Debug.Log("HomeViewCon)troller ViewDidLoad");
+
+        if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD))
         {
             //至少在home界面显示一次视频广告
             AdKitCommon.main.callbackFinish = OnAdKitFinish;
-            if(uiHome!=null){
+            if (uiHome != null)
+            {
                 uiHome.OnClickBtnAdVideo();
             }
         }
-
+        runCount++;
     }
     public override void ViewDidUnLoad()
     {

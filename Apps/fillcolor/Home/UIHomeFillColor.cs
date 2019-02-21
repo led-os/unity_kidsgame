@@ -17,7 +17,7 @@ public class UIHomeFillColor : UIHomeBase, IPopViewControllerDelegate
     // [SerializeField] protected GameObject objBtn;  
     void Awake()
     {
-
+        if (btnAdVideo != null)
         {
             btnAdVideo.gameObject.SetActive(true);
             if ((Common.noad) || (!AppVersion.appCheckHasFinished))
@@ -37,6 +37,8 @@ public class UIHomeFillColor : UIHomeBase, IPopViewControllerDelegate
         Common.SetButtonText(btnMore, Language.main.GetString("STR_MORE"), oft);
         Common.SetButtonText(btnSetting, Language.main.GetString("STR_SETTING"), oft);
         Common.SetButtonText(btnAdVideo, Language.main.GetString("BTN_ADVIDEO"), oft);
+
+
     }
     // Use this for initialization
     void Start()
