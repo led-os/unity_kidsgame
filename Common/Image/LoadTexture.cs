@@ -41,32 +41,38 @@ public class LoadTexture : MonoBehaviour
     static public Texture2D LoadFromAsset(string file)
     {
         Texture2D tex = null;
-        byte[] data = FileUtil.ReadRGBDataAsset(file);
-        if (data != null)
+        byte[] data = null;
+
+        if (Common.isAndroid)
         {
-            if (Common.isAndroid)
-            {
-                int w, h;
-                using (var javaClass = new AndroidJavaClass(FileUtil.JAVA_CLASS_FILEUTIL))
-                {
-                    w = javaClass.CallStatic<int>("GetRGBDataWidth");
-                    h = javaClass.CallStatic<int>("GetRGBDataHeight");
-                }
+            //android系统解码
+            // int w, h;
+            // using (var javaClass = new AndroidJavaClass(FileUtil.JAVA_CLASS_FILEUTIL))
+            // {
+            //     w = javaClass.CallStatic<int>("GetRGBDataWidth");
+            //     h = javaClass.CallStatic<int>("GetRGBDataHeight");
+            // }
+            // data = FileUtil.ReadRGBDataAsset(file);
+            // tex = LoadFromRGBData(data, w, h);
 
-                tex = LoadFromRGBData(data, w, h);
-            }
-            else
-            {
-                tex = LoadFromData(data);
-            }
+            //unity软件解码
+            data = FileUtil.ReadDataAsset(file);
+            tex = LoadFromData(data);
 
+        }
+        else
+        {
+            data = FileUtil.ReadDataAsset(file);
+            tex = LoadFromData(data);
         }
         return tex;
     }
     static public Texture2D LoadFromRGBData(byte[] data, int w, int h)
     {
         Texture2D tex = null;
-        tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+
+        //android Bitmap 读出来的Rgb数据是RGBA32
+        tex = new Texture2D(w, h, TextureFormat.RGBA32, false);//RGBA32  ARGB32
         byte[] pixselImage = tex.GetRawTextureData();
         int size = pixselImage.Length;
         System.Array.Copy(data, pixselImage, size);
@@ -79,7 +85,7 @@ public class LoadTexture : MonoBehaviour
     static public Texture2D LoadFromData(byte[] data)
     {
         Texture2D tex = null;
-        tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);
+        tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);//ARGB32
         tex.LoadImage(data);
         return tex;
     }

@@ -189,8 +189,12 @@ public class GameFillColor : UIView
         //Material mat = render.material;
         if (texPic != null)
         {
+            //rtPaintTemp = new RenderTexture(texPic.width, texPic.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            //rtMainPaint = new RenderTexture(texPic.width, texPic.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+
             rtPaintTemp = new RenderTexture(texPic.width, texPic.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             rtMainPaint = new RenderTexture(texPic.width, texPic.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+
             //mat.SetTexture("_MainTex", rtMainPaint);
 
             Graphics.Blit(texPic, rtMainPaint);
