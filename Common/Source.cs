@@ -23,6 +23,9 @@ public class Source
     public const string HUAWEI = "huawei";
     public const string GP = "gp";//google play
     public const string FACEBOOK = "fb";
+
+    public const string QIHU_360 = "360";
+
     //ad
     public const string INMOB = "inmobi";
     public const string ADMOB = "admob";

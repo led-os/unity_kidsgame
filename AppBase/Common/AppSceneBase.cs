@@ -67,6 +67,19 @@ public class AppSceneBase : ScriptBase
     // Use this for initialization
     void Start()
     {
+        if (Device.isLandscape)
+        {
+            OnStart();
+        }
+        else
+        {
+            //竖屏等待canvas调整大小 InitScalerMatch
+            Invoke("OnStart", 0.1f);
+        }
+
+    }
+    void OnStart()
+    {
         isHasStarted = true;
     }
 
@@ -162,7 +175,7 @@ public class AppSceneBase : ScriptBase
         else
         {
             appVersion.callbackFinished = null;
-            RunApp(); 
+            RunApp();
         }
         appVersion.StartParseVersion();
     }
