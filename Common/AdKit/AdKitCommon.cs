@@ -140,6 +140,14 @@ public class AdKitCommon : MonoBehaviour
     }
     public void ShowAdVideo()
     {
+        if (Common.noad)
+        {
+            return;
+        }
+        if (!AppVersion.appCheckHasFinished)
+        {
+            return;
+        }
         //show 之前重新设置广告
         InitAdVideo();
         AdVideo.ShowAd();

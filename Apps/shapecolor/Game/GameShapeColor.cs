@@ -1234,6 +1234,10 @@ public class GameShapeColor : UIGameBase
 
     void PlayAudioItemFinish(ShapeColorItemInfo info)
     {
+        if (info.id == ID_BOMB)
+        {
+            return;
+        }
         //AudioPlayer对象在场景切换后可能从当前scene移除了
         GameObject audioPlayer = GameObject.Find("AudioPlayer");
         if (audioPlayer != null)
