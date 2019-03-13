@@ -67,6 +67,8 @@ public class LoadTexture : MonoBehaviour
         }
         return tex;
     }
+
+    //
     static public Texture2D LoadFromRGBData(byte[] data, int w, int h)
     {
         Texture2D tex = null;
