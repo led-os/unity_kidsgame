@@ -31,7 +31,7 @@ public class NetImageParse360 : NetImageParseBase
     {
         httpImageList = new HttpRequest(OnHttpRequestFinished);
         //http://wallpaper.apc.360.cn/index.php?%20c=WallPaper&a=getAppsByCategory&cid=36&start=0&count=24&from=360chrome
-        httpImageList.Get("http://wallpaper.apc.360.cn/index.php?%20c=WallPaper&a=getAppsByCategory&cid=" + info.cid + "&start=0&count=24&from=360chrome");
+        httpImageList.Get("http://wallpaper.apc.360.cn/index.php?%20c=WallPaper&a=getAppsByCategory&cid=" + info.cid + "&start=0&count=96&from=360chrome");
     }
 
 
@@ -79,7 +79,11 @@ public class NetImageParse360 : NetImageParseBase
              */
             JsonData item = items[i];
             ImageItemInfo info = new ImageItemInfo();
-            info.title = (string)item["utag"];
+            string key = "utag";
+            if (Common.JsonDataContainsKey(item, key))
+            {
+                info.title = (string)item[key];
+            }
             info.id = (string)item["id"];
             info.pic = (string)item["url"];
             // Debug.Log("ParseImageList url = "+info.url);

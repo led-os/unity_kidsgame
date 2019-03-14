@@ -12,7 +12,7 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
     public Button btnNetImage;
     public Image imageBar;
     public Image imageBg;
-
+    public Text textTitle;
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
@@ -34,6 +34,9 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
         netImageParse = NetImageParseCommon.main;
         netImageParse.CreateAPI(Source.QIHU_360);
         netImageParse.SetDelegate(this);
+        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+
+        textTitle.text = Language.main.GetString("STR_NETIMAGE");
     }
 
     // Use this for initialization
@@ -81,6 +84,16 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
 
     public override void LayOut()
     {
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+        {
+            RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
+            float w_image = rectTransform.rect.width;
+            float h_image = rectTransform.rect.height;
+            float scale = Common.GetMaxFitScale(w_image, h_image, sizeCanvas.x, sizeCanvas.y);
+            imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
+            //屏幕坐标 现在在屏幕中央
+            imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        }
 
     }
     #region NetImageParse_Delegate 
@@ -168,7 +181,7 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
             item.index = itemIndex;
             item.totalItem = totalItem;
             item.callbackClick = OnCellItemDidClick;
-
+            item.tagValue = UINetImageCellItem.TAG_IMAGE_SORT;
             cell.AddItem(item);
 
         }

@@ -20,7 +20,7 @@ public class GamePintu : UIView, IUIPintuBlockDelegate
     public int row;
     public int col;
     public IGamePintuDelegate iDelegate;
-    
+
     int offsetTopbarY;
     float gameScaleX = 1f;
     float gameScaleY = 1f;
@@ -280,24 +280,28 @@ public class GamePintu : UIView, IUIPintuBlockDelegate
             sizeWorld.x = rcTran.rect.width * 0.6f;
             sizeWorld.y = rcTran.rect.height - heightTopbarWorld;
         }
+        if (objGamePic != null)
+        {
 
-        SpriteRenderer spRd = objGamePic.GetComponent<SpriteRenderer>();
-        Sprite sp = spRd.sprite;
-        Texture2D tex = sp.texture;
-        float pixsel_per_unit = 100;
-        float tex_world_w = tex.width / pixsel_per_unit;
-        float tex_world_h = tex.height / pixsel_per_unit;
-        float scale_x = sizeWorld.x / tex_world_w;
-        float scale_y = sizeWorld.y / tex_world_h;
-        float scale = Mathf.Min(scale_x, scale_y);
-        gameScaleX = scale;
-        gameScaleY = scale;
-        //gamePicBgScale = scale;
-        z = 0;
-        objGamePic.transform.localScale = new Vector3(scale, scale, 1f);
-        //rcTran.sizeDelta = new Vector2(tex_world_w, tex_world_h);
-        float pos_y = -heightTopbarWorld / 2;
-        objGamePic.transform.localPosition = new Vector3(0, pos_y, z);
+            SpriteRenderer spRd = objGamePic.GetComponent<SpriteRenderer>();
+            Sprite sp = spRd.sprite;
+            Texture2D tex = sp.texture;
+            float pixsel_per_unit = 100;
+            float tex_world_w = tex.width / pixsel_per_unit;
+            float tex_world_h = tex.height / pixsel_per_unit;
+            float scale_x = sizeWorld.x / tex_world_w;
+            float scale_y = sizeWorld.y / tex_world_h;
+            float scale = Mathf.Min(scale_x, scale_y);
+            gameScaleX = scale;
+            gameScaleY = scale;
+            //gamePicBgScale = scale;
+            z = 0;
+            objGamePic.transform.localScale = new Vector3(scale, scale, 1f);
+            //rcTran.sizeDelta = new Vector2(tex_world_w, tex_world_h);
+            float pos_y = -heightTopbarWorld / 2;
+            objGamePic.transform.localPosition = new Vector3(0, pos_y, z);
+
+        }
     }
 
     public void LayOutBlock(bool isOption)
@@ -307,17 +311,18 @@ public class GamePintu : UIView, IUIPintuBlockDelegate
         {
             ui.enableTouch = !isOption;
         }
-
-        if (isOption)
-        {
-            // GameObject.Destroy(obj);
-            objGamePic.SetActive(false);
-            //objSR.material = null;
-        }
-        else
+        if (objGamePic != null)
         {
 
-            objGamePic.SetActive(true);
+            if (isOption)
+            {
+                objGamePic.SetActive(false);
+            }
+            else
+            {
+
+                objGamePic.SetActive(true);
+            }
         }
         //更新位置
         foreach (UIPintuBlock ui in listItem)

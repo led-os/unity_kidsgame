@@ -20,6 +20,9 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
     public Text textTitle;
     public Button btnBack;
 
+    static public ImageItemInfo infoNetImage;
+
+
     string strPlace;
     int save_image_w = 800;
     int save_image_h = 800;
@@ -111,7 +114,7 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
     // Use this for initialization
     void Start()
     {
-        UIGuankaController.tick = Common.GetCurrentTimeMs() - UIGuankaController.tick; 
+        UIGuankaController.tick = Common.GetCurrentTimeMs() - UIGuankaController.tick;
         UpdateGuankaLevel(GameManager.gameLevel);
 
         //图片批处理将背景透明的png叠加一个大背景
@@ -162,16 +165,26 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         UpdateTitle();
         LayOut();
     }
+
+    void LoadGameTexture()
+    {
+        ItemInfo info = GetItemInfo();
+        if (imageSource == GamePintu.ImageSource.GAME_INNER)
+        {
+            texGamePic = LoadTexture.LoadFromAsset(info.pic);
+            UpdateGameTexture();
+        }
+        if (imageSource == GamePintu.ImageSource.NET)
+        {
+            StartParsePic(infoNetImage.pic);
+        }
+    }
+
     void UpdateGameTexture()
     {
         //需要提前在MergeTextureScene 里做合并操作
-        ItemInfo info = GetItemInfo(); 
-        Texture2D texBg = texBgGamePic;
         long tick = Common.GetCurrentTimeMs();
-        if (imageSource == GamePintu.ImageSource.GAME_INNER)
-        {
-            texGamePic = LoadTexture.LoadFromAsset(info.pic); 
-        }
+        Texture2D texBg = texBgGamePic;
         if (texGamePic != null)
         {
             if (texGamePic.format != TextureFormat.RGB24)
@@ -187,7 +200,28 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         Debug.Log("MergeTexture:tick=" + tick + "ms");
     }
 
+    void StartParsePic(string pic)
+    {
+        if (Common.BlankString(pic))
+        {
+            return;
+        }
+        HttpRequest http = new HttpRequest(OnHttpRequestFinished);
+        http.Get(pic);
+    }
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
+        if (isSuccess)
+        {
+            texGamePic = LoadTexture.LoadFromData(data);
+            UpdateGameTexture();
+        }
+        else
+        {
 
+        }
+    }
     void OnScreenShot()
     {
         float x, y, w, h;
@@ -267,7 +301,7 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
 
         tickclear = Common.GetCurrentTimeMs() - tickclear;
         tickLoadGameTexture = Common.GetCurrentTimeMs();
-        UpdateGameTexture();
+        LoadGameTexture();
 
         tickLoadGameTexture = Common.GetCurrentTimeMs() - tickLoadGameTexture;
         Debug.Log("LoadGameTexture:tick=" + tickLoadGameTexture + "ms");

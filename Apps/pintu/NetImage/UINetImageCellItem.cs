@@ -9,8 +9,12 @@ using System.Collections.Generic;
 //containing this component as a cell in a TableView
 public class UINetImageCellItem : UICellItemBase
 {
-    public Image imageBg;
+    public const int TAG_IMAGE_SORT = 0;
+    public const int TAG_IMAGE_LIST = 1;
+    //public Image imageBg;
     public Image imagePic;
+
+    public Text textTitle;
     public UIViewLoading viewLoading;
     public override void UpdateItem(List<object> list)
     {
@@ -18,18 +22,36 @@ public class UINetImageCellItem : UICellItemBase
         if (index < list.Count)
         {
             ImageItemInfo info = list[index] as ImageItemInfo;
-            StartParsePic(info.pic);
 
-            // Vector4 border = AppRes.borderCellSettingBg;
-            // TextureUtil.UpdateImageTexture(imagePic, "", true);
+
+            if (tagValue == TAG_IMAGE_SORT)
+            {
+                imagePic.gameObject.SetActive(true);
+                textTitle.gameObject.SetActive(true);
+                textTitle.text = info.title;
+                Vector4 border = AppRes.borderCellSettingBg;
+                TextureUtil.UpdateImageTexture(imagePic, UISettingCellItem.strImageBg[index % 3], false, border);
+                LayOut();
+            }
+            else
+            {
+                imagePic.gameObject.SetActive(false);
+                textTitle.gameObject.SetActive(false);
+                StartParsePic(info.pic);
+            }
+
+
         }
     }
     public override void LayOut()
     {
-        RectTransform rctran = imagePic.GetComponent<RectTransform>();
-        float ratio = 0.9f;
-        float scale = Common.GetBestFitScale(rctran.rect.width, rctran.rect.height, width, height) * ratio;
-        imagePic.transform.localScale = new Vector3(scale, scale, 1.0f);
+        if (tagValue == TAG_IMAGE_LIST)
+        {
+            RectTransform rctran = imagePic.GetComponent<RectTransform>();
+            float ratio = 0.9f;
+            float scale = Common.GetBestFitScale(rctran.rect.width, rctran.rect.height, width, height) * ratio;
+            imagePic.transform.localScale = new Vector3(scale, scale, 1.0f);
+        }
     }
 
     void StartParsePic(string pic)
@@ -60,6 +82,7 @@ public class UINetImageCellItem : UICellItemBase
             TextureUtil.UpdateImageTexture(imagePic, tex, true);
             LayOut();
             viewLoading.Show(false);
+            imagePic.gameObject.SetActive(true);
         }
         else
         {

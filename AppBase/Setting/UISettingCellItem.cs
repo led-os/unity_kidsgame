@@ -16,7 +16,7 @@ public class UISettingCellItem : UICellItemBase
     public Button btnSwitch;
     public const string IMAGE_BTN_SWITCH_UNSEL = "App/UI/Common/BtnSwitchUnsel";
     public const string IMAGE_BTN_SWITCH_SEL = "App/UI/Common/BtnSwitchsel";
-    string[] strImageBg = { AppRes.IMAGE_CELL_BG_BLUE, AppRes.IMAGE_CELL_BG_ORINGE, AppRes.IMAGE_CELL_BG_YELLOW };
+    static public string[] strImageBg = { AppRes.IMAGE_CELL_BG_BLUE, AppRes.IMAGE_CELL_BG_ORINGE, AppRes.IMAGE_CELL_BG_YELLOW };
 
     public override void UpdateItem(List<object> list)
     {
