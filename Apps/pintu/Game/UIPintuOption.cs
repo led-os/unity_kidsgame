@@ -30,7 +30,7 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
     float slideValue;
     UIGamePintu game;
 
-    bool isNeedAdVideoTips
+    public bool isNeedAdVideoTips
     {
         get
         {

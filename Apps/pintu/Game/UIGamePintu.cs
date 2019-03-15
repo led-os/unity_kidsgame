@@ -168,16 +168,17 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
 
     void LoadGameTexture()
     {
+        if (imageSource == GamePintu.ImageSource.NET)
+        {
+            StartParsePic(infoNetImage.pic);
+            return;
+        }
         ItemInfo info = GetItemInfo();
         if (imageSource == GamePintu.ImageSource.GAME_INNER)
         {
             texGamePic = LoadTexture.LoadFromAsset(info.pic);
-            UpdateGameTexture();
         }
-        if (imageSource == GamePintu.ImageSource.NET)
-        {
-            StartParsePic(infoNetImage.pic);
-        }
+        UpdateGameTexture();
     }
 
     void UpdateGameTexture()
@@ -286,7 +287,11 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
 
     public override void UpdateGuankaLevel(int level)
     {
-
+        if (GameManager.main.fromUIViewController == GuankaViewController.main)
+        {
+            imageSource = GamePintu.ImageSource.GAME_INNER;
+        }
+        
         tickclear = Common.GetCurrentTimeMs();
         AppSceneBase.main.ClearMainWorld();
 
@@ -494,6 +499,10 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         {
             OnShowAdVideo();
 
+        }
+        if (uiPintuOption != null)
+        {
+            uiPintuOption.isNeedAdVideoTips = false;
         }
 
     }

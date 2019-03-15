@@ -12,7 +12,8 @@ public class GameManager
     static public int placeLevel;
     HttpRequest httpReqPlaceList;
 
-
+    public UIViewController fromUIViewController;//来源
+    
     static private GameManager _main = null;
     public static GameManager main
     {
@@ -220,7 +221,7 @@ public class GameManager
 
     public void GotoGame(UIViewController fromController)
     {
-
+        fromUIViewController = fromController;
         //GameViewController.main.ShowOnController(AppSceneBase.main.rootViewController);
         NaviViewController navi = fromController.naviController;
         if (navi != null)

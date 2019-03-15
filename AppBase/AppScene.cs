@@ -41,6 +41,7 @@ public class AppScene : AppSceneBase
             {
                 AdVideo.PreLoad(Source.UNITY);
                 AdVideo.PreLoad(Source.MOBVISTA);
+                AdVideo.PreLoad(Source.VUNGLE);
             }
 
 

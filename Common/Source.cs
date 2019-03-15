@@ -35,5 +35,6 @@ public class Source
     public const string ADVIEW = "adview";
     public const string MICROSOFT = "microsoft";
     public const string MOBVISTA = "mobvista";
+    public const string VUNGLE = "vungle";
 
 }
