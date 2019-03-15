@@ -5,135 +5,78 @@ using UnityEngine;
 //方格布局
 public class LayOutGrid : LayOutBase
 {
-    public int row;//行
-    public int col;//列
-    public Rect rect;
-    public bool isAutoFitSize = false;
-    public float itemScaleRatio = 1.0f;
-    private List<GameObject> listItem;
+    public int row = 1;//行
+    public int col = 1;//列  
 
-    public int count
+    private void Awake()
     {
-        get
-        {
-            int ret = 0;
-            if (listItem != null)
-            {
-                ret = listItem.Count;
-            }
-            return ret;
-        }
-    }
-    public void AddItem(GameObject obj)
-    {
-        if (listItem == null)
-        {
-            listItem = new List<GameObject>();
-        }
 
-        listItem.Add(obj);
     }
 
-    public void ReplaceItem(int idx, GameObject obj)
+    private void Start()
     {
-        listItem.RemoveAt(idx);
-        listItem.Insert(idx, obj);
+        LayOut();
     }
-    public GameObject GetItem(int idx)
+    // r 行 ; c 列  返回中心位置
+    public Vector2 GetItemPostion(int r, int c)
     {
-        GameObject obj = null;
-        if (listItem != null)
-        {
-            if (idx < listItem.Count)
-            {
-                obj = listItem[idx];
-            }
-        }
-        return obj;
-    }
+        float x, y, w, h;
+        RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
+        w = rctran.rect.width;
+        h = rctran.rect.height;
+        float item_w = w / col;
+        float item_h = h / row;
 
-    public void Clear()
-    {
-        if (listItem != null)
-        {
-            listItem.Clear();
-        }
+        x = -w / 2 + item_w * c + item_w / 2;
+        y = -h / 2 + item_h * r + item_h / 2;
+
+        return new Vector2(x, y);
+
     }
 
-    public void DestroyAllItem()
+    public override void LayOut()
     {
-        if (listItem == null)
-        {
-            return;
-        }
-        foreach (GameObject obj in listItem)
-        {
-            GameObject.DestroyImmediate(obj);
-        }
-
-        listItem.Clear();
-    }
-
-    public Vector2 GetItemPostion(int i_row, int j_col)
-    {
-        float x, y;
-        float item_w = rect.size.x / col;
-        float item_h = rect.size.y / row;
-
-        x = item_w * j_col + rect.x;
-        y = item_h * i_row + rect.y;
-        //rect item : x,y,item_w,item_h
-        float x_center, y_center;
-        x_center = x + item_w / 2;
-        y_center = y + item_h / 2;
-        //Debug.Log("i=" + i + " item_h=" + item_h + " rect.size.y=" + rect.size.y + " row=" + row + " y_center=" + y_center);
-        return new Vector2(x_center, y_center);
-
-    }
-    public void LayOutItem()
-    {
-        float x, y;
-        float item_w = rect.size.x / col;
-        float item_h = rect.size.y / row;
         int idx = 0;
-        if (listItem.Count == 0)
+        int r = 0, c = 0;
+        /* 
+        foreach (Transform child in objMainWorld.transform)这种方式遍历子元素会漏掉部分子元素
+        */
+
+        //GetComponentsInChildren寻找的子对象也包括父对象自己本身和子对象的子对象
+        foreach (Transform child in this.gameObject.GetComponentsInChildren<Transform>(true))
         {
-            return;
-        }
-        for (int i = 0; i < row; i++)
-        {
-            for (int j = 0; j < col; j++)
+            if (child == null)
             {
-                if (idx < listItem.Count)
-                {
-                    x = item_w * j + rect.x;
-                    y = item_h * i + rect.y;
-                    //rect item : x,y,item_w,item_h
-                    float x_center, y_center;
-                    x_center = x + item_w / 2;
-                    y_center = y + item_h / 2;
-                    //Debug.Log("i=" + i + " item_h=" + item_h + " rect.size.y=" + rect.size.y + " row=" + row + " y_center=" + y_center);
-                    GameObject obj = listItem[idx];
-                    RectTransform rctran = obj.transform as RectTransform;
-                    rctran.anchoredPosition = new Vector2(x_center, y_center);
-                    if (isAutoFitSize)
-                    {
-                        SpriteRenderer spRender = obj.GetComponent<SpriteRenderer>();
-                        if (spRender != null)
-                        {
-                            float scalez = obj.transform.localScale.z;
-                            float scalex = item_w * itemScaleRatio / spRender.size.x;
-                            float scaley = item_h * itemScaleRatio / spRender.size.y;
-                            float scale = Mathf.Min(scalex, scaley);
-                            obj.transform.localScale = new Vector3(scale, scale, scalez);
-                        }
-
-                    }
-                    idx++;
-                }
-
+                // 过滤已经销毁的嵌套子对象
+                Debug.Log("LayOut child is null idx=" + idx);
+                continue;
+            }
+            GameObject objtmp = child.gameObject;
+            if (this.gameObject == objtmp)
+            {
+                continue;
             }
 
+            if (objtmp.transform.parent != this.gameObject.transform)
+            {
+                //只找第一层子物体
+                continue;
+            }
+
+            r = idx / col;
+            c = idx - r * col;
+
+            //从顶部往底部显示
+            r = row - 1 - r;
+
+            Vector2 pt = GetItemPostion(r, c);
+            RectTransform rctran = child.gameObject.GetComponent<RectTransform>();
+            if (rctran != null)
+            {
+                rctran.anchoredPosition = pt;
+                Debug.Log("GetItemPostion:idx=" + idx + " r=" + r + " c=" + c + " pt=" + pt);
+            }
+            idx++;
         }
     }
 }

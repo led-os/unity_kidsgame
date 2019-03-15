@@ -123,6 +123,35 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
         //     rctran.sizeDelta = new Vector2(w, h);
         // }
 
+        {
+            LayOutGrid lygrid = objLayoutBtn.GetComponent<LayOutGrid>();
+            RectTransform rctran = objLayoutBtn.GetComponent<RectTransform>();
+            int h_item = 256;
+            if (Device.isLandscape)
+            {
+                lygrid.row = 1;
+                lygrid.col = 5;
+                x = 0;
+                y = -sizeCanvas.y / 4;
+            }
+            else
+            {
+                lygrid.row = 3;
+                lygrid.col = 2;
+                x = 0;
+                y = -sizeCanvas.y / 4;
+            }
+            w = rctran.rect.width;
+            h = h_item * lygrid.row;
+
+            rctran.sizeDelta = new Vector2(w, h);
+            rctran.offsetMin = new Vector2(0, rctran.offsetMin.y);
+            rctran.offsetMax = new Vector2(0, rctran.offsetMax.y);
+            rctran.anchoredPosition = new Vector2(x, y);
+
+            lygrid.LayOut();
+        }
+
         LayoutChildBase();
     }
 

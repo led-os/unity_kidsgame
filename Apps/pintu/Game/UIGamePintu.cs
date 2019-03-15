@@ -287,11 +287,6 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
 
     public override void UpdateGuankaLevel(int level)
     {
-        if (GameManager.main.fromUIViewController == GuankaViewController.main)
-        {
-            imageSource = GamePintu.ImageSource.GAME_INNER;
-        }
-        
         tickclear = Common.GetCurrentTimeMs();
         AppSceneBase.main.ClearMainWorld();
 

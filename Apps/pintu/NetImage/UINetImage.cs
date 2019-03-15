@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
 {
+    
+
     public GameObject objLayoutBtn;
     public Button btnPlay;
     public Button btnNetImage;

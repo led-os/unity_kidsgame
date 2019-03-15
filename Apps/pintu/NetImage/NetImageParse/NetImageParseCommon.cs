@@ -22,6 +22,7 @@ public interface INetImageParseDelegate
 }
 public class NetImageParseCommon
 {
+    public const float IMAGE_PIXSEL_RATIO = 16.0f/9;
     NetImageParseBase netImageParse;
     HttpRequest httpSortList;
     HttpRequest httpImageList;

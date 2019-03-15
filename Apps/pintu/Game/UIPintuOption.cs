@@ -29,7 +29,7 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
     bool isTouchUp;
     float slideValue;
     UIGamePintu game;
-
+    GamePintu.ImageSource imageSource;
     public bool isNeedAdVideoTips
     {
         get
@@ -197,6 +197,8 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
 
     void OnSysImageLibDidOpenFinish(string file)
     {
+
+
         if (Common.isAndroid)
         {
             int w, h;
@@ -216,6 +218,11 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
             }
 
         }
+
+
+        //恢复原来的
+        UIGamePintu.imageSource = imageSource;
+        
     }
 
     public void OnSliderTouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
@@ -264,11 +271,15 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
 
     public void OnClickBtnPhoto()
     {
+        imageSource = UIGamePintu.imageSource;
+
         SysImageLib.main.SetObjectInfo(this.gameObject.name, "OnSysImageLibDidOpenFinish");
         SysImageLib.main.OpenImage();
     }
     public void OnClickBtnCamera()
     {
+        imageSource = UIGamePintu.imageSource;
+
         SysImageLib.main.SetObjectInfo(this.gameObject.name, "OnSysImageLibDidOpenFinish");
         SysImageLib.main.OpenCamera();
     }

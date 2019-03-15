@@ -7,7 +7,7 @@ public interface IGamePintuDelegate
     void OnGamePintuDidBack(GamePintu ui);
     void OnGamePintuDidNextLevel(GamePintu ui);
 }
-public class GamePintu : UIView, IUIPintuBlockDelegate
+public class GamePintu : GameBase, IUIPintuBlockDelegate
 {
     public enum ImageSource
     {
