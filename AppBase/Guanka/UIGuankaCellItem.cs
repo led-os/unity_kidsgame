@@ -7,7 +7,7 @@ public class UIGuankaCellItem : UICellItemBase
 {
 
     public Text textTitle;
-    public Image imageBg;
+    public RawImage imageBg;
     public Image imageSel;
     public Image imageIconLock;
 
@@ -23,19 +23,19 @@ public class UIGuankaCellItem : UICellItemBase
             // if (!Application.isEditor)
             {
                 textTitle.gameObject.SetActive(false);
-                TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_LOCK, true);
+                TextureUtil.UpdateRawImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_LOCK, true);
             }
 
         }
         else if (index == idx_play)
         {
             textTitle.gameObject.SetActive(false);
-            TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_PLAY, true);
+            TextureUtil.UpdateRawImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_PLAY, true);
         }
         else
         {
 
-            TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK, true);
+            TextureUtil.UpdateRawImageTexture(imageBg, AppCommon.IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK, true);
         }
         LayOut();
     }

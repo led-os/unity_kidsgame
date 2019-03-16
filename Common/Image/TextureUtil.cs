@@ -314,7 +314,7 @@ public class TextureUtil : MonoBehaviour
     }
 
 
-     static public void UpdateButtonTexture(Button btn, string filepath, bool isUpdateSize)
+    static public void UpdateButtonTexture(Button btn, string filepath, bool isUpdateSize)
     {
         UpdateButtonTexture(btn, filepath, isUpdateSize, Vector4.zero);
     }
@@ -335,7 +335,30 @@ public class TextureUtil : MonoBehaviour
         UpdateImageTexture(image, tex, isUpdateSize, border);
     }
 
+    //RawImage
+    static public void UpdateRawImageTexture(RawImage image, string filepath, bool isUpdateSize)
+    {
+        Texture2D tex = TextureCache.main.Load(filepath);
+        UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
+    }
 
+     static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize)
+    {
+        UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
+    }
+    static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize, Vector4 border)
+    {
+        if (tex)
+        {
+            image.texture = tex;
+            if (isUpdateSize)
+            {
+                RectTransform rctan = image.GetComponent<RectTransform>();
+                rctan.sizeDelta = new Vector2(tex.width, tex.height);
+            }
+
+        }
+    }
 
 
 }

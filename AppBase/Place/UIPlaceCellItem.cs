@@ -7,14 +7,14 @@ public class UIPlaceCellItem : UICellItemBase
 {
 
     public Text textTitle;
-    public Image imageBg;
+    public RawImage imageBg;
 
     public override void UpdateItem(List<object> list)
     {
         ItemInfo info = list[index] as ItemInfo;
         //textTitle.text = (index + 1).ToString();
         textTitle.gameObject.SetActive(false);
-        TextureUtil.UpdateImageTexture(imageBg, info.pic, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, info.pic, true);
         LayOut();
     }
     public override bool IsLock()
@@ -25,8 +25,8 @@ public class UIPlaceCellItem : UICellItemBase
     {
         {
             RectTransform rctran = imageBg.GetComponent<RectTransform>();
-            float w = imageBg.sprite.texture.width;//rectTransform.rect.width;
-            float h = imageBg.sprite.texture.height;//rectTransform.rect.height;
+            float w = imageBg.texture.width;//rectTransform.rect.width;
+            float h = imageBg.texture.height;//rectTransform.rect.height;
             RectTransform rctranCellItem = objContent.GetComponent<RectTransform>();
 
             float scalex = width / w;
