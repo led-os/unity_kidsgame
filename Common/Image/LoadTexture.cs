@@ -45,20 +45,24 @@ public class LoadTexture : MonoBehaviour
 
         if (Common.isAndroid)
         {
+            long tick = Common.GetCurrentTimeMs();
             //android系统解码
             // int w, h;
+            // data = FileUtil.ReadRGBDataAsset(file);
             // using (var javaClass = new AndroidJavaClass(FileUtil.JAVA_CLASS_FILEUTIL))
             // {
             //     w = javaClass.CallStatic<int>("GetRGBDataWidth");
             //     h = javaClass.CallStatic<int>("GetRGBDataHeight");
             // }
-            // data = FileUtil.ReadRGBDataAsset(file);
+
             // tex = LoadFromRGBData(data, w, h);
 
             //unity软件解码
             data = FileUtil.ReadDataAsset(file);
             tex = LoadFromData(data);
 
+            tick = Common.GetCurrentTimeMs() - tick;
+            Debug.Log("LoadFromAsset time tick=" + tick + "ms");
         }
         else
         {
@@ -86,9 +90,36 @@ public class LoadTexture : MonoBehaviour
 
     static public Texture2D LoadFromData(byte[] data)
     {
+        long tick = Common.GetCurrentTimeMs();
         Texture2D tex = null;
-        tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);//ARGB32
-        tex.LoadImage(data);
+        if (Common.isAndroid)
+        {
+
+            //android系统解码
+            // int w, h;
+            // byte[] rgbdata = FileUtil.ReadRGBDataFromByte(data);
+            // using (var javaClass = new AndroidJavaClass(FileUtil.JAVA_CLASS_FILEUTIL))
+            // {
+            //     w = javaClass.CallStatic<int>("GetRGBDataWidth");
+            //     h = javaClass.CallStatic<int>("GetRGBDataHeight");
+            // }
+            // tex = LoadFromRGBData(rgbdata, w, h);
+
+            // unity软件解码
+            tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);//ARGB32
+            tex.LoadImage(data);
+
+        }
+        else
+        {
+            //unity软件解码
+            tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);//ARGB32
+            tex.LoadImage(data);
+        }
+
+        tick = Common.GetCurrentTimeMs() - tick;
+        Debug.Log("LoadFromData time tick=" + tick + "ms");
+
         return tex;
     }
 

@@ -156,9 +156,23 @@ public class FileUtil : MonoBehaviour
         return ReadDataFromFile(filePath);
     }
 
+    static public byte[] ReadRGBDataFromByte(byte[] data)
+    {
+        byte[] ret = null;
+        if (Common.isAndroid)
+        {
+            using (var javaClass = new AndroidJavaClass(JAVA_CLASS_FILEUTIL))
+            {
 
-     static public byte[] ReadRGBDataAsset(string file)
-    { 
+                ret = javaClass.CallStatic<byte[]>("ReadRGBDataFromByte",data);
+            }
+
+        }
+        return ret;
+    }
+
+    static public byte[] ReadRGBDataAsset(string file)
+    {
 
         //string fileDir = Application.dataPath + "/StreamingAssets";
         string fileDir = Application.streamingAssetsPath;

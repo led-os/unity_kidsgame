@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Moonma.Tongji;
+using Moonma.AdKit.AdConfig;
 
 public class AppSceneBase : ScriptBase
 {
@@ -45,6 +46,9 @@ public class AppSceneBase : ScriptBase
 
         //app启动初始化多线程工具LOOM
         Loom loom = Loom.Current;
+
+        //初始化广告id key等参数
+        AdConfig adcf = AdConfig.main;
 
         //bg
         // Texture2D tex = AppResImage.texMainBg;
