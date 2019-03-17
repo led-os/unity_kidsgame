@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Device : MonoBehaviour
 {
@@ -287,6 +288,17 @@ public class Device : MonoBehaviour
             Screen.autorotateToPortraitUpsideDown = true;
             Screen.autorotateToLandscapeLeft = false;
             Screen.autorotateToLandscapeRight = false;
+        }
+    }
+
+
+    //参考设计分辨率
+    static public Vector2 sizeDesign
+    {
+        get
+        {
+            CanvasScaler canvasScaler = AppSceneBase.main.canvasMain.gameObject.GetComponent<CanvasScaler>();
+            return canvasScaler.referenceResolution;
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Threading;
 
 public class LoadTexture : MonoBehaviour
 {
@@ -138,6 +139,8 @@ public class LoadTexture : MonoBehaviour
         Texture2D tex = (Texture2D)Resources.Load(file);
         return tex;
     }
+
+ 
 
     static public Sprite CreateSprieFromResource(string file)
     {

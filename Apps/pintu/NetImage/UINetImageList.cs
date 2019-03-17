@@ -153,7 +153,11 @@ public class UINetImageList : UIView, ITableViewDataSource, INetImageParseDelega
     void UpdateTable(bool isLoad)
     {
 
-        float w_cell = 512;
+        float w_cell = Device.sizeDesign.x / 2;
+        if (Device.isLandscape)
+        {
+            w_cell = Device.sizeDesign.x / 4;
+        }
         RectTransform rctran = tableView.GetComponent<RectTransform>();
         float w = AppSceneBase.main.sizeCanvas.x;
         // w = rctran.rect.width;
@@ -165,7 +169,7 @@ public class UINetImageList : UIView, ITableViewDataSource, INetImageParseDelega
             oneCellNum++;
         }
         w_cell = w / oneCellNum;
-        heightCell = (int)(w_cell / NetImageParseCommon.IMAGE_PIXSEL_RATIO);
+        heightCell = (int)(w_cell / NetImageParseCommon.main.GetImageRatio());
 
         int total = listItem.Count;
         totalItem = total;

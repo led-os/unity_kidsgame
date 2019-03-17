@@ -22,10 +22,12 @@ public interface INetImageParseDelegate
 }
 public class NetImageParseCommon
 {
-    public const float IMAGE_PIXSEL_RATIO = 16.0f/9;
+
+
     NetImageParseBase netImageParse;
     HttpRequest httpSortList;
     HttpRequest httpImageList;
+
 
     static private NetImageParseCommon _main = null;
     public static NetImageParseCommon main
@@ -39,7 +41,15 @@ public class NetImageParseCommon
             return _main;
         }
     }
-
+    public float GetImageRatio()
+    {
+        float ret = 16.0f / 9;
+        if (netImageParse != null)
+        {
+            ret = netImageParse.GetImageRatio();
+        }
+        return ret;
+    }
     public void CreateAPI(string source)
     {
         if (source == Source.QIHU_360)

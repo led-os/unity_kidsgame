@@ -131,18 +131,23 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
             {
                 lygrid.row = 1;
                 lygrid.col = 5;
-                x = 0;
-                y = -sizeCanvas.y / 4;
+
             }
             else
             {
                 lygrid.row = 3;
                 lygrid.col = 2;
-                x = 0;
-                y = -sizeCanvas.y / 4;
+
             }
             w = rctran.rect.width;
             h = h_item * lygrid.row;
+            x = 0;
+            float y_bottom = -sizeCanvas.y / 2 + topBarHeight;
+            y = y_bottom / 2;
+            if ((y - h / 2) < y_bottom)
+            {
+                y = y_bottom + h / 2;
+            }
 
             rctran.sizeDelta = new Vector2(w, h);
             rctran.offsetMin = new Vector2(0, rctran.offsetMin.y);
@@ -162,10 +167,16 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
             int w, h;
             using (var javaClass = new AndroidJavaClass(SysImageLib.JAVA_CLASS))
             {
-                w = javaClass.CallStatic<int>("GetRGBDataWidth");
-                h = javaClass.CallStatic<int>("GetRGBDataHeight");
-                byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
-                Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+
+                //安卓系统解码
+                // w = javaClass.CallStatic<int>("GetRGBDataWidth");
+                // h = javaClass.CallStatic<int>("GetRGBDataHeight");
+                // byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
+                // Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+
+                //unity解码
+                Texture2D tex = LoadTexture.LoadFromFile(file);
+
                 UIGamePintu.texGamePic = tex;
                 UIGamePintu.imageSource = GamePintu.ImageSource.SYSTEM_IMAGE_LIB;
                 if (this.controller != null)

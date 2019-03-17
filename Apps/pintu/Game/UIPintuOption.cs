@@ -204,11 +204,14 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
             int w, h;
             using (var javaClass = new AndroidJavaClass(SysImageLib.JAVA_CLASS))
             {
-                w = javaClass.CallStatic<int>("GetRGBDataWidth");
-                h = javaClass.CallStatic<int>("GetRGBDataHeight");
-                byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
-                Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
-                //Texture2D tex = LoadTexture.LoadFromFile(file);
+                //安卓系统解码
+                // w = javaClass.CallStatic<int>("GetRGBDataWidth");
+                // h = javaClass.CallStatic<int>("GetRGBDataHeight");
+                // byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
+                // Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+
+                //unity解码
+                Texture2D tex = LoadTexture.LoadFromFile(file);
                 if (game != null)
                 {
                     UIGamePintu.texGamePic = tex;

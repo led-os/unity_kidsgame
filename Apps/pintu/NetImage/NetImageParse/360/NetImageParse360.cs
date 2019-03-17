@@ -19,6 +19,11 @@ public class NetImageParse360 : NetImageParseBase
     HttpRequest httpSortList;
     HttpRequest httpImageList;
 
+    //w:h
+    public override float GetImageRatio()
+    {
+        return 1024f / 768;
+    }
     public override void StartParseSortList()
     {
 
@@ -85,7 +90,14 @@ public class NetImageParse360 : NetImageParseBase
                 info.title = (string)item[key];
             }
             info.id = (string)item["id"];
+
+
             info.pic = (string)item["url"];
+            key = "img_1024_768";
+            if (Common.JsonDataContainsKey(item, key))
+            {
+                info.pic = (string)item[key];
+            }
             // Debug.Log("ParseImageList url = "+info.url);
             list.Add(info);
         }

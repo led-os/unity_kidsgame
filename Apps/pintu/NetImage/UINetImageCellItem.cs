@@ -16,6 +16,8 @@ public class UINetImageCellItem : UICellItemBase
     public RawImage rawImagePic;
     public Text textTitle;
     public UIViewLoading viewLoading;
+
+    Texture2D texPic;
     public override void UpdateItem(List<object> list)
     {
         // return;
@@ -74,6 +76,39 @@ public class UINetImageCellItem : UICellItemBase
             viewLoading.Show(false);
         }
     }
+
+    void ActionFinish(object obj, int w, int h)
+    {
+        byte[] data = obj as byte[];
+        if (data == null)
+        {
+            return;
+        }
+
+        texPic = LoadTexture.LoadFromRGBData(data, w, h);
+        if (texPic != null)
+        {
+            Loom.QueueOnMainThread(() =>
+            {
+                UpdateItemTexture(texPic);
+            });
+        }
+    }
+
+    void UpdateItemTexture(Texture2D tex)
+    {
+        if (!NetImageListViewController.main.isActive)
+        {
+            return;
+        }
+        // TextureUtil.UpdateImageTexture(imagePic, tex, true); 
+        TextureUtil.UpdateRawImageTexture(rawImagePic, tex, true);
+
+        LayOut();
+        viewLoading.Show(false);
+        rawImagePic.gameObject.SetActive(true);
+    }
+
     void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
     {
         Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
@@ -83,18 +118,15 @@ public class UINetImageCellItem : UICellItemBase
         }
         if (isSuccess)
         {
-
-            Texture2D tex = LoadTexture.LoadFromData(data);
-            if (!req.isReadFromCatch)
+            // if (Common.isAndroid)
+            // {
+            //     TextureThread.main.LoadTexThread(data, ActionFinish);
+            // }
+            // else
             {
-                //imageItem.GetComponent<Animation>().Play();
+                UpdateItemTexture(LoadTexture.LoadFromData(data));
             }
-            // TextureUtil.UpdateImageTexture(imagePic, tex, true); 
-            TextureUtil.UpdateRawImageTexture(rawImagePic, tex, true);
 
-            LayOut();
-            viewLoading.Show(false);
-            rawImagePic.gameObject.SetActive(true);
         }
         else
         {

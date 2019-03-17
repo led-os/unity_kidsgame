@@ -41,8 +41,6 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
     long tickclear;
     long tickInitUI;
     long tickAwake;
-    static Texture2D _texBgGamePic = null;
-    static bool isInitedTexBgGamePic = false;
     bool isNeedShowBgGamePic = false;
 
     static public GamePintu.ImageSource imageSource = GamePintu.ImageSource.GAME_INNER;
@@ -54,13 +52,8 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
     {
         get
         {
-            if (!isInitedTexBgGamePic)
-            {
-                //保证只加载一次
-                isInitedTexBgGamePic = true;
-                _texBgGamePic = LoadTexture.LoadFromAsset(Common.GAME_RES_DIR + "/bg_game_pic.png");
-            }
-            return _texBgGamePic;
+            return TextureCache.main.Load(Common.GAME_RES_DIR + "/bg_game_pic.png");
+            // return LoadTexture.LoadFromAsset(Common.GAME_RES_DIR + "/bg_game_pic.png");
         }
 
 
@@ -188,7 +181,7 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         Texture2D texBg = texBgGamePic;
         if (texGamePic != null)
         {
-            if (texGamePic.format != TextureFormat.RGB24)
+            if ((texGamePic.format == TextureFormat.ARGB32) || (texGamePic.format == TextureFormat.RGBA32))
             {
                 texGamePic = PintuUtil.MergeTextureGPU(texBg, texGamePic);
             }
@@ -250,6 +243,12 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
 
     void UpdateTitle()
     {
+        if (imageSource != GamePintu.ImageSource.GAME_INNER)
+        {
+            textTitle.gameObject.SetActive(false);
+            imageTopBar.gameObject.SetActive(false);
+            return;
+        }
         int idx = GameManager.gameLevel;
         ItemInfo info = listGuanka[idx] as ItemInfo;
         if (!languageGame.IsContainsKey(info.id))

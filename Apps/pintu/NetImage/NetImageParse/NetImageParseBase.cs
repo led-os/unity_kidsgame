@@ -10,6 +10,11 @@ public class NetImageParseBase
 {
     public INetImageParseDelegate iDelegate;
 
+    //w:h
+    public virtual float GetImageRatio()
+    {
+        return 16f / 9;
+    }
     public virtual void StartParseSortList()
     {
 
