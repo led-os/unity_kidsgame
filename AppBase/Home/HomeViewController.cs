@@ -48,7 +48,7 @@ public class HomeViewController : UIViewController
         if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD))
         {
             //至少在home界面显示一次视频广告
-            AdKitCommon.main.callbackFinish = OnAdKitFinish;
+            AdKitCommon.main.callbacAdVideokFinish = OnAdKitFinish;
             if (uiHome != null)
             {
                 uiHome.OnClickBtnAdVideo();
@@ -93,7 +93,7 @@ public class HomeViewController : UIViewController
 
     public void OnAdKitFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
     {
-        if (type == AdKitCommon.AdType.VIDEO)
+        //if (type == AdKitCommon.AdType.VIDEO)
         {
             if (status == AdKitCommon.AdStatus.SUCCESFULL)
             {

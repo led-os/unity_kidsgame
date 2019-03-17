@@ -15,7 +15,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     public const string APPCENTER_HTTP_URL_SORT = "http://www.mooncore.cn/moonma/app_center/applist_sort.json";
     public GameObject objTopBar;
     public GameObject objTableViewTemplate;
-    public Image imageBg;
+    public RawImage imageBg;
     public Image imageBarBg;
     public Button btnBack;
     UICellItemBase cellItemPrefab;
@@ -39,8 +39,8 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     void Awake()
     {
         listItem = new List<object>();
-         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
+        //bg
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
         StartParse();
         LoadPrefab();
         heightCell = 512;
@@ -117,9 +117,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
             RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
             float w_image = rectTransform.rect.width;
             float h_image = rectTransform.rect.height;
-            float scalex = sizeCanvas.x / w_image;
-            float scaley = sizeCanvas.y / h_image;
-            float scale = Mathf.Max(scalex, scaley);
+            float scale = Common.GetMaxFitScale(w_image, h_image, sizeCanvas.x, sizeCanvas.y);
             imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
             //屏幕坐标 现在在屏幕中央
             imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
@@ -257,7 +255,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
         {
             numRows++;
         }
-      
+
         tableView.ReloadData();
         //tableView.scrollY = 0;
     }

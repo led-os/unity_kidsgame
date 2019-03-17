@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIMoreAppCellItem : UICellItemBase
 {
-    public Image imageItem;
+    public RawImage imageItem;
     public Text textTitle;
     public Text textDetail;
     public UIViewLoading viewLoading;
@@ -54,25 +54,19 @@ public class UIMoreAppCellItem : UICellItemBase
             {
                 return;
             }
-            Texture2D tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);
-            tex.LoadImage(data);
-            Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-            imageItem.sprite = sp;
+           Texture2D tex = LoadTexture.LoadFromData(data);
+            TextureUtil.UpdateRawImageTexture(imageItem, tex, true);
             if (!req.isReadFromCatch)
             {
                 //imageItem.GetComponent<Animation>().Play();
             }
 
             RectTransform rctran = imageItem.GetComponent<RectTransform>();
-            float w = imageItem.sprite.texture.width;//rectTransform.rect.width;
-            float h = imageItem.sprite.texture.height;//rectTransform.rect.height;
-                                                      // print("imageItem size:w=" + w + " h=" + h);
-            rctran.sizeDelta = new Vector2(w, h);
-
-            RectTransform rctranCellItem = this.gameObject.GetComponent<RectTransform>();
-            float scalex = rctranCellItem.rect.width / w;
-            float scaley = rctranCellItem.rect.height / h;
-            float scale = Mathf.Min(scalex, scaley);
+            float w = imageItem.texture.width;//rectTransform.rect.width;
+            float h = imageItem.texture.height;//rectTransform.rect.height;
+            
+            RectTransform rctranCellItem = this.gameObject.GetComponent<RectTransform>(); 
+            float scale = Common.GetBestFitScale(w,h,rctranCellItem.rect.width,rctranCellItem.rect.height);
             imageItem.transform.localScale = new Vector3(scale, scale, 1.0f);
 
             viewLoading.Show(false);

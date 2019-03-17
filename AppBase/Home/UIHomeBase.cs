@@ -15,7 +15,7 @@ public class UIHomeBase : UIView
     public const string STR_KEYNAME_VIEWALERT_EXIT_APP = "STR_KEYNAME_VIEWALERT_EXIT_APP";
 
     public UIHomeAppCenter uiHomeAppCenter;
-    public Image imageBg;
+    public RawImage imageBg;
     public Image imageBgName;
     public Text TextName;
     //public GameObject objLayoutTopBar;
@@ -112,10 +112,10 @@ public class UIHomeBase : UIView
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
             RectTransform rctran = imageBg.GetComponent<RectTransform>();
-            if ((imageBg.sprite != null) && (imageBg.sprite.texture != null))
+            if (imageBg.texture != null)
             {
-                w = imageBg.sprite.texture.width;//rectTransform.rect.width;
-                h = imageBg.sprite.texture.height;//rectTransform.rect.height;
+                w = imageBg.texture.width;//rectTransform.rect.width;
+                h = imageBg.texture.height;//rectTransform.rect.height;
             }
 
             print("imageBg size:w=" + w + " h=" + h);
@@ -287,7 +287,7 @@ public class UIHomeBase : UIView
     public void DoBtnNoADIAP()
     {
         IAP.main.SetObjectInfo(this.gameObject.name, "IAPCallBack");
-        IAP.main.StartBuy(IAP.productIdNoAD,false);
+        IAP.main.StartBuy(IAP.productIdNoAD, false);
     }
 
     public void OnUIShareDidClick(ItemInfo item)

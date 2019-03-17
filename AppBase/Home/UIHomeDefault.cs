@@ -7,7 +7,7 @@ public class UIHomeDefault : UIHomeBase
     public GameObject objLayoutBtn;
     void Awake()
     {
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);

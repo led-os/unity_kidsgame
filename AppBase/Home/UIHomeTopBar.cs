@@ -49,8 +49,10 @@ public class UIHomeTopBar : UIView
         {
             btnMore.gameObject.SetActive(false);
         }
-
-
+        if (Application.isEditor)
+        {
+            btnMore.gameObject.SetActive(true);
+        }
         if (btnAdVideo != null)
         {
             btnAdVideo.gameObject.SetActive(true);
@@ -229,7 +231,7 @@ public class UIHomeTopBar : UIView
         // string no = Language.main.GetString(AppString.STR_UIVIEWALERT_YES_SHOP_START_BUY);
         // viewAlert.SetText(title, msg, yes, no);
         // viewAlert.Show();
-        IAP.main.StartBuy(IAP.productIdNoAD,false);
+        IAP.main.StartBuy(IAP.productIdNoAD, false);
 
 
     }

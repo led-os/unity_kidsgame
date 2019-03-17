@@ -13,7 +13,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
     public Image imageBar;
-    public Image imageBg;
+    public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
 
@@ -46,7 +46,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
 
         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
         string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
         if (Common.isWeb)
         {

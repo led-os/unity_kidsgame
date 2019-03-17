@@ -13,7 +13,7 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
     public Button btnNetImage;
     void Awake()
     {
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
@@ -142,7 +142,7 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
             w = rctran.rect.width;
             h = h_item * lygrid.row;
             x = 0;
-            float y_bottom = -sizeCanvas.y / 2 + topBarHeight;
+            float y_bottom = -sizeCanvas.y / 2 + topBarHeight+16;
             y = y_bottom / 2;
             if ((y - h / 2) < y_bottom)
             {

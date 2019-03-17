@@ -13,7 +13,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
     public Image imageBar;
-    public Image imageBg;
+    public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
 
@@ -33,7 +33,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         heightCell = 512;
         listItem = GameManager.main.ParsePlaceList();
         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GAME_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GAME_BG, true);
 
 
         string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
