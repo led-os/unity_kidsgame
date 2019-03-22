@@ -35,14 +35,25 @@ public class ActionImage : ActionBase
                 //  Debug.Log("UpdateImage:index=" + index + " update sprite");
                 rd.sprite = LoadTexture.CreateSprieFromTex(tex);
             }
-            //image
+
             if ((rd == null) && (tex != null))
             {
                 Image image = this.gameObject.GetComponent<Image>();
-                image.sprite = LoadTexture.CreateSprieFromTex(tex);
-                RectTransform rctran = image.GetComponent<RectTransform>();
+                if (image != null)
+                {
+                    //image
+                    image.sprite = LoadTexture.CreateSprieFromTex(tex);
+                }
+                else
+                {
+                    //rawimage
+                    RawImage rawimage = this.gameObject.GetComponent<RawImage>();
+                    rawimage.texture = tex;
+                }
+                RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
                 rctran.sizeDelta = new Vector2(tex.width, tex.height);
             }
+
         }
     }
     public override void InitAction()

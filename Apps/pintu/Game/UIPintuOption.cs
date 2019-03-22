@@ -195,30 +195,39 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         gameObject.SetActive(isShow);
     }
 
+
     void OnSysImageLibDidOpenFinish(string file)
     {
-
-
+        Texture2D tex = null;
         if (Common.isAndroid)
         {
             int w, h;
             using (var javaClass = new AndroidJavaClass(SysImageLib.JAVA_CLASS))
             {
+
                 //安卓系统解码
                 // w = javaClass.CallStatic<int>("GetRGBDataWidth");
                 // h = javaClass.CallStatic<int>("GetRGBDataHeight");
                 // byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
-                // Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+                //   tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+            }
 
-                //unity解码
-                Texture2D tex = LoadTexture.LoadFromFile(file);
-                if (game != null)
-                {
-                    UIGamePintu.texGamePic = tex;
-                    UIGamePintu.imageSource = GamePintu.ImageSource.SYSTEM_IMAGE_LIB;
-                    game.UpdateGuankaLevel(GameManager.gameLevel);
-                }
+            //unity解码
+            tex = LoadTexture.LoadFromFile(file);
 
+        }
+        else
+        {
+            tex = LoadTexture.LoadFromFile(file);
+        }
+
+        if (tex != null)
+        {
+            if (game != null)
+            {
+                UIGamePintu.texGamePic = tex;
+                UIGamePintu.imageSource = GamePintu.ImageSource.SYSTEM_IMAGE_LIB;
+                game.UpdateGuankaLevel(GameManager.gameLevel);
             }
 
         }
@@ -226,8 +235,8 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
 
         //恢复原来的
         UIGamePintu.imageSource = imageSource;
-
     }
+ 
 
     public void OnSliderTouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {

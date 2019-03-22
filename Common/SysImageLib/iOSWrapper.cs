@@ -8,24 +8,24 @@ namespace Moonma.SysImageLib
 	internal class iOSWrapper : BasePlatformWrapper
 	{
 		[DllImport ("__Internal")] 
-		public static extern void SysImageLib_SetObjectInfo(string objName,string objMethod);
+		public static extern void ImageUtil_SetObjectInfo(string objName,string objMethod);
 		[DllImport ("__Internal")]
-		public static extern void SysImageLib_OpenImage(); 
+		public static extern void ImageUtil_OpenSysImageLib(); 
 		[DllImport ("__Internal")]
-	 	public static extern void SysImageLib_OpenCamera(); 
+	 	public static extern void ImageUtil_OpenSysCamera(); 
 	  	 
    		 public override void SetObjectInfo(string objName, string objMethod)
         { 
-            SysImageLib_SetObjectInfo( objName,objMethod);
+            ImageUtil_SetObjectInfo( objName,objMethod);
         }
 
        public override void OpenImage()
         {
-   			SysImageLib_OpenImage();
+   			ImageUtil_OpenSysImageLib();
         }   
            public override void OpenCamera()
         {
-   			SysImageLib_OpenCamera();	 
+   			ImageUtil_OpenSysCamera();	 
         }  
 	}
 }

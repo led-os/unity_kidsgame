@@ -142,7 +142,7 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
             w = rctran.rect.width;
             h = h_item * lygrid.row;
             x = 0;
-            float y_bottom = -sizeCanvas.y / 2 + topBarHeight+16;
+            float y_bottom = -sizeCanvas.y / 2 + topBarHeight + 16;
             y = y_bottom / 2;
             if ((y - h / 2) < y_bottom)
             {
@@ -162,6 +162,7 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
 
     void OnSysImageLibDidOpenFinish(string file)
     {
+        Texture2D tex = null;
         if (Common.isAndroid)
         {
             int w, h;
@@ -172,19 +173,26 @@ public class UIHomePintu : UIHomeBase//, ISysImageLibDelegate
                 // w = javaClass.CallStatic<int>("GetRGBDataWidth");
                 // h = javaClass.CallStatic<int>("GetRGBDataHeight");
                 // byte[] dataRGB = javaClass.CallStatic<byte[]>("GetRGBData");
-                // Texture2D tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+                //   tex = LoadTexture.LoadFromRGBData(dataRGB, w, h);
+            }
 
-                //unity解码
-                Texture2D tex = LoadTexture.LoadFromFile(file);
+            //unity解码
+            tex = LoadTexture.LoadFromFile(file);
 
-                UIGamePintu.texGamePic = tex;
-                UIGamePintu.imageSource = GamePintu.ImageSource.SYSTEM_IMAGE_LIB;
-                if (this.controller != null)
-                {
-                    NaviViewController navi = this.controller.naviController;
-                    navi.Push(GameViewController.main);
-                }
+        }
+        else
+        {
+            tex = LoadTexture.LoadFromFile(file);
+        }
 
+        if (tex != null)
+        {
+            UIGamePintu.texGamePic = tex;
+            UIGamePintu.imageSource = GamePintu.ImageSource.SYSTEM_IMAGE_LIB;
+            if (this.controller != null)
+            {
+                NaviViewController navi = this.controller.naviController;
+                navi.Push(GameViewController.main);
             }
 
         }

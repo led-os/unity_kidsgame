@@ -273,14 +273,14 @@ public class UIShop : UIView, ITableViewDataSource
     }
     void InitAd()
     {
-        AdKitCommon.main.callbackFinish = OnAdKitFinish;
+        AdKitCommon.main.callbacAdVideokFinish = OnAdKitAdVideoFinish;
         AdVideo.SetType(AdVideo.ADVIDEO_TYPE_REWARD);
         int type = AdConfigParser.SOURCE_TYPE_VIDEO;
         string source = AdConfig.main.GetAdSource(type);
         AdVideo.InitAd(source);
     }
 
-    public void OnAdKitFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
+    public void OnAdKitAdVideoFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
     {
         if (type == AdKitCommon.AdType.VIDEO)
         {
@@ -401,6 +401,7 @@ public class UIShop : UIView, ITableViewDataSource
         {
             if (info.id == ID_GOLD_VIDEO)
             {
+                AdKitCommon.main.callbacAdVideokFinish = OnAdKitAdVideoFinish;
                 AdKitCommon.main.ShowAdVideo();
             }
             if (info.id == ID_GOLD_SHARE)

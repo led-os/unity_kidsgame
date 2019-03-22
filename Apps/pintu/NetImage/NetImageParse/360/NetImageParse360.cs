@@ -15,7 +15,7 @@ http://tool.oschina.net/codeformat/json/
 
 public class NetImageParse360 : NetImageParseBase
 {
-
+    public const string URL_IMAGE_SORT_360 = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/pintu/common/netimage/image_channel_360.json?sign=a9704628589e196757bacf8ba09aa80b&t=1553075538";
     HttpRequest httpSortList;
     HttpRequest httpImageList;
 
@@ -26,11 +26,12 @@ public class NetImageParse360 : NetImageParseBase
     }
     public override void StartParseSortList()
     {
+        httpSortList = new HttpRequest(OnHttpRequestFinished);
+        //http://wallpaper.apc.360.cn/index.php?%20c=WallPaper&a=getAppsByCategory&cid=36&start=0&count=24&from=360chrome
+        httpSortList.Get(URL_IMAGE_SORT_360);
+        //string filePath = Common.GAME_RES_DIR + "/netimage/image_channel_360.json";
 
-        string filePath = Common.GAME_RES_DIR + "/netimage/image_channel_360.json";
 
-        string json = FileUtil.ReadStringAsset(filePath);
-        ParseSortList(json);
     }
     public override void StartParseImageList(ImageItemInfo info)
     {
@@ -40,9 +41,9 @@ public class NetImageParse360 : NetImageParseBase
     }
 
 
-    public void ParseSortList(string str)
+    public void ParseSortList(byte[] data)
     {
-        //string str = Encoding.UTF8.GetString(data);
+        string str = Encoding.UTF8.GetString(data);
         // Debug.Log(str);
         JsonData jsonRoot = JsonMapper.ToObject(str);
         JsonData items = jsonRoot["items"];
@@ -115,7 +116,7 @@ public class NetImageParse360 : NetImageParseBase
         {
             if (isSuccess)
             {
-                // ParseSortList(data);
+                ParseSortList(data);
             }
             else
             {
