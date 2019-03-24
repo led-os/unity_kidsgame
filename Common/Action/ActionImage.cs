@@ -21,8 +21,9 @@ public class ActionImage : ActionBase
     {
         if (index < listPic.Count)
         {
-            // Debug.Log("UpdateImage:index=" + index + " listPic.Count=" + listPic.Count);
+
             string pic = listPic[index];
+            // Debug.Log("UpdateImage:index=" + index + " listPic.Count=" + listPic.Count + " pic=" + pic);
             Texture2D tex = TextureCache.main.Load(pic);
             if (tex == null)
             {
@@ -58,15 +59,16 @@ public class ActionImage : ActionBase
     }
     public override void InitAction()
     {
-        Debug.Log("ActionImage:InitAction");
+
         listPic = new List<string>();
         index = 0;
         isUpdateByPercent = false;
         percentage = 0;
+        deltaTime = 0;
+        Debug.Log("ActionImage:InitAction index=" + index);
     }
     public override void UpdateAction()
     {
-
         if (listPic.Count == 0)
         {
             return;
@@ -79,6 +81,7 @@ public class ActionImage : ActionBase
             deltaTime = 0;
             UpdateImage();
             index++;
+            // Debug.Log("UpdateImage:index++=" + index);
             if (index >= listPic.Count)
             {
                 OnFinish();
