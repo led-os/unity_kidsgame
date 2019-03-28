@@ -241,14 +241,26 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         gamePintu.LayOut(uiPintuOption.gameObject.activeSelf);
     }
 
-    void UpdateTitle()
+    void CheckShowTitle()
     {
+        textTitle.gameObject.SetActive(true);
+        imageTopBar.gameObject.SetActive(true);
+        if (uiPintuOption.gameObject.activeSelf)
+        {
+            textTitle.gameObject.SetActive(false);
+            imageTopBar.gameObject.SetActive(false);
+        }
+
         if (imageSource != GamePintu.ImageSource.GAME_INNER)
         {
             textTitle.gameObject.SetActive(false);
             imageTopBar.gameObject.SetActive(false);
             return;
         }
+    }
+    void UpdateTitle()
+    {
+        CheckShowTitle();
         int idx = GameManager.gameLevel;
         ItemInfo info = listGuanka[idx] as ItemInfo;
         if (!languageGame.IsContainsKey(info.id))
@@ -402,6 +414,7 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         // objGamePic.SetActive(true);
         btnBack.gameObject.SetActive(true);
         gamePintu.ShowItemAnimate();
+        CheckShowTitle();
     }
     public void OnUIPintuOptionDidSlider(UIPintuOption pintuOption)
     {

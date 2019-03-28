@@ -15,6 +15,8 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
     public Text textTitle;
     public Button btnBack;
     public Button btnPlay;
+    public Button btnShape;
+    public UIShapeBar uiShapeBar;
     //public GameObject objLayoutBtn;
     public OnUIPintuOptionDidCloseDelegate callbackClose { get; set; }
     public OnUIPintuOptionDidSliderDelegate callbackSlider { get; set; }
@@ -49,6 +51,8 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         isTouchUp = false;
         slideValue = slider.value;
         // textTitle.gameObject.SetActive(false);
+        uiShapeBar.gameObject.SetActive(false);
+        uiShapeBar.callBackDidClick = OnUIShapeBarItemDidClick;
 
         audioClipBtn = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
         if (Device.isLandscape)
@@ -75,6 +79,9 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
 
         UITouchEventWithMove touch_ev = slider.gameObject.AddComponent<UITouchEventWithMove>();
         touch_ev.callBackTouch = OnSliderTouchEvent;
+
+        Image image = btnShape.GetComponent<Image>();
+        TextureUtil.UpdateImageTexture(image, UIPintuBlock.picShape, false);
     }
 
 
@@ -156,13 +163,15 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
                 x = sizeCanvas.x / 4;
                 y = -h;
                 y += adbaner_h_canvas;
+                w = h = 160;
             }
             else
             {
-                x = rctranParent.rect.width / 2 - w / 2 - 16;
-                y = rctranParent.rect.height / 2 - h / 2 - 16;
+                x = 0;//rctranParent.rect.width / 2 - w / 2 - 16;
+                y = 0;//rctranParent.rect.height / 2 - h / 2 - 16;
+                w = h = 256;
             }
-
+            rctran.sizeDelta = new Vector2(w, h);
             rctran.anchoredPosition = new Vector2(x, y);
         }
 
@@ -236,7 +245,7 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         //恢复原来的
         UIGamePintu.imageSource = imageSource;
     }
- 
+
 
     public void OnSliderTouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
@@ -272,6 +281,15 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
             }
         }
     }
+
+    public void OnUIShapeBarItemDidClick(UIShapeBarItem item)
+    {
+        uiShapeBar.gameObject.SetActive(false);
+        UIPintuBlock.picShape = item.infoItem.pic;
+        game.UpdateGuankaLevel(GameManager.gameLevel);
+        Image image = btnShape.GetComponent<Image>();
+        TextureUtil.UpdateImageTexture(image, UIPintuBlock.picShape, false);
+    }
     public void OnClickBtnBack()
     {
         PlayBtnClickSound();
@@ -297,6 +315,10 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         SysImageLib.main.OpenCamera();
     }
 
+    public void OnClickBtnShape()
+    {
+        uiShapeBar.gameObject.SetActive(!uiShapeBar.gameObject.activeSelf);
+    }
     public void OnBtnClickPlay()
     {
         PlayBtnClickSound();

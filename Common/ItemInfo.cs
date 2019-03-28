@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
- 
+
 public class ItemInfo
 {
     public string source;
     public string id;
+    public string type;
     public string pic;
     public string title;
     public string description;
@@ -14,7 +15,7 @@ public class ItemInfo
     public string icon;
     public string appid;
     public string category;
-    public string sound; 
+    public string sound;
     public int tag;
     public int index;
     public int row;
@@ -22,4 +23,3 @@ public class ItemInfo
     public GameObject obj;
     public float time;
 }
-   

@@ -21,6 +21,8 @@ public class UIPintuBlock : UIView, IPointerUpHandler, IPointerDownHandler, IDra
 
     public const int TAG_ITEM_LOCK = -1;
     public const int TAG_ITEM_UNLOCK = 0;
+
+
     public GameObject objGame;
     public IUIPintuBlockDelegate iDelegate;
     public int tagItem = TAG_ITEM_UNLOCK;
@@ -51,7 +53,24 @@ public class UIPintuBlock : UIView, IPointerUpHandler, IPointerDownHandler, IDra
     Vector3 posTouchDown;
     //BlockMask_V
     Texture2D texBlockMaskH;
-    Texture2D texBlockMaskV;
+    //Texture2D texBlockMaskV;
+
+
+    static public string picShape
+    {
+        get
+        {
+            string key = "KEY_PINTU_BLOCK_SHAPE";
+            return PlayerPrefs.GetString(key, "App/UI/Game/Shape/sanjiaoxing");
+        }
+
+        set
+        {
+            string key = "KEY_PINTU_BLOCK_SHAPE";
+            PlayerPrefs.SetString(key, value);
+        }
+
+    }
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -103,14 +122,16 @@ public class UIPintuBlock : UIView, IPointerUpHandler, IPointerDownHandler, IDra
 
         meshRender.material = meshMat;
 
-        UpdateTextureMask();
+        UpdateTextureMask(picShape);//"App/UI/Game/Shape/sanjiaoxing"
         Draw();
     }
-    void UpdateTextureMask()
+    void UpdateTextureMask(string pic)
     {
         int w, h;
 
-        Texture2D textmp = TextureCache.main.Load("App/UI/Game/BlockMask_H");
+        Texture2D texFile = TextureCache.main.Load(pic);
+        // Texture2D texFile = TextureCache.main.Load("App/UI/Game/BlockMask_H");
+
         bool isUpdateMask = true;
 
         w = (int)Common.WorldToScreenWidth(mainCam, centerWidth);
@@ -125,18 +146,45 @@ public class UIPintuBlock : UIView, IPointerUpHandler, IPointerDownHandler, IDra
         }
         if (isUpdateMask)
         {
+            int h_tex = h;
+            int w_tex = h_tex * texFile.width / texFile.height;
+            Texture2D texConvert = TextureUtil.ConvertSize(texFile, w_tex, h_tex);
+            Texture2D texBg = new Texture2D(w, h, TextureFormat.ARGB32, false);//ARGB32
+                                                                               //背景全透明
+            {
+                w = texBg.width;
+                h = texBg.height;
 
-            texBlockMaskH = TextureUtil.ConvertSize(textmp, w, h);
+                ColorImage colorImage = new ColorImage();
+                colorImage.Init(texBg);
 
-            w = (int)Common.WorldToScreenWidth(mainCam, sideWidth);
-            h = (int)Common.WorldToScreenWidth(mainCam, centerHeight);
-            textmp = TextureCache.main.Load("App/UI/Game/BlockMask_V");
-            texBlockMaskV = TextureUtil.ConvertSize(textmp, w, h);
+
+                for (int i = 0; i < w; i++)
+                {
+                    for (int j = 0; j < h; j++)
+                    {
+                        Vector2 pt = new Vector2(i, j);
+                        Color color = colorImage.GetImageColorOrigin(pt);
+                        color.a = 0f;
+                        colorImage.SetImageColor(pt, color);
+                    }
+                }
+                colorImage.UpdateTexture();
+
+            }
+
+
+
+            texBlockMaskH = PintuUtil.MergeTextureGPU(texBg, texConvert);
+            // w = (int)Common.WorldToScreenWidth(mainCam, sideWidth);
+            // h = (int)Common.WorldToScreenWidth(mainCam, centerHeight);
+            // textmp = TextureCache.main.Load("App/UI/Game/BlockMask_V");
+            // texBlockMaskV = TextureUtil.ConvertSize(textmp, w, h);
 
         }
 
         meshMat.SetTexture("_texMaskH", texBlockMaskH);
-        meshMat.SetTexture("_texMaskV", texBlockMaskV);
+        // meshMat.SetTexture("_texMaskV", texBlockMaskV);
     }
 
     Vector3[] GetverticeOfPoint(Vector2 pt)

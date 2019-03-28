@@ -13,7 +13,7 @@ public class GameManager
     HttpRequest httpReqPlaceList;
 
     public UIViewController fromUIViewController;//来源
-    
+
     static private GameManager _main = null;
     public static GameManager main
     {
@@ -170,12 +170,28 @@ public class GameManager
         string json = Encoding.UTF8.GetString(data);
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
-        JsonData items = root["places"];
+        JsonData items = null;
+        string key = "places";
+        if (Common.JsonDataContainsKey(root, key))
+        {
+            items = root[key];
+        }
+        else
+        {
+            items = root["items"];
+        }
+
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
             ItemInfo info = new ItemInfo();
-            info.id = (string)item["game_type"];
+            info.type = (string)item["game_type"];
+            key = "id";
+            if (Common.JsonDataContainsKey(item, key))
+            {
+                info.id = (string)item[key];
+            }
+
             info.title = (string)item["title"];
             info.pic = Common.GAME_RES_DIR + "/" + (string)item["pic"];
             info.icon = info.pic;

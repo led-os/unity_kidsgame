@@ -109,6 +109,15 @@ public class UINetImageCellItem : UICellItemBase
         rawImagePic.gameObject.SetActive(true);
     }
 
+
+    IEnumerator OnUpdateItemImageEnumerator(byte[] data)
+    {
+        float time = 0;
+        //yield return null;
+        yield return new WaitForSeconds(time);
+        UpdateItemTexture(LoadTexture.LoadFromData(data));
+    }
+
     void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
     {
         Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
@@ -124,7 +133,7 @@ public class UINetImageCellItem : UICellItemBase
             // }
             // else
             {
-                UpdateItemTexture(LoadTexture.LoadFromData(data));
+                StartCoroutine(OnUpdateItemImageEnumerator(data));
             }
 
         }

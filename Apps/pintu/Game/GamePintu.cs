@@ -237,6 +237,8 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
                     ui.sideTypeTop = GetRandomSideType();
                 }
             }
+
+            
         }
 
     }
@@ -299,6 +301,10 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
             objGamePic.transform.localScale = new Vector3(scale, scale, 1f);
             //rcTran.sizeDelta = new Vector2(tex_world_w, tex_world_h);
             float pos_y = -heightTopbarWorld / 2;
+            if (!Device.isLandscape)
+            {
+                pos_y = 0;
+            }
             objGamePic.transform.localPosition = new Vector3(0, pos_y, z);
 
         }

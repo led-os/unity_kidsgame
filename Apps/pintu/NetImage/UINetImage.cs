@@ -15,6 +15,8 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
     public Image imageBar;
     public Image imageBg;
     public Text textTitle;
+    public Text textTips;
+
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
@@ -39,6 +41,8 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
 
         textTitle.text = Language.main.GetString("STR_NETIMAGE");
+        textTips.text = Language.main.GetString("STR_PLAY_ADVIDEO_TIPS");
+
     }
 
     // Use this for initialization
@@ -118,6 +122,12 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
 
     #endregion
 
+    public void OnShowAdVideo()
+    {
+        //AdKitCommon.main.callbackFinish = OnAdKitFinish;
+        AdKitCommon.main.ShowAdVideo();
+    }
+
     #region GuankaItem_Delegate 
     public void OnCellItemDidClick(UICellItemBase item)
     {
@@ -135,6 +145,8 @@ public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
 
             ImageItemInfo info = listItem[item.index] as ImageItemInfo;
             p.StartParseImageList(info);
+
+            OnShowAdVideo();
         }
 
     }
