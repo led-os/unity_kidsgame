@@ -264,7 +264,6 @@ public class UIHomeBase : UIView
     {
         if (Config.main.APP_FOR_KIDS)
         {
-
             ParentGateViewController.main.Show(null, null);
             ParentGateViewController.main.ui.callbackClose = OnUIParentGateDidCloseNoAd;
         }

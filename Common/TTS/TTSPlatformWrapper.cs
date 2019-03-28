@@ -22,7 +22,7 @@ internal class TTSBasePlatformWrapper
 	{
 
 
-		public virtual void Speek(string text)
+		public virtual void Speak(string text)
 		{
 			 
 		}

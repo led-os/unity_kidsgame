@@ -3,11 +3,11 @@ using System.Collections;
  
   public class TTS  
 	{
-        	public static void Speek(string text)
+        	public static void Speak(string text)
 		{
             TTSBasePlatformWrapper platformWrapper = TTSPlatformWrapper.platform;
 					 
-            platformWrapper.Speek(text);
+            platformWrapper.Speak(text);
 		}
 
  

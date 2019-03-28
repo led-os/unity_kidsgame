@@ -10,11 +10,6 @@ public class UIHomeDefault : UIHomeBase
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        if (ret)
-        {
-            TTS.Speek(appname);
-        }
     }
 
     // Use this for initialization

@@ -12,7 +12,7 @@ using System.Collections;
 
 	 
 
-		public override void Speek(string text)
+		public override void Speak(string text)
 		 {
 
 			 TTS_speekText(text); 

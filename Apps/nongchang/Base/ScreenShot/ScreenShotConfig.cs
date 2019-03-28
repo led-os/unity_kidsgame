@@ -23,7 +23,7 @@ public class ScreenShotConfig
         {
             controller = AdHomeViewController.main;
         }
-        else if ((dev.name == UIScreenShotController.DEVICE_NAME_COPY_RIGHT_HUAWEI) || (dev.name == UIScreenShotController.DEVICE_NAME_COPY_RIGHT_HD_HUAWEI))
+        else if (dev.name == UIScreenShotController.DEVICE_NAME_COPY_RIGHT_HUAWEI)
         {
             controller = CopyRightViewController.main;
             CopyRightViewController.main.deviceInfo = dev;
@@ -40,7 +40,7 @@ public class ScreenShotConfig
                     controller = GameViewController.main;
                     break;
                 case 2:
-                    GameManager.gameLevel = 1;
+                    GameManager.gameLevel = 0;
                     controller = GameViewController.main;
                     break;
                 case 3:
