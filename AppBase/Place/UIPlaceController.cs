@@ -187,6 +187,13 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
                 navi.Push(guanka);
             }
         }
+
+        ItemInfo info = listItem[item.index] as ItemInfo;
+        if (info.isAd)
+        {
+            AdKitCommon.main.ShowAdVideo();
+        }
+
     }
 
     #region ITableViewDataSource

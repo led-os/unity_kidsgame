@@ -8,13 +8,14 @@ public class UIPlaceCellItem : UICellItemBase
 
     public Text textTitle;
     public RawImage imageBg;
-
+    public RawImage imageIcon;
     public override void UpdateItem(List<object> list)
     {
         ItemInfo info = list[index] as ItemInfo;
         //textTitle.text = (index + 1).ToString();
         textTitle.gameObject.SetActive(false);
         TextureUtil.UpdateRawImageTexture(imageBg, info.pic, true);
+        imageIcon.gameObject.SetActive(info.isAd);
         LayOut();
     }
     public override bool IsLock()

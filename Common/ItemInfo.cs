@@ -22,4 +22,5 @@ public class ItemInfo
     public int col;
     public GameObject obj;
     public float time;
+    public bool isAd;
 }
