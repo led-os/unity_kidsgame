@@ -238,19 +238,21 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
             //   var seq = cc.sequence([time, actionUp, actionUp.reverse(), actionDown, actionDown.reverse()]);
             //  btn.node.runAction(seq.repeatForever());
             float z = btn.transform.localPosition.z;
+
+            Vector3 posNormal = new Vector3(pt.x, pt.y, z);
             Vector3 toPos = new Vector3(pt.x, pt.y + y_step, z);
-
+            Sequence seq = DOTween.Sequence();
             //actionUp
-            rctran.DOLocalMove(toPos, duration).OnComplete(() =>
-               {
-                   toPos = new Vector3(pt.x, pt.y - y_step, z);
-                   //actionDown
-                   rctran.DOLocalMove(toPos, duration).OnComplete(() =>
-                      {
+            Tweener acUp = rctran.DOLocalMove(toPos, duration);
 
-                      });
-               }).SetLoops(-1, LoopType.Restart);
-
+            //normal
+            Tweener acNormal = rctran.DOLocalMove(posNormal, duration);
+            Tweener acNormal2 = rctran.DOLocalMove(posNormal, duration);
+            //actionDown
+            toPos = new Vector3(pt.x, pt.y - y_step, z);
+            Tweener acDown = rctran.DOLocalMove(toPos, duration);
+            float time = 0.5f * i;
+            seq.AppendInterval(time).Append(acUp).Append(acNormal).Append(acDown).Append(acNormal2).SetLoops(-1);
 
         }
 
@@ -298,6 +300,10 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
 
     void GotoGameByMode(int mode)
     {
+        if (!isActionFinish)
+        {
+            return;
+        }
         AudioPlay.main.PlayFile(AppCommon.AUDIO_BTN_CLICK);
         GameManager.gameMode = mode;
         if (this.controller != null)
