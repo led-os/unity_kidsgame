@@ -10,7 +10,6 @@ https://itunes.apple.com/cn/app/%E5%84%BF%E7%AB%A5%E5%AD%A6%E4%B9%A0%E4%B9%90%E5
  */
 public class NongChangItemInfo : ItemInfo
 {
-    public List<object> listSearchItem;
     public List<object> listPosition;
     public bool flipx;
     public float scale;
@@ -23,6 +22,8 @@ public class NongChangItemInfo : ItemInfo
 
 public class UIGameNongChang : UIGameBase
 {
+
+    public const int GUANKA_NUM_PER_ITEM = 5;
     public TopBarSearchItem topBarSearchItem0;
     public TopBarSearchItem topBarSearchItem1;
     public TopBarSearchItem topBarSearchItem2;
@@ -37,8 +38,8 @@ public class UIGameNongChang : UIGameBase
     public GameObject objScrollViewContent;
     // public Scro
     List<object> listMapItem;
-    List<object> listPoints;
-
+    List<object> listPoint;
+    List<object> listSearchItem;
     GameObject objItemClick;
     int idxItemClick;
     int imageBgWidth;
@@ -268,12 +269,7 @@ public class UIGameNongChang : UIGameBase
 
     public override int GetGuankaTotal()
     {
-        ParseGuanka();
-        if (listGuanka != null)
-        {
-            return listGuanka.Count;
-        }
-        return 0;
+        return ParseGuanka();
     }
 
     public override void CleanGuankaList()
@@ -286,9 +282,13 @@ public class UIGameNongChang : UIGameBase
         {
             listMapItem.Clear();
         }
-        if (listPoints != null)
+        if (listPoint != null)
         {
-            listPoints.Clear();
+            listPoint.Clear();
+        }
+        if (listSearchItem != null)
+        {
+            listSearchItem.Clear();
         }
     }
 
@@ -300,6 +300,8 @@ public class UIGameNongChang : UIGameBase
         {
             return listGuanka.Count;
         }
+
+        listSearchItem = new List<object>();
 
         listGuanka = new List<object>();
         int idx = GameManager.placeLevel;
@@ -320,13 +322,15 @@ public class UIGameNongChang : UIGameBase
             NongChangItemInfo info = new NongChangItemInfo();
             info.id = (string)item["id"];
             info.pic = picRoot + info.id + ".png";
-            listGuanka.Add(info);
+            listSearchItem.Add(info);
         }
 
         ParseMapItem(mapid);
 
-        count = listGuanka.Count;
-
+        if (listSearchItem != null)
+        {
+            count = GUANKA_NUM_PER_ITEM * listSearchItem.Count;
+        }
         // Debug.Log("ParseGame::count=" + count);
         return count;
     }
@@ -341,11 +345,11 @@ public class UIGameNongChang : UIGameBase
         }
 
 
-        if (listPoints == null)
+        if (listPoint == null)
         {
-            listPoints = new List<object>();
+            listPoint = new List<object>();
         }
-        listPoints.Clear();
+        listPoint.Clear();
 
         string filePath = Common.GAME_RES_DIR + "/guanka/map/" + mapid + ".json";
         //FILE_PATH
@@ -406,7 +410,7 @@ public class UIGameNongChang : UIGameBase
             info.icon = "";
 
 
-            listPoints.Add(info);
+            listPoint.Add(info);
         }
     }
 
