@@ -13,6 +13,8 @@ namespace Moonma.AdKit.AdVideo
 		[DllImport ("Common")]
 		public static extern void AdVideo_InitAd(string source);
 		[DllImport ("Common")]
+		public static extern void AdVideo_PreLoad(string source);
+		[DllImport ("Common")]
 		public static extern void AdVideo_ShowAd();
 		[DllImport ("Common")]
 		public static extern void AdVideo_SetObjectInfo(string objName,string objMethod);
@@ -33,7 +35,11 @@ namespace Moonma.AdKit.AdVideo
 		{
 			AdVideo_SetType(type);
 		}
-		
+		public override void PreLoad(string source)
+		{  
+			AdVideo_PreLoad(source);
+		}
+
 		public override void InitAd(string source)
 		{
 			AdVideo_SetCallbackUnity(CallbackAdFinish);

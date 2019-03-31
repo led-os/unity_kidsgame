@@ -16,7 +16,6 @@ public class UIGameBase : UIView
     //public AudioClip audioClipBtn;
     public Button btnShare;
     static public List<object> listGuanka;
- 
     static public Language languageGame;
     static public int heightAdBanner;
     static public float heightAdBannerWorld;

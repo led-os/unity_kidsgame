@@ -12,9 +12,22 @@ public class GuankaJsonItemInfo
 public class AutoGuankaJson : ScriptBase
 {
     List<GuankaJsonItemInfo> listGuankaJson;
+
+    List<string> listImage;
+
     // Use this for initialization
     void Start()
     {
+        listImage = new List<string>();
+
+        string dirRoot = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/search_items/";
+
+        listImage.Add(dirRoot + "animal");
+        listImage.Add(dirRoot + "fruit");
+        listImage.Add(dirRoot + "insect");
+        listImage.Add(dirRoot + "num");
+        listImage.Add(dirRoot + "tool");
+        listImage.Add(dirRoot + "vegetables");
 
     }
 
@@ -23,13 +36,13 @@ public class AutoGuankaJson : ScriptBase
     {
 
     }
-    void CreateGuankaJsonFile()
+    void CreateGuankaJsonFile(string path)
     {
-        string strPlace = "树木";
-        string path = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image/" + strPlace;
+        string strPlace = FileUtil.GetFileName(path);
+        //  string path = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image/" + strPlace;
         string path_new = path + "_new";
-        int width_save = 1024;
-        int height_save = 768;
+        // int width_save = 1024;
+        // int height_save = 768;
         //创建文件夹
         Directory.CreateDirectory(path_new);
 
@@ -80,6 +93,9 @@ public class AutoGuankaJson : ScriptBase
     }
     public void OnClickBtnGuanka()
     {
-        CreateGuankaJsonFile();
+        foreach (string pic in listImage)
+        {
+            CreateGuankaJsonFile(pic);
+        }
     }
 }

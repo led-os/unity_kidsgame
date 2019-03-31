@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AudioPlay : MonoBehaviour
 {
@@ -80,5 +81,28 @@ public class AudioPlay : MonoBehaviour
             return;
         }
         audioSource.PlayOneShot(clip);
+    }
+
+
+    public void PlayUrl(string url)
+    {
+        StartCoroutine(PlayUrlEnumerator(url));
+    }
+
+    //https://blog.csdn.net/qq_15386973/article/details/78696116 
+    IEnumerator PlayUrlEnumerator(string url)
+    {
+        using (var uwr = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG))
+        {
+            yield return uwr.SendWebRequest();
+            if (uwr.isNetworkError)
+            {
+                Debug.LogError(uwr.error);
+                yield break;
+            }
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
+            // use audio clip
+            PlayAudioClip(clip);
+        }
     }
 }
