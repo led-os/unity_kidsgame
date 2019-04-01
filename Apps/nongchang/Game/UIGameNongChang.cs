@@ -11,6 +11,7 @@ https://itunes.apple.com/cn/app/%E5%84%BF%E7%AB%A5%E5%AD%A6%E4%B9%A0%E4%B9%90%E5
 public class NongChangItemInfo : ItemInfo
 {
     public List<object> listPosition;
+    public List<object> listSearchItem;
     public bool flipx;
     public float scale;
     public int x; //基于图片左下角的坐标，自己锚点为(0.5,0.5)
@@ -37,9 +38,11 @@ public class UIGameNongChang : UIGameBase
     public GameObject objScrollView;
     public GameObject objScrollViewContent;
     // public Scro
-    List<object> listMapItem;
-    List<object> listPoint;
-    List<object> listSearchItem;
+    static public List<object> listMapItem;
+    static public List<object> listPoint;
+    List<object> listGuankaItem;//image id
+
+    List<object> listAutoGuanka;//item index list
     GameObject objItemClick;
     int idxItemClick;
     int imageBgWidth;
@@ -50,18 +53,18 @@ public class UIGameNongChang : UIGameBase
     Vector2 scrollViewOffsetMinNormal;
     Vector2 scrollViewOffsetMaxNormal;
 
-    NongChangItemInfo infoMap;
+    static public string strPicBg;
+    AutoMakeGuanka autoMakeGuanka;
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
     {
         foundSearchItem = 0;
-        ParseGuanka();
+        // ParseGuanka();
         RectTransform rctran = objScrollView.GetComponent<RectTransform>();
         scrollViewOffsetMinNormal = new Vector2(rctran.offsetMin.x, rctran.offsetMin.y);
         scrollViewOffsetMaxNormal = new Vector2(rctran.offsetMax.x, rctran.offsetMax.y);
-
 
     }
     // Use this for initialization
@@ -89,7 +92,7 @@ public class UIGameNongChang : UIGameBase
     {
         DestroyGame();
         LoadGame();
-        PlaySoundGameIntro();
+        // PlaySoundGameIntro();
         LayOut();
 
         OnUIDidFinish();
@@ -110,7 +113,7 @@ public class UIGameNongChang : UIGameBase
         // audioClipBtn = (AudioClip)Resources.Load(AppResAudio.RES_AUDIO_BTN_CLICK);
         NongChangItemInfo info = GetItemInfo();
         Debug.Log("sound:" + info.sound);
-        string fileaudio = "Audio/" + FileUtil.GetFileName(info.sound);
+        string fileaudio = "App/Audio/" + FileUtil.GetFileName(info.sound);
         AudioUtil.PlayFileResource(fileaudio);
     }
 
@@ -136,7 +139,8 @@ public class UIGameNongChang : UIGameBase
             objImageBg = new GameObject("ImageBg");
             objImageBg.transform.parent = objScrollViewContent.transform;
             objImageBg.AddComponent<Image>();
-            Texture2D tex = LoadTexture.LoadFromAsset(infoMap.picBg);
+            Debug.Log("strPicBg2=" + strPicBg);
+            Texture2D tex = LoadTexture.LoadFromAsset(strPicBg);
             if (tex)
             {
                 objImageBg.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
@@ -191,6 +195,7 @@ public class UIGameNongChang : UIGameBase
 
         //search item
         int search_idx = 0;
+
         foreach (NongChangItemInfo searchiteminfo in info.listSearchItem)
         {
             GameObject objSearchItem = new GameObject(FileUtil.GetFileName(searchiteminfo.pic));
@@ -229,6 +234,7 @@ public class UIGameNongChang : UIGameBase
             search_idx++;
 
         }
+
 
         totalSearchItem = info.listSearchItem.Count;
 
@@ -274,9 +280,12 @@ public class UIGameNongChang : UIGameBase
 
     public override void CleanGuankaList()
     {
-        if (listGuanka != null)
+        Debug.Log("CleanGuankaList nongchang");
+        if (UIGameBase.listGuanka != null)
         {
-            listGuanka.Clear();
+            Debug.Log("CleanGuankaList nongchang Clear");
+            UIGameBase.listGuanka.Clear();
+            Debug.Log("CleanGuankaList nongchang Clear end=" + UIGameBase.listGuanka.Count);
         }
         if (listMapItem != null)
         {
@@ -286,24 +295,33 @@ public class UIGameNongChang : UIGameBase
         {
             listPoint.Clear();
         }
-        if (listSearchItem != null)
+        if (listGuankaItem != null)
         {
-            listSearchItem.Clear();
+            listGuankaItem.Clear();
         }
     }
 
     public override int ParseGuanka()
     {
         int count = 0;
-
-        if ((listGuanka != null) && (listGuanka.Count != 0))
+        CleanGuankaList();
+        if ((UIGameBase.listGuanka != null) && (UIGameBase.listGuanka.Count != 0))
         {
-            return listGuanka.Count;
+            Debug.Log("ParseGuanka nongchang is not null count=" + UIGameBase.listGuanka.Count);
+            return UIGameBase.listGuanka.Count;
         }
 
-        listSearchItem = new List<object>();
+        if (autoMakeGuanka == null)
+        {
+            // autoMakeGuanka = this.gameObject.AddComponent<AutoMakeGuanka>();
+            autoMakeGuanka = new AutoMakeGuanka();
+            autoMakeGuanka.Init();
+        }
+        listAutoGuanka = autoMakeGuanka.ParseAutoGuankaJson();
 
-        listGuanka = new List<object>();
+        listGuankaItem = new List<object>();
+
+        UIGameBase.listGuanka = new List<object>();
         int idx = GameManager.placeLevel;
         string fileName = Common.GAME_RES_DIR + "/guanka/guanka_list_" + idx + ".json";
         //FILE_PATH
@@ -322,15 +340,47 @@ public class UIGameNongChang : UIGameBase
             NongChangItemInfo info = new NongChangItemInfo();
             info.id = (string)item["id"];
             info.pic = picRoot + info.id + ".png";
-            listSearchItem.Add(info);
+            listGuankaItem.Add(info);
         }
 
         ParseMapItem(mapid);
 
-        if (listSearchItem != null)
+        count = listAutoGuanka.Count;
+        // count = listGuankaItem.Count;
+
+        NongChangItemInfo infoPoint = listPoint[0] as NongChangItemInfo;
+
+        for (int i = 0; i < count; i++)
         {
-            count = GUANKA_NUM_PER_ITEM * listSearchItem.Count;
+            NongChangItemInfo infoGuanka = new NongChangItemInfo();
+
+            NongChangItemInfo infoAutoGuanka = listAutoGuanka[i] as NongChangItemInfo;
+            string strcontent = infoAutoGuanka.id;
+            string[] strArray = strcontent.Split(',');
+            infoGuanka.listSearchItem = new List<object>();
+
+            int pos_index = 0;
+            foreach (string stritem in strArray)
+            {
+                idx = Common.String2Int(stritem);
+                NongChangItemInfo infoId= listGuankaItem[idx] as NongChangItemInfo;
+                NongChangItemInfo infoSearchItem = new NongChangItemInfo();
+                infoSearchItem.id = infoId.id;
+                infoSearchItem.pic = infoId.pic;
+
+                infoGuanka.listSearchItem.Add(infoSearchItem);
+                NongChangItemInfo infoposition = infoPoint.listPosition[pos_index] as NongChangItemInfo;
+                infoSearchItem.x = infoposition.x;
+                infoSearchItem.y = infoposition.y;
+                infoSearchItem.scale = infoposition.scale;
+                infoSearchItem.flipx = infoposition.flipx;
+                infoSearchItem.isHasFound = false;
+                pos_index++;
+            }
+
+            UIGameBase.listGuanka.Add(infoGuanka);
         }
+
         // Debug.Log("ParseGame::count=" + count);
         return count;
     }
@@ -359,9 +409,8 @@ public class UIGameNongChang : UIGameBase
 
         string strbgname = (string)root["bg"];
         string picRoot = Common.GAME_RES_DIR + "/map/" + mapid + "/";
-
-        infoMap = new NongChangItemInfo();
-        infoMap.picBg = picRoot + strbgname;
+        strPicBg = picRoot + strbgname;
+        Debug.Log("strPicBg1=" + strPicBg);
 
         //map_item
         JsonData mapitems = root["items"];
@@ -427,6 +476,7 @@ public class UIGameNongChang : UIGameBase
 
         NongChangItemInfo info = GetItemInfo();
         bool isAllItemFound = true;
+
         foreach (NongChangItemInfo infotmp in info.listSearchItem)
         {
             if (!infotmp.isHasFound)
@@ -539,12 +589,13 @@ public class UIGameNongChang : UIGameBase
         NongChangItemInfo info = GetItemInfo();
         NongChangItemInfo searchinfo = (NongChangItemInfo)info.listSearchItem[idx];
         searchinfo.isHasFound = true;
-        string fileaudio = "Audio/" + FileUtil.GetFileName(searchinfo.sound);
-        AudioUtil.PlayFileResource(fileaudio);
+        // string fileaudio = "App/Audio/" + FileUtil.GetFileName(searchinfo.sound);
+        // AudioUtil.PlayFileResource(fileaudio);
 
 
 
         foundSearchItem = 0;
+
         foreach (NongChangItemInfo infotmp in info.listSearchItem)
         {
             if (infotmp.isHasFound)

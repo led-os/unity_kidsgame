@@ -1,17 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using LitJson;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class AutoMakeGuankaInfo
+{
+    //public string pic;//0,0,100,100
+    public string content;
+    public string count;
+}
 public class AutoMakeGuanka
 {
     public List<object> listGuanka;//string "0,1,2,3,4"
+    List<AutoMakeGuankaInfo> listGuankaJson;
     int n;
     int total;
     string strSplit = ",";
+
+
+    static public string filepathAutoGuankaJson
+    {
+        get
+        {
+            string dirRoot = Common.GAME_RES_DIR + "/guanka/";
+            return dirRoot + "/auto_guanka.json";
+        }
+
+    } 
     public void Init()
     {
         listGuanka = new List<object>();
+        listGuankaJson = new List<AutoMakeGuankaInfo>();
         n = 5;
         total = (int)Mathf.Pow((float)n, 5f);
         Debug.Log("AutoMakeGuanka:total = " + total);
@@ -22,6 +43,8 @@ public class AutoMakeGuanka
     public void RunAutoMake()
     {
         listGuanka.Clear();
+        listGuankaJson.Clear();
+
         List<object> listTmp = new List<object>();
 
         while (listTmp.Count < total)
@@ -55,9 +78,16 @@ public class AutoMakeGuanka
                 if (count == num)
                 {
                     listGuanka.Add(str);
+
+                    AutoMakeGuankaInfo info = new AutoMakeGuankaInfo();
+                    info.content = str;
+                    info.count = count.ToString();
+                    listGuankaJson.Add(info);
                 }
             }
         }
+
+        SaveJson();
     }
 
     public bool CheckInList(string str, List<object> list)
@@ -105,5 +135,44 @@ public class AutoMakeGuanka
         }
         RemoveRepeatItems(listStr);
         return listStr.Count;
+    }
+
+    void SaveJson()
+    {
+        string filepath = filepathAutoGuankaJson;
+        if (Application.isEditor)
+        {
+            filepath = Application.streamingAssetsPath + "/" + filepathAutoGuankaJson;
+        }
+        //save guanka json
+        Hashtable data = new Hashtable();
+        data["total"] = listGuankaJson.Count;
+        data["items"] = listGuankaJson;
+        string strJson = JsonMapper.ToJson(data);
+        byte[] bytes = Encoding.UTF8.GetBytes(strJson);
+        System.IO.File.WriteAllBytes(filepath, bytes);
+    }
+
+
+
+    public List<object> ParseAutoGuankaJson()
+    {
+        List<object> list = new List<object>();
+        string json = FileUtil.ReadStringAsset(filepathAutoGuankaJson);
+        JsonData root = JsonMapper.ToObject(json);
+        JsonData items = root["items"];
+        for (int i = 0; i < items.Count; i++)
+        {
+            JsonData item = items[i];
+            NongChangItemInfo info = new NongChangItemInfo();
+            info.id = (string)item["content"];
+            list.Add(info);
+        }
+        return list;
+
+    }
+    public void OnClickBtnGuanka()
+    {
+        RunAutoMake();
     }
 }
