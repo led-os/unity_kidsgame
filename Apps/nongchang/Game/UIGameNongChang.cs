@@ -24,7 +24,7 @@ public class NongChangItemInfo : ItemInfo
 public class UIGameNongChang : UIGameBase
 {
 
-    public const int GUANKA_NUM_PER_ITEM = 5;
+    public const int GUANKA_ITEM_NUM = 5;
     public TopBarSearchItem topBarSearchItem0;
     public TopBarSearchItem topBarSearchItem1;
     public TopBarSearchItem topBarSearchItem2;
@@ -42,7 +42,7 @@ public class UIGameNongChang : UIGameBase
     static public List<object> listPoint;
     List<object> listGuankaItem;//image id
 
-    List<object> listAutoGuanka;//item index list
+    static public List<object> listAutoGuanka;//item index list
     GameObject objItemClick;
     int idxItemClick;
     int imageBgWidth;
@@ -281,10 +281,10 @@ public class UIGameNongChang : UIGameBase
     public override void CleanGuankaList()
     {
         Debug.Log("CleanGuankaList nongchang");
-        if (UIGameBase.listGuanka != null)
+        if (listGuanka != null)
         {
             Debug.Log("CleanGuankaList nongchang Clear");
-            UIGameBase.listGuanka.Clear();
+            listGuanka.Clear();
             Debug.Log("CleanGuankaList nongchang Clear end=" + UIGameBase.listGuanka.Count);
         }
         if (listMapItem != null)
@@ -305,10 +305,10 @@ public class UIGameNongChang : UIGameBase
     {
         int count = 0;
         CleanGuankaList();
-        if ((UIGameBase.listGuanka != null) && (UIGameBase.listGuanka.Count != 0))
+        if ((listGuanka != null) && (listGuanka.Count != 0))
         {
-            Debug.Log("ParseGuanka nongchang is not null count=" + UIGameBase.listGuanka.Count);
-            return UIGameBase.listGuanka.Count;
+            Debug.Log("ParseGuanka nongchang is not null count=" + listGuanka.Count);
+            return listGuanka.Count;
         }
 
         if (autoMakeGuanka == null)
@@ -317,11 +317,14 @@ public class UIGameNongChang : UIGameBase
             autoMakeGuanka = new AutoMakeGuanka();
             autoMakeGuanka.Init();
         }
-        listAutoGuanka = autoMakeGuanka.ParseAutoGuankaJson();
+        if (listAutoGuanka == null)
+        {
+            listAutoGuanka = autoMakeGuanka.ParseAutoGuankaJson();
+        }
 
         listGuankaItem = new List<object>();
 
-        UIGameBase.listGuanka = new List<object>();
+        listGuanka = new List<object>();
         int idx = GameManager.placeLevel;
         string fileName = Common.GAME_RES_DIR + "/guanka/guanka_list_" + idx + ".json";
         //FILE_PATH
@@ -343,44 +346,64 @@ public class UIGameNongChang : UIGameBase
             listGuankaItem.Add(info);
         }
 
+
+        //让总数是GUANKA_ITEM_NUM的整数倍
+        int tmp = (listGuankaItem.Count % GUANKA_ITEM_NUM);
+        if (tmp > 0)
+        {
+            for (int i = 0; i < (GUANKA_ITEM_NUM - tmp); i++)
+            {
+                NongChangItemInfo infoId = listGuankaItem[i] as NongChangItemInfo;
+                NongChangItemInfo info = new NongChangItemInfo();
+                info.id = infoId.id;
+                info.pic = infoId.pic;
+                listGuankaItem.Add(info);
+            }
+        }
+
         ParseMapItem(mapid);
+        int group = listGuankaItem.Count / GUANKA_ITEM_NUM;
 
         count = listAutoGuanka.Count;
         // count = listGuankaItem.Count;
 
-        NongChangItemInfo infoPoint = listPoint[0] as NongChangItemInfo;
-
-        for (int i = 0; i < count; i++)
+        int rdm = Random.Range(0, listPoint.Count);
+        NongChangItemInfo infoPoint = listPoint[rdm] as NongChangItemInfo;
+        for (int g = 0; g < group; g++)
         {
-            NongChangItemInfo infoGuanka = new NongChangItemInfo();
 
-            NongChangItemInfo infoAutoGuanka = listAutoGuanka[i] as NongChangItemInfo;
-            string strcontent = infoAutoGuanka.id;
-            string[] strArray = strcontent.Split(',');
-            infoGuanka.listSearchItem = new List<object>();
-
-            int pos_index = 0;
-            foreach (string stritem in strArray)
+            for (int i = 0; i < count; i++)
             {
-                idx = Common.String2Int(stritem);
-                NongChangItemInfo infoId= listGuankaItem[idx] as NongChangItemInfo;
-                NongChangItemInfo infoSearchItem = new NongChangItemInfo();
-                infoSearchItem.id = infoId.id;
-                infoSearchItem.pic = infoId.pic;
+                NongChangItemInfo infoGuanka = new NongChangItemInfo();
 
-                infoGuanka.listSearchItem.Add(infoSearchItem);
-                NongChangItemInfo infoposition = infoPoint.listPosition[pos_index] as NongChangItemInfo;
-                infoSearchItem.x = infoposition.x;
-                infoSearchItem.y = infoposition.y;
-                infoSearchItem.scale = infoposition.scale;
-                infoSearchItem.flipx = infoposition.flipx;
-                infoSearchItem.isHasFound = false;
-                pos_index++;
+                NongChangItemInfo infoAutoGuanka = listAutoGuanka[i] as NongChangItemInfo;
+                string strcontent = infoAutoGuanka.id;
+                string[] strArray = strcontent.Split(',');
+                infoGuanka.listSearchItem = new List<object>();
+
+                int pos_index = 0;
+                foreach (string stritem in strArray)
+                {
+                    idx = Common.String2Int(stritem) + g * GUANKA_ITEM_NUM;
+                    NongChangItemInfo infoId = listGuankaItem[idx] as NongChangItemInfo;
+                    NongChangItemInfo infoSearchItem = new NongChangItemInfo();
+                    infoSearchItem.id = infoId.id;
+                    infoSearchItem.pic = infoId.pic;
+
+                    infoGuanka.listSearchItem.Add(infoSearchItem);
+                    NongChangItemInfo infoposition = infoPoint.listPosition[pos_index] as NongChangItemInfo;
+                    infoSearchItem.x = infoposition.x;
+                    infoSearchItem.y = infoposition.y;
+                    infoSearchItem.scale = infoposition.scale;
+                    infoSearchItem.flipx = infoposition.flipx;
+                    infoSearchItem.isHasFound = false;
+                    pos_index++;
+                }
+
+                listGuanka.Add(infoGuanka);
             }
 
-            UIGameBase.listGuanka.Add(infoGuanka);
         }
-
         // Debug.Log("ParseGame::count=" + count);
         return count;
     }
