@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
-public class AudioPlay : MonoBehaviour
+using uAudio;
+using System;
+public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 {
 
     public static AudioPlay main;
+    public uAudioStreamer uAudioNet;
+
+
+    public uAudioStreamer_UI uAudioUI;
 
     private AudioSource audioSource;
     /// <summary>
@@ -25,6 +30,13 @@ public class AudioPlay : MonoBehaviour
                     Destroy(this.gameObject);
                 }
         */
+
+
+
+        uAudioUI = AppSceneBase.main.objuAudio.GetComponent<uAudioStreamer_UI>();
+
+        // uAudioNet = this.gameObject.AddComponent<uAudioStreamer>();
+        // uAudioNet.sendPlaybackState += new System.Action<uAudio.uAudio_backend.PlayBackState>(uAudioPlayStatus);
 
     }
     // Use this for initialization
@@ -87,8 +99,31 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayUrl(string url)
     {
-        StartCoroutine(PlayUrlEnumerator(url));
+        if (Common.isAndroid || Common.isiOS)
+        {
+            StartCoroutine(PlayUrlEnumerator(url));
+        }
+        else
+        {
+            //url = "https://cdn.feilaib.top/img/sounds/bg.mp3";
+          //  uAudioNet.SetURL(url);
+         //   uAudioNet.SetFile(url);
+           // uAudioNet.Play(null);
+
+           Debug.Log("PlayUrl:url="+url);
+           uAudioUI.Stop();
+           uAudioUI.targetFilePath =url;
+           uAudioUI.Play(null);
+        }
+
     }
+
+    //@uAudio
+    public void uAudioPlayStatus(uAudio.uAudio_backend.PlayBackState v)
+    {
+        Debug.Log("sendPlaybackState: " + v.ToString() + "---- 7ts87dt");
+    }
+    //@uAudio
 
     //https://blog.csdn.net/qq_15386973/article/details/78696116 
     IEnumerator PlayUrlEnumerator(string url)

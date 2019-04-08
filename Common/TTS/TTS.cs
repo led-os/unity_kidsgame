@@ -32,7 +32,7 @@ public class TTS
 
             platformWrapper.Speak(text);
         }
-        if (Common.isWinUWP)
+        else
         {
             SpeakWeb(text);
         }

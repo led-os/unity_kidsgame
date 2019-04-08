@@ -14,6 +14,8 @@ public class AppSceneBase : ScriptBase
     public GameObject objMainWorld;
     public GameObject objSpriteBg;
 
+    public GameObject objuAudio;
+
     //public Camera mainCamera;
     float _adBannerHeightCanvas = 0;
 

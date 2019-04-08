@@ -47,7 +47,10 @@ public class TTSApiBaidu : TTSApiBase
         //     //openapi.baidu.com/oauth浏览器不能跨域访问
         //     url = "https://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + strencode;
         // }
-
+        //添加mp3后缀 让cc.loader.load认为加载声音资源
+        string ext = "&1.mp3";
+        //url = url + ext;
+        //url = "https://cdn.feilaib.top/img/sounds/bg.mp3";
         return url;
     }
     //认证权限access_token 

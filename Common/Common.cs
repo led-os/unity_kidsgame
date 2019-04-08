@@ -203,6 +203,10 @@ public class Common
             int ret = 0;
             string key = "KEY_GAME_GOLD";
             ret = PlayerPrefs.GetInt(key, 0);
+             if (Application.isEditor)
+            {
+                ret = AppRes.GOLD_INIT_VALUE;
+            }
             return ret;
         }
 

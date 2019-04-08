@@ -25,6 +25,7 @@ public class UIHomeBase : UIView
     // public Button btnMore;
     // public Button btnShare;
     // public Button btnNoAd;
+    public Button btnMusic;
     public Button btnAdVideo;
     public float topBarHeight = 160;
     AudioClip audioClipBtnPlay;
@@ -233,6 +234,30 @@ public class UIHomeBase : UIView
     }
 
 
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        if (btnMusic != null)
+        {
+            TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
+        }
+    }
+
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
+    }
     public void OnClickBtnMore()
     {
         MoreViewController.main.Show(null, null);

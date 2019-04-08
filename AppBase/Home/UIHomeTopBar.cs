@@ -18,7 +18,7 @@ public class UIHomeTopBar : UIView
     public Button btnSetting;
     public Button btnMore;
     public Button btnAdVideo;
-
+    public Button btnMusic;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -69,6 +69,8 @@ public class UIHomeTopBar : UIView
                 }
             }
         }
+
+        UpdateBtnMusic();
     }
     // Use this for initialization
     void Start()
@@ -95,7 +97,27 @@ public class UIHomeTopBar : UIView
     }
 
 
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
+    }
 
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
+    }
     public void OnUIShareDidClick(ItemInfo item)
     {
         string title = Language.main.GetString("UIMAIN_SHARE_TITLE");
