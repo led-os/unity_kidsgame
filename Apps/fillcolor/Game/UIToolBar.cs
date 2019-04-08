@@ -24,6 +24,7 @@ public class UIToolBar : UIView
     public const int BTN_CLICK_MODE_STRAW = 0;
     public const int BTN_CLICK_MODE_COLOR_INPUT = 1;
 
+    public Button btnMusic;
     public Button btnDelLast;//删除最后一画
                              //public UIViewAlert viewAlert;
     public UIGameFillColor uiGameFillColor;
@@ -68,6 +69,7 @@ public class UIToolBar : UIView
     void Awake()
     {
         btnDelLast.gameObject.SetActive(false);
+        UpdateBtnMusic();
     }
     // Use this for initialization
     void Start()
@@ -238,6 +240,27 @@ public class UIToolBar : UIView
         uiGameFillColor.uiColorBoard.gameObject.SetActive(!uiGameFillColor.uiColorBoard.gameObject.activeSelf);
     }
 
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
+    }
+
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
+    }
     void DoDeleteAll()
     {
         uiGameFillColor.gameFillColor.DoDeleteAll();

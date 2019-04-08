@@ -39,21 +39,22 @@ public class CreateMaskScene : MonoBehaviour
     float diffS = 0.2f;
     float diffV = 0.2f;
 
-    
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
     {
         GameManager.placeLevel = 0;//ng  8  11
-        //ng 5.10 6.0  8all 10.0 10.5 10.11 10.14 11.0 11.1 11.2 11.3 11all
-        indexFillColor = 0;
+        //ng 5.10 6.0  8all 10.0 10.5 10.11 10.14 11.0 11.1 11.2 11.3 11all #endregion
         listColorFill = new List<object>();
         listColorJson = new List<ColorJsonItemInfo>();
         long tick = Common.GetCurrentTimeMs();
         CreateRandomColorList();
         tick = Common.GetCurrentTimeMs() - tick;
         Debug.Log("CreateRandomColorList:" + tick + "ms");
+        //  GameManager.placeLevel = 1;
+        CleanGuankaList();
         ParseGuanka();
 
 
@@ -105,7 +106,7 @@ public class CreateMaskScene : MonoBehaviour
             if ((ext == "png") || (ext == "jpg"))
             {
                 Debug.Log("id=" + idx.ToString() + ":" + NextFile.Name);
-                string name =strPlace+"_"+ idx.ToString() + "." + ext;
+                string name = strPlace + "_" + idx.ToString() + "." + ext;
                 //name = NextFile.Name;
                 string filepath_new = NextFile.ToString();
                 //重命名
@@ -208,7 +209,7 @@ public class CreateMaskScene : MonoBehaviour
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
         string strPlace = (string)root["place"];
-        JsonData items = root["list"];
+        JsonData items = root["items"];
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
@@ -231,7 +232,7 @@ public class CreateMaskScene : MonoBehaviour
             // info.icon = Common.GAME_RES_DIR + "/animal/thumb/" + picname + ".png";
 
             listGuanka.Add(info);
-           
+
         }
 
         count = listGuanka.Count;
@@ -302,18 +303,27 @@ public class CreateMaskScene : MonoBehaviour
                 Vector2 pttmp = new Vector2(i, j);
 
                 Color colorpic = colorImage.GetImageColorOrigin(pttmp);
+
+                if (colorpic == Color.white)
+                {
+                    //白色变透明
+                    colorpic.a = 0f;
+                }
+
+
                 //统一为纯黑色
                 colorpic.r = 0f;
                 colorpic.g = 0f;
                 colorpic.b = 0f;
-
                 if (colorpic.a < 0.5f)
                 {
                     colorpic.a = 0f;
                 }
                 else
                 {
+
                     colorpic.a = 1f;
+
                 }
                 // colorpic.r = 0;
                 // colorpic.g = 0;
@@ -570,9 +580,8 @@ public class CreateMaskScene : MonoBehaviour
 
     void DoFillColor()
     {
-        // Debug.Log("DoFillColor start");
-
         int idx = 0;
+
         if (indexFillColor < listGuanka.Count)
         {
 
@@ -587,9 +596,7 @@ public class CreateMaskScene : MonoBehaviour
 
             indexFillColor++;
 
-            // Debug.Log("Invoke DoFillColor start");
             Invoke("DoFillColor", 0.5f);
-            //Debug.Log("Invoke DoFillColor end");
         }
         else
         {
@@ -607,11 +614,11 @@ public class CreateMaskScene : MonoBehaviour
     {
         ColorItemInfo info = GetItemInfo(indexFillColor);
         Debug.Log("TestFillColor:idx=" + indexFillColor + " path:" + info.pic);
-       
+
         long tick = Common.GetCurrentTimeMs();
-       
-         string filepath_mask = Application.streamingAssetsPath + "/" + info.picmask;
-        
+
+        string filepath_mask = Application.streamingAssetsPath + "/" + info.picmask;
+
         listColorFill.Clear();
         listColorJson.Clear();
         texPic = LoadTexture.LoadFromAsset(info.pic);
@@ -620,9 +627,9 @@ public class CreateMaskScene : MonoBehaviour
         //不用调整图片大小
         {
             FormatTexture();
-          
+
         }
- 
+
 
         //Debug.Log("texPic.width="+texPic.width+" texPic.height=:"+texPic.height);
         int idx = 0;
@@ -647,7 +654,7 @@ public class CreateMaskScene : MonoBehaviour
                     //colorFill = Color.red;
                     colorImage.RunFillColor(pt, colorFill, Color.black);
                     //Debug.Log("idx="+idx+" FillRect:"+colorImage.fillRect);
- 
+
                     idx++;
                     break;
                 }
@@ -657,12 +664,12 @@ public class CreateMaskScene : MonoBehaviour
         }
 
 
- 
-        UpdateTexture(); 
+
+        UpdateTexture();
         tick = Common.GetCurrentTimeMs() - tick;
 
         Debug.Log("TestFillColor:idx=" + indexFillColor + " count=" + listGuanka.Count + " tick=" + tick + "ms" + " color_count=" + listColorFill.Count);
- 
+
     }
 
     void UpdateTexture()
@@ -680,7 +687,7 @@ public class CreateMaskScene : MonoBehaviour
         if (FileUtil.FileIsExist(filepath_mask))
         {
             Debug.Log("FillColorImage::FileIsExist");
-            //return;
+            return;
         }
         listColorFill.Clear();
         listColorJson.Clear();
@@ -695,7 +702,7 @@ public class CreateMaskScene : MonoBehaviour
             {
                 byte[] bytes = texPic.EncodeToPNG();
                 string filepath = Application.streamingAssetsPath + "/" + info.pic;
-                System.IO.File.WriteAllBytes(filepath, bytes);
+                // System.IO.File.WriteAllBytes(filepath, bytes);
             }
         }
 
@@ -749,7 +756,7 @@ public class CreateMaskScene : MonoBehaviour
 
                     listColorJson.Add(colorJsonInfo);
 
-                    idx++; 
+                    idx++;
                 }
 
 
@@ -794,7 +801,7 @@ public class CreateMaskScene : MonoBehaviour
     public void OnClickMask()
     {
         btnMask.gameObject.SetActive(false);
-        Invoke("DoFillColor", 0.5f); 
+        Invoke("DoFillColor", 0.5f);
     }
     public void OnClickThumb()
     {

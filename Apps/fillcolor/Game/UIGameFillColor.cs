@@ -264,7 +264,7 @@ public class UIGameFillColor : UIGameBase
         // Debug.Log("json::"+json);
         JsonData root = JsonMapper.ToObject(json);
         string strPlace = (string)root["place"];
-        JsonData items = root["list"];
+        JsonData items = root["items"];
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
