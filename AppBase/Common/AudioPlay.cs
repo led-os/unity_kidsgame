@@ -106,14 +106,14 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         else
         {
             //url = "https://cdn.feilaib.top/img/sounds/bg.mp3";
-          //  uAudioNet.SetURL(url);
-         //   uAudioNet.SetFile(url);
-           // uAudioNet.Play(null);
+            //  uAudioNet.SetURL(url);
+            //   uAudioNet.SetFile(url);
+            // uAudioNet.Play(null);
 
-           Debug.Log("PlayUrl:url="+url);
-           uAudioUI.Stop();
-           uAudioUI.targetFilePath =url;
-           uAudioUI.Play(null);
+            Debug.Log("PlayUrl:url=" + url);
+            //    uAudioUI.Stop();
+            //    uAudioUI.targetFilePath =url;
+            //    uAudioUI.Play(null);
         }
 
     }

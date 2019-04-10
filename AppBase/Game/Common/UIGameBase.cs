@@ -15,6 +15,7 @@ public class UIGameBase : UIView
     public const string STR_KEYNAME_VIEWALERT_ADVIDEO_FAIL = "keyname_viewalert_advideo_fail";
     //public AudioClip audioClipBtn;
     public Button btnShare;
+    public Button btnMusic;
     static public List<object> listGuanka;
     static public Language languageGame;
     static public int heightAdBanner;
@@ -147,6 +148,32 @@ public class UIGameBase : UIView
 
         // }
         AppSceneBase.main.LayoutChild();
+    }
+
+
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        if (btnMusic != null)
+        {
+            TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
+        }
+    }
+
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
     }
     public void OnClickBtnShare()
     {
