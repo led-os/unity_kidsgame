@@ -46,8 +46,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         Debug.Log("AudioPlay Start");
         if (ret)
         {
-            audioSource.clip = AudioCache.main.Load("App/Audio/Bg");
-            Play();
+            PlayMusicBg();
         }
     }
 
@@ -55,6 +54,19 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     void Update()
     {
 
+    }
+
+    //设置背景音乐
+    public void SetMusicBg()
+    {
+        audioSource.clip = AudioCache.main.Load(AppRes.AUDIO_BG);
+    }
+
+
+    public void PlayMusicBg()
+    {
+        SetMusicBg();
+        Play();
     }
 
     public void Stop()

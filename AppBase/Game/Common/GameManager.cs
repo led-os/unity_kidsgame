@@ -191,6 +191,7 @@ public class GameManager
             info.type = JsonUtil.JsonGetString(item, "type", JsonUtil.JsonGetString(item, "game_type", ""));
             info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
             info.icon = info.pic;
+            info.language = JsonUtil.JsonGetString(item, "language", "language");
             // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
             info.index = i;
             GameManager.listPlace.Add(info);

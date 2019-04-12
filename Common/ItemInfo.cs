@@ -16,6 +16,7 @@ public class ItemInfo
     public string appid;
     public string category;
     public string sound;
+    public string language;
     public int tag;
     public int index;
     public int row;

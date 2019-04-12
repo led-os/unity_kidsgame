@@ -363,7 +363,7 @@ public class AdKitCommon : MonoBehaviour
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         if (ret)
         {
-            AudioPlay.main.Play();
+            AudioPlay.main.PlayMusicBg();
         }
 
         if (callbacAdVideokFinish != null)
@@ -382,7 +382,7 @@ public class AdKitCommon : MonoBehaviour
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         if (ret)
         {
-            AudioPlay.main.Play();
+            AudioPlay.main.PlayMusicBg();
         }
 
         if (callbacAdVideokFinish != null)

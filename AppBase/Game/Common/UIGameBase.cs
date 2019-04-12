@@ -150,7 +150,14 @@ public class UIGameBase : UIView
         AppSceneBase.main.LayoutChild();
     }
 
+    public void UpdateLanguage(string language)
+    {
+        string strlan = Common.GAME_RES_DIR + "/language/" + language + ".csv";
+        languageGame = new Language();
+        languageGame.Init(strlan);
+        languageGame.SetLanguage(Language.main.GetLanguage());
 
+    }
     public void UpdateBtnMusic()
     {
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
@@ -167,7 +174,7 @@ public class UIGameBase : UIView
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
         if (value)
         {
-            AudioPlay.main.Play();
+            AudioPlay.main.PlayMusicBg();
         }
         else
         {

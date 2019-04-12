@@ -110,7 +110,7 @@ public class UIHomeTopBar : UIView
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
         if (value)
         {
-            AudioPlay.main.Play();
+            AudioPlay.main.PlayMusicBg();
         }
         else
         {
