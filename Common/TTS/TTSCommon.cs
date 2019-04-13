@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Moonma.IAP; 
+using Moonma.IAP;
 
 public class TTSCommon : MonoBehaviour
 {
@@ -32,6 +32,19 @@ public class TTSCommon : MonoBehaviour
 
     }
 
- 
+    #region TTS
+    public void TTSSpeechDidStart(string str)
+    { 
+    }
+    public void TTSSpeechDidFinish(string str)
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        if (ret)
+        {
+            //恢复播放
+            AudioPlay.main.Play();
+        }
+    }
+    #endregion
 
 }

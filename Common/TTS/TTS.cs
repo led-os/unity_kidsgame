@@ -26,6 +26,13 @@ public class TTS
 
     public void Speak(string text)
     {
+
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        if (ret)
+        {
+            AudioPlay.main.Stop();
+        }
+
         if (Common.isAndroid || Common.isiOS)
         {
             TTSBasePlatformWrapper platformWrapper = TTSPlatformWrapper.platform;

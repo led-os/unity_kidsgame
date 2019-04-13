@@ -26,7 +26,7 @@ public class TTSApiBaidu : TTSApiBase
     void SpeakInternal(string text)
     {
         string url = GetTextUrl(text);
-        AudioPlay.main.PlayUrl(url);
+        PlayUrl(url);
     }
     public override string GetTextUrl(string text)
     {

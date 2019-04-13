@@ -125,6 +125,7 @@ public class UIGameBase : UIView
 
     public virtual void UpdateGuankaLevel(int level)
     {
+        UpdateLanguage();
     }
     public virtual void UpdatePlaceLevel(int level)
     {
@@ -150,9 +151,10 @@ public class UIGameBase : UIView
         AppSceneBase.main.LayoutChild();
     }
 
-    public void UpdateLanguage(string language)
+    public void UpdateLanguage()
     {
-        string strlan = Common.GAME_RES_DIR + "/language/" + language + ".csv";
+        ItemInfo info = GameManager.main.GetPlaceItemInfo(GameManager.placeLevel);
+        string strlan = Common.GAME_RES_DIR + "/language/" + info.language + ".csv";
         languageGame = new Language();
         languageGame.Init(strlan);
         languageGame.SetLanguage(Language.main.GetLanguage());
@@ -223,15 +225,6 @@ public class UIGameBase : UIView
 
     }
 
-    #region TTS
-    public virtual void TTSSpeechDidStart(string str)
-    {
-
-    }
-    public virtual void TTSSpeechDidFinish(string str)
-    {
-        Debug.Log("GameBase TTSSpeechDidFinish ");
-    }
 
     public void PlaySoundFromResource(string file)
     {
@@ -244,5 +237,5 @@ public class UIGameBase : UIView
         }
     }
 
-    #endregion
+   
 }

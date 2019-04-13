@@ -92,9 +92,8 @@ public class UIGameNongChang : UIGameBase
     }
     public override void UpdateGuankaLevel(int level)
     {
+        base.UpdateGuankaLevel(level);
         DestroyGame();
-        ItemInfo info = GameManager.main.GetPlaceItemInfo(GameManager.placeLevel);
-        UpdateLanguage(info.language);
         LoadGame();
         PlaySoundGameIntro();
         LayOut();

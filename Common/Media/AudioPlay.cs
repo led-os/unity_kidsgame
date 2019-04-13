@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using uAudio;
 using System;
+using Moonma.Media;
 public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 {
 
@@ -115,19 +116,29 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         {
             StartCoroutine(PlayUrlEnumerator(url));
         }
+        else if (Common.isWinUWP)
+        {
+            MediaPlayer.main.callbackMediaPlayerEvent = OnMediaPlayerEvent;
+            MediaPlayer.main.Open(url);
+        }
         else
         {
             //url = "https://cdn.feilaib.top/img/sounds/bg.mp3";
-            //  uAudioNet.SetURL(url);
-            //   uAudioNet.SetFile(url);
-            // uAudioNet.Play(null);
 
             Debug.Log("PlayUrl:url=" + url);
-            //    uAudioUI.Stop();
-            //    uAudioUI.targetFilePath =url;
-            //    uAudioUI.Play(null);
+            uAudioUI.Stop();
+            uAudioUI.targetFilePath = url;
+            uAudioUI.Play(null);
         }
 
+    }
+
+    public void OnMediaPlayerEvent(string status)
+    {
+        if (status == MediaPlayer.EVENT_COMPLETE)
+        {
+
+        }
     }
 
     //@uAudio
