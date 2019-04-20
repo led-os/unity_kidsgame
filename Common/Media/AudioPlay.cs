@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using uAudio;
+//using uAudio;
 using System;
 using Moonma.Media;
 public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 {
 
     public static AudioPlay main;
-    public uAudioStreamer uAudioNet;
+    //public uAudioStreamer uAudioNet;
 
 
-    public uAudioStreamer_UI uAudioUI;
+    //public uAudioStreamer_UI uAudioUI;
 
     private AudioSource audioSource;
     /// <summary>
@@ -34,7 +34,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 
 
 
-        uAudioUI = AppSceneBase.main.objuAudio.GetComponent<uAudioStreamer_UI>();
+        // uAudioUI = AppSceneBase.main.objuAudio.GetComponent<uAudioStreamer_UI>();
 
         // uAudioNet = this.gameObject.AddComponent<uAudioStreamer>();
         // uAudioNet.sendPlaybackState += new System.Action<uAudio.uAudio_backend.PlayBackState>(uAudioPlayStatus);
@@ -126,9 +126,9 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
             //url = "https://cdn.feilaib.top/img/sounds/bg.mp3";
 
             Debug.Log("PlayUrl:url=" + url);
-            uAudioUI.Stop();
-            uAudioUI.targetFilePath = url;
-            uAudioUI.Play(null);
+            // uAudioUI.Stop();
+            // uAudioUI.targetFilePath = url;
+            // uAudioUI.Play(null);
         }
 
     }
@@ -142,10 +142,10 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     }
 
     //@uAudio
-    public void uAudioPlayStatus(uAudio.uAudio_backend.PlayBackState v)
-    {
-        Debug.Log("sendPlaybackState: " + v.ToString() + "---- 7ts87dt");
-    }
+    // public void uAudioPlayStatus(uAudio.uAudio_backend.PlayBackState v)
+    // {
+    //     Debug.Log("sendPlaybackState: " + v.ToString() + "---- 7ts87dt");
+    // }
     //@uAudio
 
     //https://blog.csdn.net/qq_15386973/article/details/78696116 
