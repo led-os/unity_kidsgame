@@ -57,6 +57,7 @@ public class UIGameNongChang : UIGameBase
     static public string strPicBg;
     AutoMakeGuanka autoMakeGuanka;
 
+
     int rowPointTotal;
     int colPointTotal;
     /// <summary>
@@ -349,8 +350,11 @@ public class UIGameNongChang : UIGameBase
                 rctran.anchoredPosition = new Vector2(pt.x, pt.y);
                 float scale_item = searchiteminfo.scale;
                 float sc = scaleBg * scale_item;
+                if (GameManager.placeLevel >= 6)
+                {
+                    sc = sc / 2;
+                }
                 objSearchItem.transform.localScale = new Vector3(sc, sc, 1.0f);
-
             }
 
             search_idx++;
