@@ -15,7 +15,7 @@ public class AutoMakeGuanka
 {
     public List<object> listGuanka;//string "0,1,2,3,4"
     List<AutoMakeGuankaInfo> listGuankaJson;
-    int n_one_group;
+    int n;
     int total;
     string strSplit = ",";
 
@@ -33,49 +33,61 @@ public class AutoMakeGuanka
     {
         listGuanka = new List<object>();
         listGuankaJson = new List<AutoMakeGuankaInfo>();
-        n_one_group = 5;
+        n = 5;
+        total = (int)Mathf.Pow((float)n, 5f);
+        Debug.Log("AutoMakeGuanka:total = " + total);
 
     }
 
-    //组合 C(n,m)
-    void GetIndex(int n, int m)
-    {
-
-    }
 
     public void RunAutoMake()
     {
-        GetNumList(2);
-        GetNumList(3);
-        GetNumList(4);
-        GetNumList(5);
-        SaveJson();
-    }
-    public void GetNumList(int m)
-    {
-        int[] IntArr = new int[] { 0, 1, 2, 3, 4 }; //整型数组
-        List<int[]> ListCombination = PermutationCombination<int>.GetCombination(IntArr, m); //求全部的3-3组合
-        Debug.Log("count =" + ListCombination.Count);
-        foreach (int[] arr in ListCombination)
+        listGuanka.Clear();
+        listGuankaJson.Clear();
+
+        List<object> listTmp = new List<object>();
+
+        while (listTmp.Count < total)
         {
             string str = "";
-            int idx = 0;
-            foreach (int item in arr)
+            for (int i = 0; i < n; i++)
             {
-                str += item.ToString() + strSplit;
-                if (idx == arr.Length - 1)
+                int rdm = Random.Range(0, n);
+
+                if (i < n - 1)
                 {
-                    str += item.ToString();
+                    str += rdm.ToString() + strSplit;
                 }
-                idx++;
+                else
+                {
+                    str += rdm.ToString();
+                }
             }
-            AutoMakeGuankaInfo info = new AutoMakeGuankaInfo();
-            info.content = str;
-            info.count = m.ToString();
-            listGuankaJson.Add(info);
-            Debug.Log(str);
+            if (!CheckInList(str, listTmp))
+            {
+                listTmp.Add(str);
+            }
         }
 
+        //重新排列
+        for (int num = 1; num <= n; num++)
+        {
+            foreach (string str in listTmp)
+            {
+                int count = GetCountOfItem(str);
+                if (count == num)
+                {
+                    listGuanka.Add(str);
+
+                    AutoMakeGuankaInfo info = new AutoMakeGuankaInfo();
+                    info.content = str;
+                    info.count = count.ToString();
+                    listGuankaJson.Add(info);
+                }
+            }
+        }
+
+        SaveJson();
     }
 
     public bool CheckInList(string str, List<object> list)
@@ -152,13 +164,16 @@ public class AutoMakeGuanka
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
-            LianLianLeItemInfo info = new LianLianLeItemInfo();
+            NongChangItemInfo info = new NongChangItemInfo();
             info.id = (string)item["content"];
-            info.count = Common.String2Int((string)item["count"]);
             list.Add(info);
         }
         return list;
 
     }
 
+    public void OnClickBtnGuanka()
+    {
+        RunAutoMake();
+    }
 }

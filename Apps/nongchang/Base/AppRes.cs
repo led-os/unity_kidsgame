@@ -16,6 +16,7 @@ public class AppRes
 
     //audio 
     public const string AUDIO_BG = "App/Audio/Bg";
+
     public const string AUDIO_BTN_CLICK = "App/Audio/BtnClick";
     public const string AUDIO_PINTU_BLOCK_FINISH = "Audio/PintuBlockFinish";
     public const string AUDIO_WORD_OK = "App/Audio/word_ok";
@@ -37,7 +38,6 @@ public class AppRes
     public const string PREFAB_MOREAPP_CELL_ITEM = "App/Prefab/MoreApp/UIMoreAppCellItem";
 
     //image
-
     public const string IMAGE_BtnMusicOn = "App/UI/Home/BtnMusicOn";
     public const string IMAGE_BtnMusicOff = "App/UI/Home/BtnMusicOff";
 
@@ -63,7 +63,12 @@ public class AppRes
     public const string IMAGE_CELL_BG_YELLOW = "App/UI/Setting/SettingCellBgYellow";
     static public Vector4 borderCellSettingBg = new Vector4(18f, 18f, 18f, 18f);
 
-    public const string IMAGE_GAME_BG = "App/UI/Guanka/GuankaBg";
+    public const string IMAGE_GAME_BG = "App/UI/Game/GameBg";
+
+    // cmditem
+    public const string IMAGE_CMDITEM_BG = "App/UI/Game/CmdItem/CmdItemBg";
+
+
 
 
 }
