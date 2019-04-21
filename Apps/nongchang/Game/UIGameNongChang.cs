@@ -337,8 +337,10 @@ public class UIGameNongChang : UIGameBase
                     if (rcMap.Contains(pt))
                     {
                         //有显示重叠
-                        pt.x = (pt.x > x) ? (x + w / 2) : (x - w / 2);
-                        pt.y = (pt.y > y) ? (y + h / 2) : (y - h / 2);
+                        //  pt.x = (pt.x > x) ? (x + w / 2) : (x - w / 2);
+                        //   pt.y = (pt.y > y) ? (y + h / 2) : (y - h / 2);
+                        //置顶
+                        objSearchItem.transform.SetAsLastSibling();
                         break;
                     }
 
