@@ -39,7 +39,7 @@ public class UIHomeTopBar : UIView
         }
         if (Common.isAndroid)
         {
-            if (Config.main.channel == Source.HUAWEI)
+            if ((Config.main.channel == Source.HUAWEI) || (Config.main.channel == Source.GP))
             {
                 //华为市场不显示
                 btnMore.gameObject.SetActive(false);
