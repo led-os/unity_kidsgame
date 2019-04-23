@@ -51,7 +51,7 @@ public class UIHomeDefault : UIHomeBase
         //image name
         {
             RectTransform rctran = imageBgName.GetComponent<RectTransform>();
-           
+
             int fontSize = TextName.fontSize;
             int r = fontSize / 2;
             w = Common.GetStringLength(TextName.text, AppString.STR_FONT_NAME, fontSize) + r * 2;
@@ -72,21 +72,19 @@ public class UIHomeDefault : UIHomeBase
 
             rctran.sizeDelta = new Vector2(w, h);
             x = 0;
-            y = (sizeCanvas.y - topBarHeight) / 4;
+            y = (sizeCanvas.y / 2 - topBarHeight) / 2;
             rctran.anchoredPosition = new Vector2(x, y);
         }
 
 
 
-        // {
-        //     RectTransform rctran = imageBgName.GetComponent<RectTransform>();
-        //     float w, h;
-        //     int fontSize = TextName.fontSize;
-        //     int r = fontSize / 2;
-        //     w = Common.GetStringLength(TextName.text, AppString.STR_FONT_NAME, fontSize) + r * 2;
-        //     h = fontSize * 2;
-        //     rctran.sizeDelta = new Vector2(w, h);
-        // }
+        {
+            RectTransform rctranName = imageBgName.GetComponent<RectTransform>();
+            RectTransform rctran = objLayoutBtn.GetComponent<RectTransform>();
+            x = 0;
+            y = (-sizeCanvas.y / 2 + (rctranName.anchoredPosition.y - rctranName.rect.height / 2)) / 2;
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
 
         LayoutChildBase();
     }
