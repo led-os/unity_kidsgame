@@ -24,7 +24,7 @@ public class AutoMakeGuanka
     {
         get
         {
-            string dirRoot = Common.GAME_RES_DIR + "/guanka/";
+            string dirRoot = Common.GAME_RES_DIR + "/guanka";
             return dirRoot + "/auto_guanka.json";
         }
 
@@ -159,13 +159,16 @@ public class AutoMakeGuanka
     {
         List<object> list = new List<object>();
         string json = FileUtil.ReadStringAsset(filepathAutoGuankaJson);
+        Debug.Log("ParseAutoGuankaJson json = " + json);
         JsonData root = JsonMapper.ToObject(json);
+        Debug.Log("ParseAutoGuankaJson ToObject end");
         JsonData items = root["items"];
+        Debug.Log("ParseAutoGuankaJson root items end");
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
             NongChangItemInfo info = new NongChangItemInfo();
-            info.id = (string)item["content"];
+            info.id = JsonUtil.JsonGetString(item, "content", "id");
             list.Add(info);
         }
         return list;

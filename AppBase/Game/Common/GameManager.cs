@@ -186,7 +186,11 @@ public class GameManager
             JsonData item = items[i];
             ItemInfo info = new ItemInfo();
             info.id = JsonUtil.JsonGetString(item, "id", "");
-            info.isAd = JsonUtil.JsonGetBool(item, "advideo", false);
+            info.isAd = false;
+            if (AppVersion.appCheckHasFinished)
+            {
+                info.isAd = JsonUtil.JsonGetBool(item, "advideo", false);
+            }
             info.pic = Common.GAME_RES_DIR + "/" + JsonUtil.JsonGetString(item, "pic", "place/image/" + info.id + ".png");
             info.type = JsonUtil.JsonGetString(item, "type", JsonUtil.JsonGetString(item, "game_type", ""));
             info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
