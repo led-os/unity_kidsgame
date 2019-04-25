@@ -103,21 +103,7 @@ public class UIHomeTopBar : UIView
         TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
     }
 
-    public void OnClickBtnMusic()
-    {
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        bool value = !ret;
-        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
-        if (value)
-        {
-            AudioPlay.main.PlayMusicBg();
-        }
-        else
-        {
-            AudioPlay.main.Stop();
-        }
-        UpdateBtnMusic();
-    }
+
     public void OnUIShareDidClick(ItemInfo item)
     {
         string title = Language.main.GetString("UIMAIN_SHARE_TITLE");
@@ -186,6 +172,35 @@ public class UIHomeTopBar : UIView
     {
 
     }
+
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.PlayMusicBg();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
+    }
+    public void OnClickBtnAdVideo()
+    {
+        if (Common.noad)
+        {
+            return;
+        }
+        if (!AppVersion.appCheckHasFinished)
+        {
+            return;
+        }
+        AdKitCommon.main.ShowAdVideo();
+    }
+
 
     public void OnClickBtnSetting()
     {
