@@ -66,7 +66,6 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
     {
         RunActionBtn();
         LayOut();
-        OnUIDidFinish();
 
         // AudioPlay.main.PlayUrl("https://cdn.feilaib.top/img/sounds/bg.mp3");
 
@@ -238,6 +237,7 @@ public class UIHomeShapeColor : UIHomeBase, IPopViewControllerDelegate
                       else
                       {
                           this.isActionFinish = true;
+                          OnUIDidFinish();
                           this.RunActionUpDown();
                       }
                   });

@@ -174,19 +174,13 @@ public class UIScreenShotController : UIView
 
 
         {
-
-
-            // //ICON
-            CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
-            //adhome
-            CreateDevice(DEVICE_NAME_AD, 1024, 500, false, true);
-            CreateDevice(DEVICE_NAME_AD, 1080, 480, false, true);
-
             // //ipadpro
             CreateDevice(DEVICE_NAME_IPADPRO, SCREEN_WIDTH_IPADPRO, SCREEN_HEIGHT_IPADPRO, true
             , true);
+
             //iphone
             CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
+
             //iphone_6_5
             CreateDevice(DEVICE_NAME_IPHONE_6_5, SCREEN_WIDTH_IPHONE_6_5, SCREEN_HEIGHT_IPHONE_6_5, true, true);
 
@@ -204,6 +198,16 @@ public class UIScreenShotController : UIView
 
             //   copy right huawei
             CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+
+        }
+
+        {
+            // //ICON
+            CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
+            //adhome
+            CreateDevice(DEVICE_NAME_AD, 1024, 500, false, true);
+
+            CreateDevice(DEVICE_NAME_AD, 1080, 480, false, true);
 
         }
         deviceInfoNow = listDevice[0];
