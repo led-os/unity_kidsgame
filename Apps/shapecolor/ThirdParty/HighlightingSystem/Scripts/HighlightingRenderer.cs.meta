@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6b7b95b73116c1f4d80639138709445f
+labels:
+- Glow
+- Effect
+- Outline
+- Highlight
+- Selection
+- System
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

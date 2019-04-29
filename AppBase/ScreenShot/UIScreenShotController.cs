@@ -39,6 +39,12 @@ public class UIScreenShotController : UIView
     public const int SCREEN_HEIGHT_IPHONE = 1242;
     public const string DEVICE_NAME_IPHONE = "iphone";
 
+    //1242x2688
+    //iPhone X Plus将配备6.5 英寸屏幕 分辨率1242x2688
+    public const int SCREEN_WIDTH_IPHONE_6_5 = 2688;
+    public const int SCREEN_HEIGHT_IPHONE_6_5 = 1242;
+    public const string DEVICE_NAME_IPHONE_6_5 = "iphone_6_5";
+
     //1080p
     public const int SCREEN_WIDTH_1080P = 1920;
     public const int SCREEN_HEIGHT_1080P = 1080;
@@ -181,7 +187,8 @@ public class UIScreenShotController : UIView
             , true);
             //iphone
             CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
-
+            //iphone_6_5
+            CreateDevice(DEVICE_NAME_IPHONE_6_5, SCREEN_WIDTH_IPHONE_6_5, SCREEN_HEIGHT_IPHONE_6_5, true, true);
 
             //  ipad
             CreateDevice(DEVICE_NAME_IPAD, SCREEN_WIDTH_IPAD, SCREEN_HEIGHT_IPAD, true, false);

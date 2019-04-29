@@ -8,6 +8,10 @@ using System.Text;
 
 public class GameManager
 {
+    public const string PLACE_ITEM_TYPE_NONE = "none";
+    public const string PLACE_ITEM_TYPE_VIDEO = "video";
+    public const string PLACE_ITEM_TYPE_LOCK = "lock";
+
     static List<object> listPlace;
     static public int placeLevel;
     HttpRequest httpReqPlaceList;
@@ -186,20 +190,36 @@ public class GameManager
             JsonData item = items[i];
             ItemInfo info = new ItemInfo();
             info.id = JsonUtil.JsonGetString(item, "id", "");
-            info.isAd = false;
-            if (AppVersion.appCheckHasFinished)
-            {
-                info.isAd = JsonUtil.JsonGetBool(item, "advideo", false);
-            }
+
             info.pic = Common.GAME_RES_DIR + "/" + JsonUtil.JsonGetString(item, "pic", "place/image/" + info.id + ".png");
-            info.type = JsonUtil.JsonGetString(item, "type", JsonUtil.JsonGetString(item, "game_type", ""));
+            info.game = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
+            info.type = JsonUtil.JsonGetString(item, "type", PLACE_ITEM_TYPE_NONE);
             info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
             info.icon = info.pic;
             info.language = JsonUtil.JsonGetString(item, "language", "language");
             // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
             info.index = i;
+
+            info.isAd = false;
+            if (AppVersion.appCheckHasFinished)
+            {
+                if (info.type == PLACE_ITEM_TYPE_VIDEO)
+                {
+                    info.isAd = true;
+                }
+                if (Common.isAndroid)
+                {
+                    if (info.type == PLACE_ITEM_TYPE_LOCK)
+                    {
+                        info.isAd = true;
+                    }
+                }
+            }
+
             GameManager.listPlace.Add(info);
         }
+
+        Debug.Log("ParsePlaceList count =" + GameManager.listPlace.Count);
     }
 
     public List<object> ParsePlaceList()

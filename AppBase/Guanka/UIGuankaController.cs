@@ -34,12 +34,12 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         LoadPrefab();
         switch (Common.appType)
         {
-            case AppType.SHAPECOLOR:
-                heightCell = 160;
-                break;
+            // case AppType.SHAPECOLOR:
+            //     heightCell = 160;
+            //     break;
 
             default:
-                heightCell = 256 + 128;
+                heightCell = 192;
                 break;
         }
 
