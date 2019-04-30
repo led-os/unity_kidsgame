@@ -201,13 +201,13 @@ public class GameManager
             info.index = i;
 
             info.isAd = false;
-            if (AppVersion.appCheckHasFinished)
+            if (AppVersion.appCheckHasFinished && (!Common.noad))
             {
                 if (info.type == PLACE_ITEM_TYPE_VIDEO)
                 {
                     info.isAd = true;
                 }
-                if (Common.isAndroid)
+                // if (Common.isAndroid)
                 {
                     if (info.type == PLACE_ITEM_TYPE_LOCK)
                     {
