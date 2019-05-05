@@ -1,75 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Moonma.SysImageLib;
 using Tacticsoft;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIGuankaController : UIGuankaBase, ITableViewDataSource
+public class UINetImage : UIView, ITableViewDataSource, INetImageParseDelegate
 {
-    public Button btnBack;
+
+
+    public GameObject objLayoutBtn;
+    public Button btnPlay;
+    public Button btnNetImage;
+    public Image imageBar;
+    public Image imageBg;
     public Text textTitle;
+    public Text textTips;
+
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
-    public Image imageBar;
-    public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
-
     int oneCellNum;
     int heightCell;
     int totalItem;
     List<object> listItem;
-    static public long tick;
 
-    Language languagePlace;
-    HttpRequest httpReqLanguage;
-
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
+    NetImageParseCommon netImageParse;
     void Awake()
     {
         LoadPrefab();
-        switch (Common.appType)
-        {
-            case AppType.PINTU:
-                heightCell = 400;
-                break;
-
-            default:
-                heightCell = 192;
-                break;
-        }
-
-
-
-        //bg
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
-        string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
-        if (Common.isWeb)
-        {
-            httpReqLanguage = new HttpRequest(OnHttpRequestFinished);
-            httpReqLanguage.Get(HttpRequest.GetWebUrlOfAsset(strlan));
-        }
-        else
-        {
-            byte[] data = FileUtil.ReadDataAuto(strlan);
-            OnGetLanguageFileDidFinish(FileUtil.FileIsExistAsset(strlan), data, true);
-        }
-
-
-
-        GameManager.main.ParseGuanka();
-        listItem = UIGameBase.listGuanka;
+        listItem = new List<object>();
+        heightCell = 256 + 128;
         UpdateTable(false);
         tableView.dataSource = this;
-        //tableView.ReloadData();
+        netImageParse = NetImageParseCommon.main;
+        netImageParse.CreateAPI(Source.QIHU_360);
+        netImageParse.SetDelegate(this);
+        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+
+        textTitle.text = Language.main.GetString("STR_NETIMAGE");
+        textTips.text = Language.main.GetString("STR_PLAY_ADVIDEO_TIPS");
 
     }
+
+    // Use this for initialization
     void Start()
     {
+
+        netImageParse.StartParseSortList();
+
         LayOut();
         OnUIDidFinish();
     }
@@ -77,58 +58,9 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            OnClickBtnBack();
-        }
+
     }
-    public override void PreLoadDataForWeb()
-    {
-        string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
-        httpReqLanguage = new HttpRequest(OnHttpRequestFinished);
-        httpReqLanguage.Get(HttpRequest.GetWebUrlOfAsset(strlan));
-    }
-    void OnGetLanguageFileDidFinish(bool isSuccess, byte[] data, bool isLocal)
-    {
 
-        {
-            //web
-            if (isSuccess)
-            {
-                languagePlace = new Language();
-                languagePlace.Init(data);
-                languagePlace.SetLanguage(Language.main.GetLanguage());
-            }
-            else
-            {
-                languagePlace = Language.main;
-            }
-        }
-
-        {
-            //textTitle.text = Language.main.GetString("STR_GUANKA");
-            int idx = GameManager.placeLevel;
-            Debug.Log("GameManager.placeTotal=" + GameManager.placeTotal + " idx=" + idx);
-            if (idx < GameManager.placeTotal)
-            {
-                ItemInfo info = GameManager.main.GetPlaceItemInfo(idx);
-                Debug.Log(info.title);
-                string str = languagePlace.GetString(info.title);
-                textTitle.text = str;
-
-                int fontsize = textTitle.fontSize;
-                float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
-                RectTransform rctran = imageBar.transform as RectTransform;
-                Vector2 sizeDelta = rctran.sizeDelta;
-                float oft = 0;
-                sizeDelta.x = str_w + fontsize + oft * 2;
-                Debug.Log("guanka title=" + str + " str_w=" + str_w + " fontsize=" + fontsize);
-                rctran.sizeDelta = sizeDelta;
-            }
-
-
-        }
-    }
     void LoadPrefab()
     {
         {
@@ -136,15 +68,23 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             cellPrefab = obj.GetComponent<UICellBase>();
         }
         {
-            GameObject obj = PrefabCache.main.Load(AppCommon.PREFAB_GUANKA_CELL_ITEM_APP);
-            if (obj == null)
-            {
-                obj = PrefabCache.main.Load(AppCommon.PREFAB_GUANKA_CELL_ITEM_COMMON);
-            }
-
+            GameObject obj = PrefabCache.main.Load("App/Prefab/NetImage/UINetImageCellItem");
 
             cellItemPrefab = obj.GetComponent<UICellItemBase>();
         }
+
+    }
+
+    public void OnClickBtnBack()
+    {
+        NaviViewController navi = this.controller.naviController;
+        if (navi != null)
+        {
+            navi.Pop();
+        }
+    }
+    public void OnClickBtnPlay()
+    {
 
     }
 
@@ -155,67 +95,59 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
             float w_image = rectTransform.rect.width;
             float h_image = rectTransform.rect.height;
-            float scalex = sizeCanvas.x / w_image;
-            float scaley = sizeCanvas.y / h_image;
-            float scale = Mathf.Max(scalex, scaley);
+            float scale = Common.GetMaxFitScale(w_image, h_image, sizeCanvas.x, sizeCanvas.y);
             imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
             //屏幕坐标 现在在屏幕中央
             imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
         }
 
-        UpdateTable(true);
     }
-
-    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    #region NetImageParse_Delegate 
+    public void OnNetImageParseDidParseSortList(NetImageParseBase parse, bool isSuccess, List<object> list)
     {
-        if (req == httpReqLanguage)
+        if ((isSuccess) && (list != null))
         {
-            OnGetLanguageFileDidFinish(isSuccess, data, false);
-
+            listItem.Clear();
+            foreach (object obj in list)
+            {
+                listItem.Add(obj);
+            }
+            UpdateTable(true);
         }
     }
-
-    void ShowShop()
+    public void OnNetImageParseDidParseImageList(NetImageParseBase parse, bool isSuccess, List<object> list)
     {
 
     }
-    void ShowParentGate()
-    {
-        ParentGateViewController.main.Show(null, null);
-        ParentGateViewController.main.ui.callbackClose = OnUIParentGateDidClose;
 
-    }
-    public void OnUIParentGateDidClose(UIParentGate ui, bool isLongPress)
+    #endregion
+
+    public void OnShowAdVideo()
     {
-        if (isLongPress)
-        {
-            ShowShop();
-        }
+        //AdKitCommon.main.callbackFinish = OnAdKitFinish;
+        AdKitCommon.main.ShowAdVideo();
     }
 
-    public void OnClickBtnBack()
-    {
-        NaviViewController navi = this.controller.naviController;
-        if (navi != null)
-        {
-            navi.Pop();
-        }
-
-    }
     #region GuankaItem_Delegate 
-    void GotoGame(int idx)
-    {
-        GameManager.gameLevel = idx;
-        GameManager.main.GotoGame(this.controller);
-    }
     public void OnCellItemDidClick(UICellItemBase item)
     {
         if (item.IsLock())
         {
             return;
         }
-        tick = Common.GetCurrentTimeMs();
-        GotoGame(item.index);
+        // GotoGame(item.index);
+        NaviViewController navi = this.controller.naviController;
+        if (navi != null)
+        {
+            NetImageListViewController p = NetImageListViewController.main;
+            p.index = item.index;
+            navi.Push(p);
+
+            ImageItemInfo info = listItem[item.index] as ImageItemInfo;
+            p.StartParseImageList(info);
+
+            OnShowAdVideo();
+        }
 
     }
 
@@ -224,13 +156,28 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
     void UpdateTable(bool isLoad)
     {
-        oneCellNum = 3;
+        float imageRatio = 1f;//w:h
+
+        float w_cell = Device.sizeDesign.x / 3;
         if (Device.isLandscape)
         {
-            oneCellNum = oneCellNum * 2;
+            w_cell = Device.sizeDesign.x / 6;
         }
+        RectTransform rctran = tableView.GetComponent<RectTransform>();
+        float w = AppSceneBase.main.sizeCanvas.x;
+        // w = rctran.rect.width;
+        Debug.Log("tableView rctran:" + rctran.rect + " w=" + w);
+        float num = (w / w_cell);
+        oneCellNum = (int)num;
+        if ((num - oneCellNum) > 0)
+        {
+            oneCellNum++;
+        }
+        w_cell = w / oneCellNum;
+        heightCell = (int)(w_cell / imageRatio);
 
-        int total = GameManager.maxGuankaNum;
+
+        int total = listItem.Count;
         totalItem = total;
         Debug.Log("total:" + total);
         numRows = total / oneCellNum;
@@ -263,7 +210,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             item.index = itemIndex;
             item.totalItem = totalItem;
             item.callbackClick = OnCellItemDidClick;
-
+            item.tagValue = UINetImageCellItem.TAG_IMAGE_SORT;
             cell.AddItem(item);
 
         }
@@ -340,4 +287,3 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
 
 }
-
