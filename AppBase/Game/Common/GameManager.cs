@@ -18,6 +18,10 @@ public class GameManager
 
     public UIViewController fromUIViewController;//来源
 
+    public float heightAdWorld;
+    public float heightAdScreen;
+    public float heightAdCanvas;
+
     static private GameManager _main = null;
     public static GameManager main
     {

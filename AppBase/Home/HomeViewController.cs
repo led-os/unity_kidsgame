@@ -48,7 +48,7 @@ public class HomeViewController : UIViewController
         if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD))
         {
             //至少在home界面显示一次视频广告
-            AdKitCommon.main.callbacAdVideokFinish = OnAdKitAdVideoFinish;
+            AdKitCommon.main.callbackAdVideoFinish = OnAdKitAdVideoFinish;
             if (uiHome != null)
             {
                 uiHome.OnClickBtnAdVideo();

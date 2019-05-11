@@ -128,6 +128,7 @@ public class UIGameBase : UIView
     public virtual void UpdateGuankaLevel(int level)
     {
         UpdateLanguage();
+        AdKitCommon.main.callbackFinish = OnAdKitFinish;
     }
     public virtual void UpdatePlaceLevel(int level)
     {
@@ -135,7 +136,7 @@ public class UIGameBase : UIView
 
 
     public void ParseGuankaItemId(int count_one_group)
-    { 
+    {
         listGuankaItemId = new List<object>();
 
         listGuanka = new List<object>();
@@ -173,7 +174,7 @@ public class UIGameBase : UIView
                 listGuankaItemId.Add(info);
             }
         }
-  
+
     }
 
     public virtual void PreLoadDataForWeb()
@@ -252,25 +253,41 @@ public class UIGameBase : UIView
         ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
     }
 
-    public virtual void AdBannerDidReceiveAd(int w, int h)
-    {
 
+    public void OnAdKitFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
+    {
+        OnGameAdKitFinish(type, status, str);
     }
 
-    public virtual void AdVideoDidFail(string str)
+    public virtual void OnGameAdKitFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
     {
+        if (type == AdKitCommon.AdType.BANNER)
+        {
+            if (status == AdKitCommon.AdStatus.SUCCESFULL)
+            {
+                int w = 0;
+                int h = 0;
+                int idx = str.IndexOf(":");
+                string strW = str.Substring(0, idx);
+                int.TryParse(strW, out w);
+                string strH = str.Substring(idx + 1);
+                int.TryParse(strH, out h);
+                Debug.Log("OnGameAdKitFinish AdBannerDidReceiveAd::w=" + w + " h=" + h);
 
+                Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+                GameManager.main.heightAdScreen = h + Device.heightSystemHomeBar;
+                GameManager.main.heightAdWorld = Common.ScreenToWorldHeight(mainCam, h);
+                GameManager.main.heightAdCanvas = Common.ScreenToCanvasHeigt(sizeCanvas, h);
+            }
+
+            if (status == AdKitCommon.AdStatus.FAIL)
+            {
+
+            }
+
+            LayOut();
+        }
     }
-
-    public virtual void AdVideoDidStart(string str)
-    {
-
-    }
-    public virtual void AdVideoDidFinish(string str)
-    {
-
-    }
-
 
     public void PlaySoundFromResource(string file)
     {
