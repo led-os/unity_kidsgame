@@ -666,11 +666,11 @@ public class UIGamePintu : UIGameBase, IGamePintuDelegate
         {
             if (status == AdKitCommon.AdStatus.SUCCESFULL)
             {
-                uiPintuOption.DoSliderValueChanged();
+                //uiPintuOption.DoSliderValueChanged();
             }
             if (status == AdKitCommon.AdStatus.FAIL)
             {
-                ShowAdVideoFailAlert();
+                //ShowAdVideoFailAlert();
             }
         }
     }

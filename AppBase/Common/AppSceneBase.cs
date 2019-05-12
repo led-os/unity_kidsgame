@@ -267,10 +267,10 @@ public class AppSceneBase : ScriptBase
 
         RectTransform rctranWorld = objMainWorld.GetComponent<RectTransform>();
         Vector2 size = Common.GetWorldSize(mainCamera);
-        w = size.x - oft_left - oft_right;
-        h = size.y - adBannerHeight_world - oft_top - oft_bottom;
-        y = mainCamera.orthographicSize - oft_top - h / 2;
-        //y = 0;
+        w = size.x;// - oft_left - oft_right;
+        h = size.y;// - adBannerHeight_world - oft_top - oft_bottom;
+        //y = mainCamera.orthographicSize - oft_top - h / 2;
+        y = 0;
         x = 0;
         float z = rctranWorld.position.z;
         rctranWorld.sizeDelta = new Vector2(w, h);

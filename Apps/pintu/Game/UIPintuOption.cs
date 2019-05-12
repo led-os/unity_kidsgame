@@ -26,7 +26,7 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
 
     AudioClip audioClipBtn;
 
-    private int[] pintuBlockNum = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }; 
+    private int[] pintuBlockNum = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
     private bool isNeedLayout = true;
     bool isTouchUp;
@@ -132,7 +132,7 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
     {
         float x, y, w, h;
         Vector2 sizeCanvas = this.frame.size;
-        float adbaner_h_canvas = GameManager.main.heightAdCanvas; 
+        float adbaner_h_canvas = GameManager.main.heightAdCanvas;
         float topbarHeightCanvas = 160;
         RectTransform rctranParent = this.GetComponent<RectTransform>();
         //text
@@ -196,8 +196,9 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
                 x = 0;
             }
             h = rctran.rect.height;
-            y = -sizeCanvas.y / 2;
+            y = -sizeCanvas.y / 2 + h;
             y += adbaner_h_canvas;
+            Debug.Log("adbaner_h_canvas=" + adbaner_h_canvas);
             rctran.sizeDelta = new Vector2(w, h);
             rctran.anchoredPosition = new Vector2(x, y);
         }
@@ -350,24 +351,25 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         if (isTouchUp)
         {
             slideValue = slider.value;
-            if (Application.isEditor)
-            {
-                DoSliderValueChanged();
-                return;
-            }
-            if (Common.noad || (!AppVersion.appCheckHasFinished))
-            {
-                DoSliderValueChanged();
-                return;
-            }
-            if (isNeedAdVideoTips)
-            {
-                game.ShowAdVideoTips();
-            }
-            else
-            {
-                game.OnShowAdVideo();
-            }
+            DoSliderValueChanged();
+            // if (Application.isEditor)
+            // {
+            //     DoSliderValueChanged();
+            //     return;
+            // }
+            // if (Common.noad || (!AppVersion.appCheckHasFinished))
+            // {
+            //     DoSliderValueChanged();
+            //     return;
+            // }
+            // if (isNeedAdVideoTips)
+            // {
+            //     game.ShowAdVideoTips();
+            // }
+            // else
+            // {
+            //     game.OnShowAdVideo();
+            // }
         }
     }
     public void DoSliderValueChanged()
@@ -423,6 +425,6 @@ public class UIPintuOption : UIView//, ISysImageLibDelegate
         }
     }
 
- 
+
 
 }

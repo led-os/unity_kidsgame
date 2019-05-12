@@ -33,7 +33,7 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
     Vector3 posItemWorld;
     //ItemInfo itemInfoSel;
     bool isItemHasSel;
-  
+
 
     float heightTopbarWorld;
     float itemPosZ = -1f;
@@ -53,7 +53,7 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
         listItemLeft = new List<UIPintuBlock>();
         listItemRight = new List<UIPintuBlock>();
         listItem = new List<UIPintuBlock>();
-       
+
 
         offsetTopbarY = 160;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
@@ -262,7 +262,7 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
 
     public void LayOutGamePic()
     {
-        float z = 0;
+        float x = 0, y = 0, z = 0, w = 0, h = 0, w_rect = 0, h_rect = 0;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         heightTopbarWorld = Common.CanvasToWorldHeight(mainCam, sizeCanvas, offsetTopbarY);
 
@@ -284,23 +284,43 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
             float pixsel_per_unit = 100;
             float tex_world_w = tex.width / pixsel_per_unit;
             float tex_world_h = tex.height / pixsel_per_unit;
-            float scale_x = sizeWorld.x / tex_world_w;
-            float scale_y = sizeWorld.y / tex_world_h;
-            float scale = Mathf.Min(scale_x, scale_y);
+
+            float pos_y = 0;
+            if (Device.isLandscape)
+            {
+                w_rect = sizeWorld.x;
+                h_rect = sizeWorld.y - heightTopbarWorld - GameManager.main.heightAdWorld;
+                pos_y = -heightTopbarWorld / 2 + GameManager.main.heightAdWorld / 2;
+            }
+            else
+            {
+                w_rect = sizeWorld.x;
+                h_rect = sizeWorld.y;
+                pos_y = 0;
+            }
+            float scale = Common.GetBestFitScale(tex_world_w, tex_world_h, w_rect, h_rect);
             gameScaleX = scale;
             gameScaleY = scale;
             //gamePicBgScale = scale;
             z = 0;
             objGamePic.transform.localScale = new Vector3(scale, scale, 1f);
             //rcTran.sizeDelta = new Vector2(tex_world_w, tex_world_h);
-            float pos_y = -heightTopbarWorld / 2;
-            if (!Device.isLandscape)
-            {
-                pos_y = 0;
-            }
+
             objGamePic.transform.localPosition = new Vector3(0, pos_y, z);
 
+
+            w = spRd.bounds.size.x;
+            h = spRd.bounds.size.y;
+            x = -w / 2;
+            y = pos_y - h / 2;
+            Debug.Log("game pic:gamePicBgScale=" + gamePicBgScale + " gameScaleX=" + gameScaleX + " x=" + x + " y=" + y + " w=" + w + " h=" + h);
+            rectMain = new Rect(x, y, w, h);
+
+            gameRectWidth = Common.WorldToScreenWidth(mainCam, w);
+
         }
+
+
     }
 
     public void LayOutBlock(bool isOption)
@@ -312,16 +332,7 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
         }
         if (objGamePic != null)
         {
-
-            if (isOption)
-            {
-                objGamePic.SetActive(false);
-            }
-            else
-            {
-
-                objGamePic.SetActive(true);
-            }
+            objGamePic.SetActive(!isOption);
         }
         //更新位置
         foreach (UIPintuBlock ui in listItem)
@@ -429,17 +440,6 @@ public class GamePintu : GameBase, IUIPintuBlockDelegate
             LayOutGamePic();
 
 
-            //rcTran.sizeDelta = new Vector2(tex_world_w, tex_world_h);
-            float pos_y = objGamePic.transform.localPosition.y;
-
-            w = spRd.bounds.size.x;
-            h = spRd.bounds.size.y;
-            x = -w / 2;
-            y = pos_y - h / 2;
-            Debug.Log("game pic:gamePicBgScale=" + gamePicBgScale + " gameScaleX=" + gameScaleX + " x=" + x + " y=" + y + " w=" + w + " h=" + h);
-            rectMain = new Rect(x, y, w, h);
-
-            gameRectWidth = Common.WorldToScreenWidth(mainCam, w);
         }
 
 

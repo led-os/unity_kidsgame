@@ -146,7 +146,7 @@ public class GameViewController : PopViewController
         RectTransform rctran = _gameBase.GetComponent<RectTransform>();
         float x, y, w, h;
         float adBannerHeight = 160f;
-
+        adBannerHeight = 0;
         //poivt (0.5,0.5)
         // w = rctranParent.rect.width;
         // h = rctranParent.rect.height-adBannerHeight;
@@ -155,13 +155,13 @@ public class GameViewController : PopViewController
         // rctran.sizeDelta = new Vector2(w,h);
         // rctran.anchoredPosition = new Vector2(x,y);
 
-        Vector2 pt = rctran.offsetMin;
-        pt.y = adBannerHeight;
-        if (gameType == AppType.NONGCHANG)
-        {
-            pt.y = 0;
-        }
-        rctran.offsetMin = pt;
+        // Vector2 pt = rctran.offsetMin;
+        // pt.y = adBannerHeight;
+        // if (gameType == AppType.NONGCHANG)
+        // {
+        //     pt.y = 0;
+        // }
+        // rctran.offsetMin = pt;
 
         AppSceneBase.main.UpdateMainWorldRect(adBannerHeight);
 
