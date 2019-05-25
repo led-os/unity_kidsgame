@@ -30,7 +30,24 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     void Awake()
     {
         LoadPrefab();
-        heightCell = 512;
+        switch (Common.appType)
+        {
+            case AppType.PINTU:
+                heightCell = 400;
+                break;
+            case AppType.FILLCOLOR:
+                heightCell = 400;
+                break;
+            case AppType.PAINT:
+                heightCell = 400;
+                break;
+
+            default:
+                //
+                heightCell = 512;
+                break;
+        }
+
         listItem = GameManager.main.ParsePlaceList();
         //bg
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GAME_BG, true);
@@ -63,15 +80,16 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         }
 
 
-        oneCellNum = 2;
-        if (Device.isLandscape)
-        {
-            oneCellNum = 2;
-        }
-
+        // oneCellNum = 2;
+        // if (Device.isLandscape)
+        // {
+        //     oneCellNum *= 2;
+        // }
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+        oneCellNum = (int)(sizeCanvas.x / heightCell);
         int total = listItem.Count;
         totalItem = total;
-        Debug.Log("total:" + total);
+        Debug.Log("total:" + total + " oneCellNum=" + oneCellNum);
         numRows = total / oneCellNum;
         if (total % oneCellNum != 0)
         {

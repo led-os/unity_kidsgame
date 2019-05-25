@@ -9,6 +9,9 @@ public class AppType
     public const string SHAPECOLOR = "shapecolor";
     public const string STICKER = "sticker";
     public const string NONGCHANG = "nongchang";
+    public const string FILLCOLOR = "fillcolor";
+    public const string PAINT = "paint";
+
     //kidsgame2
 
 

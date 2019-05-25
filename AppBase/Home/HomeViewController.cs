@@ -45,14 +45,18 @@ public class HomeViewController : UIViewController
         CreateUI();
         Debug.Log("HomeViewCon)troller ViewDidLoad");
 
-        if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD))
+        if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD) && (!GameManager.main.isShowGameAdInsert))
         {
             //至少在home界面显示一次视频广告
-            AdKitCommon.main.callbackAdVideoFinish = OnAdKitAdVideoFinish;
-            if (uiHome != null)
-            {
-                uiHome.OnClickBtnAdVideo();
-            }
+            //AdKitCommon.main.callbackAdVideoFinish = OnAdKitAdVideoFinish;
+            //   if (uiHome != null)
+            // {
+            //     uiHome.OnClickBtnAdVideo();
+            // }
+
+            //至少在home界面显示一次开机插屏
+            AdKitCommon.main.ShowAdInsert(100);
+
         }
         runCount++;
     }

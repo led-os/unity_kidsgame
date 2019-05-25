@@ -37,8 +37,15 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             case AppType.PINTU:
                 heightCell = 400;
                 break;
+            case AppType.FILLCOLOR:
+                heightCell = 400;
+                break;
+            case AppType.PAINT:
+                heightCell = 400;
+                break;
 
             default:
+                //
                 heightCell = 192;
                 break;
         }
@@ -224,12 +231,13 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
     void UpdateTable(bool isLoad)
     {
-        oneCellNum = 3;
-        if (Device.isLandscape)
-        {
-            oneCellNum = oneCellNum * 2;
-        }
-
+        // oneCellNum = 3;
+        // if (Device.isLandscape)
+        // {
+        //     oneCellNum = oneCellNum * 2;
+        // }
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+        oneCellNum = (int)(sizeCanvas.x / heightCell);
         int total = GameManager.maxGuankaNum;
         totalItem = total;
         Debug.Log("total:" + total);

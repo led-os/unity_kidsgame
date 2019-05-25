@@ -22,6 +22,8 @@ public class GameManager
     public float heightAdScreen;
     public float heightAdCanvas;
 
+    public bool isShowGameAdInsert;
+
     static private GameManager _main = null;
     public static GameManager main
     {
@@ -194,8 +196,12 @@ public class GameManager
             JsonData item = items[i];
             ItemInfo info = new ItemInfo();
             info.id = JsonUtil.JsonGetString(item, "id", "");
-
-            info.pic = Common.GAME_RES_DIR + "/" + JsonUtil.JsonGetString(item, "pic", "place/image/" + info.id + ".png");
+            string filepath = Common.GAME_RES_DIR + "/place/image/" + info.id;
+            info.pic = filepath + ".png";
+            if (!FileUtil.FileIsExistAsset(info.pic))
+            {
+                info.pic = filepath + ".jpg";
+            }
             info.game = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
             info.type = JsonUtil.JsonGetString(item, "type", PLACE_ITEM_TYPE_NONE);
             info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);

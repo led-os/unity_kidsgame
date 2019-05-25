@@ -20,8 +20,8 @@ public class UIGameBase : UIView
     static public List<object> listGuanka;
     public List<object> listGuankaItemId;//image id
     static public Language languageGame;
-    static public int heightAdBanner;
-    static public float heightAdBannerWorld;
+    //static public int heightAdBanner;
+    //static public float heightAdBannerWorld;
     public HttpRequest httpReqLanguage;
     private int _gameMode;
 
@@ -75,9 +75,11 @@ public class UIGameBase : UIView
         {
             _step = 1;
         }
+        GameManager.main.isShowGameAdInsert = false;
         if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
         {
             AdKitCommon.main.ShowAdInsert(100);
+            GameManager.main.isShowGameAdInsert = true;
         }
     }
 
