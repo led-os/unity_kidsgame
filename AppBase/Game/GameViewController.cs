@@ -7,6 +7,8 @@ public class GameViewController : PopViewController
 
     public const string STR_KEYNAME_VIEWALERT_COMMENT = "STR_KEYNAME_VIEWALERT_COMMENT";
     public UIGameBase gameBasePrefab;
+    public UIAdBanner uiAdBannerPrefab;
+    public UIAdBanner uiAdBanner;
     static private bool isShowComment = false;
     static public string gameType = Common.appType;
     static public string dirRootPrefab = "App/Prefab/Game";
@@ -41,6 +43,7 @@ public class GameViewController : PopViewController
     void Init()
     {
         LoadGame();
+        LoadUIAdBanner();
     }
 
     public override void ViewDidLoad()
@@ -130,6 +133,34 @@ public class GameViewController : PopViewController
         //gameBasePrefab.LoadPrefab();
     }
 
+    bool EnableUIAdBanner()
+    {
+        if (Application.isEditor)
+        {
+            //编辑器
+            return true;
+        }
+        if (Common.isIos && !AppVersion.appCheckHasFinished)
+        {
+            //ios 审核中
+            return true;
+        }
+
+        return false;
+    }
+
+    void LoadUIAdBanner()
+    {
+        if (!EnableUIAdBanner())
+        {
+            return;
+        }
+        GameObject obj = PrefabCache.main.Load(UIAdBanner.PREFAB_UIAdBanner);
+        if (obj != null)
+        {
+            uiAdBannerPrefab = obj.GetComponent<UIAdBanner>();
+        }
+    }
 
     void GotoGame(string name)
     {
@@ -167,6 +198,11 @@ public class GameViewController : PopViewController
 
         //显示横幅广告
         AdKitCommon.main.InitAdBanner();
+        if (EnableUIAdBanner())
+        {
+            uiAdBanner = (UIAdBanner)GameObject.Instantiate(uiAdBannerPrefab);
+            uiAdBanner.SetViewParent(AppSceneBase.main.canvasMain.gameObject);
+        }
 
 
         ShowUserComment();
