@@ -36,5 +36,5 @@ public class Source
     public const string MICROSOFT = "microsoft";
     public const string MOBVISTA = "mobvista";
     public const string VUNGLE = "vungle";
-
+    public const string MOONMA = "moonma";
 }

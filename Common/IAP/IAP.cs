@@ -27,7 +27,12 @@ namespace Moonma.IAP
                 if (Common.isiOS)
                 {
                     //ios 不同的app的product id都不能相同
-                    str = Common.GetAppPackage() + "." + IAP_PRODUCT_NOAD;
+                    str = Config.main.IDNoadIAP;
+                    if (Common.BlankString(str))
+                    {
+                        str = Common.GetAppPackage() + "." + IAP_PRODUCT_NOAD;
+                    }
+
                 }
                 if (Common.isAndroid)
                 {
@@ -72,12 +77,12 @@ namespace Moonma.IAP
         public void StartBuy(string product, bool isConsume)
         {
             BasePlatformWrapper platformWrapper = PlatformWrapper.platform;
-            platformWrapper.StartBuy(product,isConsume);
+            platformWrapper.StartBuy(product, isConsume);
         }
 
         public void StartBuy(string product)
         {
-            StartBuy(product,true);
+            StartBuy(product, true);
         }
 
         public void RestoreBuy(string product)

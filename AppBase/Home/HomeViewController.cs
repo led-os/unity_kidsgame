@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Moonma.AdKit.AdInsert;
 
 public class HomeViewController : UIViewController
 {
@@ -45,7 +46,8 @@ public class HomeViewController : UIViewController
         CreateUI();
         Debug.Log("HomeViewCon)troller ViewDidLoad");
 
-        if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD) && (!GameManager.main.isShowGameAdInsert))
+        //if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD) && (!GameManager.main.isShowGameAdInsert))
+        if ((!isAdVideoHasFinish) && (runCount == 0))
         {
             //至少在home界面显示一次视频广告
             //AdKitCommon.main.callbackAdVideoFinish = OnAdKitAdVideoFinish;
@@ -55,6 +57,9 @@ public class HomeViewController : UIViewController
             // }
 
             //至少在home界面显示一次开机插屏
+            int type = AdConfigParser.SOURCE_TYPE_INSERT;
+            string source = Source.GDT;
+            AdInsert.InitAd(source);
             AdKitCommon.main.ShowAdInsert(100);
 
         }

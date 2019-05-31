@@ -223,6 +223,14 @@ public class Config
     }
 
 
+    public string IDNoadIAP
+    {
+        get
+        {
+            return GetString("ID_NOAD_IAP", "");  
+        }
+    }
+
     public bool isHaveShop
     {
         get

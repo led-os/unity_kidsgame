@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class UIGameBase : UIView
 {
 
-    public const int GAME_AD_INSERT_SHOW_STEP = 1;
+    public const int GAME_AD_INSERT_SHOW_STEP = 2;
     public const string STR_KEYNAME_VIEWALERT_USER_GUIDE = "keyname_viewalert_user_guide";
     public const string STR_KEYNAME_VIEWALERT_GAME_FINISH = "keyname_viewalert_game_finish";
     public const string STR_KEYNAME_VIEWALERT_GOLD = "keyname_viewalert_gold";
@@ -78,6 +78,7 @@ public class UIGameBase : UIView
         GameManager.main.isShowGameAdInsert = false;
         if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
         {
+            AdKitCommon.main.InitAdInsert();
             AdKitCommon.main.ShowAdInsert(100);
             GameManager.main.isShowGameAdInsert = true;
         }
@@ -218,6 +219,14 @@ public class UIGameBase : UIView
         }
     }
 
+    public void OnGameWinBase()
+    {
+        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
+    }
+
+    public void OnGameFailBase()
+    {
+    }
     public void OnClickBtnMusic()
     {
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
@@ -252,7 +261,7 @@ public class UIGameBase : UIView
         {
             navi.Pop();
         }
-        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
+        // ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
     }
 
 

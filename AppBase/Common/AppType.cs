@@ -11,7 +11,7 @@ public class AppType
     public const string NONGCHANG = "nongchang";
     public const string FILLCOLOR = "fillcolor";
     public const string PAINT = "paint";
-
+    public const string XIEHANZI = "xiehanzi";
     //kidsgame2
 
 

@@ -43,7 +43,9 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             case AppType.PAINT:
                 heightCell = 400;
                 break;
-
+            case AppType.XIEHANZI:
+                heightCell = 320;
+                break;
             default:
                 //
                 heightCell = 192;
