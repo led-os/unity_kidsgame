@@ -83,6 +83,10 @@ public class UIAdBanner : UIView
 
     public void OnClickAd()
     {
+    }
+
+    public void OnClickAdInternal()
+    {
         ItemInfo info = listAd[indexAd];
         string url = info.url;
         if (!Common.BlankString(url))
@@ -172,10 +176,6 @@ public class UIAdBanner : UIView
         {
             parserJson(data, listAd);
             Invoke("OnUpdateTime", timeUpdate);
-        else
-            {
-
-            }
         }
     }
 
@@ -203,7 +203,6 @@ public class UIAdBanner : UIView
             }
 
             TextureUtil.UpdateRawImageTexture(image, tex, true);
-
 
             LayOut();
         }
