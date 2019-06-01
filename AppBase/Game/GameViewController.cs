@@ -136,18 +136,24 @@ public class GameViewController : PopViewController
 
     bool EnableUIAdBanner()
     {
+
         if (Application.isEditor)
         {
             //编辑器
             return true;
         }
+        bool ret = false;
+
         if (Common.isiOS && !AppVersion.appCheckHasFinished)
         {
             //ios 审核中
-            return true;
+            ret = true;
         }
-
-        return false;
+        if (Common.isRemoveAd)
+        {
+            ret = false;
+        }
+        return ret;
     }
 
     void LoadUIAdBanner()
@@ -174,6 +180,15 @@ public class GameViewController : PopViewController
             GameObject.Destroy(uiAdBanner.gameObject);
             uiAdBanner = null;
         }
+    }
+
+    public void OnRemoveAd()
+    {
+        if (uiAdBanner != null)
+        {
+            uiAdBanner.OnClickBtnClose();
+        }
+        DestroyUIAdBanner();
     }
 
 

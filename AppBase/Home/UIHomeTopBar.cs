@@ -236,7 +236,6 @@ public class UIHomeTopBar : UIView
 
     public void OnClickBtnNoADIAP()
     {
-
         if (Config.main.APP_FOR_KIDS)
         {
             ParentGateViewController.main.Show(null, null);

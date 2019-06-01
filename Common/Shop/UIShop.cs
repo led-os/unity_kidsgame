@@ -341,6 +341,7 @@ public class UIShop : UIView, ITableViewDataSource
             OnBuyFinish();
             //去除广告
             Common.noad = true;
+            Common.isRemoveAd = true;
         }
         if (str == IAP.UNITY_CALLBACK_BUY_DID_Fail)
         {

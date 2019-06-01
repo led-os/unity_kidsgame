@@ -179,6 +179,22 @@ public class Common
             PlayerPrefs.SetInt(key, ret);
         }
     }
+
+    static public bool isRemoveAd
+    {
+        get
+        {
+            string key = "KEY_HAS_REMOVE_AD";
+            return Common.Int2Bool(PlayerPrefs.GetInt(key, 0));
+        }
+        set
+        {
+            string key = "KEY_HAS_REMOVE_AD";
+            PlayerPrefs.SetInt(key, Common.Bool2Int(value));
+
+        }
+    }
+
     static public string appKeyName
     {
         get
@@ -203,7 +219,7 @@ public class Common
             int ret = 0;
             string key = "KEY_GAME_GOLD";
             ret = PlayerPrefs.GetInt(key, 0);
-             if (Application.isEditor)
+            if (Application.isEditor)
             {
                 ret = AppRes.GOLD_INIT_VALUE;
             }

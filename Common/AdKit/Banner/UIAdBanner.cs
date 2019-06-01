@@ -23,6 +23,9 @@ public class UIAdBanner : UIView
 
     HttpRequest httpReqBg;
     HttpRequest httpReqIcon;
+
+    bool isDownloadBg;
+    bool isDownloadIcon;
     int indexAd;
 
     /// <summary>
@@ -52,6 +55,8 @@ public class UIAdBanner : UIView
         textTitle.text = info.title;
         textDetail.text = info.description;
 
+        isDownloadBg = false;
+        isDownloadIcon = false;
 
         httpReqBg = new HttpRequest(OnHttpRequestFinishedImage);
         httpReqBg.Get(info.pic);
@@ -92,10 +97,17 @@ public class UIAdBanner : UIView
         {
             w = imageBg.texture.width;
             h = imageBg.texture.height;
-            float scalex = rctran.rect.width / w;
+
+
             float scaley = rctran.rect.height / h;
+            float scalex = scaley;
+            if (scalex * w > rctran.rect.width)
+            {
+                scalex = rctran.rect.width / w;
+            }
+
             //scalex = scalex/2;
-            scale = Common.GetBestFitScale(w, h, rctran.rect.width, rctran.rect.height) * ratio;
+            //scale = Common.GetBestFitScale(w, h, rctran.rect.width, rctran.rect.height) * ratio;
             imageBg.transform.localScale = new Vector3(scalex, scaley, 1.0f);
             w = w * scalex;
             h = h * scaley;
@@ -115,7 +127,7 @@ public class UIAdBanner : UIView
             if (imageAd.texture != null)
             {
                 w = imageBg.texture.width * imageBg.transform.localScale.x;
-                x = rctran.rect.width/2 - (rctranBg.anchoredPosition.x + w / 2);
+                x = rctran.rect.width / 2 - (rctranBg.anchoredPosition.x + w / 2);
                 x = -x;
                 y = 0;//rctranBg.anchoredPosition.y + h / 2;
                 rctranAd.anchoredPosition = new Vector2(x, y);
@@ -133,7 +145,7 @@ public class UIAdBanner : UIView
         {
             w = imageIcon.texture.width;//rectTransform.rect.width;
             h = imageIcon.texture.height;//rectTransform.rect.height;
-            scale = Common.GetBestFitScale(w, h, rctran.rect.height, rctran.rect.height)*0.8f;
+            scale = Common.GetBestFitScale(w, h, rctran.rect.height, rctran.rect.height) * 0.8f;
             imageIcon.transform.localScale = new Vector3(scale, scale, 1.0f);
 
             w = w * scale;
@@ -190,7 +202,9 @@ public class UIAdBanner : UIView
 
     public void OnClickBtnClose()
     {
-
+        int w_screen = 0;
+        int h_screen = 0;
+        AdKitCommon.main.AdBannerDidReceiveAd(w_screen.ToString() + ":" + h_screen.ToString());
     }
     public void StartParseAd()
     {
@@ -298,14 +312,16 @@ public class UIAdBanner : UIView
                 float value = (156 * 1f / 1024);
                 tex = TextureUtil.RoundRectTexture(tex, value);
                 image = imageIcon;
+                isDownloadIcon = true;
             }
             if (httpReqBg == req)
             {
+                isDownloadBg = true;
                 image = imageBg;
             }
 
             TextureUtil.UpdateRawImageTexture(image, tex, true);
-            if ((imageBg.texture != null) && (imageIcon.texture != null))
+            if ((isDownloadBg) && (isDownloadIcon))
             {
                 this.gameObject.SetActive(true);
                 LayOut();

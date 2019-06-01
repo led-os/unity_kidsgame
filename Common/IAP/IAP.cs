@@ -121,6 +121,7 @@ namespace Moonma.IAP
                 //viewAlert.Hide();
                 //去除广告
                 Common.noad = true;
+                Common.isRemoveAd = true;
 
                 ShowAlertRemoveAdFinish();
             }
