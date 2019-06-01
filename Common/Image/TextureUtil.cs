@@ -342,7 +342,7 @@ public class TextureUtil : MonoBehaviour
         UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
     }
 
-     static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize)
+    static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize)
     {
         UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
     }
@@ -358,6 +358,24 @@ public class TextureUtil : MonoBehaviour
             }
 
         }
+    }
+
+    //圆角   value = (156 * 1f / 1024);
+    static public Texture2D RoundRectTexture(Texture2D tex, float value)
+    {
+        int w = tex.width;
+        int h = tex.height;
+        RenderTexture rt = new RenderTexture(w, h, 0);
+        string strshader = "Custom/RoundRect";
+        //string str = FileUtil.ReadStringAsset(ShotBase.STR_DIR_ROOT_SHADER+"/ShaderRoundRect.shader");
+        Material mat = new Material(Shader.Find(strshader));//
+        //Debug.Log("RoundRectTexture:value=" + value);
+        //value = 0.1f;
+        //设置半径 最大0.5f
+        mat.SetFloat("_RADIUSBUCE", value);
+        Graphics.Blit(tex, rt, mat);
+        Texture2D texRet = TextureUtil.RenderTexture2Texture2D(rt);
+        return texRet;
     }
 
 

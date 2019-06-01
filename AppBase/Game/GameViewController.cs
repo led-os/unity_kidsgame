@@ -61,6 +61,7 @@ public class GameViewController : PopViewController
         Debug.Log("UIGameController.ViewDidUnLoad");
         AppSceneBase.main.ClearMainWorld();
         AdKitCommon.main.ShowAdBanner(false);
+        DestroyUIAdBanner();
     }
     public override void LayOutView()
     {
@@ -140,7 +141,7 @@ public class GameViewController : PopViewController
             //编辑器
             return true;
         }
-        if (Common.isIos && !AppVersion.appCheckHasFinished)
+        if (Common.isiOS && !AppVersion.appCheckHasFinished)
         {
             //ios 审核中
             return true;
@@ -161,6 +162,20 @@ public class GameViewController : PopViewController
             uiAdBannerPrefab = obj.GetComponent<UIAdBanner>();
         }
     }
+
+    void DestroyUIAdBanner()
+    {
+        if (!EnableUIAdBanner())
+        {
+            return;
+        }
+        if (uiAdBanner != null)
+        {
+            GameObject.Destroy(uiAdBanner.gameObject);
+            uiAdBanner = null;
+        }
+    }
+
 
     void GotoGame(string name)
     {
@@ -202,6 +217,7 @@ public class GameViewController : PopViewController
         {
             uiAdBanner = (UIAdBanner)GameObject.Instantiate(uiAdBannerPrefab);
             uiAdBanner.SetViewParent(AppSceneBase.main.canvasMain.gameObject);
+            UIViewController.ClonePrefabRectTransform(uiAdBannerPrefab.gameObject, uiAdBanner.gameObject);
         }
 
 

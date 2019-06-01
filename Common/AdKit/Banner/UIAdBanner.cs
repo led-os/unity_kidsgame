@@ -18,7 +18,7 @@ public class UIAdBanner : UIView
     public RawImage imageBg;
     public RawImage imageIcon;
     public RawImage imageAd;
-    float timeUpdate = 0.5f;//second
+    float timeUpdate = 30f;//second
     public List<ItemInfo> listAd;
 
     HttpRequest httpReqBg;
@@ -32,11 +32,16 @@ public class UIAdBanner : UIView
     {
         listAd = new List<ItemInfo>();
         indexAd = 0;
+        this.gameObject.SetActive(false);
+
+        TextureUtil.UpdateRawImageTexture(imageAd, "Common/UI/Home/AdBannerIconAd", true);
+
         StartParseAd();
     }
 
     public void OnUpdateTime()
     {
+        UpdateItem();
         Invoke("OnUpdateTime", timeUpdate);
     }
 
@@ -45,7 +50,7 @@ public class UIAdBanner : UIView
     {
         ItemInfo info = listAd[indexAd];
         textTitle.text = info.title;
-        textDetail.text = info.detail;
+        textDetail.text = info.description;
 
 
         httpReqBg = new HttpRequest(OnHttpRequestFinishedImage);
@@ -63,26 +68,114 @@ public class UIAdBanner : UIView
 
     public override void LayOut()
     {
+        float x, y, w, h, oft;
         RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
         RectTransform rctranBg = imageBg.GetComponent<RectTransform>();
+        RectTransform rctranIcon = imageIcon.GetComponent<RectTransform>();
+        RectTransform rctranAd = imageAd.GetComponent<RectTransform>();
+
+        RectTransform rctranTitle = textTitle.GetComponent<RectTransform>();
+        RectTransform rctranDetail = textDetail.GetComponent<RectTransform>();
+
         float scale = 1f;
         float ratio = 1f;
+        float x_left = 0;
+        oft = 16;
+
+        //banner 显示在屏幕底部
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+        x = 0;
+        y = Common.ScreenToCanvasHeigt(sizeCanvas, Device.heightSystemHomeBar);
+        rctran.anchoredPosition = new Vector2(x, y);
+
+
         {
-            scale = Common.GetBestFitScale(rctranBg.rect.width, rctranBg.rect.height, rctran.rect.width, rctran.rect.height) * ratio;
-            imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
+            w = imageBg.texture.width;
+            h = imageBg.texture.height;
+            float scalex = rctran.rect.width / w;
+            float scaley = rctran.rect.height / h;
+            //scalex = scalex/2;
+            scale = Common.GetBestFitScale(w, h, rctran.rect.width, rctran.rect.height) * ratio;
+            imageBg.transform.localScale = new Vector3(scalex, scaley, 1.0f);
+            w = w * scalex;
+            h = h * scaley;
+            x_left = rctranBg.anchoredPosition.x - w / 2;
+
+
+            w = rctran.rect.width;
+            h = rctran.rect.height;
+            int w_screen = (int)Common.CanvasToScreenWidth(sizeCanvas, w);
+            int h_screen = (int)Common.CanvasToScreenWidth(sizeCanvas, h);
+            Debug.Log("UIAdBanner AdBannerDidReceiveAd::w=" + w_screen + " h=" + h_screen);
+            AdKitCommon.main.AdBannerDidReceiveAd(w_screen.ToString() + ":" + h_screen.ToString());
+
+
+
+
+            if (imageAd.texture != null)
+            {
+                w = imageBg.texture.width * imageBg.transform.localScale.x;
+                x = rctran.rect.width/2 - (rctranBg.anchoredPosition.x + w / 2);
+                x = -x;
+                y = 0;//rctranBg.anchoredPosition.y + h / 2;
+                rctranAd.anchoredPosition = new Vector2(x, y);
+                w = imageAd.texture.width;//rectTransform.rect.width;
+                h = imageAd.texture.height;//rectTransform.rect.height;
+                float sz = rctran.rect.height / 3;
+                scale = Common.GetBestFitScale(w, h, sz, sz);
+                imageAd.transform.localScale = new Vector3(scale, scale, 1.0f);
+            }
+
+        }
+
+
+
+        {
+            w = imageIcon.texture.width;//rectTransform.rect.width;
+            h = imageIcon.texture.height;//rectTransform.rect.height;
+            scale = Common.GetBestFitScale(w, h, rctran.rect.height, rctran.rect.height)*0.8f;
+            imageIcon.transform.localScale = new Vector3(scale, scale, 1.0f);
+
+            w = w * scale;
+            h = h * scale;
+
+            x = x_left + oft + w / 2;
+            y = 0;
+            rctranIcon.anchoredPosition = new Vector2(x, y);
+
+            x_left = x + w / 2;
+        }
+
+
+
+        {
+            x = x_left + oft;
+            y = rctran.rect.height / 2 + 2;
+            rctranTitle.anchoredPosition = new Vector2(x, y);
         }
 
         {
-            float w = imageIcon.texture.width;//rectTransform.rect.width;
-            float h = imageIcon.texture.height;//rectTransform.rect.height;
-            scale = Common.GetBestFitScale(w, h, rctran.rect.height, rctran.rect.height);
-            imageIcon.transform.localScale = new Vector3(scale, scale, 1.0f);
+            x = x_left + oft;
+            y = -(rctran.rect.height / 2 + 2);
+            rctranDetail.anchoredPosition = new Vector2(x, y);
         }
+
+
+
 
     }
 
     public void OnClickAd()
     {
+        if (Config.main.APP_FOR_KIDS)
+        {
+            ParentGateViewController.main.Show(null, null);
+            ParentGateViewController.main.ui.callbackClose = OnUIParentGateDidClose;
+        }
+        else
+        {
+            OnClickAdInternal();
+        }
     }
 
     public void OnClickAdInternal()
@@ -101,7 +194,6 @@ public class UIAdBanner : UIView
     }
     public void StartParseAd()
     {
-        listApp = new List<ItemInfo>();
         HttpRequest http = new HttpRequest(OnHttpRequestFinished);
         http.Get(URL_AD_LIST);
     }
@@ -169,13 +261,21 @@ public class UIAdBanner : UIView
         }
     }
 
+    public void OnUIParentGateDidClose(UIParentGate ui, bool isLongPress)
+    {
+        if (isLongPress)
+        {
+            OnClickAdInternal();
+        }
+    }
     void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
     {
-        // Debug.Log("MoreAppParser OnHttpRequestFinished"); 
+        // Debug.Log("UIAdBanner OnHttpRequestFinished isSucces="+isSuccess); 
         if (isSuccess)
         {
             parserJson(data, listAd);
-            Invoke("OnUpdateTime", timeUpdate);
+            Debug.Log("UIAdBanner OnHttpRequestFinished listAd Count=" + listAd.Count);
+            Invoke("OnUpdateTime", 0);
         }
     }
 
@@ -183,7 +283,7 @@ public class UIAdBanner : UIView
 
     void OnHttpRequestFinishedImage(HttpRequest req, bool isSuccess, byte[] data)
     {
-        Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
+        //   Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
         //  return;
         if (isSuccess)
         {
@@ -195,6 +295,8 @@ public class UIAdBanner : UIView
             RawImage image = null;
             if (httpReqIcon == req)
             {
+                float value = (156 * 1f / 1024);
+                tex = TextureUtil.RoundRectTexture(tex, value);
                 image = imageIcon;
             }
             if (httpReqBg == req)
@@ -203,11 +305,14 @@ public class UIAdBanner : UIView
             }
 
             TextureUtil.UpdateRawImageTexture(image, tex, true);
-
-            LayOut();
+            if ((imageBg.texture != null) && (imageIcon.texture != null))
+            {
+                this.gameObject.SetActive(true);
+                LayOut();
+            }
         }
-    }
 
+    }
 }
 
 
