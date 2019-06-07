@@ -76,7 +76,8 @@ public class UIGameBase : UIView
             _step = 1;
         }
         GameManager.main.isShowGameAdInsert = false;
-        if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
+        // if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
+        if ((GameManager.gameLevel % _step) == 0)
         {
             AdKitCommon.main.InitAdInsert();
             AdKitCommon.main.ShowAdInsert(100);

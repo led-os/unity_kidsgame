@@ -47,7 +47,7 @@ public class HomeViewController : UIViewController
         Debug.Log("HomeViewCon)troller ViewDidLoad");
 
         //if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD) && (!GameManager.main.isShowGameAdInsert))
-        if ((!isAdVideoHasFinish) && (runCount == 0))
+        if (runCount == 0)
         {
             //至少在home界面显示一次视频广告
             //AdKitCommon.main.callbackAdVideoFinish = OnAdKitAdVideoFinish;
