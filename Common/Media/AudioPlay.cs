@@ -66,6 +66,10 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 
     public void PlayMusicBg()
     {
+        if (Common.isMonoPlayer)//isPC 
+        {
+            return;
+        }
         SetMusicBg();
         Play();
     }

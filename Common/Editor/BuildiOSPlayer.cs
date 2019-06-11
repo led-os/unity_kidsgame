@@ -76,7 +76,7 @@ public static class BuildiOSPlayer
         pbxProj.AddBuildProperty(targetGuid, "OTHER_LDFLAGS", "-ObjC");
 
         // 打开选项
-        pbxProj.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "YES");
+        //pbxProj.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "YES");
         pbxProj.SetBuildProperty(targetGuid, "CLANG_ENABLE_MODULES", "YES");
 
         //teamid 
