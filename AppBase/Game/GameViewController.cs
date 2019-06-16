@@ -142,6 +142,12 @@ public class GameViewController : PopViewController
             //编辑器
             return true;
         }
+
+        if (Common.isMonoPlayer)
+        {
+            return false;
+        }
+
         bool ret = false;
 
         if (Common.isiOS && !AppVersion.appCheckHasFinished)

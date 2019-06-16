@@ -10,6 +10,7 @@ public class UITouchEvent: MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     public const int STATUS_TOUCH_MOVE = 1;
     public const int STATUS_TOUCH_UP = 2;
     bool isTouchDown = false;
+    public int index;
     public OnUITouchEventDelegate callBackTouch { get; set; }
 
     //相当于touchDown

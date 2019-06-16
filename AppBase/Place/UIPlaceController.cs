@@ -50,8 +50,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 
         listItem = GameManager.main.ParsePlaceList();
         //bg
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GAME_BG, true);
-
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_PLACE_BG, true);//IMAGE_GAME_BG
 
         string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
         if (FileUtil.FileIsExistAsset(strlan))
