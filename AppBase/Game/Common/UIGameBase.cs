@@ -17,8 +17,7 @@ public class UIGameBase : UIView
     //public AudioClip audioClipBtn;
     public Button btnShare;
     public Button btnMusic;
-    static public List<object> listGuanka;
-    public List<object> listGuankaItemId;//image id
+    //static public List<object> listGuanka;
     static public Language languageGame;
     //static public int heightAdBanner;
     //static public float heightAdBannerWorld;
@@ -96,38 +95,8 @@ public class UIGameBase : UIView
     // public virtual int GetPlaceTotal()
     // {
     //     return 0;
-    // } 
-    public virtual int GetGuankaTotal()
-    {
-        return 0;
-    }
+    // }  
 
-    public virtual void CleanGuankaList()
-    {
-        if (listGuanka != null)
-        {
-            listGuanka.Clear();
-        }
-    }
-    public virtual int ParseGuanka()
-    {
-        Debug.Log("ParseGuanka UIGameBase");
-        return 0;
-    }
-
-    public virtual ItemInfo GetGuankaItemInfo(int idx)
-    {
-        if (listGuanka == null)
-        {
-            return null;
-        }
-        if (idx >= listGuanka.Count)
-        {
-            return null;
-        }
-        ItemInfo info = listGuanka[idx] as ItemInfo;
-        return info;
-    }
 
     public virtual void UpdateGuankaLevel(int level)
     {
@@ -137,50 +106,7 @@ public class UIGameBase : UIView
     public virtual void UpdatePlaceLevel(int level)
     {
     }
-
-
-    public void ParseGuankaItemId(int count_one_group)
-    {
-        listGuankaItemId = new List<object>();
-
-        listGuanka = new List<object>();
-        ItemInfo infoPlace = GameManager.main.GetPlaceItemInfo(GameManager.placeLevel);
-        string fileName = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(fileName); //((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
-        // Debug.Log("json::"+json);
-        JsonData root = JsonMapper.ToObject(json);
-        string type = (string)root["type"];
-        string picRoot = Common.GAME_RES_DIR + "/image/" + type + "/";
-
-        //search_items
-        JsonData items = root["items"];
-        for (int i = 0; i < items.Count; i++)
-        {
-            JsonData item = items[i];
-            ItemInfo info = new ItemInfo();
-            info.id = (string)item["id"];
-            info.pic = picRoot + info.id + ".png";
-            listGuankaItemId.Add(info);
-        }
-
-
-        //让总数是count_one_group的整数倍
-        int tmp = (listGuankaItemId.Count % count_one_group);
-        if (tmp > 0)
-        {
-            for (int i = 0; i < (count_one_group - tmp); i++)
-            {
-                ItemInfo infoId = listGuankaItemId[i] as ItemInfo;
-                ItemInfo info = new ItemInfo();
-                info.id = infoId.id;
-                info.pic = infoId.pic;
-                listGuankaItemId.Add(info);
-            }
-        }
-
-    }
-
+ 
     public virtual void PreLoadDataForWeb()
     {
     }

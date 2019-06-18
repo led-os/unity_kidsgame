@@ -71,7 +71,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
 
         GameManager.main.ParseGuanka();
-        listItem = UIGameBase.listGuanka;
+        listItem = GameGuankaParse.main.listGuanka;
         UpdateTable(false);
         tableView.dataSource = this;
         //tableView.ReloadData();

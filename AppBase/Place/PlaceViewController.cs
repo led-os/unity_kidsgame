@@ -26,7 +26,7 @@ public class PlaceViewController : UIViewController
     void Init()
     {
 
-        string strPrefab = "App/Prefab/Place/" + GetPrefabName();
+        string strPrefab = "AppCommon/Prefab/Place/" + GetPrefabName();
         string strPrefabDefault = "Common/Prefab/Place/UIPlaceController";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         if (obj == null)

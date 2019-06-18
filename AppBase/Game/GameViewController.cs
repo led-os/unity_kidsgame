@@ -11,7 +11,7 @@ public class GameViewController : PopViewController
     public UIAdBanner uiAdBanner;
     static private bool isShowComment = false;
     static public string gameType = Common.appType;
-    static public string dirRootPrefab = "App/Prefab/Game";
+    static public string dirRootPrefab = "AppCommon/Prefab/Game";
     static private GameViewController _main = null;
     public static GameViewController main
     {

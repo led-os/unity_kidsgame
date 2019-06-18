@@ -22,7 +22,7 @@ public class AdHomeViewController : UIViewController
 
     void Init()
     {
-        string strPrefab = "App/Prefab/ScreenShot/UIAdHomeController";
+        string strPrefab = "AppCommon/Prefab/ScreenShot/UIAdHomeController";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         uiPrefab = obj.GetComponent<UIShotBase>();
     }

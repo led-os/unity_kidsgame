@@ -8,13 +8,9 @@ using System.Text;
 
 public class GameManager
 {
-    public const string PLACE_ITEM_TYPE_NONE = "none";
-    public const string PLACE_ITEM_TYPE_VIDEO = "video";
-    public const string PLACE_ITEM_TYPE_LOCK = "lock";
 
-    static List<object> listPlace;
+
     static public int placeLevel;
-    HttpRequest httpReqPlaceList;
 
     public UIViewController fromUIViewController;//来源
 
@@ -42,14 +38,7 @@ public class GameManager
         get
         {
             int ret = 0;
-            // if (GameScene.gameBase != null)
-            {
-                GameManager.main.ParsePlaceList();
-                ret = GameManager.listPlace.Count;//GameScene.gameBase.GetPlaceTotal();
-            }
-
-
-
+            ret = GameGuankaParse.main.listPlace.Count;//GameScene.gameBase.GetPlaceTotal();
             return ret;
         }
     }
@@ -119,151 +108,28 @@ public class GameManager
     {
         get
         {
-            int ret = 0;
-
-
-            if (GameViewController.main.gameBase != null)
-            {
-                ret = GameViewController.main.gameBase.GetGuankaTotal();
-            }
+            int ret = GameGuankaParse.main.GetGuankaTotal();
             return ret;
         }
     }
-    void StartParsePlaceList()
-    {
-
-        if (GameManager.listPlace == null)
-        {
-            GameManager.listPlace = new List<object>();
-        }
-        if (GameManager.listPlace.Count > 0)
-        {
-            //已经解析完成
-            return;
-        }
-        string filepath = Common.GAME_RES_DIR + "/place/place_list.json";
-        if (Common.isWeb)
-        {
-            httpReqPlaceList = new HttpRequest(OnHttpRequestFinished);
-            httpReqPlaceList.Get(HttpRequest.GetWebUrlOfAsset(filepath));
-        }
-        else
-        {
-            byte[] data = FileUtil.ReadDataAuto(filepath);
-            OnGetPlaceListDidFinish(FileUtil.FileIsExistAsset(filepath), data, true);
-        }
-    }
-
-    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
-    {
-        if (req == httpReqPlaceList)
-        {
-            OnGetPlaceListDidFinish(isSuccess, data, false);
-
-        }
-    }
-    void OnGetPlaceListDidFinish(bool isSuccess, byte[] data, bool isLocal)
-    {
-        if (isSuccess)
-        {
-            ParsePlaceList(data);
-        }
-    }
-
-    void ParsePlaceList(byte[] data)
-    {
-        if ((GameManager.listPlace != null) && (GameManager.listPlace.Count != 0))
-        {
-            return;
-        }
-
-        string json = Encoding.UTF8.GetString(data);
-        // Debug.Log("json::"+json);
-        JsonData root = JsonMapper.ToObject(json);
-        JsonData items = null;
-        string key = "places";
-        if (Common.JsonDataContainsKey(root, key))
-        {
-            items = root[key];
-        }
-        else
-        {
-            items = root["items"];
-        }
-
-        for (int i = 0; i < items.Count; i++)
-        {
-            JsonData item = items[i];
-            ItemInfo info = new ItemInfo();
-            info.id = JsonUtil.JsonGetString(item, "id", "");
-            string filepath = Common.GAME_RES_DIR + "/place/image/" + info.id;
-            info.pic = filepath + ".png";
-            if (!FileUtil.FileIsExistAsset(info.pic))
-            {
-                info.pic = filepath + ".jpg";
-            }
-            info.game = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
-            info.type = JsonUtil.JsonGetString(item, "type", PLACE_ITEM_TYPE_NONE);
-            info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
-            info.icon = info.pic;
-            info.language = JsonUtil.JsonGetString(item, "language", "language");
-            // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
-            info.index = i;
-
-            info.isAd = false;
-            if (AppVersion.appCheckHasFinished && (!Common.noad))
-            {
-                if (info.type == PLACE_ITEM_TYPE_VIDEO)
-                {
-                    info.isAd = true;
-                }
-                // if (Common.isAndroid)
-                {
-                    if (info.type == PLACE_ITEM_TYPE_LOCK)
-                    {
-                        info.isAd = true;
-                    }
-                }
-            }
-
-            GameManager.listPlace.Add(info);
-        }
-
-        Debug.Log("ParsePlaceList count =" + GameManager.listPlace.Count);
-    }
-
     public List<object> ParsePlaceList()
     {
-        StartParsePlaceList();
-        return GameManager.listPlace;
+        return GameGuankaParse.main.listPlace;
     }
     public void CleanGuankaList()
     {
-        GameViewController.main.gameBase.CleanGuankaList();
+        GameGuankaParse.main.CleanGuankaList();
     }
     public ItemInfo GetPlaceItemInfo(int idx)
     {
-        ParsePlaceList();
-        int index = 0;
-        foreach (ItemInfo info in GameManager.listPlace)
-        {
-            //  if (info.tag == PlaceScene.PLACE_ITEM_TYPE_GAME)
-            {
-                if (index == idx)
-                {
-                    return info;
-                }
-                index++;
-            }
-        }
-
-        return null;
+        return GameGuankaParse.main.GetPlaceItemInfo(idx);
     }
 
     public void ParseGuanka()
     {
         CleanGuankaList();
-        GameViewController.main.gameBase.ParseGuanka();
+        //GameViewController.main.gameBase.ParseGuanka();
+        GameGuankaParse.main.ParseGuanka();
     }
 
     public void GotoGame(UIViewController fromController)
@@ -378,13 +244,13 @@ public class GameManager
             //必须在placeLevel设置之后再设置gameLevel
             GameManager.gameLevel = 0;
             ParseGuanka();
-            if (UIGameBase.listGuanka == null)
+            if (GameGuankaParse.main.listGuanka == null)
             {
                 Debug.Log("listGuanka is null");
             }
             else
             {
-                foreach (object obj in UIGameBase.listGuanka)
+                foreach (object obj in GameGuankaParse.main.listGuanka)
                 {
                     listRet.Add(obj);
                 }
@@ -400,7 +266,7 @@ public class GameManager
     public void PreLoadDataForWeb()
     {
         //place list
-        StartParsePlaceList();
+        ParsePlaceList();
 
         //place
         PlaceViewController.main.PreLoadDataForWeb();

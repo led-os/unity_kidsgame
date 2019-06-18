@@ -26,7 +26,7 @@ public class GuankaViewController : UIViewController
     void Init()
     {
 
-        string strPrefab = "App/Prefab/Guanka/" + GetPrefabName();
+        string strPrefab = "AppCommon/Prefab/Guanka/" + GetPrefabName();
         string strPrefabDefault = "Common/Prefab/Guanka/UIGuankaController";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         if (obj == null)

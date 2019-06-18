@@ -28,7 +28,7 @@ public class HomeViewController : UIViewController
 
     void Init()
     {
-        string strPrefab = "App/Prefab/Home/" + GetPrefabName();
+        string strPrefab = "AppCommon/Prefab/Home/" + GetPrefabName();
         string strPrefabDefault = "Common/Prefab/Home/UIHomeDefault";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         if (obj == null)

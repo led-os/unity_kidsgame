@@ -60,14 +60,14 @@ public class UIPay : ScriptBase, ITableViewDataSource
             ItemInfo info = new ItemInfo();
             info.source = Source.WEIXIN;
             info.title = Language.main.GetString("STR_PAY_WEIXIN");
-            info.pic = "App/UI/Pay/pay_icon_weixin";
+            info.pic = "AppCommon/UI/Pay/pay_icon_weixin";
             listItem.Add(info);
         }
         {
             ItemInfo info = new ItemInfo();
             info.source = Source.QQ;
             info.title = Language.main.GetString("STR_PAY_QQ");
-            info.pic = "App/UI/Pay/pay_icon_qq";
+            info.pic = "AppCommon/UI/Pay/pay_icon_qq";
             listItem.Add(info);
         }
 

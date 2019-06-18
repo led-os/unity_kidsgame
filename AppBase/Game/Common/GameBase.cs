@@ -10,6 +10,8 @@ public interface IGameDelegate
 {
     void OnGameDidWin(GameBase g);
     void OnGameDidFail(GameBase g);
+    void OnGameUpdateTitle(GameBase g,ItemInfo info,bool isshow);
+
 }
 
 public class GameBase : UIView

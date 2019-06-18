@@ -4,7 +4,7 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UISegment : MonoBehaviour, ISegmentItemDelegate
+public class UISegment : UIView, ISegmentItemDelegate
 {
     public TableView tableView;
     public GameObject objContent; 

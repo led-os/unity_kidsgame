@@ -23,7 +23,7 @@ public class IconViewController : UIViewController
 
     void Init()
     {
-        string strPrefab = "App/Prefab/ScreenShot/UIIconController";
+        string strPrefab = "AppCommon/Prefab/ScreenShot/UIIconController";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         uiPrefab = obj.GetComponent<UIShotBase>();
     }

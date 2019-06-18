@@ -8,19 +8,19 @@ public class AppCommon
     //string
     public const string STR_LANGUAGE_REPLACE = "xxx";
     //audio 
-    public const string AUDIO_BTN_CLICK = "App/Audio/BtnClick";
+    public const string AUDIO_BTN_CLICK = "AppCommon/Audio/BtnClick";
 
     //prefab
     public const string PREFAB_UICELLBASE = "Common/Prefab/TableView/UICellBase";
     public const string PREFAB_UISettingCellItem = "Common/Prefab/Setting/UISettingCellItem";
     public const string PREFAB_UILanguageCellItem = "Common/Prefab/Setting/UILanguageCellItem";
     public const string PREFAB_GUANKA_CELL_ITEM_COMMON = "Common/Prefab/Guanka/UIGuankaCellItem";
-    public const string PREFAB_GUANKA_CELL_ITEM_APP = "App/Prefab/Guanka/UIGuankaCellItem";
+    public const string PREFAB_GUANKA_CELL_ITEM_APP = "AppCommon/Prefab/Guanka/UIGuankaCellItem";
 
     public const string PREFAB_MOREAPP_CELL_ITEM = "Common/Prefab/MoreApp/UIMoreAppCellItem";
 
     public const string PREFAB_PLACE_CELL_ITEM_COMMON = "Common/Prefab/Place/UIPlaceCellItem";
-    public const string PREFAB_PLACE_CELL_ITEM_APP = "App/Prefab/Place/UIPlaceCellItem";
+    public const string PREFAB_PLACE_CELL_ITEM_APP = "AppCommon/Prefab/Place/UIPlaceCellItem";
 
     public const string PREFAB_SHOP_CELL_ITEM = "Common/Prefab/Shop/UIShopCellItem";
     public const string PREFAB_SETTING = "Common/Prefab/Setting/UISettingController";
@@ -30,7 +30,7 @@ public class AppCommon
     public const string PREFAB_UIImageText = "Common/Prefab/UIKit/UIImageText";
 
     //image
-    public const string IMAGE_SETTING_BG = "App/UI/Setting/SettingBg";
+    public const string IMAGE_SETTING_BG = "AppCommon/UI/Setting/SettingBg";
 
     public const string IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK = "App/UI/Guanka/guanka_item_unlock";
     public const string IMAGE_GUANKA_CELL_ITEM_BG_LOCK = "App/UI/Guanka/guanka_item_lock";
