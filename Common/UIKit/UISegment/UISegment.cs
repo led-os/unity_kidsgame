@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UISegment : UIView, ISegmentItemDelegate
 {
     public TableView tableView;
-    public GameObject objContent; 
+    public GameObject objContent;
     public SegmentItem segmentItem;
     public int numRows;
 
@@ -44,12 +44,12 @@ public class UISegment : UIView, ISegmentItemDelegate
         heightCell = 128;
         oneCellNum = 1;
         scrollRect = GetComponent<ScrollRect>();
-       // tableView.dataSource = this;
+        // tableView.dataSource = this;
     }
     // Use this for initialization
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -71,40 +71,42 @@ public class UISegment : UIView, ISegmentItemDelegate
             listItem = new List<SegmentItem>();
             //return;
         }
-         if(listItem.Count==0){
-             totalStringWidth = 0;
-         }
-        if(scrollRect==null){
+        if (listItem.Count == 0)
+        {
+            totalStringWidth = 0;
+        }
+        if (scrollRect == null)
+        {
             scrollRect = GetComponent<ScrollRect>();
         }
 
-         //横向滑动
-         int space_x = 10;
-         SegmentItem item = (SegmentItem)GameObject.Instantiate(segmentItem);
-         item.iDelegate = this;
-         item.index = listItem.Count;
-         listItem.Add(item);
-         item.transform.parent = objContent.transform;
-         item.colorSel = colorSel;
-         item.colorUnSel = colorUnSel;
-         item.textTitle.fontSize = itemFontSize;
-         item.UpdateInfo(info);
-         int str_width = Common.GetStringLength(info.title,AppString.STR_FONT_NAME,itemFontSize);
-        int offsetx = space_x*listItem.Count+totalStringWidth;
-        totalStringWidth+=str_width;
+        //横向滑动
+        int space_x = 10;
+        SegmentItem item = (SegmentItem)GameObject.Instantiate(segmentItem);
+        item.iDelegate = this;
+        item.index = listItem.Count;
+        listItem.Add(item);
+        item.transform.parent = objContent.transform;
+        item.colorSel = colorSel;
+        item.colorUnSel = colorUnSel;
+        item.textTitle.fontSize = itemFontSize;
+        item.UpdateInfo(info);
+        int str_width = Common.GetStringLength(info.title, AppString.STR_FONT_NAME, itemFontSize);
+        int offsetx = space_x * listItem.Count + totalStringWidth;
+        totalStringWidth += str_width;
         RectTransform rctranContent = objContent.transform as RectTransform;
-        float left_x = -rctranContent.rect.width/2;
+        float left_x = -rctranContent.rect.width / 2;
 
         RectTransform rctran = item.transform as RectTransform;
-        rctran.sizeDelta = new Vector2(str_width,rctranContent.rect.height);
-        float x = left_x+offsetx+rctran.sizeDelta.x/2;
-        Vector2 pos = new Vector2(x,0);
+        rctran.sizeDelta = new Vector2(str_width, rctranContent.rect.height);
+        float x = left_x + offsetx + rctran.sizeDelta.x / 2;
+        Vector2 pos = new Vector2(x, 0);
         //item.transform.position = pos;
-        
-        rctran.localScale = new Vector3(1f,1f,1f);
+
+        rctran.localScale = new Vector3(1f, 1f, 1f);
         //rctran.anchoredPosition = pos;
-       
-       //scrollRect.content.sizeDelta = new Vector2(space_x*listItem.Count+totalStringWidth,scrollRect.content.sizeDelta.y);
+
+        //scrollRect.content.sizeDelta = new Vector2(space_x*listItem.Count+totalStringWidth,scrollRect.content.sizeDelta.y);
 
 
     }
@@ -114,25 +116,32 @@ public class UISegment : UIView, ISegmentItemDelegate
         Select(0);
         //totalItem = listItem.Count;
         numRows = totalItem;
-       // tableView.ReloadData();
+        // tableView.ReloadData();
     }
     public SegmentItem GetItem(int idx)
     {
         SegmentItem item_ret = null;
-         foreach(SegmentItem item in listItem){
-            if(idx == item.index){
+        foreach (SegmentItem item in listItem)
+        {
+            if (idx == item.index)
+            {
                 item_ret = item;
                 break;
-            } 
+            }
         }
         return item_ret;
     }
-    void Select(int idx){
-        foreach(SegmentItem item in listItem){
-            if(idx == item.index){
+    public void Select(int idx)
+    {
+        foreach (SegmentItem item in listItem)
+        {
+            if (idx == item.index)
+            {
                 item.SetSelect(true);
                 //break;
-            }else{
+            }
+            else
+            {
                 item.SetSelect(false);
             }
         }
@@ -150,12 +159,13 @@ public class UISegment : UIView, ISegmentItemDelegate
     // }
     public void SegmentItemDidClick(SegmentItem item)
     {
-        if(item==null){
+        if (item == null)
+        {
             return;
         }
         Select(item.index);
         if (_delegate != null)
-        { 
+        {
             _delegate.SegmentDidClick(this, item);
         }
     }

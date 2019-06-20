@@ -262,6 +262,33 @@ public class GameManager
 
     }
 
+
+    public List<object> GetGuankaListOfPlace(int idx)
+    {
+        List<object> listRet = new List<object>();
+        {
+            GameManager.placeLevel = idx;
+            //必须在placeLevel设置之后再设置gameLevel
+            GameManager.gameLevel = 0;
+            ParseGuanka();
+            if (GameGuankaParse.main.listGuanka == null)
+            {
+                Debug.Log("listGuanka is null");
+            }
+            else
+            {
+                foreach (object obj in GameGuankaParse.main.listGuanka)
+                {
+                    listRet.Add(obj);
+                }
+            }
+
+
+        }
+        return listRet;
+
+    }
+
     //webgl 异步加载需要提前加载一些配置数据
     public void PreLoadDataForWeb()
     {
