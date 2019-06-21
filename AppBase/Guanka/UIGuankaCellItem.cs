@@ -17,7 +17,7 @@ public class UIGuankaCellItem : UICellItemBase
         textTitle.fontSize = (int)(height * 0.5f);
         imageSel.gameObject.SetActive(false);
         textTitle.gameObject.SetActive(true);
-        int idx_play = GameManager.gameLevelFinish + 1;
+        int idx_play = LevelManager.main.gameLevelFinish + 1;
         if (index > idx_play)
         {
             // if (!Application.isEditor)
@@ -41,7 +41,7 @@ public class UIGuankaCellItem : UICellItemBase
     }
     public override bool IsLock()
     {
-        if (index > (GameManager.gameLevelFinish + 1))
+        if (index > (LevelManager.main.gameLevelFinish + 1))
         {
             return true;
         }

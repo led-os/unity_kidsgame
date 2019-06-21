@@ -162,7 +162,7 @@ public class GuankaParseBase
         listGuankaItemId = new List<object>();
 
         listGuanka = new List<object>();
-        ItemInfo infoPlace = GetPlaceItemInfo(GameManager.placeLevel);
+        ItemInfo infoPlace = GetPlaceItemInfo(LevelManager.main.placeLevel);
         string fileName = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
         //FILE_PATH
         string json = FileUtil.ReadStringAsset(fileName); //((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;

@@ -48,7 +48,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
                 break;
         }
 
-        listItem = GameManager.main.ParsePlaceList();
+        listItem = LevelManager.main.ParsePlaceList();
         //bg
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_PLACE_BG, true);//IMAGE_GAME_BG
 
@@ -187,14 +187,14 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         {
             return;
         }
-        GameManager.placeLevel = item.index;
+        LevelManager.main.placeLevel = item.index;
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;
 
             if (Common.appType == AppType.STICKER)
             {
-                GameManager.main.ParseGuanka();
+                LevelManager.main.ParseGuanka();
                 navi.Push(GameViewController.main);
             }
             else

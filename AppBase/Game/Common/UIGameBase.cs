@@ -76,7 +76,7 @@ public class UIGameBase : UIView
         }
         GameManager.main.isShowGameAdInsert = false;
         // if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
-        if ((GameManager.gameLevel % _step) == 0)
+        if ((LevelManager.main.gameLevel % _step) == 0)
         {
             AdKitCommon.main.InitAdInsert();
             AdKitCommon.main.ShowAdInsert(100);
@@ -130,7 +130,7 @@ public class UIGameBase : UIView
 
     public void UpdateLanguage()
     {
-        ItemInfo info = GameManager.main.GetPlaceItemInfo(GameManager.placeLevel);
+        ItemInfo info = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
         string strlan = Common.GAME_RES_DIR + "/language/" + info.language + ".csv";
         languageGame = new Language();
         languageGame.Init(strlan);

@@ -121,6 +121,7 @@ public class UIScreenShotController : UIView
     /// </summary>
     void Awake()
     {
+        GameManager.main.isLoadGameScreenShot = true;
         iconConvert = this.gameObject.AddComponent<IconConvert>();
         screenShotConfig = new ScreenShotConfig();
         //mainCam = Common.GetMainCamera();
@@ -1025,6 +1026,8 @@ public class UIScreenShotController : UIView
     }
     public void OnClickSave()
     {
+        ShowScreenShotUI(false);
+        isRunDoAutoSaveOneScreenShot = false;
         StartCoroutine(OnSaveEnumerator());
     }
     void OnSave()
@@ -1204,6 +1207,10 @@ public class UIScreenShotController : UIView
 
         Debug.Log(string.Format("截屏了一张照片: {0}", filepath));
 
+        if (!isRunDoAutoSaveOneScreenShot)
+        {
+            ShowScreenShotUI(true);
+        }
 
     }
 }

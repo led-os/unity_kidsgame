@@ -164,7 +164,7 @@ public class UIHomeDefault : UIHomeBase
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;
-            int total = GameManager.placeTotal;
+            int total = LevelManager.main.placeTotal;
             if (total > 1)
             {
                 navi.Push(PlaceViewController.main);

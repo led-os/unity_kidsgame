@@ -70,7 +70,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
 
 
-    GameManager.main.ParseGuanka();
+        LevelManager.main.ParseGuanka();
         listItem = GameGuankaParse.main.listGuanka;
         UpdateTable(false);
         tableView.dataSource = this;
@@ -116,11 +116,11 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
 
         {
             //textTitle.text = Language.main.GetString("STR_GUANKA");
-            int idx = GameManager.placeLevel;
-            Debug.Log("GameManager.placeTotal=" + GameManager.placeTotal + " idx=" + idx);
-            if (idx < GameManager.placeTotal)
+            int idx = LevelManager.main.placeLevel;
+            Debug.Log("LevelManager.main.placeTotal=" + LevelManager.main.placeTotal + " idx=" + idx);
+            if (idx < LevelManager.main.placeTotal)
             {
-                ItemInfo info = GameManager.main.GetPlaceItemInfo(idx);
+                ItemInfo info = LevelManager.main.GetPlaceItemInfo(idx);
                 Debug.Log(info.title);
                 string str = languagePlace.GetString(info.title);
                 textTitle.text = str;
@@ -214,7 +214,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     #region GuankaItem_Delegate 
     void GotoGame(int idx)
     {
-        GameManager.gameLevel = idx;
+        LevelManager.main.gameLevel = idx;
         GameManager.main.GotoGame(this.controller);
     }
     public void OnCellItemDidClick(UICellItemBase item)
@@ -240,7 +240,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         // }
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         oneCellNum = (int)(sizeCanvas.x / heightCell);
-        int total = GameManager.maxGuankaNum;
+        int total = LevelManager.main.maxGuankaNum;
         totalItem = total;
         Debug.Log("total:" + total);
         numRows = total / oneCellNum;

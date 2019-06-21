@@ -74,7 +74,7 @@ public class ShotBase : MonoBehaviour
         // gameBase = GameScene.gameBase;
         // gameBase.ParseGuanka();
 
-        // listGuankaOfAllPlace = GameManager.GetGuankaListOfAllPlace();
+        // listGuankaOfAllPlace = LevelManager.GetGuankaListOfAllPlace();
 
     }
 
