@@ -1015,7 +1015,7 @@ public class UIScreenShotController : UIView
         // OnClickClearScreenShot();
 
         isAllMainDeviceFinish = false;
-        indexDevice = 0;
+        //indexDevice = 0;
         indexScreenShot = 0;
         tickTotalTimeSecond = Common.GetCurrentTimeSecond();
         isRunDoAutoSaveOneScreenShot = true;

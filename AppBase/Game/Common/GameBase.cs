@@ -22,6 +22,7 @@ public class GameBase : UIView
     public const int GAME_STATUS_FINISH = 2;//完成
 
     public List<object> listItem;
+    public ItemInfo infoGuankaItem;
     private IGameDelegate _delegate;
 
     public IGameDelegate iDelegate
