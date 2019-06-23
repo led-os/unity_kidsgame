@@ -11,6 +11,9 @@ public class LevelManager
 
 
     public int placeLevel;
+
+    public List<object> listGuankaItemId;//image id
+
     static private LevelManager _main = null;
     public static LevelManager main
     {
@@ -97,6 +100,33 @@ public class LevelManager
         GameGuankaParse.main.ParseGuanka();
     }
 
+
+    public void ParseGuankaItemId(int idxPlace)
+    {
+        listGuankaItemId = new List<object>();
+        ItemInfo infoPlace = GetPlaceItemInfo(idxPlace);
+        string fileName = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(fileName); //((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
+        // Debug.Log("json::"+json);
+        JsonData root = JsonMapper.ToObject(json);
+        string type = (string)root["type"];
+        string picRoot = Common.GAME_RES_DIR + "/image/" + type + "/";
+
+        //search_items
+        JsonData items = root["items"];
+        for (int i = 0; i < items.Count; i++)
+        {
+            JsonData item = items[i];
+            ItemInfo info = new ItemInfo();
+            info.id = (string)item["id"];
+            info.pic = picRoot + info.id + ".png";
+            listGuankaItemId.Add(info);
+        }
+
+  
+    }
+
     public void GotoPreLevel()
     {
 
@@ -118,7 +148,7 @@ public class LevelManager
         //Debug.Log("gameLevel=" + gameLevel + " maxGuankaNum=" + maxGuankaNum);
         if (gameLevel >= maxGuankaNum)
         {
-           // Debug.Log("GotoNextPlace:gameLevel=" + .gameLevel + " maxGuankaNum=" + maxGuankaNum);
+            // Debug.Log("GotoNextPlace:gameLevel=" + .gameLevel + " maxGuankaNum=" + maxGuankaNum);
             GotoNextPlace();
             return;
 
@@ -148,7 +178,7 @@ public class LevelManager
     {
 
         placeLevel--;
-        if ( placeLevel < 0)
+        if (placeLevel < 0)
         {
             placeLevel = placeTotal - 1;
 

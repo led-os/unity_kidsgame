@@ -29,7 +29,7 @@ public class UILanguage : UIView, ITableViewDataSource
         textTitle.color = AppRes.colorTitle;
         textTitle.text = Language.main.GetString("STR_LANGUAGE");
         LoadPrefab();
-        TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_SETTING_BG, true);
+        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
     }
 
     // Use this for initialization

@@ -125,8 +125,8 @@ public class UIScreenShotController : UIView
         iconConvert = this.gameObject.AddComponent<IconConvert>();
         screenShotConfig = new ScreenShotConfig();
         //mainCam = Common.GetMainCamera();
-
-
+        LevelManager.main.ParsePlaceList();
+        LevelManager.main.ParseGuanka();
         InitDevice();
         SetScreen(deviceInfoNow.width, deviceInfoNow.height);
     }
@@ -493,7 +493,7 @@ public class UIScreenShotController : UIView
     {
         if (isRunDoAutoSaveOneScreenShot)
         {
-            OnClickSave();
+            DoClickSave();
         }
     }
 
@@ -1024,10 +1024,15 @@ public class UIScreenShotController : UIView
 
 
     }
+
     public void OnClickSave()
     {
-        ShowScreenShotUI(false);
         isRunDoAutoSaveOneScreenShot = false;
+        DoClickSave();
+    }
+    public void DoClickSave()
+    {
+        ShowScreenShotUI(false);
         StartCoroutine(OnSaveEnumerator());
     }
     void OnSave()

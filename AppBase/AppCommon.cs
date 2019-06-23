@@ -30,12 +30,6 @@ public class AppCommon
     public const string PREFAB_UIImageText = "Common/Prefab/UIKit/UIImageText";
 
     //image
-    public const string IMAGE_SETTING_BG = "AppCommon/UI/Setting/SettingBg";
-
-    public const string IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK = "App/UI/Guanka/guanka_item_unlock";
-    public const string IMAGE_GUANKA_CELL_ITEM_BG_LOCK = "App/UI/Guanka/guanka_item_lock";
-    public const string IMAGE_GUANKA_CELL_ITEM_BG_PLAY = "App/UI/Guanka/guanka_item_playing";
-
     static public float scaleBase
     {
         get

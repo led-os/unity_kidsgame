@@ -46,7 +46,7 @@ public class UIPay : ScriptBase, ITableViewDataSource
         heightCell = 256 + 128;
 
         //bg
-       TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_SETTING_BG,true);
+       TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG,true);
 
         topBarOffsetYNormal = objTopBar.GetComponent<RectTransform>().offsetMax.y;
 

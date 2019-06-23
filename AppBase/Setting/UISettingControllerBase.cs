@@ -46,7 +46,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
         LoadPrefab();
 
 
-        TextureUtil.UpdateImageTexture(imageBg, AppCommon.IMAGE_SETTING_BG, true);
+        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
 
         {
             string str = Language.main.GetString(AppString.STR_SETTING);

@@ -19,7 +19,7 @@ public class UIHomeTopBar : UIView
     public Button btnMore;
     public Button btnAdVideo;
     public Button btnMusic;
-
+    public Button btnLearn;
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -229,9 +229,12 @@ public class UIHomeTopBar : UIView
 
     }
 
+    public void OnClickBtnLearn()
+    {
+       
+        MoreViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
-
-
+    }
 
 
     public void OnClickBtnNoADIAP()

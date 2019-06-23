@@ -36,10 +36,10 @@ public class UIMoreAppCellItem : UICellItemBase
     {
         HttpRequest http = new HttpRequest(OnHttpRequestFinished);
         http.Get(pic);
-        viewLoading.Show(true);
+        //viewLoading.Show(true);
         if (http.isReadFromCatch)
         {
-            viewLoading.Show(false);
+          //  viewLoading.Show(false);
         }
     }
 
@@ -69,7 +69,7 @@ public class UIMoreAppCellItem : UICellItemBase
             float scale = Common.GetBestFitScale(w,h,rctranCellItem.rect.width,rctranCellItem.rect.height);
             imageItem.transform.localScale = new Vector3(scale, scale, 1.0f);
 
-            viewLoading.Show(false);
+           // viewLoading.Show(false);
         }
         else
         {
