@@ -120,6 +120,10 @@ public class LayOutScale : LayOutBase
             RawImage rawimage = obj.GetComponent<RawImage>();
             if (rawimage != null)
             {
+                if (rawimage.texture == null)
+                {
+                    return;
+                }
                 w = rawimage.texture.width;
                 h = rawimage.texture.height;
             }
@@ -128,6 +132,14 @@ public class LayOutScale : LayOutBase
                 Image image = obj.GetComponent<Image>();
                 if (image != null)
                 {
+                    if (image.sprite == null)
+                    {
+                        return;
+                    }
+                    if (image.sprite.texture == null)
+                    {
+                        return;
+                    }
                     w = image.sprite.texture.width;
                     h = image.sprite.texture.height;
                 }

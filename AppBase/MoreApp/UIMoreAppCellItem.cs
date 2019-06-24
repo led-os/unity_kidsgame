@@ -36,10 +36,10 @@ public class UIMoreAppCellItem : UICellItemBase
     {
         HttpRequest http = new HttpRequest(OnHttpRequestFinished);
         http.Get(pic);
-        //viewLoading.Show(true);
+        viewLoading.Show(true);
         if (http.isReadFromCatch)
         {
-          //  viewLoading.Show(false);
+            viewLoading.Show(false);
         }
     }
 
@@ -47,14 +47,14 @@ public class UIMoreAppCellItem : UICellItemBase
     void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
     {
         Debug.Log("MoreAppParser OnHttpRequestFinished:isSuccess=" + isSuccess);
-     //  return;
-           if (isSuccess)
+        //  return;
+        if (isSuccess)
         {
             if (!MoreViewController.main.isActive)
             {
                 return;
             }
-           Texture2D tex = LoadTexture.LoadFromData(data);
+            Texture2D tex = LoadTexture.LoadFromData(data);
             TextureUtil.UpdateRawImageTexture(imageItem, tex, true);
             if (!req.isReadFromCatch)
             {
@@ -64,12 +64,12 @@ public class UIMoreAppCellItem : UICellItemBase
             RectTransform rctran = imageItem.GetComponent<RectTransform>();
             float w = imageItem.texture.width;//rectTransform.rect.width;
             float h = imageItem.texture.height;//rectTransform.rect.height;
-            
-            RectTransform rctranCellItem = this.gameObject.GetComponent<RectTransform>(); 
-            float scale = Common.GetBestFitScale(w,h,rctranCellItem.rect.width,rctranCellItem.rect.height);
+
+            RectTransform rctranCellItem = this.gameObject.GetComponent<RectTransform>();
+            float scale = Common.GetBestFitScale(w, h, rctranCellItem.rect.width, rctranCellItem.rect.height);
             imageItem.transform.localScale = new Vector3(scale, scale, 1.0f);
 
-           // viewLoading.Show(false);
+            viewLoading.Show(false);
         }
         else
         {
