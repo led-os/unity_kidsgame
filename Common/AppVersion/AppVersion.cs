@@ -34,6 +34,16 @@ public class AppVersion
     {
         get
         {
+
+            if (Application.isEditor)
+            {
+                //编辑器
+                return true;
+            }
+            if (Common.isMonoPlayer)//isPC
+            {
+                return false;
+            }
             if (Common.isAndroid)
             {
                 if (Config.main.channel == Source.TAPTAP)

@@ -67,7 +67,7 @@ public class UIGameBase : UIView
         ParentGateViewController.main.ui.callbackClose = callbackClose;
     }
 
-    public void ShowAdInsert(int step)
+    public void ShowAdInsert(int step, bool isAlwasy)
     {
         int _step = step;
         if (_step <= 0)
@@ -75,8 +75,20 @@ public class UIGameBase : UIView
             _step = 1;
         }
         GameManager.main.isShowGameAdInsert = false;
-        // if ((GameManager.gameLevel != 0) && ((GameManager.gameLevel % _step) == 0))
-        if ((LevelManager.main.gameLevel % _step) == 0)
+        bool isshow = false;
+        if (isAlwasy)
+        {
+            isshow = true;
+        }
+        else
+        {
+            if ((LevelManager.main.gameLevel != 0) && ((LevelManager.main.gameLevel % _step) == 0))
+            //if ((LevelManager.main.gameLevel % _step) == 0)
+            {
+                isshow = true;
+            }
+        }
+        if (isshow)
         {
             AdKitCommon.main.InitAdInsert();
             AdKitCommon.main.ShowAdInsert(100);
@@ -106,7 +118,7 @@ public class UIGameBase : UIView
     public virtual void UpdatePlaceLevel(int level)
     {
     }
- 
+
     public virtual void PreLoadDataForWeb()
     {
     }
@@ -148,9 +160,13 @@ public class UIGameBase : UIView
 
     public void OnGameWinBase()
     {
-        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP);
+        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP, false);
     }
 
+    public void OnGameWinBase2(bool isAlwasyShowAd)
+    {
+        ShowAdInsert(GAME_AD_INSERT_SHOW_STEP, isAlwasyShowAd);
+    }
     public void OnGameFailBase()
     {
     }

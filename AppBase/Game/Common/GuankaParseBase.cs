@@ -62,6 +62,10 @@ public class GuankaParseBase
 
     void ParsePlaceList(byte[] data)
     {
+        if (data == null)
+        {
+            return;
+        }
         if ((_listPlace != null) && (_listPlace.Count != 0))
         {
             return;

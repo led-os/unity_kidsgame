@@ -282,15 +282,17 @@ public class AdConfigParser
         Debug.Log("StartParseConfig:" + url);
 
         listPlatform = new List<AdInfo>();
+        //直接从本地读取
+        //OnHttpRequestFinished(null, false, null);
+        ParseJsonDataApp();
 
+        //common 在后面
         ParseJsonDataCommon();
         ParseJsonPriority();
 
         // HttpRequest http = new HttpRequest(OnHttpRequestFinished);
         // http.Get(url);
 
-        //直接从本地读取
-        OnHttpRequestFinished(null, false, null);
 
 
     }
@@ -357,8 +359,44 @@ public class AdConfigParser
         string str = Encoding.UTF8.GetString(data);
         JsonData root = JsonMapper.ToObject(str);
         ParsePlatformData(root);
+        if (Config.main.channel == Source.XIAOMI)
+        {
+            //小米 系统开屏 广告单价高 不再开启应用开屏广告
+            //AdConfig.SetEnableAdSplash(false);
+        }
+        OnConfiFinish();
     }
 
+
+    void ParseJsonDataApp()
+    {
+        string filename = "ad_config_ios.json";
+        if (AppVersion.appForPad)
+        {
+            filename = "ad_config_ios_hd.json";
+        }
+        if (Common.isAndroid)
+        {
+            filename = "ad_config_android.json";
+            if (AppVersion.appForPad)
+            {
+                filename = "ad_config_android_hd.json";
+            }
+        }
+        if (Common.isWinUWP)
+        {
+            filename = "ad_config_win.json";
+            if (AppVersion.appForPad)
+            {
+                filename = "ad_config_win_hd.json";
+            }
+        }
+
+        string filepath = Common.RES_CONFIG_DATA + "/adconfig/" + filename;
+
+        byte[] datatmp = FileUtil.ReadDataFromResources(filepath);
+        ParseData(datatmp);
+    }
 
     void ParseJsonDataCommon()
     {
@@ -507,43 +545,9 @@ public class AdConfigParser
         }
         else
         {
-            Debug.Log("StartParseConfig:OnHttpRequestFinished Fail");
 
-            string filename = "ad_config_ios.json";
-            if (AppVersion.appForPad)
-            {
-                filename = "ad_config_ios_hd.json";
-            }
-            if (Common.isAndroid)
-            {
-                filename = "ad_config_android.json";
-                if (AppVersion.appForPad)
-                {
-                    filename = "ad_config_android_hd.json";
-                }
-            }
-            if (Common.isWinUWP)
-            {
-                filename = "ad_config_win.json";
-                if (AppVersion.appForPad)
-                {
-                    filename = "ad_config_win_hd.json";
-                }
-            }
-
-            string filepath = Common.RES_CONFIG_DATA + "/adconfig/" + filename;
-
-            byte[] datatmp = FileUtil.ReadDataFromResources(filepath);
-            ParseData(datatmp);
-
+            ParseJsonDataApp();
         }
 
-
-        if (Config.main.channel == Source.XIAOMI)
-        {
-            //小米 系统开屏 广告单价高 不再开启应用开屏广告
-            //AdConfig.SetEnableAdSplash(false);
-        }
-        OnConfiFinish();
     }
 }

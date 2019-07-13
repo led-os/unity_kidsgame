@@ -8,11 +8,13 @@ public class UIHomeAppCenter : UIView
     public const string AD_JSON_FILE_KIDS = "applist_home_kids.json";
     public const string AD_JSON_FILE_SMALL_GAME = "applist_home_minigame.json";
 
+    //微信小程序id:wx621ff1107207384c
+    public const string APPCENTER_HTTP_URL_HEAD = "";//http://www.mooncore.cn/moonma/app_center/
     //http://www.mooncore.cn/moonma/app_center/applist_home_smallgame.json
-    public const string APPCENTER_HTTP_URL_HOME_SMALL_GAME = "http://www.mooncore.cn/moonma/app_center/" + AD_JSON_FILE_SMALL_GAME;
+    public const string APPCENTER_HTTP_URL_HOME_SMALL_GAME = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/Unity/app_center/applist_home_minigame.json?sign=4b79dab72806704c30be94312351cacd&t=1561688564";
 
     //http://www.mooncore.cn/moonma/app_center/applist_home_kids.json
-    public const string APPCENTER_HTTP_URL_HOME_KIDS_GAME = "http://www.mooncore.cn/moonma/app_center/" + AD_JSON_FILE_KIDS;
+    public const string APPCENTER_HTTP_URL_HOME_KIDS_GAME = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/Unity/app_center/applist_home_kids.json?sign=0dc2a5bf8e85d12b9515afb3cf87cfe1&t=1561688516";
     public Button btnAppIcon0;
     public Button btnAppIcon1;
     public Button btnAppIcon2;

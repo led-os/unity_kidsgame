@@ -32,7 +32,7 @@ public class MoreAppParser
         http.Get(url);
     }
 
-   static public void parserJson(byte[] data,List<ItemInfo> list)
+    static public void parserJson(byte[] data, List<ItemInfo> list)
     {
         string str = Encoding.UTF8.GetString(data);
         JsonData root = JsonMapper.ToObject(str);
@@ -67,15 +67,13 @@ public class MoreAppParser
             key = Source.APPSTORE;
             if (Common.isAndroid)
             {
-                key = Source.TAPTAP;
+                key = Config.main.channel;
             }
-           
+
             if (Common.JsonDataContainsKey(jsonAppId, key))
             {
-                 info.appid = (string)jsonAppId[key];
+                info.appid = (string)jsonAppId[key];
             }
-
-
             JsonData jsonUrl = current["URL"];
             key = Source.IOS;
             if (Common.isAndroid)
@@ -85,8 +83,12 @@ public class MoreAppParser
             info.url = (string)jsonUrl[key];
 
             string appname = Common.GetAppName();
-            //(GetAppIdCur() != info.appid)
-            if (!Common.BlankString(info.url) && (!appname.Contains(info.title)) && (!(Common.GetAppPackage() + ".pad").Contains(info.id)))
+            bool isAdd = true;
+            if (Common.BlankString(info.appid) || Common.BlankString(info.url) || appname.Contains(info.title) || (Common.GetAppPackage() + ".pad").Contains(info.id))
+            {
+                isAdd = false;
+            }
+            if (isAdd)
             {
                 list.Add(info);
 
@@ -97,7 +99,7 @@ public class MoreAppParser
 
     void parserAppList(byte[] data)
     {
-        parserJson(data,listApp);
+        parserJson(data, listApp);
 
         if (this.callback != null)
         {

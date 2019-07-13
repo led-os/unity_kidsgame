@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public class UIMoreAppController : UIView, ITableViewDataSource
 {
-
+    //微信小程序id:wx621ff1107207384c
 
     //public const string APPCENTER_HTTP_URL_HOME = "http://42.96.196.180/moonma/app_center/applist_home.json";
-    public const string APPCENTER_HTTP_URL_HOME_KIDS_GAME = "http://www.mooncore.cn/moonma/app_center/applist_moreapp_kids.json";
-    public const string APPCENTER_HTTP_URL_HOME_SMALL_GAME = "http://www.mooncore.cn/moonma/app_center/applist_moreapp_minigame.json";
+    public const string APPCENTER_HTTP_URL_HOME_KIDS_GAME = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/Unity/app_center/applist_moreapp_kids.json?sign=03a98060722081f3f1eb4214765177b9&t=1561688618";
+    public const string APPCENTER_HTTP_URL_HOME_SMALL_GAME = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/Unity/app_center/applist_moreapp_minigame.json?sign=5a5971a8613fc2ab9e6264b96ed81089&t=1561688651";
     public const string APPCENTER_HTTP_URL_SORT = "http://www.mooncore.cn/moonma/app_center/applist_sort.json";
     public GameObject objTopBar;
     public GameObject objTableViewTemplate;

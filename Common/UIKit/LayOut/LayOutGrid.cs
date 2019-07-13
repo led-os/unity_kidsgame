@@ -38,6 +38,10 @@ public class LayOutGrid : LayOutBase
     {
         int idx = 0;
         int r = 0, c = 0;
+        if (!enableLayout)
+        {
+            return;
+        }
         /* 
         foreach (Transform child in objMainWorld.transform)这种方式遍历子元素会漏掉部分子元素
         */
@@ -63,7 +67,8 @@ public class LayOutGrid : LayOutBase
                 continue;
             }
 
-            r = idx / col;
+          //  LayoutElement
+           r = idx / col;
             c = idx - r * col;
 
             //从顶部往底部显示

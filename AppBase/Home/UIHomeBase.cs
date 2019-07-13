@@ -37,21 +37,22 @@ public class UIHomeBase : UIView
         LevelManager.main.ParsePlaceList();
 
         audioClipBtnPlay = AudioCache.main.Load(AppCommon.AUDIO_BTN_CLICK);
-        uiHomeAppCenter.gameObject.SetActive(true);
-        if (!AppVersion.appCheckHasFinished)
+        if (uiHomeAppCenter != null)
         {
-            uiHomeAppCenter.gameObject.SetActive(false);
-        }
-        if (Common.isAndroid)
-        {
-            if ((Config.main.channel == Source.GP) || (Config.main.channel == Source.HUAWEI))
+            uiHomeAppCenter.gameObject.SetActive(true);
+            if (!AppVersion.appCheckHasFinished)
             {
-                //GP市场不显示
                 uiHomeAppCenter.gameObject.SetActive(false);
             }
+            if (Common.isAndroid)
+            {
+                if ((Config.main.channel == Source.GP))//|| (Config.main.channel == Source.HUAWEI)
+                {
+                    //GP市场不显示
+                    uiHomeAppCenter.gameObject.SetActive(false);
+                }
+            }
         }
-
-
         if (btnAdVideo != null)
         {
             btnAdVideo.gameObject.SetActive(true);
@@ -274,14 +275,6 @@ public class UIHomeBase : UIView
 
     public void OnClickBtnAdVideo()
     {
-        if (Common.noad)
-        {
-            return;
-        }
-        if (!AppVersion.appCheckHasFinished)
-        {
-            return;
-        }
         AdKitCommon.main.ShowAdVideo();
     }
 

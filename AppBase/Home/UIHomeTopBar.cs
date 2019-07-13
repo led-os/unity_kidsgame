@@ -189,15 +189,7 @@ public class UIHomeTopBar : UIView
         UpdateBtnMusic();
     }
     public void OnClickBtnAdVideo()
-    {
-        if (Common.noad)
-        {
-            return;
-        }
-        if (!AppVersion.appCheckHasFinished)
-        {
-            return;
-        }
+    { 
         AdKitCommon.main.ShowAdVideo();
     }
 

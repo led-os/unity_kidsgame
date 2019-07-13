@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LayOutBase : MonoBehaviour
 {
+    public bool enableLayout = true;
     public virtual void LayOut()
     {
 
