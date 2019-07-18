@@ -221,7 +221,7 @@ public class Common
             ret = PlayerPrefs.GetInt(key, 0);
             if (Application.isEditor)
             {
-                ret = AppRes.GOLD_INIT_VALUE;
+               // ret = AppRes.GOLD_INIT_VALUE;
             }
             return ret;
         }

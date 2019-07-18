@@ -227,7 +227,7 @@ public class Config
     {
         get
         {
-            return GetString("ID_NOAD_IAP", "");  
+            return GetString("ID_NOAD_IAP", "");
         }
     }
 

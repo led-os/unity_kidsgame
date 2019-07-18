@@ -51,6 +51,10 @@ public class UIAdBanner : UIView
 
     public void UpdateItem()
     {
+        if (listAd == null || (listAd.Count == 0))
+        {
+            return;
+        }
         ItemInfo info = listAd[indexAd];
         textTitle.text = info.title;
         textDetail.text = info.description;
