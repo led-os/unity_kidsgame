@@ -8,6 +8,22 @@ public delegate void OnAppVersionUpdateDelegate(AppVersion app);
 
 public class AppVersion
 {
+    //包名	商店
+    //com.android.vending	Google Play
+    //com.tencent.android.qqdownloader	应用宝
+    //com.qihoo.appstore	360手机助手
+    //com.baidu.appsearch	百度手机助
+    //com.xiaomi.market	小米应用商店
+    //com.wandoujia.phoenix2	豌豆荚
+    //com.huawei.appmarket	华为应用市场
+    //com.taobao.appcenter	淘宝手机助手
+    //com.hiapk.marketpho	安卓市场
+    public const string PACKAGE_APPSTORE_HUAWEI = "com.huawei.appmarket";
+    public const string PACKAGE_APPSTORE_XIAOMI = "com.xiaomi.market";
+    public const string PACKAGE_APPSTORE_GP = "com.android.vending";
+    public const string PACKAGE_APPSTORE_TAPTAP = "com.huawei.appmarket";
+
+
     public const string STRING_KEY_APP_CHECK_FINISHED = "app_check_finished";
     static private AppVersion _main = null;
     public static AppVersion main
@@ -183,10 +199,31 @@ public class AppVersion
         ItemInfo info = Config.main.listAppStore[0];
         DoComment(info);
     }
+
+
+    //https://blog.csdn.net/pz789as/article/details/78223517
+    //跳转到appstore写评论
+    public void GotoToAppstoreApp(string app, string marketPkg)
+    {
+        if (Common.isAndroid)
+        {
+            AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
+            AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
+            intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_VIEW"));
+            AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
+            AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "market://details?id=" + app);
+            intentObject.Call<AndroidJavaObject>("setData", uriObject);
+            intentObject.Call<AndroidJavaObject>("setPackage", marketPkg);
+            AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
+            currentActivity.Call("startActivity", intentObject);
+        }
+    }
     public void DoComment(ItemInfo info)
     {
         string strappid = Config.main.GetAppIdOfStore(info.source);
         string strUrlComment = "";
+        string appstorePackage = "";
         switch (info.source)
         {
             case Source.APPSTORE:
@@ -201,22 +238,31 @@ public class AppVersion
             case Source.TAPTAP:
                 {
                     strUrlComment = "https://www.taptap.com/app/" + strappid + "/review";
+                    appstorePackage = PACKAGE_APPSTORE_TAPTAP;
                 }
                 break;
             case Source.XIAOMI:
                 {
                     strUrlComment = "http://app.xiaomi.com/details?id=" + Common.GetAppPackage();
+                    appstorePackage = PACKAGE_APPSTORE_XIAOMI;
                 }
                 break;
             case Source.HUAWEI:
                 {
                     //http://appstore.huawei.com/app/C100270155
                     strUrlComment = "http://appstore.huawei.com/app/C" + strappid;
+                    appstorePackage = PACKAGE_APPSTORE_HUAWEI;
                 }
                 break;
 
 
         }
+        if (Common.isAndroid)
+        {
+            GotoToAppstoreApp(Common.GetAppPackage(),appstorePackage);
+            return;
+        }
+
         string url = strUrlComment;
         if (!Common.BlankString(url))
         {

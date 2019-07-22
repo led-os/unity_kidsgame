@@ -11,7 +11,7 @@ public class CaiCaiLeItemInfo : ItemInfo
 
 }
 
-public class UIGameCaiCaiLe : UIGameBase
+public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 {
 
     public GameObject objTopBar;
@@ -223,7 +223,7 @@ public class UIGameCaiCaiLe : UIGameBase
 
             }
 
-            float y_bottom_limite = -sizeCanvas.y / 2 + topbarHeightCanvas+16;
+            float y_bottom_limite = -sizeCanvas.y / 2 + topbarHeightCanvas + 16;
             if ((y - h / 2) < y_bottom_limite)
             {
                 y = y_bottom_limite + h / 2;
@@ -283,7 +283,7 @@ public class UIGameCaiCaiLe : UIGameBase
 
     void ShowShop()
     {
-        ShopViewController.main.Show(null, null);
+        ShopViewController.main.Show(null, this);
     }
 
     public void OnNotEnoughGold(UIWordBar bar, bool isUpdate)
@@ -376,4 +376,8 @@ public class UIGameCaiCaiLe : UIGameBase
         base.OnClickBtnBack();
     }
 
+    public void OnPopViewControllerDidClose(PopViewController controller)
+    {
+        UpdateGold();
+    }
 }

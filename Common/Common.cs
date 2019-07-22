@@ -221,7 +221,7 @@ public class Common
             ret = PlayerPrefs.GetInt(key, 0);
             if (Application.isEditor)
             {
-               // ret = AppRes.GOLD_INIT_VALUE;
+                // ret = AppRes.GOLD_INIT_VALUE;
             }
             return ret;
         }
@@ -659,15 +659,15 @@ public class Common
         {
             appname = Config.main.GetAppNameJson(Device.isLandscape);
         }
-        //string appname = Language.main.GetString(AppString.APP_NAME);
+        appname = Language.main.GetString(AppString.APP_NAME);
 
         //去除hd
-        // int idxtmp = appname.IndexOf("HD");
-        // if (idxtmp > 0)
-        // {
-        //     string strtmp = appname.Substring(0, idxtmp);
-        //     appname = strtmp;
-        // }
+        int idxtmp = appname.IndexOf("HD");
+        if (idxtmp > 0)
+        {
+            string strtmp = appname.Substring(0, idxtmp);
+            appname = strtmp;
+        }
 
         return appname;
     }
