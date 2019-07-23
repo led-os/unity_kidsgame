@@ -265,34 +265,30 @@ public class UIHomeAppCenter : UIView
             return;
         }
         ItemInfo info = listApp[idx];
-
+        string appstorePackage = "";
+        string appstore = Source.APPSTORE;
         if (Common.isAndroid)
         {
-            string appstorePackage = "";
-
             if (Config.main.channel == Source.TAPTAP)
             {
+                appstore = Source.TAPTAP;
                 appstorePackage = AppVersion.PACKAGE_APPSTORE_TAPTAP;
             }
 
             if (Config.main.channel == Source.XIAOMI)
             {
+                appstore = Source.XIAOMI;
                 appstorePackage = AppVersion.PACKAGE_APPSTORE_XIAOMI;
             }
             if (Config.main.channel == Source.HUAWEI)
             {
+                appstore = Source.HUAWEI;
                 appstorePackage = AppVersion.PACKAGE_APPSTORE_HUAWEI;
             }
 
-            AppVersion.main.GotoToAppstoreApp(info.id, appstorePackage);
-            return;
         }
+        AppVersion.main.GotoToAppstoreApp(appstore, info.id, appstorePackage, info.url);
 
-        if (Common.BlankString(info.url))
-        {
-            return;
-        }
-        Application.OpenURL(info.url);
 
     }
 

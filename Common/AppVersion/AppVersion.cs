@@ -203,21 +203,36 @@ public class AppVersion
 
     //https://blog.csdn.net/pz789as/article/details/78223517
     //跳转到appstore写评论
-    public void GotoToAppstoreApp(string app, string marketPkg)
+    public void GotoToAppstoreApp(string appstore, string app, string marketPkg, string url)
     {
         if (Common.isAndroid)
         {
-            AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
-            AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
-            intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_VIEW"));
-            AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
-            AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "market://details?id=" + app);
-            intentObject.Call<AndroidJavaObject>("setData", uriObject);
-            intentObject.Call<AndroidJavaObject>("setPackage", marketPkg);
-            AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
-            currentActivity.Call("startActivity", intentObject);
+            if (appstore != Source.TAPTAP)
+            {
+                AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
+                AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
+                intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_VIEW"));
+                AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
+                AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "market://details?id=" + app);
+                intentObject.Call<AndroidJavaObject>("setData", uriObject);
+                intentObject.Call<AndroidJavaObject>("setPackage", marketPkg);
+                AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
+                currentActivity.Call("startActivity", intentObject);
+
+                return;
+            }
+
         }
+
+
+        if (!Common.BlankString(url))
+        {
+            Application.OpenURL(url);
+        }
+
+
+
     }
     public void DoComment(ItemInfo info)
     {
@@ -257,23 +272,21 @@ public class AppVersion
 
 
         }
-        if (Common.isAndroid)
-        {
-            GotoToAppstoreApp(Common.GetAppPackage(),appstorePackage);
-            return;
-        }
+
+
 
         string url = strUrlComment;
         if (!Common.BlankString(url))
         {
             OnUICommentDidClick(null);
             Debug.Log("strUrlComment::" + url);
-            Application.OpenURL(url);
         }
         else
         {
             Debug.Log("strUrlComment is Empty");
         }
+        GotoToAppstoreApp(info.source, Common.GetAppPackage(), appstorePackage, url);
+
     }
     public void StartParseVersion()
     {
