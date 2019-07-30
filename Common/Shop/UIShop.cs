@@ -413,9 +413,9 @@ public class UIShop : UIView, ITableViewDataSource
             {
                 string str_date = GetDateString();
                 PlayerPrefs.SetString(KEY_HAS_COMMENT, str_date);
-                AppVersion.main.callBackCommentClick = OnUICommentDidClick;
-                AppVersion.main.OnComment();
-
+                //AppVersion.main.callBackCommentClick = OnUICommentDidClick;
+                //AppVersion.main.OnComment();
+                AppVersion.main.GotoComment();
             }
 
         }

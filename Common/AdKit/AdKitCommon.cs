@@ -23,9 +23,11 @@ public class AdKitCommon : MonoBehaviour
         CLOSE
     }
     public static AdKitCommon main;
+    public bool enableBanner = true;
     bool isAdVideoFinish;
     public OnAdKitFinishDelegate callbackFinish { get; set; }
     public OnAdKitFinishDelegate callbackAdVideoFinish { get; set; }
+
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -54,6 +56,10 @@ public class AdKitCommon : MonoBehaviour
 
     public void InitAdBanner()
     {
+        if (!enableBanner)
+        {
+            return;
+        }
         if (Common.noad)
         {
             return;
@@ -136,6 +142,10 @@ public class AdKitCommon : MonoBehaviour
 
     public void ShowAdBanner(bool isShow)
     {
+        if (!enableBanner)
+        {
+            return;
+        }
         AdBanner.ShowAd(isShow);
     }
     public void ShowAdVideo()

@@ -21,7 +21,7 @@ public class AppVersion
     public const string PACKAGE_APPSTORE_HUAWEI = "com.huawei.appmarket";
     public const string PACKAGE_APPSTORE_XIAOMI = "com.xiaomi.market";
     public const string PACKAGE_APPSTORE_GP = "com.android.vending";
-    public const string PACKAGE_APPSTORE_TAPTAP = "com.huawei.appmarket";
+    public const string PACKAGE_APPSTORE_TAPTAP = "com.taptap.market";
 
 
     public const string STRING_KEY_APP_CHECK_FINISHED = "app_check_finished";
@@ -179,6 +179,45 @@ public class AppVersion
 
     }
 
+
+    public string GetUrlOfComment(string source)
+    {
+        string url = "";
+        string strappid = Config.main.appId;
+        switch (source)
+        {
+            case Source.APPSTORE:
+                {
+                    url = "https://itunes.apple.com/cn/app/id" + strappid;
+                    if (!IPInfo.isInChina)
+                    {
+                        url = "https://itunes.apple.com/us/app/id" + strappid;
+                    }
+                }
+                break;
+            case Source.TAPTAP:
+                {
+                    url = "https://www.taptap.com/app/" + strappid + "/review";
+                }
+                break;
+            case Source.XIAOMI:
+                {
+                    url = "http://app.xiaomi.com/details?id=" + Common.GetAppPackage();
+                }
+                break;
+            case Source.HUAWEI:
+                {
+                    //http://appstore.huawei.com/app/C100270155
+                    url = "http://appstore.huawei.com/app/C" + strappid;
+                }
+                break;
+
+
+        }
+        return url;
+    }
+
+
     public void OnUICommentDidClick(ItemInfo item)
     {
         if (callBackCommentClick != null)
@@ -199,12 +238,39 @@ public class AppVersion
         ItemInfo info = Config.main.listAppStore[0];
         DoComment(info);
     }
+    public void GotoComment()
+    {
+        string appstorePackage = "";
+        string appstore = Source.APPSTORE;
+        if (Common.isAndroid)
+        {
+            if (Config.main.channel == Source.TAPTAP)
+            {
+                appstore = Source.TAPTAP;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_TAPTAP;
+            }
 
+            if (Config.main.channel == Source.XIAOMI)
+            {
+                appstore = Source.XIAOMI;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_XIAOMI;
+            }
+            if (Config.main.channel == Source.HUAWEI)
+            {
+                appstore = Source.HUAWEI;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_HUAWEI;
+            }
+
+        }
+
+        GotoToAppstoreApp(appstore, Common.GetAppPackage(), appstorePackage, GetUrlOfComment(appstore));
+    }
 
     //https://blog.csdn.net/pz789as/article/details/78223517
     //跳转到appstore写评论
-    public void GotoToAppstoreApp(string appstore, string app, string marketPkg, string url)
+    public void GotoToAppstoreApp(string appstore, string appPackage, string marketPkg, string url)
     {
+        Debug.Log("GotoToAppstoreApp appstore=" + appstore + " appPackage=" + appPackage + " marketPkg=" + marketPkg + " url" + url);
         if (Common.isAndroid)
         {
             if (appstore != Source.TAPTAP)
@@ -213,7 +279,7 @@ public class AppVersion
                 AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
                 intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_VIEW"));
                 AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
-                AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "market://details?id=" + app);
+                AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "market://details?id=" + appPackage);
                 intentObject.Call<AndroidJavaObject>("setData", uriObject);
                 intentObject.Call<AndroidJavaObject>("setPackage", marketPkg);
                 AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -230,8 +296,6 @@ public class AppVersion
         {
             Application.OpenURL(url);
         }
-
-
 
     }
     public void DoComment(ItemInfo info)

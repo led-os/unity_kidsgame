@@ -233,17 +233,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
         {
             case (int)SettingItemTag.TAG_SETTING_COMMENT:
                 {
-                    string url = AppVersion.main.strUrlComment;
-                    if (!Common.BlankString(url))
-                    {
-                        Debug.Log("strUrlComment::" + url);
-                        Application.OpenURL(url);
-                    }
-                    else
-                    {
-                        Debug.Log("strUrlComment is Empty");
-                    }
-
+                    AppVersion.main.GotoComment();
                 }
                 break;
 
@@ -460,7 +450,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
         // string no = Language.main.GetString(AppString.STR_UIVIEWALERT_YES_SHOP_START_BUY);
         // viewAlert.SetText(title, msg, yes, no);
         // viewAlert.Show();
-        IAP.main.StartBuy(IAP.productIdNoAD,false);
+        IAP.main.StartBuy(IAP.productIdNoAD, false);
 
     }
 
