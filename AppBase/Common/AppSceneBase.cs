@@ -167,8 +167,6 @@ public class AppSceneBase : ScriptBase
             Language.main.SetLanguage(lan);
 
         }
-
-
     }
 
     void RunCheckApp()
