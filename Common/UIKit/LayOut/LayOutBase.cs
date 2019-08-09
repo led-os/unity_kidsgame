@@ -5,6 +5,7 @@ using UnityEngine;
 public class LayOutBase : MonoBehaviour
 {
     public bool enableLayout = true;
+    public Vector2 space = Vector2.zero;
     public virtual void LayOut()
     {
 

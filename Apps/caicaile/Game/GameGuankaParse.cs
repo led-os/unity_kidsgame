@@ -5,6 +5,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Text;
+
+public class PoemContentInfo
+{
+    public string content;
+    public string pinyin;
+}
+
+
+public class CaiCaiLeItemInfo : ItemInfo
+{
+    public string author;
+    public string year;
+    public string style;
+    public string album;
+    public string intro;
+    public string translation;
+    public string appreciation;
+    public List<PoemContentInfo> listPoemContent;
+}
 public class GameGuankaParse : GuankaParseBase
 {
 
@@ -22,7 +41,15 @@ public class GameGuankaParse : GuankaParseBase
         }
     }
 
-
+    public bool OnlyTextGame()
+    {
+        bool ret = false;
+        if (Common.appKeyName == "poem")
+        {
+            ret = true;
+        }
+        return ret;
+    }
     public CaiCaiLeItemInfo GetItemInfo()
     {
         int idx = LevelManager.main.gameLevel;
@@ -110,5 +137,39 @@ public class GameGuankaParse : GuankaParseBase
 
         Debug.Log("ParseGame::count=" + count);
         return count;
+    }
+
+    //诗词
+    public void ParsePoemItem(CaiCaiLeItemInfo info)
+    {
+        string filepath = Common.GAME_RES_DIR + "/guanka/" + info.id + ".json";
+        if (!FileUtil.FileIsExistAsset(filepath))
+        {
+            return;
+        }
+        //
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(filepath); 
+        JsonData root = JsonMapper.ToObject(json);
+        info.title = (string)root["title"];
+        info.author = (string)root["author"];
+        info.year = (string)root["year"];
+        info.style = (string)root["style"];
+        info.album = (string)root["album"];
+        info.url = (string)root["url"];
+        info.intro = (string)root["intro"];
+        info.translation = (string)root["translation"];
+        info.appreciation = (string)root["appreciation"];
+
+        JsonData itemPoem = root["poem"];
+        info.listPoemContent = new List<PoemContentInfo>();
+        for (int i = 0; i < itemPoem.Count; i++)
+        {
+            JsonData item = itemPoem[i];
+            PoemContentInfo infoPoem = new PoemContentInfo();
+            infoPoem.content = (string)item["content"];
+            infoPoem.pinyin = (string)item["pinyin"];
+            info.listPoemContent.Add(infoPoem);
+        }
     }
 }

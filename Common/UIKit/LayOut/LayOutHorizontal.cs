@@ -17,6 +17,7 @@ public class LayOutHorizontal : LayOutGrid
 
     public override void LayOut()
     {
+        col = GetChildCount();
         base.LayOut();
     }
 }

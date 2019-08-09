@@ -24,11 +24,11 @@ public class LayOutGrid : LayOutBase
         RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
         w = rctran.rect.width;
         h = rctran.rect.height;
-        float item_w = w / col;
-        float item_h = h / row;
+        float item_w = (w - (space.x * (col - 1))) / col;
+        float item_h = (h - (space.y * (row - 1))) / row;
 
-        x = -w / 2 + item_w * c + item_w / 2;
-        y = -h / 2 + item_h * r + item_h / 2;
+        x = -w / 2 + item_w * c + item_w / 2 + space.x * c;
+        y = -h / 2 + item_h * r + item_h / 2 + space.y * r;
 
         return new Vector2(x, y);
 
@@ -67,8 +67,8 @@ public class LayOutGrid : LayOutBase
                 continue;
             }
 
-          //  LayoutElement
-           r = idx / col;
+            //  LayoutElement
+            r = idx / col;
             c = idx - r * col;
 
             //从顶部往底部显示

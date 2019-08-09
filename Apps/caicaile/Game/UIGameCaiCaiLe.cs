@@ -5,14 +5,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CaiCaiLeItemInfo : ItemInfo
-{
-
-
-}
 
 public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 {
+    public const string STR_UNKNOWN_WORD = "__";
 
     public GameObject objTopBar;
     public Button btnTips;
@@ -22,6 +18,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
     public GameObject objLeftBtn;
     public GameObject objContentPic;
     public Text textTitle;
+
+    public Text textLine0;
+    public Text textLine1;
+    public GameObject objText;
+
     public GameObject objGoldBar;
     public Image imageGoldBg;
     public Text textGold;
@@ -33,9 +34,17 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
     GameBase gameBase;
     static public Language languageWord;
+
+    int rowWordBoard = 3;
+    int colWordBoard = 8;
+
     void Awake()
     {
-        gameBase = new GameBase();
+        gameBase = this.gameObject.AddComponent<GameBase>();
+        if (gameBase == null)
+        {
+            Debug.Log("gameBase is null");
+        }
         UpdateLanguageWord();
         btnTips.gameObject.SetActive(Config.main.isHaveShop);
         RectTransform rctran = objTopBar.GetComponent<RectTransform>();
@@ -54,13 +63,16 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
         uiWordBar.wordBoard = uiWordBoard;
         uiWordBoard.wordBar = uiWordBar;
-        uiWordBar.callbackGameWin = OnGameWin;
+        uiWordBar.callbackGameFinish = OnGameWinFinish;
         uiWordBar.callbackGold = OnNotEnoughGold;
 
         UpdateLanguage();
         UpdateBtnMusic();
 
-
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        objText.gameObject.SetActive(isonlytext);
+        imagePic.gameObject.SetActive(!isonlytext);
+        uiWordBar.gameObject.SetActive(!isonlytext);
 
     }
     // Use this for initialization
@@ -76,6 +88,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
     }
 
+
     public void UpdateLanguageWord()
     {
         ItemInfo info = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
@@ -90,30 +103,36 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
     {
         base.UpdateGuankaLevel(level);
         AppSceneBase.main.ClearMainWorld();
+        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        GameGuankaParse.main.ParsePoemItem(info);
         InitUI();
         // ShowAdInsert(GAME_AD_INSERT_SHOW_STEP,true);
-
         if (gameBase != null)
         {
-            CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
             if (gameBase.GetGameItemStatus(info) == GameBase.GAME_STATUS_UN_START)
             {
                 gameBase.SetGameItemStatus(info, GameBase.GAME_STATUS_PLAY);
             }
 
         }
+
+
         OnUIDidFinish();
     }
     void InitUI()
     {
         //game pic
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (!isonlytext)
+        {
+            TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
+        }
 
         TextureUtil.UpdateImageTexture(imagePicBoard, "AppCommon/UI/Game/BoardPic", true);
 
 
-        UpdateWordBar();
+        UpdateWord();
         UpdateTitle();
         UpdateGold();
         LayOut();
@@ -145,7 +164,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             ratio = 0.9f;
             if (Device.isLandscape)
             {
-                w = (this.frame.width / 2 - topbarHeightCanvas * 2) * ratio;
+                w = (this.frame.width / 2) * ratio;
                 h = (this.frame.height - topbarHeightCanvas * 2) * ratio;
                 x = -this.frame.width / 4 - w / 2;
                 y = 0 - h / 2;
@@ -153,7 +172,8 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             else
             {
 
-                w = this.frame.width - topbarHeightCanvas * 2;
+                // w = this.frame.width - topbarHeightCanvas * 2;
+                w = this.frame.width;
                 h = (this.frame.height / 2 - topbarHeightCanvas * 2);
                 y = this.frame.height / 4 - h / 2;
                 x = 0 - w / 2;
@@ -187,24 +207,49 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             // }
         }
 
-        //leftbtn
-        {
-            RectTransform rctran = objLeftBtn.GetComponent<RectTransform>();
-            w = rctran.rect.size.x;
-            h = rctranContentPic.rect.size.y;
-            x = 0;
-            y = rctranContentPic.anchoredPosition.y;
-            rctran.sizeDelta = new Vector2(w, h);
-            rctran.anchoredPosition = new Vector2(x, y);
-        }
+
 
         //wordboard
         {
+
+
 
             RectTransform rctran = uiWordBoard.GetComponent<RectTransform>();
             GridLayoutGroup gridLayout = uiWordBoard.GetComponent<GridLayoutGroup>();
             Vector2 cellSize = gridLayout.cellSize;
             Vector2 space = gridLayout.spacing;
+
+            bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+            if (isonlytext)
+            {
+                gridLayout.cellSize = new Vector2(160, 160);
+                gridLayout.spacing = new Vector2(16, 16);
+
+                cellSize = gridLayout.cellSize;
+                space = gridLayout.spacing;
+                rowWordBoard = 2;
+                colWordBoard = 4;
+            }
+            else
+            {
+                if (Device.isLandscape)
+                {
+                    rowWordBoard = 3;
+                    colWordBoard = 8;
+                }
+                else
+                {
+                    rowWordBoard = 3;
+                    colWordBoard = 8;
+                    w = (cellSize.x + space.x) * colWordBoard;
+                    if (w > this.frame.width)
+                    {
+                        rowWordBoard = 4;
+                        colWordBoard = 6;
+                    }
+
+                }
+            }
 
             if (Device.isLandscape)
             {
@@ -214,8 +259,8 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
                 y = -this.frame.height / 4;
 
                 //6x4
-                w = (cellSize.x + space.x) * 8;
-                h = (cellSize.y + space.y) * 3;
+                w = (cellSize.x + space.x) * colWordBoard;
+                h = (cellSize.y + space.y) * rowWordBoard;
             }
             else
             {
@@ -224,15 +269,13 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
 
                 //8x3
-                w = (cellSize.x + space.x) * 8;
-                h = (cellSize.y + space.y) * 3;
-                if (w > this.frame.width)
-                {
-                    w = (cellSize.x + space.x) * 6;
-                    h = (cellSize.y + space.y) * 4;
-                }
+                w = (cellSize.x + space.x) * colWordBoard;
+                h = (cellSize.y + space.y) * rowWordBoard;
 
             }
+
+
+
 
             float y_bottom_limite = -sizeCanvas.y / 2 + topbarHeightCanvas + 16;
             if ((y - h / 2) < y_bottom_limite)
@@ -241,11 +284,16 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             }
             rctran.sizeDelta = new Vector2(w, h);
             rctran.anchoredPosition = new Vector2(x, y);
+
+            uiWordBoard.row = rowWordBoard;
+            uiWordBoard.col = colWordBoard;
+
         }
 
-
+        RectTransform rctranWordBar = uiWordBar.GetComponent<RectTransform>();
         //wordbar
         {
+            ratio = 0.9f;
             RectTransform rctranBoard = uiWordBoard.GetComponent<RectTransform>();
             RectTransform rctran = uiWordBar.GetComponent<RectTransform>();
             if (Device.isLandscape)
@@ -254,13 +302,31 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
                 float y1 = rctranBoard.anchoredPosition.y + rctranBoard.rect.height / 2;
                 float y2 = this.frame.height / 2 - topbarHeightCanvas;
                 y = (y1 + y2) / 2;
+                w = (this.frame.width / 2 - topbarHeightCanvas * 2) * ratio;
             }
             else
             {
+                w = (this.frame.width - topbarHeightCanvas * 2) * ratio;
                 x = 0;
                 y = 0;
 
             }
+
+
+            h = topbarHeightCanvas;
+            rctran.sizeDelta = new Vector2(w, h);
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
+
+        //leftbtn
+        {
+
+            RectTransform rctran = objLeftBtn.GetComponent<RectTransform>();
+            w = rctran.rect.size.x;
+            h = rctranContentPic.rect.size.y;
+            x = 0;
+            y = rctranWordBar.anchoredPosition.y;
+            rctran.sizeDelta = new Vector2(w, h);
             rctran.anchoredPosition = new Vector2(x, y);
         }
     }
@@ -285,11 +351,38 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
     }
 
 
-    void UpdateWordBar()
+    void UpdateWord()
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        uiWordBar.UpadteItem(info);
+
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (isonlytext)
+        {
+            PoemContentInfo infopoem0 = info.listPoemContent[0];
+            string str = infopoem0.content;
+            //最后一个标点符号
+            int idx = Random.Range(0, str.Length - 1);
+
+            string answer = str.Substring(idx, 1);
+            uiWordBoard.strWordAnswer = answer;
+            string strHead = str.Substring(0, idx);
+            string strEnd = str.Substring(idx + 1);
+            textLine0.text = strHead + STR_UNKNOWN_WORD + strEnd;
+
+            PoemContentInfo infopoem1 = info.listPoemContent[1];
+            textLine1.text = infopoem1.content;
+
+        }
+
+
+
+        //先计算行列数
+        LayOut();
+        uiWordBoard.InitItem();
+
+
         uiWordBoard.UpadteItem(info);
+        uiWordBar.UpadteItem(info);
     }
 
     void ShowShop()
@@ -314,21 +407,33 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         }
 
     }
-    public void OnGameWin(UIWordBar bar)
+
+    public void OnGameWinFinish(UIWordBar bar, bool isFail)
     {
         //show game win
-        LevelManager.main.gameLevelFinish = LevelManager.main.gameLevel;
-        //gameEndParticle.Play();
-        //  Invoke("ShowGameWin", 1f);
-        OnGameWinBase();
-
-        if (gameBase != null)
+        if (isFail)
         {
-            CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-            gameBase.SetGameItemStatus(info, GameBase.GAME_STATUS_FINISH);
+            PopUpManager.main.Show<UIGameFail>("AppCommon/Prefab/Game/UIGameFail");
+        }
+        else
+        {
+            Debug.Log("caicaile OnGameWin");
+            LevelManager.main.gameLevelFinish = LevelManager.main.gameLevel;
+            //gameEndParticle.Play();
+            //  Invoke("ShowGameWin", 1f);
+            OnGameWinBase();
+
+            if (gameBase != null)
+            {
+
+                CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+                Debug.Log("caicaile OnGameWin GAME_STATUS_FINISH+info.id=" + info.id);
+                gameBase.SetGameItemStatus(info, GameBase.GAME_STATUS_FINISH);
+            }
+            PopUpManager.main.Show<UIGameWin>("AppCommon/Prefab/Game/UIGameWin");
+            // ShowGameWin();
         }
 
-        ShowGameWin();
     }
     void ShowGameWin()
     {

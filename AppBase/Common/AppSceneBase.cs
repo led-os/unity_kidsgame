@@ -45,6 +45,8 @@ public class AppSceneBase : ScriptBase
         this.gameObject.AddComponent<ShareCommon>();
         this.gameObject.AddComponent<TTSCommon>();
         this.gameObject.AddComponent<AudioPlay>();
+        this.gameObject.AddComponent<PopUpManager>();
+
 
         //app启动初始化多线程工具LOOM
         Loom loom = Loom.Current;
@@ -150,6 +152,7 @@ public class AppSceneBase : ScriptBase
             //第一次安装
             Common.SetBool(AppString.STR_KEY_NOT_FIRST_RUN, true);
 
+            Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, true);
             Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, true);
 
             int lanTag = (int)Application.systemLanguage;

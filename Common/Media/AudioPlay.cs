@@ -100,7 +100,11 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         {
             return;
         }
-        audioSource.PlayOneShot(clip);
+        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+        if (ret)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 
     public void PlayFile(string audiofile)
@@ -109,6 +113,11 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         if (clip == null)
         {
             return;
+        }
+        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+        if (ret)
+        {
+            audioSource.PlayOneShot(clip);
         }
         audioSource.PlayOneShot(clip);
     }

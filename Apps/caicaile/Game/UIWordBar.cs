@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void OnUIWordBarDidGameWin(UIWordBar bar);
+public delegate void OnUIWordBarDidGameFinish(UIWordBar bar, bool isFail);
 public delegate void OnUIWordBarNotEnoughGold(UIWordBar bar, bool isUpdate);
 public class UIWordBar : UIView, IUIWordItemDelegate
 {
@@ -19,7 +19,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     Color colorTips = new Color(107 / 255.0f, 1f, 1.0f, 1.0f);
 
     Sprite spriteBg;
-    public OnUIWordBarDidGameWin callbackGameWin { get; set; }
+    public OnUIWordBarDidGameFinish callbackGameFinish { get; set; }
     public OnUIWordBarNotEnoughGold callbackGold { get; set; }
 
 
@@ -57,7 +57,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         {
             foreach (UIWordItem item in listItem)
             {
-                Destroy(item.gameObject);
+                DestroyImmediate(item.gameObject);
             }
         }
 
@@ -68,6 +68,23 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         }
         listItem.Clear();
         isAllAnswer = false;
+        LayOutHorizontal ly = this.gameObject.GetComponent<LayOutHorizontal>();
+        RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
+        float oft = 0;
+        if (ly != null)
+        {
+            oft = ly.space.x;
+        }
+        float w = (rctran.rect.size.x - oft * (len - 1)) / len;
+        float limit_max = 160f;
+        if (w > limit_max)
+        {
+            w = limit_max;
+        }
+        Debug.Log("UpadteItem w = " + w + " len=" + len);
+        float h = w;
+
+
         for (int i = 0; i < len; i++)
         {
             string word = str.Substring(i, 1);
@@ -76,6 +93,9 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             item.index = i;
             item.iDelegate = this;
             item.strWordAnswer = word;
+            rctran = item.gameObject.GetComponent<RectTransform>();
+            rctran.sizeDelta = new Vector2(w, h);
+
             item.transform.SetParent(this.transform);
             item.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             listItem.Add(item);
@@ -86,10 +106,24 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
             //item.UpdateTitle(word);
         }
+
+
+        if (ly != null)
+        {
+            ly.LayOut();
+        }
+
     }
 
     public void AddWord(string word)
     {
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (isonlytext)
+        {
+            CheckAnswerOnlyText(word);
+            return;
+        }
+
         foreach (UIWordItem item in listItem)
         {
             if (Common.BlankString(item.strWord))
@@ -126,6 +160,32 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         return ret;
     }
 
+
+    void CheckAnswerOnlyText(string word)
+    {
+
+        isAllAnswer = false;
+
+        if (wordBoard.strWordAnswer == word)
+
+        {
+            isAllAnswer = true;
+
+        }
+
+        if (isAllAnswer)
+        {
+            //全部猜对 game win
+            OnGameWin();
+
+        }
+        else
+        {
+            //游戏失败
+            OnGameFail();
+        }
+    }
+
     //判断答案是否正确
     void CheckAnswer()
     {
@@ -138,6 +198,8 @@ public class UIWordBar : UIView, IUIWordItemDelegate
                 break;
             }
         }
+
+
 
         if (isAllAnswer)
         {
@@ -166,13 +228,17 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             // const float FADE_ANIMATE_TIME = 1.0f;
             // iTween.FadeTo(item.textTitle.gameObject, iTween.Hash("alpha", 0, "time", FADE_ANIMATE_TIME, "easeType", iTween.EaseType.linear, "loopType", iTween.LoopType.pingPong));
         }
+        if (this.callbackGameFinish != null)
+        {
+            this.callbackGameFinish(this, true);
+        }
 
     }
     void OnGameWin()
     {
-        if (this.callbackGameWin != null)
+        if (this.callbackGameFinish != null)
         {
-            this.callbackGameWin(this);
+            this.callbackGameFinish(this, false);
         }
 
         // GameScene.ShowAdInsert();

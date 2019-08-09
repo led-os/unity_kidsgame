@@ -72,6 +72,7 @@ public class AppString
     //key
     public const string STR_KEY_NOT_FIRST_RUN = "STR_KEY_NOT_FIRST_RUN";
     public const string STR_KEY_BACKGROUND_MUSIC = "KEY_BACKGROUND_MUSIC";
+    public const string KEY_ENABLE_PLAYSOUND = "KEY_ENABLE_PLAYSOUND";
     public const string STR_KEY_LANGUAGE = "STR_KEY_LANGUAGE";
     public const string STR_KEY_COMMENT_VERSION = "key_comment_";
     public const string STR_KEY_COMMENT_LAST_TIME = "key_comment_last_time";

@@ -9,11 +9,11 @@ public class UIHomeCaiCaiLe : UIHomeBase
     float timeAction;
     bool isActionFinish;
     public LayOutGrid layoutBtn;
-    public ActionHomeBtn actionBtnPlay;
     public ActionHomeBtn actionBtnLearn;
     void Awake()
     {
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
         timeAction = 0.3f;
@@ -24,8 +24,8 @@ public class UIHomeCaiCaiLe : UIHomeBase
         actionBtnLearn.gameObject.SetActive(Config.main.APP_FOR_KIDS);
         UpdateLayoutBtn();
 
-        actionBtnPlay.ptNormal = layoutBtn.GetItemPostion(0, 0);
-        actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 1);
+        actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
+        LoadPrefab();
     }
 
     // Use this for initialization
@@ -33,11 +33,34 @@ public class UIHomeCaiCaiLe : UIHomeBase
     {
         isActionFinish = false;
         RunActionImageName();
-        actionBtnPlay.RunAction();
         actionBtnLearn.RunAction();
         LayOut();
+
     }
 
+    void LoadPrefab()
+    {
+        float x, y, z;
+        {
+            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Home/GlitterParticles");
+            obj = GameObject.Instantiate(obj);
+            x = obj.transform.localPosition.x;
+            y = obj.transform.localPosition.y;
+            z = -1f;
+            AppSceneBase.main.AddObjToMainWorld(obj);
+            obj.transform.localPosition = new Vector3(x, y, z);
+        }
+        {
+            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Home/StarsParticles");
+            obj = GameObject.Instantiate(obj);
+            x = obj.transform.localPosition.x;
+            y = obj.transform.localPosition.y;
+            z = -1f;
+            AppSceneBase.main.AddObjToMainWorld(obj);
+            obj.transform.localPosition = new Vector3(x, y, z);
+        }
+
+    }
     // Update is called once per frame
     void Update()
     {
@@ -102,11 +125,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
     public void OnClickBtnPlay()
     {
-        if (!isActionFinish)
-        {
-            return;
-        }
-        //AudioPlay.main.PlayAudioClip(audioClipBtn);
+        Debug.Log("OnClickBtnPlay");
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;

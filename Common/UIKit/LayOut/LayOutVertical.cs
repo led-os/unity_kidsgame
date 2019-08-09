@@ -18,6 +18,7 @@ public class LayOutVertical : LayOutGrid
 
     public override void LayOut()
     {
+        row = GetChildCount();
         base.LayOut();
     }
 }
