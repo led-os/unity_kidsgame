@@ -39,6 +39,8 @@ public class AppRes
     //image
     public const string IMAGE_BtnMusicOn = "AppCommon/UI/Home/BtnMusicOn";
     public const string IMAGE_BtnMusicOff = "AppCommon/UI/Home/BtnMusicOff";
+    public const string IMAGE_BtnSoundOn = "AppCommon/UI/Home/BtnSoundOn";
+    public const string IMAGE_BtnSoundOff = "AppCommon/UI/Home/BtnSoundOff";
 
     public const string IMAGE_UIVIEWALERT_BG_BOARD = "AppCommon/UI/Setting/SettingCellBgBlue";
     static public Vector4 borderUIViewAlertBgBoard = new Vector4(18f, 18f, 18f, 18f);
@@ -57,7 +59,7 @@ public class AppRes
     public const string IMAGE_CELL_BG_YELLOW = "AppCommon/UI/Setting/SettingCellBgYellow";
     static public Vector4 borderCellSettingBg = new Vector4(18f, 18f, 18f, 18f);
 
- 
+
 
     // cmditem
     public const string IMAGE_CMDITEM_BG = "AppCommon/UI/Game/CmdItem/CmdItemBg";

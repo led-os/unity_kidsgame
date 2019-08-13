@@ -8,24 +8,30 @@ public class UIHomeCaiCaiLe : UIHomeBase
 {
     float timeAction;
     bool isActionFinish;
+    public LayOutGrid layoutBtnSide;
     public LayOutGrid layoutBtn;
-    public ActionHomeBtn actionBtnLearn;
+    public AnimateButton btnPlay;
+    public Button btnLearn;
+    //public ActionHomeBtn actionBtnLearn;
     void Awake()
     {
+        base.Awake();
         // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
         timeAction = 0.3f;
         isActionFinish = false;
-        layoutBtn.enableLayout = false;
+        //layoutBtn.enableLayout = false;
 
 
-        actionBtnLearn.gameObject.SetActive(Config.main.APP_FOR_KIDS);
+        // actionBtnLearn.gameObject.SetActive(Config.main.APP_FOR_KIDS);
         UpdateLayoutBtn();
 
-        actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
+        // actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
         LoadPrefab();
+        UpdateBtnMusic();
+        UpdateBtnSound();
     }
 
     // Use this for initialization
@@ -33,7 +39,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
     {
         isActionFinish = false;
         RunActionImageName();
-        actionBtnLearn.RunAction();
+        //   actionBtnLearn.RunAction();
         LayOut();
 
     }
@@ -156,19 +162,47 @@ public class UIHomeCaiCaiLe : UIHomeBase
     }
     public void UpdateLayoutBtn()
     {
-        float w_item = 256;
-        float h_item = 256;
-        float oft = 64;
-        layoutBtn.row = 1;
-        layoutBtn.col = 2;
-        if (!actionBtnLearn.gameObject.activeSelf)
+        float w_item = 160;
+        float h_item = 160;
+        float oft = 8;
+        float x, y, w, h;
+        Vector2 sizeCanvas = this.frame.size;
+        int child_count = layoutBtnSide.GetChildCount(false);
+        if (Device.isLandscape)
         {
-            layoutBtn.col = 1;
+            layoutBtnSide.row = 1;
+            layoutBtnSide.col = child_count;
+        }
+        else
+        {
+            layoutBtnSide.row = child_count;
+            layoutBtnSide.col = 1;
         }
 
-        RectTransform rctran = layoutBtn.GetComponent<RectTransform>();
-        rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtn.col, (h_item + oft) * layoutBtn.row);
-        layoutBtn.LayOut();
+        RectTransform rctran = layoutBtnSide.GetComponent<RectTransform>();
+        rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtnSide.col, (h_item + oft) * layoutBtnSide.row);
+        layoutBtnSide.LayOut();
+
+        GridLayoutGroup gridLayout = uiHomeAppCenter.GetComponent<GridLayoutGroup>();
+        Vector2 cellSize = gridLayout.cellSize;
+        w = rctran.rect.size.x;
+        h = rctran.rect.size.y;
+        if (Device.isLandscape)
+        {
+            x = 0;
+            y = -sizeCanvas.y / 2 + h / 2;
+        }
+        else
+        {
+            x = -sizeCanvas.x / 2 + w / 2;
+            y = -sizeCanvas.y / 2 + cellSize.y + h / 2;
+        }
+
+        //Debug.Log("layout y1=" + y1 + " y2=" + y2 + " y=" + y + " rctranAppIcon.rect.size.y=" + rctranAppIcon.rect.size.y);
+
+
+        rctran.anchoredPosition = new Vector2(x, y);
+
 
     }
 
@@ -188,23 +222,32 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
 
 
-        //layoutBtn
+
 
         UpdateLayoutBtn();
-        x = 0;
-        float y1 = rctranImageName.anchoredPosition.y - rctranImageName.rect.size.y / 2;
-        float ofty = rctranAppIcon.rect.size.y;
-        if (Device.isLandscape)
+        RectTransform rctranPlay = btnPlay.transform as RectTransform;
+        //play
         {
-            ofty = 0;
+
+
+            x = 0;
+            y = -rctranPlay.rect.size.y / 2;
+            rctranPlay.anchoredPosition = new Vector2(x, y);
         }
-        float y2 = -sizeCanvas.y / 2 + ofty;
-        y = (y1 + y2) / 2;
-        //Debug.Log("layout y1=" + y1 + " y2=" + y2 + " y=" + y + " rctranAppIcon.rect.size.y=" + rctranAppIcon.rect.size.y);
+        //layoutBtn
+        {
 
-        RectTransform rctranBtn = layoutBtn.GetComponent<RectTransform>();
-        rctranBtn.anchoredPosition = new Vector2(x, y);
+            RectTransform rctran = layoutBtn.transform as RectTransform;
+            x = 0;
+            h = rctran.rect.size.y;
+            y = rctranPlay.anchoredPosition.y - rctranPlay.rect.size.y / 2 - h / 2;
 
+            float h_item = rctran.rect.size.y;
+            float w_item = h_item;
+            float oft = layoutBtn.space.x;
+            rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtn.col, (h_item + oft) * layoutBtn.row);
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
 
         LayoutChildBase();
     }

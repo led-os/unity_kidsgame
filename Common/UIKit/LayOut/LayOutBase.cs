@@ -11,7 +11,7 @@ public class LayOutBase : MonoBehaviour
 
     }
 
-    public int GetChildCount()
+    public int GetChildCount(bool includeHide = true)
     {
         int count = 0;
         foreach (Transform child in this.gameObject.GetComponentsInChildren<Transform>(true))
@@ -25,6 +25,15 @@ public class LayOutBase : MonoBehaviour
             if (this.gameObject == objtmp)
             {
                 continue;
+            }
+
+            if (!includeHide)
+            {
+                if (!objtmp.activeSelf)
+                {
+                    //过虑隐藏的
+                    continue;
+                }
             }
 
             if (objtmp.transform.parent != this.gameObject.transform)

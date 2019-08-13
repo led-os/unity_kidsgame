@@ -8,18 +8,14 @@ using UnityEngine.UI;
 
 public class UIGameFail : UIViewPop
 {
-    public GameObject objContent;
     public Image imageBg;
-    public Image imageBoard;
     public Text textTitle;
-    public Text textMsg;
-    public Button btnYes;
-    public Button btnNo;
-    public string keyName;
+    public Button btnRevive;//复活
+    public Button btnRestart; //从第一关开始
 
     void Awake()
     {
-
+        textTitle.text = Language.main.GetString("STR_GameFail");
     }
     // Use this for initialization
     void Start()
@@ -38,5 +34,12 @@ public class UIGameFail : UIViewPop
 
     }
 
+    public void OnClickBtnRevive()
+    {
 
+    }
+    public void OnClickBtnRestart()
+    {
+
+    }
 }
