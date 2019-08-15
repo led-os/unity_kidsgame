@@ -96,30 +96,40 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
 
     public void PlayAudioClip(AudioClip clip)
     {
+        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+        if (!ret)
+        {
+            return;
+        }
         if (clip == null)
         {
             return;
         }
-        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
-        if (ret)
-        {
-            audioSource.PlayOneShot(clip);
-        }
+
+        audioSource.PlayOneShot(clip);
+
     }
 
     public void PlayFile(string audiofile)
     {
+        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+        if (!ret)
+        {
+            return;
+        }
         AudioClip clip = AudioCache.main.Load(audiofile);
         if (clip == null)
         {
             return;
         }
-        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
-        if (ret)
-        {
-            audioSource.PlayOneShot(clip);
-        }
+
         audioSource.PlayOneShot(clip);
+
+    }
+
+    public void PlayBtnSound()
+    {
+        PlayFile(AppRes.AUDIO_BTN_CLICK);
     }
 
 

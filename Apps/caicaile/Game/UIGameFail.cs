@@ -13,14 +13,17 @@ public class UIGameFail : UIViewPop
     public Button btnRevive;//复活
     public Button btnRestart; //从第一关开始
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         textTitle.text = Language.main.GetString("STR_GameFail");
+        Common.SetButtonText(btnRevive, Language.main.GetString("STR_GameFail_btnRevive"));
+        Common.SetButtonText(btnRestart, Language.main.GetString("STR_GameFail_btnRestart"));
     }
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame
@@ -36,10 +39,16 @@ public class UIGameFail : UIViewPop
 
     public void OnClickBtnRevive()
     {
-
+        AudioPlay.main.PlayBtnSound();
+        Close();
     }
     public void OnClickBtnRestart()
     {
-
+        AudioPlay.main.PlayBtnSound();
+        Close();
+        LevelManager.main.placeLevel = 0;
+        LevelManager.main.gameLevel = 0;
+        LevelManager.main.gameLevelFinish = -1;
+        GameManager.main.GotoPlayAgain();
     }
 }

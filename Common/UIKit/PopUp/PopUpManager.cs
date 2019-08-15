@@ -14,6 +14,7 @@ public class PopUpManager : MonoBehaviour
     protected Stack<GameObject> currentPanels = new Stack<GameObject>();
 
     public static PopUpManager main;
+    Action<UIViewPop> _onClose;
     void Init()
     {
 
@@ -23,9 +24,9 @@ public class PopUpManager : MonoBehaviour
     {
         main = this;
     }
-    public void Show<T>(string pathPrefab, Action<T> onOpened = null, bool darkenBackground = true) where T : UIViewPop
+    public void Show<T>(string pathPrefab, Action<T> onOpened = null, Action<UIViewPop> onClose = null, bool darkenBackground = true) where T : UIViewPop
     {
-        StartCoroutine(OpenPopupAsync(pathPrefab, onOpened, darkenBackground));
+        StartCoroutine(OpenPopupAsync(pathPrefab, onOpened, onClose, darkenBackground));
     }
 
 
@@ -37,13 +38,16 @@ public class PopUpManager : MonoBehaviour
     /// <param name="darkenBackground">True if the popup should have a dark background; false otherwise.</param>
     /// <typeparam name="T">The type of the popup.</typeparam>
     /// <returns>The coroutine.</returns>
-    protected IEnumerator OpenPopupAsync<T>(string popupName, Action<T> onOpened, bool darkenBackground) where T : UIViewPop
+    protected IEnumerator OpenPopupAsync<T>(string popupName, Action<T> onOpened, Action<UIViewPop> onClose, bool darkenBackground) where T : UIViewPop
     {
-        var request = Resources.LoadAsync<GameObject>(popupName);
-        while (!request.isDone)
-        {
-            yield return null;
-        }
+        // var request = Resources.LoadAsync<GameObject>(popupName);
+        // while (!request.isDone)
+        // {
+        //     yield return null;
+        // }
+        yield return null;
+        GameObject objPrefab = PrefabCache.main.Load(popupName);
+
         Canvas canvas = AppSceneBase.main.canvasMain;
         var panel = new GameObject("Panel");
         var panelImage = panel.AddComponent<Image>();
@@ -58,21 +62,28 @@ public class PopUpManager : MonoBehaviour
         currentPanels.Push(panel);
         StartCoroutine(FadeIn(panel.GetComponent<Image>(), 0.2f));
 
-        var popup = Instantiate(request.asset) as GameObject;
+        //var popup = Instantiate(request.asset) as GameObject;
+        var popup = Instantiate(objPrefab) as GameObject;
         Assert.IsNotNull((popup));
         popup.transform.SetParent(canvas.transform, false);
 
         //popup.GetComponent<Popup>().parentScene = this;
 
-     
+
 
         if (onOpened != null)
         {
             onOpened(popup.GetComponent<T>());
         }
+        _onClose = onClose;
         currentPopups.Push(popup);
     }
 
+
+    public void OnClose()
+    {
+
+    }
     /// <summary>
     /// Closes the topmost popup.
     /// </summary>
@@ -101,10 +112,15 @@ public class PopUpManager : MonoBehaviour
         {
             StartCoroutine(FadeOut(topmostPanel.GetComponent<Image>(), 0.2f, () => Destroy(topmostPanel)));
         }
+
+        if (_onClose != null)
+        {
+            _onClose(topmostPopup.GetComponent<UIViewPop>());
+        }
     }
 
 
-    
+
     /// <summary>
     /// Utility coroutine to fade in the specified image.
     /// </summary>

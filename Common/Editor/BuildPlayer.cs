@@ -15,13 +15,9 @@ public class BuildPlayer
     //得到工程中所有场景名称
     static string[] SCENES = FindEnabledEditorScenes();
     //一系列批量build的操作
-    [MenuItem("Custom/Build Android QQ")]
-    static void PerformAndroidQQBuild()
-    {
-        BulidTarget("QQ", "Android");
-    }
 
-    [MenuItem("Custom/Build Android UC")]
+
+    [MenuItem("Custom/Build Android")]
     static void PerformAndroidUCBuild()
     {
         Debug.Log("PerformAndroidUCBuild start");
@@ -29,43 +25,13 @@ public class BuildPlayer
         Debug.Log("PerformAndroidUCBuild end");
     }
 
-    [MenuItem("Custom/Build Android CMCC")]
-    static void PerformAndroidCMCCBuild()
-    {
-        BulidTarget("CMCC", "Android");
-    }
 
-    [MenuItem("Custom/Build Android ALL")]
-    static void PerformAndroidALLBuild()
-    {
-        BulidTarget("QQ", "Android");
-        BulidTarget("UC", "Android");
-        BulidTarget("CMCC", "Android");
-    }
-    [MenuItem("Custom/Build iPhone QQ")]
+
+
+    [MenuItem("Custom/Build iPhone")]
     static void PerformiPhoneQQBuild()
     {
         BulidTarget("QQ", "IOS");
-    }
-
-    [MenuItem("Custom/Build iPhone QQ")]
-    static void PerformiPhoneUCBuild()
-    {
-        BulidTarget("UC", "IOS");
-    }
-
-    [MenuItem("Custom/Build iPhone CMCC")]
-    static void PerformiPhoneCMCCBuild()
-    {
-        BulidTarget("CMCC", "IOS");
-    }
-
-    [MenuItem("Custom/Build iPhone ALL")]
-    static void PerformiPhoneALLBuild()
-    {
-        BulidTarget("QQ", "IOS");
-        BulidTarget("UC", "IOS");
-        BulidTarget("CMCC", "IOS");
     }
 
     //这里封装了一个简单的通用方法。
@@ -87,7 +53,7 @@ public class BuildPlayer
         }
         if (target == "IOS")
         {
-            target_dir = applicationPath + "/TargetIOS";
+            target_dir = applicationPath + "/OutPut";
             target_name = app_name;
             target_name = "iOS";
             targetGroup = BuildTargetGroup.iOS;
@@ -108,24 +74,11 @@ public class BuildPlayer
         }
 
         //==================这里是比较重要的东西=======================
-        switch (name)
-        {
-            case "QQ":
-                PlayerSettings.applicationIdentifier = "com.game.qq";
-                PlayerSettings.bundleVersion = "v0.0.1";
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, "QQ");
-                break;
-            case "UC":
-                PlayerSettings.applicationIdentifier = "com.game.uc";
-                PlayerSettings.bundleVersion = "v0.0.1";
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, "UC");
-                break;
-            case "CMCC":
-                PlayerSettings.applicationIdentifier = "com.game.cmcc";
-                PlayerSettings.bundleVersion = "v0.0.1";
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, "CMCC");
-                break;
-        }
+
+        //PlayerSettings.applicationIdentifier = "com.moonma.kidsgame";
+        PlayerSettings.bundleVersion = "v0.0.1";
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, "QQ");
+
 
         //==================这里是比较重要的东西=======================
 

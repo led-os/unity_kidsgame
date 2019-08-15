@@ -44,7 +44,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
         StartParse();
         LoadPrefab();
         heightCell = 512;
-        audioClipBtn = AudioCache.main.Load(AppCommon.AUDIO_BTN_CLICK);
+        audioClipBtn = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
 
         oneCellNum = 1;
         if (Screen.width > Screen.height)
@@ -126,7 +126,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     }
     public void OnClickBtnBack()
     {
-        AudioPlay.main.PlayAudioClip(audioClipBtn);
+        AudioPlay.main.PlayBtnSound();
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

@@ -50,6 +50,11 @@ public class UITextView : UIView
         rctran.sizeDelta = new Vector2(rctran.sizeDelta.x, h);
     }
 
+      public void SetFontSize(int sz)
+    { 
+        textContent.fontSize = sz;
+    }
+
     public override void LayOut()
     {
         int fontsize = textContent.fontSize;

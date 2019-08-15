@@ -60,6 +60,14 @@ public class LayOutGrid : LayOutBase
             {
                 continue;
             }
+            if (!enableHide)
+            {
+                if (!objtmp.activeSelf)
+                {
+                    //过虑隐藏的
+                    continue;
+                }
+            }
 
             if (objtmp.transform.parent != this.gameObject.transform)
             {

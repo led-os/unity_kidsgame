@@ -925,7 +925,7 @@ public class Common
         rctran.sizeDelta = sizeDelta;
     }
 
-    static public void SetButtonText(Button btn, string str, float offset)
+    static public void SetButtonText(Button btn, string str, float offset = 0)
     {
         Transform tr = btn.transform.Find("Text");
         Text btnText = tr.GetComponent<Text>();

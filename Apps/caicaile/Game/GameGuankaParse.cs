@@ -27,6 +27,7 @@ public class CaiCaiLeItemInfo : ItemInfo
 public class GameGuankaParse : GuankaParseBase
 {
 
+    public const string STR_APPKEYNAME_POEM = "poem";
     public string strWord3500;
     static private GameGuankaParse _main = null;
     public static GameGuankaParse main
@@ -44,7 +45,7 @@ public class GameGuankaParse : GuankaParseBase
     public bool OnlyTextGame()
     {
         bool ret = false;
-        if (Common.appKeyName == "poem")
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
         {
             ret = true;
         }
@@ -149,7 +150,7 @@ public class GameGuankaParse : GuankaParseBase
         }
         //
         //FILE_PATH
-        string json = FileUtil.ReadStringAsset(filepath); 
+        string json = FileUtil.ReadStringAsset(filepath);
         JsonData root = JsonMapper.ToObject(json);
         info.title = (string)root["title"];
         info.author = (string)root["author"];

@@ -28,6 +28,9 @@ public class AppRes
     public const string AUDIO_SUCCESS_1 = "AppCommon/Audio/success-1";
     public const string AUDIO_SUCCESS_2 = "AppCommon/Audio/success-2";
 
+    //
+    public const string Audio_PopupOpen = "AppCommon/Audio/PopUp/PopupOpen";
+    public const string Audio_PopupClose = "AppCommon/Audio/PopUp/PopupClose";
 
     //prefab  
 

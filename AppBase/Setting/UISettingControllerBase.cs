@@ -60,7 +60,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
             rctran.sizeDelta = sizeDelta;
         }
 
-        audioClipBtn = AudioCache.main.Load(AppCommon.AUDIO_BTN_CLICK);
+        audioClipBtn = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
         listItem = new List<object>();
         UpdateItem();
         oneCellNum = 1;
@@ -125,7 +125,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
 
     public void OnClickBtnBack()
     {
-        AudioPlay.main.PlayAudioClip(audioClipBtn);
+        AudioPlay.main.PlayBtnSound();
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {
@@ -137,11 +137,22 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     {
         if (isShow)
         {
-            // UILanguage langugae = (UILanguage)GameObject.Instantiate(uiLanguage);
-            // langugae.callbackClose = OnUILanguageDidClose;
-            LanguageViewController lan = LanguageViewController.main;
-            lan.Show(null, null);
-            lan.ui.callbackClose = OnUILanguageDidClose;
+            // LanguageViewController lan = LanguageViewController.main;
+            // lan.Show(null, null);
+            // lan.ui.callbackClose = OnUILanguageDidClose;
+
+            PopUpManager.main.Show<UILanguage>("Common/Prefab/Setting/UILanguage", popup =>
+         {
+             Debug.Log("UIViewAlert Open ");
+
+             popup.callbackClose = OnUILanguageDidClose;
+
+         }, popup =>
+         {
+
+
+         });
+
         }
         else
         {

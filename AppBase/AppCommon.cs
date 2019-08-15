@@ -6,9 +6,7 @@ using System.Text;
 public class AppCommon
 {
     //string
-    public const string STR_LANGUAGE_REPLACE = "xxx";
-    //audio 
-    public const string AUDIO_BTN_CLICK = "AppCommon/Audio/BtnClick";
+    public const string STR_LANGUAGE_REPLACE = "xxx"; 
 
     //prefab
     public const string PREFAB_UICELLBASE = "Common/Prefab/TableView/UICellBase";

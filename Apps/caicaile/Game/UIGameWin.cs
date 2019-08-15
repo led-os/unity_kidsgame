@@ -11,23 +11,38 @@ public class UIGameWin : UIViewPop
     public UITextView textView;
     public Text textTitle;
     public Image imageBg;
-    public AnimateButton btnClose;
+    public Button btnClose;
 
-    void Awake()
+    public Button btnFriend;
+    public Button btnNext;
+    public Button btnAddLove;
+    /// <summary>
+    /// Unity's Awake method.
+    /// </summary>
+    protected override void Awake()
     {
+        base.Awake();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+
+        Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
+        Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"));
+        Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
+
 
         textTitle.text = info.title;
         string str = GetText();
 
+        textView.SetFontSize(80);
         textView.text = str;
     }
-    // Use this for initialization
-    void Start()
+
+    /// <summary>
+    /// Unity's Start method.
+    /// </summary>
+    protected override void Start()
     {
+        base.Start();
         LayOut();
-
-
     }
 
     // Update is called once per frame
@@ -62,37 +77,42 @@ public class UIGameWin : UIViewPop
         // public string translation;
         // public string appreciation;
         // public List<PoemContentInfo> listPoemContent;
-
-        string strPoem = "原文:";
-        for (int i = 0; i < info.listPoemContent.Count; i++)
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
         {
-            PoemContentInfo infoPoem = info.listPoemContent[i];
-            strPoem += infoPoem.content + "\n";
-        }
-        string strAuthor = "诗人:" + info.author + "\n";
-        string strAlbum = "出处:" + info.album + "\n";
-        string strIntro = "简介:" + info.intro + "\n";
-        string strTranslation = "译文:" + info.translation + "\n";
-        string strAppreciation = "赏析:" + info.appreciation + "\n";
+            string strPoem = "原文:";
+            for (int i = 0; i < info.listPoemContent.Count; i++)
+            {
+                PoemContentInfo infoPoem = info.listPoemContent[i];
+                strPoem += infoPoem.content + "\n";
+            }
+            string strAuthor = "诗人:" + info.author + "\n";
+            string strAlbum = "出处:" + info.album + "\n";
+            string strIntro = "简介:" + info.intro + "\n";
+            string strTranslation = "译文:" + info.translation + "\n";
+            string strAppreciation = "赏析:" + info.appreciation + "\n";
 
-        str = strPoem + strAuthor + strAlbum + strIntro + strTranslation + strAppreciation;
+            str = strPoem + strAuthor + strAlbum + strIntro + strTranslation + strAppreciation;
+        }
+
         return str;
     }
     public void OnClickBtnClose()
     {
+        AudioPlay.main.PlayBtnSound();
         Close();
     }
     public void OnClickBtnFriend()
     {
-
+        AudioPlay.main.PlayBtnSound();
     }
     public void OnClickBtnNext()
     {
+        AudioPlay.main.PlayBtnSound();
         Close();
         LevelManager.main.GotoNextLevel();
     }
     public void OnClickBtnAddLove()
     {
-
+        AudioPlay.main.PlayBtnSound();
     }
 }

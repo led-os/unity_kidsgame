@@ -204,6 +204,7 @@ public class UIGuankaCaiCaiLe : UIGuankaBase, ITableViewDataSource
 
     public void OnClickBtnBack()
     {
+        AudioPlay.main.PlayBtnSound();
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {
@@ -224,6 +225,7 @@ public class UIGuankaCaiCaiLe : UIGuankaBase, ITableViewDataSource
             return;
         }
         tick = Common.GetCurrentTimeMs();
+        AudioPlay.main.PlayBtnSound();
         GotoGame(item.index);
 
     }

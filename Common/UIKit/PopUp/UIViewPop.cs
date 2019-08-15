@@ -13,13 +13,33 @@ public class UIViewPop : UIView
 
     private Animator animator;
 
+    protected virtual void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    /// <summary>
+    /// Unity's Start method.
+    /// </summary>
+    protected virtual void Start()
+    {
+        AudioPlay.main.PlayFile(AppRes.Audio_PopupOpen);
+        if (onOpen != null)
+        {
+            onOpen.Invoke();
+        }
+    }
+
     /// <summary>
     /// Closes the popup.
     /// </summary>
     public void Close()
     {
-        animator = this.gameObject.GetComponent<Animator>();
-        // onClose.Invoke();
+        AudioPlay.main.PlayFile(AppRes.Audio_PopupClose);
+        if (onClose != null)
+        {
+            onClose.Invoke();
+        }
         // if (parentScene != null)
         // {
         //     parentScene.ClosePopup();
@@ -32,8 +52,15 @@ public class UIViewPop : UIView
         }
         else
         {
-            Destroy(gameObject);
+            DoClose();
         }
+    }
+
+
+    void DoClose()
+    {
+        PopUpManager.main.OnClose();
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -43,7 +70,7 @@ public class UIViewPop : UIView
     protected virtual IEnumerator DestroyPopup()
     {
         yield return new WaitForSeconds(0.5f);
-        Destroy(gameObject);
+        DoClose();
     }
 
 

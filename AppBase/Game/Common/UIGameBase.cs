@@ -172,6 +172,7 @@ public class UIGameBase : UIView
     }
     public void OnClickBtnMusic()
     {
+        AudioPlay.main.PlayBtnSound();
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
@@ -187,6 +188,7 @@ public class UIGameBase : UIView
     }
     public void OnClickBtnShare()
     {
+        AudioPlay.main.PlayBtnSound();
         ShowShare();
     }
 
@@ -199,6 +201,7 @@ public class UIGameBase : UIView
         //     pop.Close();
         // }
         Debug.Log("GameBase:OnClickBtnBack");
+        AudioPlay.main.PlayBtnSound();
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {

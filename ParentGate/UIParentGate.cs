@@ -210,7 +210,7 @@ public class UIParentGate : UIView
     }
     public void OnClickBtnBack()
     {
-
+        AudioPlay.main.PlayBtnSound();
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

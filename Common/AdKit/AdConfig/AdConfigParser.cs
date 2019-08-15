@@ -392,9 +392,10 @@ public class AdConfigParser
             }
         }
 
-        string filepath = Common.RES_CONFIG_DATA + "/adconfig/" + filename;
-
-        byte[] datatmp = FileUtil.ReadDataFromResources(filepath);
+        // string filepath = Common.RES_CONFIG_DATA + "/adconfig/" + filename;
+        // byte[] datatmp = FileUtil.ReadDataFromResources(filepath);
+        string filepath = Common.GAME_DATA_DIR + "/adconfig/" + filename;
+        byte[] datatmp = FileUtil.ReadDataAuto(filepath);
         ParseData(datatmp);
     }
 

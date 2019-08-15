@@ -11,7 +11,12 @@ public class UIHomeCaiCaiLe : UIHomeBase
     public LayOutGrid layoutBtnSide;
     public LayOutGrid layoutBtn;
     public AnimateButton btnPlay;
+    public Button btnSetting;
+    public Button btnMore;
+    public Button btnShare;
+    public Button btnNoAd;
     public Button btnLearn;
+    public GameObject objLogo;
     //public ActionHomeBtn actionBtnLearn;
     void Awake()
     {
@@ -32,6 +37,42 @@ public class UIHomeCaiCaiLe : UIHomeBase
         LoadPrefab();
         UpdateBtnMusic();
         UpdateBtnSound();
+
+
+        if (btnShare != null)
+        {
+            btnShare.gameObject.SetActive(Config.main.isHaveShare);
+        }
+        if (btnNoAd != null)
+        {
+            btnNoAd.gameObject.SetActive(Config.main.isHaveRemoveAd);
+        }
+        if (!AppVersion.appCheckHasFinished)
+        {
+            btnMore.gameObject.SetActive(false);
+        }
+        if (Common.isAndroid)
+        {
+            if ((Config.main.channel == Source.HUAWEI) || (Config.main.channel == Source.GP))
+            {
+                //华为市场不显示
+                btnMore.gameObject.SetActive(false);
+            }
+        }
+
+        if (!Config.main.APP_FOR_KIDS)
+        {
+            btnLearn.gameObject.SetActive(false);
+        }
+        if (Config.main.APP_FOR_KIDS)
+        {
+            objLogo.gameObject.SetActive(false);
+        }
+        else
+        {
+            imageBgName.gameObject.SetActive(false);
+        }
+
     }
 
     // Use this for initialization
@@ -129,37 +170,6 @@ public class UIHomeCaiCaiLe : UIHomeBase
     }
 
 
-    public void OnClickBtnPlay()
-    {
-        Debug.Log("OnClickBtnPlay");
-        if (this.controller != null)
-        {
-            NaviViewController navi = this.controller.naviController;
-            int total = LevelManager.main.placeTotal;
-            if (total > 1)
-            {
-                navi.Push(PlaceViewController.main);
-            }
-            else
-            {
-                navi.Push(GuankaViewController.main);
-            }
-        }
-    }
-
-    public void OnClickBtnLearn()
-    {
-        if (!isActionFinish)
-        {
-            return;
-        }
-        if (this.controller != null)
-        {
-            NaviViewController navi = this.controller.naviController;
-            navi.Push(LearnProgressViewController.main);
-
-        }
-    }
     public void UpdateLayoutBtn()
     {
         float w_item = 160;
@@ -250,5 +260,38 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
 
         LayoutChildBase();
+    }
+
+
+    public void OnClickBtnPlay()
+    {
+        AudioPlay.main.PlayBtnSound();
+
+        Debug.Log("OnClickBtnPlay");
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            int total = LevelManager.main.placeTotal;
+            if (total > 1)
+            {
+                navi.Push(PlaceViewController.main);
+            }
+            else
+            {
+                navi.Push(GuankaViewController.main);
+            }
+        }
+    }
+
+    public void OnClickBtnLearn()
+    {
+        AudioPlay.main.PlayBtnSound();
+
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            navi.Push(LearnProgressViewController.main);
+
+        }
     }
 }

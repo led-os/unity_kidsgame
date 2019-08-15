@@ -174,6 +174,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 
     public void OnClickBtnBack()
     {
+         AudioPlay.main.PlayBtnSound();
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {
@@ -188,6 +189,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             return;
         }
         LevelManager.main.placeLevel = item.index;
+         AudioPlay.main.PlayBtnSound();
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;

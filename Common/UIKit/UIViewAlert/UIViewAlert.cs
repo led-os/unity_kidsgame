@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public delegate void OnUIViewAlertFinishedDelegate(UIViewAlert alert, bool isYes);
-public class UIViewAlert : UIView
+public class UIViewAlert : UIViewPop
 {
     public GameObject objContent;
     public Image imageBg;
@@ -19,8 +19,9 @@ public class UIViewAlert : UIView
 
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         {
             TextureUtil.UpdateImageTexture(imageBoard, AppRes.IMAGE_UIVIEWALERT_BG_BOARD, true, AppRes.borderUIViewAlertBgBoard);
             RectTransform rctran = imageBoard.GetComponent<RectTransform>();
@@ -44,8 +45,9 @@ public class UIViewAlert : UIView
         }
     }
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         LayOut();
 
     }
@@ -89,11 +91,9 @@ public class UIViewAlert : UIView
 
     void Remove()
     {
-
-        DestroyImmediate(this.gameObject);
-
-
-
+       // DestroyImmediate(this.gameObject);
+       Close();
+ 
     }
 
     public void Hide()

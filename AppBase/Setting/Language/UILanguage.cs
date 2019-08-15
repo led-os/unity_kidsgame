@@ -5,7 +5,7 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.UI;
 public delegate void OnUILanguageDidCloseDelegate(UILanguage language);
-public class UILanguage : UIView, ITableViewDataSource
+public class UILanguage : UIViewPop, ITableViewDataSource
 {
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;
@@ -23,8 +23,9 @@ public class UILanguage : UIView, ITableViewDataSource
     int heightCell;
     int totalItem;
     public OnUILanguageDidCloseDelegate callbackClose { get; set; }
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         heightCell = 160;
         textTitle.color = AppRes.colorTitle;
         textTitle.text = Language.main.GetString("STR_LANGUAGE");
@@ -33,9 +34,9 @@ public class UILanguage : UIView, ITableViewDataSource
     }
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
-
+        base.Start();
         listItem = new List<object>();
         UpdateItem();
         oneCellNum = 1;
@@ -105,11 +106,12 @@ public class UILanguage : UIView, ITableViewDataSource
 
     public void OnClickBtnBack()
     {
-        PopViewController pop = (PopViewController)this.controller;
-        if (pop != null)
-        {
-            pop.Close();
-        }
+        // PopViewController pop = (PopViewController)this.controller;
+        // if (pop != null)
+        // {
+        //     pop.Close();
+        // }
+        Close();
     }
 
     public void UpdateItem()
