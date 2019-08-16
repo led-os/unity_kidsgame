@@ -369,8 +369,7 @@ public class UIShop : UIView, ITableViewDataSource
     }
 
     public void OnClickBtnBack()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

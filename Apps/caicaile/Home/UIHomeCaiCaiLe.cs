@@ -18,7 +18,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
     public Button btnLearn;
     public GameObject objLogo;
     //public ActionHomeBtn actionBtnLearn;
-    void Awake()
+    public void Awake()
     {
         base.Awake();
         // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
@@ -27,11 +27,11 @@ public class UIHomeCaiCaiLe : UIHomeBase
         TextName.text = appname;
         timeAction = 0.3f;
         isActionFinish = false;
-        //layoutBtn.enableLayout = false;
+        layoutBtnSide.enableHide = false;
 
 
         // actionBtnLearn.gameObject.SetActive(Config.main.APP_FOR_KIDS);
-        UpdateLayoutBtn();
+
 
         // actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
         LoadPrefab();
@@ -73,6 +73,9 @@ public class UIHomeCaiCaiLe : UIHomeBase
             imageBgName.gameObject.SetActive(false);
         }
 
+
+
+        UpdateLayoutBtn();
     }
 
     // Use this for initialization
@@ -264,8 +267,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
 
     public void OnClickBtnPlay()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
 
         Debug.Log("OnClickBtnPlay");
         if (this.controller != null)
@@ -284,8 +286,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
     }
 
     public void OnClickBtnLearn()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
 
         if (this.controller != null)
         {

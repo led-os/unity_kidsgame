@@ -43,12 +43,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     // Use this for initialization
     void Start()
     {
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        Debug.Log("AudioPlay Start");
-        if (ret)
-        {
-            PlayMusicBg();
-        }
+       
     }
 
     // Update is called once per frame
@@ -56,24 +51,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     {
 
     }
-
-    //设置背景音乐
-    public void SetMusicBg()
-    {
-        audioSource.clip = AudioCache.main.Load(AppRes.AUDIO_BG);
-    }
-
-
-    public void PlayMusicBg()
-    {
-        if (Common.isMonoPlayer)//isPC 
-        {
-            return;
-        }
-        SetMusicBg();
-        Play();
-    }
-
+  
     public void Stop()
     {
         audioSource.Stop();
@@ -90,8 +68,6 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
         {
             audioSource.Pause();
         }
-
-
     }
 
     public void PlayAudioClip(AudioClip clip)

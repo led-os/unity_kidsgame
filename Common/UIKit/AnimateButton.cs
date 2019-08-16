@@ -22,6 +22,8 @@ public class AnimateButton : UIBehaviour, IPointerClickHandler
     }
 
     public bool interactable = true;
+    public bool enableAnimate = true;
+    public bool isPlaySound = true;
 
     [SerializeField]
     private ButtonClickedEvent m_onClick = new ButtonClickedEvent();
@@ -51,7 +53,7 @@ public class AnimateButton : UIBehaviour, IPointerClickHandler
     /// <param name="eventData">The data associated to the pointer event.</param>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-                Debug.Log("AnimateButton OnPointerClick");
+        Debug.Log("AnimateButton OnPointerClick");
         if (eventData.button != PointerEventData.InputButton.Left || !interactable)
         {
             return;
@@ -75,7 +77,10 @@ public class AnimateButton : UIBehaviour, IPointerClickHandler
         {
             return;
         }
-
+        if (isPlaySound)
+        {
+            AudioPlay.main.PlayBtnSound();
+        }
         animator.SetTrigger("Pressed");
         StartCoroutine(InvokeOnClickAction());
     }

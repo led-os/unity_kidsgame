@@ -36,7 +36,6 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
 
     public List<object> listItem;
 
-    private AudioClip audioClipBtn;
     int oneCellNum;
     int heightCell;
     int totalItem;
@@ -44,10 +43,8 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     {
         heightCell = 160;
         LoadPrefab();
-
-
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
-
+        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);//IMAGE_SETTING_BG
+        // 
         {
             string str = Language.main.GetString(AppString.STR_SETTING);
             textTitle.text = str;
@@ -59,20 +56,20 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
             sizeDelta.x = str_w + fontsize + oft * 2;
             rctran.sizeDelta = sizeDelta;
         }
-
-        audioClipBtn = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
         listItem = new List<object>();
         UpdateItem();
         oneCellNum = 1;
         totalItem = listItem.Count;
         numRows = totalItem;
         tableView.dataSource = this;
+
+
     }
 
     // Use this for initialization
     void Start()
     {
-        LayOutChild();
+        LayOut();
     }
 
     // Update is called once per frame
@@ -86,12 +83,12 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
 
         if (Device.isDeviceDidRotation)
         {
-            LayOutChild();
+            LayOut();
         }
     }
 
 
-    void LayOutChild()
+    public override void LayOut()
     {
         //Vector2 sizeCanvas = ViewControllerManager.sizeCanvas;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
@@ -124,8 +121,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     }
 
     public void OnClickBtnBack()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

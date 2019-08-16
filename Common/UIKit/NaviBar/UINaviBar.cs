@@ -41,8 +41,7 @@ public class UINaviBar : UIView
     }
 
     public void OnClickBtnBack()
-    {
-         AudioPlay.main.PlayBtnSound();
+    { 
         if (callbackBackClick != null)
         {
             callbackBackClick(this);

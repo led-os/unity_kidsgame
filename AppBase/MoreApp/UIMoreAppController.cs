@@ -25,8 +25,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     public int numRows;
     private int numInstancesCreated = 0;
 
-    private MoreAppParser moreAppParser;
-    private AudioClip audioClipBtn;
+    private MoreAppParser moreAppParser; 
 
     List<object> listItem;
     int oneCellNum;
@@ -43,8 +42,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
         StartParse();
         LoadPrefab();
-        heightCell = 512;
-        audioClipBtn = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
+        heightCell = 512; 
 
         oneCellNum = 1;
         if (Screen.width > Screen.height)
@@ -125,8 +123,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
 
     }
     public void OnClickBtnBack()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

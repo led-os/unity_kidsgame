@@ -200,8 +200,7 @@ public class UIPay : ScriptBase, ITableViewDataSource
 
 
     public void OnClickBtnBack()
-    {
-         AudioPlay.main.PlayBtnSound();
+    { 
         Destroy(this.gameObject);
     }
  

@@ -203,8 +203,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     }
 
     public void OnClickBtnBack()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {
@@ -223,8 +222,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         if (item.IsLock())
         {
             return;
-        }
-         AudioPlay.main.PlayBtnSound();
+        } 
         tick = Common.GetCurrentTimeMs();
         GotoGame(item.index);
 

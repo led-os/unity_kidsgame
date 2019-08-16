@@ -44,6 +44,7 @@ public class AppSceneBase : ScriptBase
         this.gameObject.AddComponent<IAPCommon>();
         this.gameObject.AddComponent<ShareCommon>();
         this.gameObject.AddComponent<TTSCommon>();
+        //this.gameObject.AddComponent<MusicBgPlay>();
         this.gameObject.AddComponent<AudioPlay>();
         this.gameObject.AddComponent<PopUpManager>();
 

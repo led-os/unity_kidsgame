@@ -38,13 +38,11 @@ public class UIGameFail : UIViewPop
     }
 
     public void OnClickBtnRevive()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         Close();
     }
     public void OnClickBtnRestart()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         Close();
         LevelManager.main.placeLevel = 0;
         LevelManager.main.gameLevel = 0;

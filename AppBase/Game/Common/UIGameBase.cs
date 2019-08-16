@@ -171,24 +171,22 @@ public class UIGameBase : UIView
     {
     }
     public void OnClickBtnMusic()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
         if (value)
         {
-            AudioPlay.main.PlayMusicBg();
+            MusicBgPlay.main.PlayMusicBg();
         }
         else
         {
-            AudioPlay.main.Stop();
+            MusicBgPlay.main.Stop();
         }
         UpdateBtnMusic();
     }
     public void OnClickBtnShare()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         ShowShare();
     }
 
@@ -200,8 +198,7 @@ public class UIGameBase : UIView
         // {
         //     pop.Close();
         // }
-        Debug.Log("GameBase:OnClickBtnBack");
-        AudioPlay.main.PlayBtnSound();
+        Debug.Log("GameBase:OnClickBtnBack"); 
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {

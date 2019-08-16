@@ -72,11 +72,11 @@ public class UISettingCellItem : UICellItemBase
             UpdateBtnSwitch(value);
             if (value)
             {
-                AudioPlay.main.PlayMusicBg();
+                MusicBgPlay.main.PlayMusicBg();
             }
             else
             {
-                AudioPlay.main.Stop();
+                MusicBgPlay.main.Stop();
             }
 
 

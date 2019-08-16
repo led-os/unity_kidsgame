@@ -29,15 +29,12 @@ public class UIHomeBase : UIView
     public Button btnSound;
     public Button btnAdVideo;
     public float topBarHeight = 160;
-    AudioClip audioClipBtnPlay;
     static private bool isAppCheakVersion = false;
     public void Init()
     {
         Debug.Log("UIMainBase Init");
         //提前加载
         LevelManager.main.ParsePlaceList();
-
-        audioClipBtnPlay = AudioCache.main.Load(AppRes.AUDIO_BTN_CLICK);
         if (uiHomeAppCenter != null)
         {
             uiHomeAppCenter.gameObject.SetActive(true);
@@ -259,24 +256,22 @@ public class UIHomeBase : UIView
     }
 
     public void OnClickBtnMusic()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
         if (value)
         {
-            AudioPlay.main.PlayMusicBg();
+            MusicBgPlay.main.PlayMusicBg();
         }
         else
         {
-            AudioPlay.main.Stop();
+            MusicBgPlay.main.Stop();
         }
         UpdateBtnMusic();
     }
     public void OnClickBtnSound()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
         bool value = !ret;
         Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, value);
@@ -285,31 +280,35 @@ public class UIHomeBase : UIView
     }
 
     public void OnClickBtnMore()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         MoreViewController.main.Show(null, null);
     }
     public void OnClickBtnSetting()
+    { 
+
+        // TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);//IMAGE_SETTING_BG 导致PlayBtnSound声音播放不完整 延迟执行
+       // Invoke("DoClickBtnSetting", 0.1f);
+       DoClickBtnSetting();
+    }
+
+    public void DoClickBtnSetting()
     {
-        AudioPlay.main.PlayBtnSound();
         SettingViewController.main.Show(null, null);
     }
+
     public void OnClickBtnShare()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         ShareViewController.main.callBackClick = OnUIShareDidClick;
         ShareViewController.main.Show(null, null);
     }
 
     public void OnClickBtnAdVideo()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         AdKitCommon.main.ShowAdVideo();
     }
 
     public void OnClickBtnNoAd()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         if (Config.main.APP_FOR_KIDS)
         {
             ParentGateViewController.main.Show(null, null);

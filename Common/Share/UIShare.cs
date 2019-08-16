@@ -174,8 +174,7 @@ public class UIShare : UIView, ITableViewDataSource
 
 
     public void OnClickBtnBack()
-    {
-         AudioPlay.main.PlayBtnSound();
+    { 
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

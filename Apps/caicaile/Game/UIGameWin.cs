@@ -97,22 +97,18 @@ public class UIGameWin : UIViewPop
         return str;
     }
     public void OnClickBtnClose()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         Close();
     }
     public void OnClickBtnFriend()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
     }
     public void OnClickBtnNext()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         Close();
         LevelManager.main.GotoNextLevel();
     }
     public void OnClickBtnAddLove()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
     }
 }

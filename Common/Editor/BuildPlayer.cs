@@ -18,11 +18,11 @@ public class BuildPlayer
 
 
     [MenuItem("Custom/Build Android")]
-    static void PerformAndroidUCBuild()
+    static void PerformAndroidBuild()
     {
-        Debug.Log("PerformAndroidUCBuild start");
+        Debug.Log("PerformAndroidBuild start");
         BulidTarget("UC", "Android");
-        Debug.Log("PerformAndroidUCBuild end");
+        Debug.Log("PerformAndroidBuild end");
     }
 
 
@@ -102,6 +102,12 @@ public class BuildPlayer
 
     static void GenericBuild(string[] scenes, string target_dir, BuildTarget build_target, BuildOptions build_options)
     {
+
+        if (!Directory.Exists(target_dir))
+        {
+            Directory.CreateDirectory(target_dir);
+        }
+
         EditorUserBuildSettings.SwitchActiveBuildTarget(build_target);
         // string res =
         BuildReport report = BuildPipeline.BuildPlayer(scenes, target_dir, build_target, build_options);

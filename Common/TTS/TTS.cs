@@ -30,7 +30,7 @@ public class TTS
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         if (ret)
         {
-            AudioPlay.main.Stop();
+            MusicBgPlay.main.Stop();
         }
 
         if (Common.isAndroid || Common.isiOS)

@@ -174,45 +174,34 @@ public class UIHomeTopBar : UIView
     }
 
     public void OnClickBtnMusic()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
         if (value)
         {
-            AudioPlay.main.PlayMusicBg();
+            MusicBgPlay.main.PlayMusicBg();
         }
         else
         {
-            AudioPlay.main.Stop();
+            MusicBgPlay.main.Stop();
         }
         UpdateBtnMusic();
     }
     public void OnClickBtnAdVideo()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         AdKitCommon.main.ShowAdVideo();
     }
 
 
     public void OnClickBtnSetting()
-    {
-        AudioPlay.main.PlayBtnSound();
-        // if (audioSource == null)
-        // {
-        //     //AudioPlayer对象在场景切换后可能从当前scene移除了
-        //     GameObject audioPlayer = GameObject.Find("AudioPlayer");
-        //     audioSource = audioPlayer.GetComponent<AudioSource>();
-        // }
-        // audioSource.PlayOneShot(audioClipBtnPlay);
+    {  
         SettingViewController.main.Show(AppSceneBase.main.rootViewController, null);
     }
 
 
     public void OnClickBtnMore()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         // if (audioSource == null)
         // {
         //     //AudioPlayer对象在场景切换后可能从当前scene移除了
@@ -226,16 +215,14 @@ public class UIHomeTopBar : UIView
     }
 
     public void OnClickBtnLearn()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         MoreViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
     }
 
 
     public void OnClickBtnNoADIAP()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         if (Config.main.APP_FOR_KIDS)
         {
             ParentGateViewController.main.Show(null, null);
@@ -273,8 +260,7 @@ public class UIHomeTopBar : UIView
     }
 
     public void OnClickBtnRestoreIAP()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         if (Config.main.APP_FOR_KIDS && !Application.isEditor)
         {
             ParentGateViewController.main.Show(null, null);
@@ -307,8 +293,7 @@ public class UIHomeTopBar : UIView
 
 
     public void OnClickBtnShare()
-    {
-        AudioPlay.main.PlayBtnSound();
+    { 
         if (Config.main.APP_FOR_KIDS)
         {
             ParentGateViewController.main.Show(null, null);
