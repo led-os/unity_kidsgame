@@ -914,18 +914,21 @@ public class Common
         return w;
     }
 
-    static public void SetButtonTextWidth(Button btn, string str, float w)
+    static public void SetButtonTextWidth(Button btn, string str, float w, bool isFitWidth = true)
     {
         Transform tr = btn.transform.Find("Text");
         Text btnText = tr.GetComponent<Text>();
         btnText.text = str;
-        RectTransform rctran = btn.transform as RectTransform;
-        Vector2 sizeDelta = rctran.sizeDelta;
-        sizeDelta.x = w;
-        rctran.sizeDelta = sizeDelta;
+        if (isFitWidth)
+        {
+            RectTransform rctran = btn.transform as RectTransform;
+            Vector2 sizeDelta = rctran.sizeDelta;
+            sizeDelta.x = w;
+            rctran.sizeDelta = sizeDelta;
+        }
     }
 
-    static public void SetButtonText(Button btn, string str, float offset = 0)
+    static public void SetButtonText(Button btn, string str, float offset = 0, bool isFitWidth = true)
     {
         Transform tr = btn.transform.Find("Text");
         Text btnText = tr.GetComponent<Text>();
@@ -940,7 +943,8 @@ public class Common
             oft = offset;
         }
 
-        SetButtonTextWidth(btn, str, str_w + oft);
+        SetButtonTextWidth(btn, str, str_w + oft, isFitWidth);
+
     }
 
 

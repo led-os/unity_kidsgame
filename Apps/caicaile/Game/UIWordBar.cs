@@ -28,7 +28,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     /// </summary>
     void Awake()
     {
-        spriteBg = LoadTexture.CreateSprieFromResource("AppCommon/UI/Common/wordbar_item_bg");
+        spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/wordbar_item_bg");
 
     }
 

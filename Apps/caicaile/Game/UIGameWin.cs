@@ -11,6 +11,7 @@ public class UIGameWin : UIViewPop
     public UITextView textView;
     public Text textTitle;
     public Image imageBg;
+    public Image imageHead;
     public Button btnClose;
 
     public Button btnFriend;
@@ -24,15 +25,24 @@ public class UIGameWin : UIViewPop
         base.Awake();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
 
-        Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
-        Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"));
-        Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
+        //Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
+        Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
+        //Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
 
-
-        textTitle.text = info.title;
-        string str = GetText();
+        string str = info.title;
+        if (Common.BlankString(str))
+        {
+            str = LanguageManager.main.languageGame.GetString(info.id);
+        }
+        textTitle.text = str;
+        str = GetText();
+        if (Common.BlankString(str))
+        {
+            str = Language.main.GetString("STR_UIVIEWALERT_MSG_GAME_FINISH");
+        }
 
         textView.SetFontSize(80);
+        textView.SetTextColor(new Color32(192, 90, 59, 255));
         textView.text = str;
     }
 
@@ -56,8 +66,8 @@ public class UIGameWin : UIViewPop
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
             RectTransform rctran = this.GetComponent<RectTransform>();
-            w = Mathf.Min(sizeCanvas.x, sizeCanvas.y) * 0.8f;
-            h = w;
+            w = sizeCanvas.x * 0.8f;
+            h = rctran.rect.size.y * w / rctran.rect.size.x;
             rctran.sizeDelta = new Vector2(w, h);
 
         }
@@ -97,18 +107,19 @@ public class UIGameWin : UIViewPop
         return str;
     }
     public void OnClickBtnClose()
-    { 
+    {
         Close();
+        GameManager.main.GotoPlayAgain();
     }
     public void OnClickBtnFriend()
-    { 
+    {
     }
     public void OnClickBtnNext()
-    { 
+    {
         Close();
         LevelManager.main.GotoNextLevel();
     }
     public void OnClickBtnAddLove()
-    { 
+    {
     }
 }

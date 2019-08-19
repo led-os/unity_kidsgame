@@ -148,6 +148,7 @@ public class UIGameBase : UIView
         languageGame.Init(strlan);
         languageGame.SetLanguage(Language.main.GetLanguage());
 
+
     }
     public void UpdateBtnMusic()
     {
@@ -171,7 +172,7 @@ public class UIGameBase : UIView
     {
     }
     public void OnClickBtnMusic()
-    { 
+    {
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
@@ -186,7 +187,7 @@ public class UIGameBase : UIView
         UpdateBtnMusic();
     }
     public void OnClickBtnShare()
-    { 
+    {
         ShowShare();
     }
 
@@ -198,7 +199,7 @@ public class UIGameBase : UIView
         // {
         //     pop.Close();
         // }
-        Debug.Log("GameBase:OnClickBtnBack"); 
+        Debug.Log("GameBase:OnClickBtnBack");
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {

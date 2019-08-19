@@ -40,14 +40,14 @@ public class AppRes
     public const string PREFAB_MOREAPP_CELL_ITEM = "AppCommon/Prefab/MoreApp/UIMoreAppCellItem";
 
     //image
-    public const string IMAGE_BtnMusicOn = "AppCommon/UI/Home/BtnMusicOn";
-    public const string IMAGE_BtnMusicOff = "AppCommon/UI/Home/BtnMusicOff";
-    public const string IMAGE_BtnSoundOn = "AppCommon/UI/Home/BtnSoundOn";
-    public const string IMAGE_BtnSoundOff = "AppCommon/UI/Home/BtnSoundOff";
+    public const string IMAGE_BtnMusicOn = "App/UI/Home/BtnMusicOn";
+    public const string IMAGE_BtnMusicOff = "App/UI/Home/BtnMusicOff";
+    public const string IMAGE_BtnSoundOn = "App/UI/Home/BtnSoundOn";
+    public const string IMAGE_BtnSoundOff = "App/UI/Home/BtnSoundOff";
 
-    public const string IMAGE_UIVIEWALERT_BG_BOARD = "AppCommon/UI/Setting/SettingCellBgBlue";
+    public const string IMAGE_UIVIEWALERT_BG_BOARD = "App/UI/Setting/SettingCellBgBlue";
     static public Vector4 borderUIViewAlertBgBoard = new Vector4(18f, 18f, 18f, 18f);
-    public const string IMAGE_UIVIEWALERT_BG_BTN = "AppCommon/UI/Setting/SettingCellBgOringe";
+    public const string IMAGE_UIVIEWALERT_BG_BTN = "App/UI/Setting/SettingCellBgOringe";
     static public Vector4 borderUIViewAlertBgBtn = new Vector4(18f, 18f, 18f, 18);
 
 
@@ -57,15 +57,15 @@ public class AppRes
     public const string IMAGE_GUANKA_CELL_BG_LOCK = "App/UI/Guanka/guanka_cell_bg_lock";
 
 
-    public const string IMAGE_CELL_BG_BLUE = "AppCommon/UI/Setting/SettingCellBgBlue";
-    public const string IMAGE_CELL_BG_ORINGE = "AppCommon/UI/Setting/SettingCellBgOringe";
-    public const string IMAGE_CELL_BG_YELLOW = "AppCommon/UI/Setting/SettingCellBgYellow";
+    public const string IMAGE_CELL_BG_BLUE = "App/UI/Setting/SettingCellBgBlue";
+    public const string IMAGE_CELL_BG_ORINGE = "App/UI/Setting/SettingCellBgOringe";
+    public const string IMAGE_CELL_BG_YELLOW = "App/UI/Setting/SettingCellBgYellow";
     static public Vector4 borderCellSettingBg = new Vector4(18f, 18f, 18f, 18f);
 
 
 
     // cmditem
-    public const string IMAGE_CMDITEM_BG = "AppCommon/UI/Game/CmdItem/CmdItemBg";
+    public const string IMAGE_CMDITEM_BG = "App/UI/Game/CmdItem/CmdItemBg";
 
 
     //bg

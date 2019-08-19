@@ -12,6 +12,7 @@ enum SettingItemTag
     TAG_SETTING_VERSION,
     TAG_SETTING_LANGUAGE,
     TAG_SETTING_BACKGROUND_MUSIC,
+    TAG_SETTING_SOUND,
     TAG_SETTING_NOAD,
     TAG_SETTING_RESTORE_IAP,
 
@@ -121,7 +122,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     }
 
     public void OnClickBtnBack()
-    { 
+    {
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {
@@ -210,6 +211,13 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
             ItemInfo info = new ItemInfo();
             info.title = Language.main.GetString(AppString.STR_SETTING_BACKGROUND_MUSIC);
             info.tag = (int)SettingItemTag.TAG_SETTING_BACKGROUND_MUSIC;
+            listItem.Add(info);
+        }
+
+        {
+            ItemInfo info = new ItemInfo();
+            info.title = Language.main.GetString("STR_SETTING_SOUND");
+            info.tag = (int)SettingItemTag.TAG_SETTING_SOUND;
             listItem.Add(info);
         }
         if (Config.main.isHaveRemoveAd)

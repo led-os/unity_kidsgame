@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Text;
+
 public class FileUtil : MonoBehaviour
 {
     public const string JAVA_CLASS_FILEUTIL = "com.moonma.common.FileUtil";
@@ -164,7 +165,7 @@ public class FileUtil : MonoBehaviour
             using (var javaClass = new AndroidJavaClass(JAVA_CLASS_FILEUTIL))
             {
 
-                ret = javaClass.CallStatic<byte[]>("ReadRGBDataFromByte",data);
+                ret = javaClass.CallStatic<byte[]>("ReadRGBDataFromByte", data);
             }
 
         }
@@ -358,4 +359,45 @@ public class FileUtil : MonoBehaviour
     }
 
 
+    static public void DeleteDir(string dir)
+    {
+
+        //去除文件夹和子文件的只读属性
+        //去除文件夹的只读属性
+        System.IO.DirectoryInfo fileInfo = new DirectoryInfo(dir);
+        fileInfo.Attributes = FileAttributes.Normal & FileAttributes.Directory;
+
+        //去除文件的只读属性
+        System.IO.File.SetAttributes(dir, System.IO.FileAttributes.Normal);
+
+        //判断文件夹是否还存在
+        if (Directory.Exists(dir))
+        {
+
+            foreach (string f in Directory.GetFileSystemEntries(dir))
+            {
+
+                if (File.Exists(f))
+                {
+                    //如果有子文件删除文件
+                    File.Delete(f);
+                }
+                else
+                {
+                    //循环递归删除子文件夹
+                    DeleteDir(f);
+                }
+
+            }
+
+            //删除空文件夹
+
+            Directory.Delete(dir);
+
+        }
+
+
+
+
+    }
 }

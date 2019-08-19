@@ -83,7 +83,7 @@ public class BuildPlayer
         //==================这里是比较重要的东西=======================
 
         //开始Build场景，等待吧～
-        GenericBuild(SCENES, target_dir + "/" + target_name, buildTarget, BuildOptions.None);
+        GenericBuild(SCENES, target_dir + "/" + target_name, targetGroup,buildTarget, BuildOptions.None);
 
     }
 
@@ -100,15 +100,19 @@ public class BuildPlayer
 
     //https://docs.unity3d.com/ScriptReference/BuildPipeline.BuildPlayer.html
 
-    static void GenericBuild(string[] scenes, string target_dir, BuildTarget build_target, BuildOptions build_options)
+    static void GenericBuild(string[] scenes, string target_dir, BuildTargetGroup targetGroup,BuildTarget build_target, BuildOptions build_options)
     {
 
-        if (!Directory.Exists(target_dir))
+        if (Directory.Exists(target_dir))
+        {
+            FileUtil.DeleteDir(target_dir);
+        }
+        else
         {
             Directory.CreateDirectory(target_dir);
         }
 
-        EditorUserBuildSettings.SwitchActiveBuildTarget(build_target);
+        EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup,build_target);
         // string res =
         BuildReport report = BuildPipeline.BuildPlayer(scenes, target_dir, build_target, build_options);
 

@@ -66,6 +66,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         uiWordBar.callbackGameFinish = OnGameWinFinish;
         uiWordBar.callbackGold = OnNotEnoughGold;
 
+        LanguageManager.main.UpdateLanguage(LevelManager.main.placeLevel);
         UpdateLanguage();
         UpdateBtnMusic();
 
@@ -129,7 +130,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
         }
 
-        TextureUtil.UpdateImageTexture(imagePicBoard, "AppCommon/UI/Game/BoardPic", true);
+        TextureUtil.UpdateImageTexture(imagePicBoard, "App/UI/Game/BoardPic", true);
 
 
         UpdateWord();
@@ -413,7 +414,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         //show game win
         if (isFail)
         {
-            PopUpManager.main.Show<UIGameFail>("AppCommon/Prefab/Game/UIGameFail");
+            PopUpManager.main.Show<UIGameFail>("App/Prefab/Game/UIGameFail");
         }
         else
         {
@@ -430,7 +431,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
                 Debug.Log("caicaile OnGameWin GAME_STATUS_FINISH+info.id=" + info.id);
                 gameBase.SetGameItemStatus(info, GameBase.GAME_STATUS_FINISH);
             }
-            PopUpManager.main.Show<UIGameWin>("AppCommon/Prefab/Game/UIGameWin");
+            PopUpManager.main.Show<UIGameWin>("App/Prefab/Game/UIGameWin");
             // ShowGameWin();
         }
 

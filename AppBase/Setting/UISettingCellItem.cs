@@ -31,6 +31,12 @@ public class UISettingCellItem : UICellItemBase
                 bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
                 UpdateBtnSwitch(ret);
             }
+            if (info.tag == (int)SettingItemTag.TAG_SETTING_SOUND)
+            {
+                bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+                UpdateBtnSwitch(ret);
+            }
+
             Vector4 border = AppRes.borderCellSettingBg;
             TextureUtil.UpdateImageTexture(imageBg, strImageBg[index % 3], false, border);
         }
@@ -42,6 +48,11 @@ public class UISettingCellItem : UICellItemBase
         {
             ret = true;
         }
+        if (info.tag == (int)SettingItemTag.TAG_SETTING_SOUND)
+        {
+            ret = true;
+        }
+
         return ret;
     }
 
@@ -81,6 +92,14 @@ public class UISettingCellItem : UICellItemBase
 
 
         }
+        if (tagValue == (int)SettingItemTag.TAG_SETTING_SOUND)
+        {
+            bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+            bool value = !ret;
+            Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, value);
+            UpdateBtnSwitch(value); 
+        }
+
     }
 
 }

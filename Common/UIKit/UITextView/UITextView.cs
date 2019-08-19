@@ -55,6 +55,10 @@ public class UITextView : UIView
         textContent.fontSize = sz;
     }
 
+      public void SetTextColor(Color cr)
+    { 
+        textContent.color = cr;
+    }
     public override void LayOut()
     {
         int fontsize = textContent.fontSize;

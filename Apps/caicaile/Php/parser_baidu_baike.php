@@ -3,6 +3,8 @@ header("Content-type: text/html; charset=utf-8");
 
 include('./simple_html_dom.php');
 
+$is_find_poem = false;
+$listPoem = array();
 /*
     百度百科 唐诗三百首
     https://baike.baidu.com/item/%E5%94%90%E8%AF%97%E4%B8%89%E7%99%BE%E9%A6%96/18677
@@ -28,19 +30,48 @@ function get_html($url)
     return $html;
 }
 
-function getAdId($array_div, $tr, $key)
+function GetPoemItem($div)
 {
-    $adid;
-    $array_div = $tr->find('div[class=inner]');
-    foreach ($array_div as $div_tmp) {
-        if ($div_tmp->innertext == $key) {
-            $span = $tr->find('span[class=field-value]', 0);
-            $adid = $span->innertext;
+    global $is_find_poem;
+    global $listPoem;
+    $a = $div->find('a[target=_blank]', 0);
+    if (!$a) {
+        //  echo "find array_a fail \n";
+        return;
+    }
+    //<b>五言古诗</b>
+    // foreach ($array_a as $a) 
+
+    {
+        $b = $a->find('b', 0);
+        if ($b) {
+            $is_find_poem = true;
+            // echo $a->innertext;
+            echo $b->innertext;
+            echo "\n";
+        } else {
+            if ($is_find_poem) {
+                echo $a->innertext;
+                echo "\n";
+                echo $a->href;
+                echo "\n";
+
+
+                $element = array(
+                    'id' => urlencode($a->innertext),
+                    'url' => urlencode($a->href),
+                );
+                array_push($listPoem, $element);
+
+                if ($a->innertext == "同题仙游观") {
+                    //end
+                    $is_find_poem = false;
+                }
+            }
         }
     }
-    return $adid;
 }
-function parserAd($url, $save_file)
+function parserHtml($url, $save_file)
 {
     // get DOM from URL or file
     $html = get_html($url);
@@ -49,153 +80,34 @@ function parserAd($url, $save_file)
         return;
     }
     //<table class="table media-table js-media-details">
-    $ad_table = $html->find('table[class=table media-table js-media-details]', 0);
-    if (!$ad_table) {
-        echo "find ad_table fail";
+    $div_main = $html->find('div[class=main-content]', 0);
+    if (!$div_main) {
+        echo "find div_main fail";
         return;
     }
-    //<div class="media-body">
-    $div = $html->find('div[class=media media-info-general]', 0);
-    //tbody/tr
-
-    $strAppId;
-    $strAppName;
-    $strAppPackage;
-    //-->疯狂填色绘本HD<
-    $h4 = $div->find('span[class=text]', 0);
-    $strAppName = $h4->innertext;
-    $strhead = "-->";
-    $strend = "<";
-    $pos = strpos($strAppName, $strhead);
-    if ($pos >= 0) {
-        $strAppName = strstr($strAppName, $strhead);
-        $strAppName = strstr($strAppName, $strend, TRUE);
-        $strAppName = substr($strAppName, strlen($strhead), strlen($strAppName) - strlen($strhead));
-    }
-    $strAppName = $strAppName . "_ad2.0";
+    echo "find div_main\n\n";
 
 
-    //<span class="field-value">1106701789</span>
-    $span = $div->find('span[class=field-value]', 0);
-    $strAppId = $span->innertext;
-
-
-    echo $strAppId;
-    echo "\n";
-    echo $strAppName;
-    echo "\n";
-    echo $strAppPackage;
-    echo "\n\n";
-
-    $strAdIdSplash;
-    $strAdIdInsert;
-    $strAdIdBanner;
-    $strAdIdVideo;
     //解析广告位
 
-
-    $isFindSplash = false;
-    $isFindInsert = false;
-    $isFindBanner = false;
     //tbody/tr
-    $array_tr = $ad_table->find('tbody/tr');
-    foreach ($array_tr as $tr) { {
-            //原生
+    $array_div = $div_main->find('div[class=para]');
 
-            if (!$strAdIdNative) {
-                $adid = getAdId(array_div, $tr, "原生");
-                if ($adid) {
-                    $strAdIdNative = $adid;
-                    echo "native ad id: \n";
-                    echo $adid;
-                    echo "\n";
-                }
-            }
+    if (!$array_div) {
+        echo "find array_div fail";
+        return;
+    }
 
-            //开屏
-            if (!$strAdIdSplash) {
-                $adid = getAdId(array_div, $tr, "开屏");
-                if ($adid) {
-                    $strAdIdSplash = $adid;
-                    echo "splash ad id: \n";
-                    echo $adid;
-                    echo "\n";
-                }
-            }
-
-
-
-            //插屏 
-
-            if (!$strAdIdInsert) {
-                $adid = getAdId(array_div, $tr, "插屏2.0");
-                if ($adid) {
-                    $strAdIdInsert = $adid;
-                    echo "insert ad id: \n";
-                    echo $adid;
-                    echo "\n";
-                }
-            }
-
-
-            //横幅
-
-            if (!$strAdIdBanner) {
-                $adid = getAdId(array_div, $tr, "Banner2.0");
-                if ($adid) {
-                    $strAdIdBanner = $adid;
-                    echo "banner ad id: \n";
-                    echo $adid;
-                    echo "\n";
-                }
-            }
-
-            //激励视频
-            if (!$strAdIdVideo) {
-                $adid = getAdId(array_div, $tr, "激励视频");
-                if ($adid) {
-                    $strAdIdVideo = $adid;
-                    echo "strAdIdVideo ad id: \n";
-                    echo $adid;
-                    echo "\n";
-                }
-            }
+    foreach ($array_div as $div) { {
+            GetPoemItem($div);
         }
     }
 
-    $adid_default = "0";
-    if (!$strAdIdNative) {
-        $strAdIdNative = $adid_default;
-    }
-    if (!$strAdIdSplash) {
-        $strAdIdSplash = $adid_default;
-    }
-    if (!$strAdIdInsert) {
-        $strAdIdInsert = $adid_default;
-    }
-    if (!$strAdIdBanner) {
-        $strAdIdBanner = $adid_default;
-    }
-    if (!$strAdIdVideo) {
-        $strAdIdVideo = $adid_default;
-    }
 
 
-    $list = array();
-    $element = array(
-        'source' => urlencode("gdt"),
-        'appname' => urlencode($strAppName),
-        'appid' => urlencode($strAppId),
-        'key_splash' => urlencode($strAdIdSplash),
-        'key_splash_insert' => urlencode($strAdIdInsert),
-        'key_insert' => urlencode($strAdIdInsert),
-        'key_native' => urlencode($strAdIdNative),
-        'key_video' => urlencode($strAdIdVideo),
-        'key_banner' => urlencode($strAdIdBanner)
-    );
-    array_push($list, $element);
+    global $listPoem;
 
-    $arr = array('List' => $list);
+    $arr = array('Item' => $listPoem);
     $jsn = urldecode(json_encode($arr));
 
     $fp = fopen($save_file, "w");
@@ -212,6 +124,6 @@ function parserAd($url, $save_file)
 
 
 
-parserAd('../gdt.html', "../gdt.json");
+parserHtml('poem.html', "poem.json");
 //parserAd('../gdt_hd.html',"../gdt_hd.json");
 echo 'done<br>';

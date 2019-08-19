@@ -20,7 +20,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
 
     void Awake()
     {
-        spriteBg = LoadTexture.CreateSprieFromResource("AppCommon/UI/Common/word");
+        spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/word");
         InitItem();
     }
     // Use this for initialization
