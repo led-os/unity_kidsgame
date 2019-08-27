@@ -10,8 +10,17 @@ public class PoemContentInfo
 {
     public string content;
     public string pinyin;
+    public bool skip;
 }
 
+public class AnswerInfo
+{
+    public int index;
+    public bool isFinish;//是否答对
+    public string word;//答案
+    public bool isFillWord;//是否填了字
+    public string wordFill;//实际填充的字
+}
 
 public class CaiCaiLeItemInfo : ItemInfo
 {
@@ -29,6 +38,7 @@ public class GameGuankaParse : GuankaParseBase
 
     public const string STR_APPKEYNAME_POEM = "poem";
     public string strWord3500;
+    string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
     static private GameGuankaParse _main = null;
     public static GameGuankaParse main
     {
@@ -140,10 +150,55 @@ public class GameGuankaParse : GuankaParseBase
         return count;
     }
 
+    //过滤标点符号 点号：句号（ 。）、问号（ ？）、感叹号（ ！）、逗号（ ，）顿号（、）、分号（；）和冒号（：）。
+    public string FilterPunctuation(string str)
+    {
+        string ret = str;
+
+        foreach (string item in arrayPunctuation)
+        {
+            ret = ret.Replace(item, "");
+        }
+        return ret;
+    }
+
+    public bool IsPunctuation(string str)
+    {
+        bool ret = false;
+
+        foreach (string item in arrayPunctuation)
+        {
+            if (str == item)
+            {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    //非标点符号文字
+    public List<int> IndexListNotPunctuation(string str)
+    {
+        List<int> listRet = new List<int>();
+
+        int len = str.Length;
+        for (int i = 0; i < len; i++)
+        {
+            string word = str.Substring(i, 1);
+            if (!IsPunctuation(word))
+            {
+                listRet.Add(i);
+            }
+
+        }
+        return listRet;
+    }
+
     //诗词
     public void ParsePoemItem(CaiCaiLeItemInfo info)
     {
-        string filepath = Common.GAME_RES_DIR + "/guanka/" + info.id + ".json";
+        string filepath = Common.GAME_RES_DIR + "/guanka/poem/" + info.id + ".json";
         if (!FileUtil.FileIsExistAsset(filepath))
         {
             return;
@@ -170,7 +225,11 @@ public class GameGuankaParse : GuankaParseBase
             PoemContentInfo infoPoem = new PoemContentInfo();
             infoPoem.content = (string)item["content"];
             infoPoem.pinyin = (string)item["pinyin"];
-            info.listPoemContent.Add(infoPoem);
+            bool isSkip = JsonUtil.JsonGetBool(item, "skip", false);
+            if (!isSkip)
+            {
+                info.listPoemContent.Add(infoPoem);
+            }
         }
     }
 }

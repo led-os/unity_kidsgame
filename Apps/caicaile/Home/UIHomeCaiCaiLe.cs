@@ -27,8 +27,6 @@ public class UIHomeCaiCaiLe : UIHomeBase
         TextName.text = appname;
         timeAction = 0.3f;
         isActionFinish = false;
-        layoutBtnSide.enableHide = false;
-
 
         // actionBtnLearn.gameObject.SetActive(Config.main.APP_FOR_KIDS);
 
@@ -70,7 +68,8 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
         else
         {
-            imageBgName.gameObject.SetActive(false);
+            objLogo.gameObject.SetActive(false);
+            //imageBgName.gameObject.SetActive(false);
         }
 
 
@@ -180,6 +179,9 @@ public class UIHomeCaiCaiLe : UIHomeBase
         float oft = 8;
         float x, y, w, h;
         Vector2 sizeCanvas = this.frame.size;
+
+        layoutBtnSide.enableHide = false;
+
         int child_count = layoutBtnSide.GetChildCount(false);
         if (Device.isLandscape)
         {
@@ -216,7 +218,6 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
         rctran.anchoredPosition = new Vector2(x, y);
 
-
     }
 
     public override void LayOut()
@@ -250,16 +251,23 @@ public class UIHomeCaiCaiLe : UIHomeBase
         //layoutBtn
         {
 
+            layoutBtn.enableHide = false;
+            int child_count = layoutBtn.GetChildCount(false);
+            layoutBtn.row = 1;
+            layoutBtn.col = child_count;
+            layoutBtn.LayOut();
             RectTransform rctran = layoutBtn.transform as RectTransform;
             x = 0;
-            h = rctran.rect.size.y;
-            y = rctranPlay.anchoredPosition.y - rctranPlay.rect.size.y / 2 - h / 2;
-
             float h_item = rctran.rect.size.y;
             float w_item = h_item;
             float oft = layoutBtn.space.x;
-            rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtn.col, (h_item + oft) * layoutBtn.row);
+            h = (h_item + oft) * layoutBtn.row;
+            rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtn.col, h);
+
+            y = rctranPlay.anchoredPosition.y - rctranPlay.rect.size.y / 2 - h / 2;
             rctran.anchoredPosition = new Vector2(x, y);
+
+
         }
 
         LayoutChildBase();
@@ -267,7 +275,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
 
     public void OnClickBtnPlay()
-    { 
+    {
 
         Debug.Log("OnClickBtnPlay");
         if (this.controller != null)
@@ -286,12 +294,12 @@ public class UIHomeCaiCaiLe : UIHomeBase
     }
 
     public void OnClickBtnLearn()
-    { 
+    {
 
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;
-            navi.Push(LearnProgressViewController.main);
+            navi.Push(LearnViewController.main);
 
         }
     }

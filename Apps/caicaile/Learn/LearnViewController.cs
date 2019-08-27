@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LearnProgressViewController : PopViewController
+public class LearnViewController : PopViewController
 {
 
     UILearnProgress uiPrefab;
     UILearnProgress ui;
 
-    static private LearnProgressViewController _main = null;
-    public static LearnProgressViewController main
+    static private LearnViewController _main = null;
+    public static LearnViewController main
     {
         get
         {
             if (_main == null)
             {
-                _main = new LearnProgressViewController();
+                _main = new LearnViewController();
                 _main.Init();
             }
             return _main;

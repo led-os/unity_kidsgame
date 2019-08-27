@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SegmentItem : MonoBehaviour
+public class SegmentItem : UIView
 {
     public Image imageSel;
     public Text textTitle;
@@ -11,7 +11,9 @@ public class SegmentItem : MonoBehaviour
     public Color colorSel = Color.red;
     public Color colorUnSel = Color.white;
 
- private ISegmentItemDelegate _delegate;
+    public ItemInfo infoItem;
+
+    private ISegmentItemDelegate _delegate;
 
     public ISegmentItemDelegate iDelegate
     {
@@ -31,24 +33,28 @@ public class SegmentItem : MonoBehaviour
 
     }
 
-	public void UpdateInfo(ItemInfo info)
+    public void UpdateInfo(ItemInfo info)
     {
-		textTitle.color = colorUnSel;
-		textTitle.text = info.title;
+        infoItem = info;
+        textTitle.color = colorUnSel;
+        textTitle.text = info.title;
     }
-	public void SetSelect(bool isSel)
-	{
-		if(isSel){
-			textTitle.color = colorSel;
-		}else{
-			textTitle.color = colorUnSel;
-		}
-	}
-	public void OnClick()
-	{
-		 if (_delegate != null)
+    public void SetSelect(bool isSel)
+    {
+        if (isSel)
+        {
+            textTitle.color = colorSel;
+        }
+        else
+        {
+            textTitle.color = colorUnSel;
+        }
+    }
+    public void OnClick()
+    {
+        if (_delegate != null)
         {
             _delegate.SegmentItemDidClick(this);
         }
-	}
+    }
 }

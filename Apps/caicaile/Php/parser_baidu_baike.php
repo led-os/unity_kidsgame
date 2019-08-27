@@ -1,10 +1,12 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
 
-include('./simple_html_dom.php');
+//include('./simple_html_dom.php');
+include('./parser_poem_item.php');
 
 $is_find_poem = false;
 $listPoem = array();
+$indexPoem = 0;
 /*
     百度百科 唐诗三百首
     https://baike.baidu.com/item/%E5%94%90%E8%AF%97%E4%B8%89%E7%99%BE%E9%A6%96/18677
@@ -14,26 +16,33 @@ $listPoem = array();
     
     */
 
-function get_html($url)
+function IsPoemInList($element)
 {
-    $html = new simple_html_dom();
-
-    // // 从url中加载  
-    // $html->load_file('http://www.jb51.net');  
-
-    // // 从字符串中加载  
-    // $html->load('<html><body>从字符串中加载html文档演示</body></html>');  
-
-    //从文件中加载  
-    $html->load_file($url);
-
-    return $html;
+    global $listPoem;
+    foreach ($listPoem as $item) {
+        if ($item["id"]  == $element["id"]) {
+            return true;
+        }
+    }
+    return false;
 }
+function AddPoem($element)
+{
+    global $listPoem;
+    if (IsPoemInList($element)) {
+        return;
+    }
+    array_push($listPoem, $element);
+}
+
+
 
 function GetPoemItem($div)
 {
     global $is_find_poem;
     global $listPoem;
+    global $indexPoem;
+
     $a = $div->find('a[target=_blank]', 0);
     if (!$a) {
         //  echo "find array_a fail \n";
@@ -41,7 +50,6 @@ function GetPoemItem($div)
     }
     //<b>五言古诗</b>
     // foreach ($array_a as $a) 
-
     {
         $b = $a->find('b', 0);
         if ($b) {
@@ -51,17 +59,32 @@ function GetPoemItem($div)
             echo "\n";
         } else {
             if ($is_find_poem) {
-                echo $a->innertext;
-                echo "\n";
-                echo $a->href;
-                echo "\n";
+                $url = "https://baike.baidu.com" . $a->href;
+                $id = $a->innertext;
+
+                // echo $url;
+                // echo "\n";
 
 
                 $element = array(
-                    'id' => urlencode($a->innertext),
-                    'url' => urlencode($a->href),
+                    'id' => urlencode($id),
+                    'url' => urlencode($url),
                 );
-                array_push($listPoem, $element);
+
+
+                // $filepath = "poem/" . $id . $indexPoem . ".json";
+                $filepath = "poem/" . $id . ".json";
+                if (!file_exists($filepath)) {
+                    $ret =  ParserPoemItem($url, $filepath);
+                    if (!$ret) {
+                        echo "  error url:" . $url . "\n";
+                    } else {
+                        AddPoem($element);
+                    }
+                } else {
+                    AddPoem($element);
+                }
+
 
                 if ($a->innertext == "同题仙游观") {
                     //end
@@ -97,16 +120,18 @@ function parserHtml($url, $save_file)
         echo "find array_div fail";
         return;
     }
-
+    global $indexPoem;
+    $indexPoem = 0;
     foreach ($array_div as $div) { {
             GetPoemItem($div);
+            $indexPoem++;
         }
     }
 
 
 
     global $listPoem;
-
+    echo "Count = " . count($listPoem) . "\n";
     $arr = array('Item' => $listPoem);
     $jsn = urldecode(json_encode($arr));
 
@@ -124,6 +149,6 @@ function parserHtml($url, $save_file)
 
 
 
-parserHtml('poem.html', "poem.json");
+parserHtml('https://baike.baidu.com/item/%E5%94%90%E8%AF%97%E4%B8%89%E7%99%BE%E9%A6%96/18677', "poem.json");
 //parserAd('../gdt_hd.html',"../gdt_hd.json");
 echo 'done<br>';

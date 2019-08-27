@@ -48,6 +48,11 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     {
 
         string str = UIGameCaiCaiLe.languageWord.GetString(info.id);
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (isonlytext)
+        {
+            str = wordBoard.GetStringAnswer(info);
+        }
         Debug.Log("UIWordBar UpadteItem:" + str);
         int len = str.Length;
         wordNumMax = len;
@@ -117,12 +122,12 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
     public void AddWord(string word)
     {
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (isonlytext)
-        {
-            CheckAnswerOnlyText(word);
-            return;
-        }
+        // bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        // if (isonlytext)
+        // {
+        //     CheckAnswerOnlyText(word);
+        //     return;
+        // }
 
         foreach (UIWordItem item in listItem)
         {
@@ -158,32 +163,6 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         }
 
         return ret;
-    }
-
-
-    void CheckAnswerOnlyText(string word)
-    {
-
-        isAllAnswer = false;
-
-        if (wordBoard.strWordAnswer == word)
-
-        {
-            isAllAnswer = true;
-
-        }
-
-        if (isAllAnswer)
-        {
-            //全部猜对 game win
-            OnGameWin();
-
-        }
-        else
-        {
-            //游戏失败
-            OnGameFail();
-        }
     }
 
     //判断答案是否正确

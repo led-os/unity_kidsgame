@@ -11,7 +11,7 @@ public interface IUIWordItemDelegate
     void WordItemDidClick(UIWordItem item);
 
 }
-public class UIWordItem : MonoBehaviour
+public class UIWordItem : UIView
 {
     public const float TIME_ANIMATE_ERROR = 2.0f;
     public const int COUNT_ANIMATE_ERROR = 10;

@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
+public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoardDelegate
 {
     public const string STR_UNKNOWN_WORD = "__";
 
     public GameObject objTopBar;
     public Button btnTips;
+    public Button btnRetry;
     public RawImage imageBg;
     public RawImage imagePic;
     public Image imagePicBoard;
@@ -37,7 +38,8 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
     int rowWordBoard = 3;
     int colWordBoard = 8;
-
+    List<AnswerInfo> listAnswerInfo;//
+    int[] listIndexAnswer;
     void Awake()
     {
         gameBase = this.gameObject.AddComponent<GameBase>();
@@ -47,6 +49,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         }
         UpdateLanguageWord();
         btnTips.gameObject.SetActive(Config.main.isHaveShop);
+
+        btnRetry.gameObject.SetActive(GameGuankaParse.main.OnlyTextGame());
+
         RectTransform rctran = objTopBar.GetComponent<RectTransform>();
         //bgs
 
@@ -66,6 +71,8 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         uiWordBar.callbackGameFinish = OnGameWinFinish;
         uiWordBar.callbackGold = OnNotEnoughGold;
 
+        uiWordBoard.iDelegate = this;
+
         LanguageManager.main.UpdateLanguage(LevelManager.main.placeLevel);
         UpdateLanguage();
         UpdateBtnMusic();
@@ -75,12 +82,13 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         imagePic.gameObject.SetActive(!isonlytext);
         uiWordBar.gameObject.SetActive(!isonlytext);
 
+        Common.SetButtonText(btnTips, Language.main.GetString("STR_BTN_TIPS"), 64);
+        Common.SetButtonText(btnRetry, Language.main.GetString("STR_BTN_Retry"), 64);
     }
     // Use this for initialization
     void Start()
     {
         UpdateGuankaLevel(LevelManager.main.gameLevel);
-        Common.SetButtonText(btnTips, Language.main.GetString("STR_BTN_TIPS"), 16);
     }
 
     // Update is called once per frame
@@ -106,6 +114,37 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         AppSceneBase.main.ClearMainWorld();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
         GameGuankaParse.main.ParsePoemItem(info);
+
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (isonlytext)
+        {
+            PoemContentInfo infopoem0 = info.listPoemContent[0];
+            string strPoem = infopoem0.content;
+            //过虑标点符号
+            List<int> listIndexGuanka = GameGuankaParse.main.IndexListNotPunctuation(strPoem);
+
+            listIndexAnswer = Util.main.RandomIndex(listIndexGuanka.Count, 2);
+            ListSorter.EbullitionSort(listIndexAnswer);
+
+            listAnswerInfo = new List<AnswerInfo>();
+            uiWordBoard.strWordAnswer = "";
+            for (int i = 0; i < listIndexAnswer.Length; i++)
+            {
+                int idx = listIndexGuanka[listIndexAnswer[i]];
+                string word_answer = strPoem.Substring(idx, 1);
+                uiWordBoard.strWordAnswer += word_answer;
+
+                AnswerInfo infoanswer = new AnswerInfo();
+                infoanswer.word = word_answer;
+                infoanswer.index = idx;
+                infoanswer.isFinish = false;
+                infoanswer.isFillWord = false;
+                listAnswerInfo.Add(infoanswer);
+                Debug.Log("listAnswerInfo add " + word_answer);
+            }
+        }
+
+
         InitUI();
         // ShowAdInsert(GAME_AD_INSERT_SHOW_STEP,true);
         if (gameBase != null)
@@ -325,7 +364,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
             RectTransform rctran = objLeftBtn.GetComponent<RectTransform>();
             w = rctran.rect.size.x;
             h = rctranContentPic.rect.size.y;
-            x = 0;
+            x = -32;
             y = rctranWordBar.anchoredPosition.y;
             rctran.sizeDelta = new Vector2(w, h);
             rctran.anchoredPosition = new Vector2(x, y);
@@ -352,6 +391,159 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
     }
 
 
+    List<string> GetSplitStringByAnswerIndex(int[] listIndex, List<int> listIndexGuanka)
+    {
+        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        PoemContentInfo infopoem0 = info.listPoemContent[0];
+        string strPoem = infopoem0.content;
+
+
+        List<string> listStr = new List<string>();
+        for (int i = 0; i < listIndex.Length; i++)
+        {
+            int idx = listIndexGuanka[listIndex[i]];
+            int idx_pre = 0;
+            if (i > 0)
+            {
+                idx_pre = listIndexGuanka[listIndex[i - 1]] + 1;
+            }
+            int len = idx - idx_pre;
+            string str = strPoem.Substring(idx_pre, len);
+            listStr.Add(str);
+            //最后一个
+            if (i == listIndex.Length - 1)
+            {
+                len = (strPoem.Length - 1) - idx;
+                if (len > 0)
+                {
+                    str = strPoem.Substring(idx + 1, len);
+                    listStr.Add(str);
+                }
+            }
+
+        }
+        return listStr;
+    }
+
+    int GetFirstUnFillAnswer()
+    {
+        int index = 0;
+        foreach (AnswerInfo info in listAnswerInfo)
+        {
+            if (info.isFillWord == false)
+            {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    int GetFirstUnFinishAnswer()
+    {
+        int index = 0;
+        foreach (AnswerInfo info in listAnswerInfo)
+        {
+            if (info.isFinish == false)
+            {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    bool CheckAllAnswerFinish()
+    {
+        bool ret = true;
+        foreach (AnswerInfo info in listAnswerInfo)
+        {
+            if (info.isFinish == false)
+            {
+                ret = false;
+                break;
+            }
+
+        }
+        return ret;
+    }
+    string GetDisplayText(bool isAnswr, bool isSucces, int indexAnswer, string word)
+    {
+        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        PoemContentInfo infopoem0 = info.listPoemContent[0];
+        string strPoem = infopoem0.content;
+
+        //过虑标点符号
+        List<int> listIndexGuanka = GameGuankaParse.main.IndexListNotPunctuation(strPoem);
+        List<string> listStr = GetSplitStringByAnswerIndex(listIndexAnswer, listIndexGuanka);
+        string strShow = "";
+        for (int i = 0; i < listStr.Count; i++)
+        {
+            string tmp = listStr[i];
+            if (i == (listStr.Count - 1))
+            {
+                strShow += tmp;
+            }
+            else
+            {
+                if (isAnswr)
+                {
+                    AnswerInfo infoanswer = listAnswerInfo[i];
+
+                    if ((infoanswer.isFinish))
+                    {
+                        strShow += (tmp + infoanswer.word);
+                    }
+                    else
+                    {
+                        AnswerInfo infotmp = listAnswerInfo[indexAnswer];
+                        if (indexAnswer == i)
+                        {
+                            infotmp.isFillWord = true;
+                            Debug.Log("GetDisplayText isFillWord  i=" + i);
+                            string word_show = "";
+                            if (isSucces)
+                            {
+                                word_show = infotmp.word;
+                            }
+                            else
+                            {
+                                word_show = word;
+                            }
+
+                            //<color=#00ffffff>TestTest</color>
+                            Color color = new Color32(255, 0, 0, 255);
+                            word_show = "<color=#" + ColorUtility.ToHtmlStringRGBA(color) + ">" + word_show + "</color>";
+                            strShow += (tmp + word_show);
+                            infotmp.wordFill = word_show;
+                        }
+                        else
+                        {
+                            if (infoanswer.isFillWord)
+                            {
+                                strShow += (tmp + infoanswer.wordFill);
+                            }
+                            else
+                            {
+                                strShow += (tmp + STR_UNKNOWN_WORD);
+                            }
+
+
+                        }
+
+                    }
+
+                }
+
+                else
+                {
+                    strShow += (tmp + STR_UNKNOWN_WORD);
+                }
+            }
+
+        }
+        return strShow;
+    }
     void UpdateWord()
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
@@ -359,20 +551,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
         if (isonlytext)
         {
-            PoemContentInfo infopoem0 = info.listPoemContent[0];
-            string str = infopoem0.content;
-            //最后一个标点符号
-            int idx = Random.Range(0, str.Length - 1);
-
-            string answer = str.Substring(idx, 1);
-            uiWordBoard.strWordAnswer = answer;
-            string strHead = str.Substring(0, idx);
-            string strEnd = str.Substring(idx + 1);
-            textLine0.text = strHead + STR_UNKNOWN_WORD + strEnd;
-
-            PoemContentInfo infopoem1 = info.listPoemContent[1];
-            textLine1.text = infopoem1.content;
-
+            textLine0.text = GetDisplayText(false, false, 0, "");
+            // PoemContentInfo infopoem1 = info.listPoemContent[1];  
+            // textLine1.text = infopoem1.content;
         }
 
 
@@ -409,6 +590,41 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
     }
 
+
+
+    public void UIWordBoardDidClick(UIWordBoard bd, UIWordItem item)
+    {
+        Debug.Log("UIWordBoardDidClick");
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        int index = 0;
+        if (isonlytext)
+        {
+            bool isInAnswerList = false;
+            foreach (AnswerInfo info in listAnswerInfo)
+            {
+                if (info.word == item.strWord)
+                {
+                    //回答正确
+                    Debug.Log("GetDisplayText ok index =" + index);
+                    textLine0.text = GetDisplayText(true, true, index, "");
+                    info.isFinish = true;
+                    isInAnswerList = true;
+                    break;
+
+                }
+                index++;
+            }
+
+            if (!isInAnswerList)
+            {
+                //回答错误
+                index = GetFirstUnFillAnswer();
+                Debug.Log("GetDisplayText error index=" + index);
+
+                textLine0.text = GetDisplayText(true, false, index, item.strWord);
+            }
+        }
+    }
     public void OnGameWinFinish(UIWordBar bar, bool isFail)
     {
         //show game win
@@ -474,11 +690,32 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate
 
     }
 
+    public void OnClickBtnRetry()
+    {
+        UpdateGuankaLevel(LevelManager.main.gameLevel);
+    }
     public void OnClickBtnTips()
     {
-        if (uiWordBar != null)
+        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
+        if (isonlytext)
         {
-            uiWordBar.OnClickBtnTips();
+
+            int index = GetFirstUnFinishAnswer();
+            AnswerInfo info = listAnswerInfo[index];
+            textLine0.text = GetDisplayText(true, true, index, "");
+            info.isFinish = true;
+
+            if (CheckAllAnswerFinish())
+            {
+                OnGameWinFinish(uiWordBar, false);
+            }
+        }
+        else
+        {
+            if (uiWordBar != null)
+            {
+                uiWordBar.OnClickBtnTips();
+            }
         }
     }
 

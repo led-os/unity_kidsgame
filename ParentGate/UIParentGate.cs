@@ -94,7 +94,7 @@ public class UIParentGate : UIView
         Button[] btnList = objNumBoard.GetComponentsInChildren<Button>();
         foreach (Button btn in btnList)
         {
-            btn.onClick.AddListener(() => OnClickImageNum(btn));
+           // btn.onClick.AddListener(() => OnClickImageNum(btn));
         }
 
 
@@ -220,6 +220,7 @@ public class UIParentGate : UIView
 
     public void OnClickImageNum(Button btn)
     {
+        //AudioPlay.main.PlayBtnSound();
         Image image = btn.gameObject.GetComponent<Image>();
         Text textNum = GetImageText(image);
         switch (indexInputNum)

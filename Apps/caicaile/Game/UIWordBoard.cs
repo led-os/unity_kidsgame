@@ -2,6 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IUIWordBoardDelegate
+{
+    /// <summary>
+    /// Get the number of rows that a certain table should display
+    /// </summary>
+
+    void UIWordBoardDidClick(UIWordBoard bd, UIWordItem item);
+
+}
+
+
 public class UIWordBoard : UIView, IUIWordItemDelegate
 {
     public UIWordItem wordItemPrefab;
@@ -17,6 +28,15 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
                              /// </summary>
 
     public string strWordAnswer = "";
+
+
+    private IUIWordBoardDelegate _delegate;
+    public IUIWordBoardDelegate iDelegate
+    {
+        get { return _delegate; }
+        set { _delegate = value; }
+    }
+
 
     void Awake()
     {
@@ -137,7 +157,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
     }
 
-    string GetStringAnswer(CaiCaiLeItemInfo info)
+    public string GetStringAnswer(CaiCaiLeItemInfo info)
     {
         //真正的答案
         string str = UIGameCaiCaiLe.languageWord.GetString(info.id);
@@ -217,8 +237,13 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         int idx = 0;
         foreach (string word in listWordSel)
         {
+            if (idx >= listItem.Count)
+            {
+                Debug.Log("UIWordBoard idx:" + idx);
+                continue;
+            }
             UIWordItem item = listItem[idx] as UIWordItem;
-            Debug.Log("UIWordBoard UpdateTitle:" + word);
+
             item.UpdateTitle(word);
             idx++;
         }
@@ -243,6 +268,13 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         {
             return;
         }
+
+
+        if (_delegate != null)
+        {
+            _delegate.UIWordBoardDidClick(this, item);
+        }
+
         if (wordBar.IsWordFull())
         {
             return;
@@ -250,10 +282,11 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
 
         wordBar.AddWord(item.strWord);
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (!isonlytext)
+        //  if (!isonlytext)
         {
             item.ShowContent(false);
         }
+
 
 
     }

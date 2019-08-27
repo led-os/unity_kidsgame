@@ -131,13 +131,17 @@ public class UISegment : UIView, ISegmentItemDelegate
         }
         return item_ret;
     }
-    public void Select(int idx)
+    public void Select(int idx, bool isClick = false)
     {
         foreach (SegmentItem item in listItem)
         {
             if (idx == item.index)
             {
                 item.SetSelect(true);
+                if (isClick)
+                {
+                    item.OnClick();
+                }
                 //break;
             }
             else

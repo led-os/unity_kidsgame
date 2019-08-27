@@ -230,7 +230,7 @@ public class UIHomeTopBar : UIView
 
     public void OnClickBtnLearn()
     {
-        LearnProgressViewController.main.Show(AppSceneBase.main.rootViewController, null);
+       // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
     }
 
