@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoardDelegate
 {
     public const string STR_UNKNOWN_WORD = "__";
+    public const int GUANKA_GROUP_ITEM_NUM = 5;
 
     public GameObject objTopBar;
     public Button btnTips;
@@ -122,8 +123,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             string strPoem = infopoem0.content;
             //过虑标点符号
             List<int> listIndexGuanka = GameGuankaParse.main.IndexListNotPunctuation(strPoem);
-
-            listIndexAnswer = Util.main.RandomIndex(listIndexGuanka.Count, 2);
+            //GUANKA_GROUP_ITEM_NUM
+            int[] fillWordNum = { 1, 1, 2, 2, 3 };
+            int idxfill = LevelManager.main.gameLevel % GUANKA_GROUP_ITEM_NUM;
+            //
+            listIndexAnswer = Util.main.RandomIndex(listIndexGuanka.Count, fillWordNum[idxfill]);
             ListSorter.EbullitionSort(listIndexAnswer);
 
             listAnswerInfo = new List<AnswerInfo>();

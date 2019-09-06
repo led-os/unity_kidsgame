@@ -123,11 +123,12 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     public override void LayOut()
     {
         float x = 0, y = 0, w = 0, h = 0;
+        float ratio = 0.8f;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
             RectTransform rctran = this.GetComponent<RectTransform>();
-            w = sizeCanvas.x * 0.8f;
-            h = rctran.rect.size.y * w / rctran.rect.size.x;
+            w = sizeCanvas.x * ratio;
+            h = sizeCanvas.y * ratio;//rctran.rect.size.y * w / rctran.rect.size.x;
             rctran.sizeDelta = new Vector2(w, h);
 
         }
@@ -151,11 +152,42 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             if (info.id == KEY_GAMEWIN_INFO_INTRO)
             {
-                string strAuthor = "诗人:" + infoGuanka.author + "    ";
-                string strAlbum = "出处:" + infoGuanka.album + "\n";
 
-                string strYear = "年代:" + infoGuanka.year + "    ";
-                string strStyle = "题材:" + infoGuanka.style + "\n";
+                string strtmp = infoGuanka.author;
+                if (Common.BlankString(strtmp))
+                {
+                    strtmp = Language.main.GetString("STR_UNKNOWN");
+                }
+
+                string strAuthor = Language.main.GetString("STR_AUTHOR") + ":" + strtmp + "    ";
+
+
+
+                strtmp = infoGuanka.album;
+                if (Common.BlankString(strtmp))
+                {
+                    strtmp = Language.main.GetString("STR_UNKNOWN");
+                }
+                string strAlbum = Language.main.GetString("STR_ALBUM") + ":" + strtmp + "\n";
+
+
+                strtmp = infoGuanka.year;
+                if (Common.BlankString(strtmp))
+                {
+                    strtmp = Language.main.GetString("STR_UNKNOWN");
+                }
+                string strYear = Language.main.GetString("STR_YEAR") + ":" + strtmp + "    ";
+
+
+                strtmp = infoGuanka.style;
+                if (Common.BlankString(strtmp))
+                {
+                    strtmp = Language.main.GetString("STR_UNKNOWN");
+                }
+                string strStyle = Language.main.GetString("STR_STYLE") + ":" + strtmp + "\n";
+
+
+
                 str = strAuthor + strAlbum + strYear + strStyle + "\n" + infoGuanka.intro;
             }
             if (info.id == KEY_GAMEWIN_INFO_YUANWEN)
@@ -169,10 +201,18 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
             if (info.id == KEY_GAMEWIN_INFO_TRANSLATION)
             {
                 str = infoGuanka.translation;
+                if (Common.BlankString(str))
+                {
+                    str = Language.main.GetString("STR_UNKNOWN_TRANSLATION");
+                }
             }
             if (info.id == KEY_GAMEWIN_INFO_JIANSHUANG)
             {
                 str = infoGuanka.appreciation;
+                if (Common.BlankString(str))
+                {
+                    str = Language.main.GetString("STR_UNKNOWN_JIANSHUANG");
+                }
             }
 
         }
