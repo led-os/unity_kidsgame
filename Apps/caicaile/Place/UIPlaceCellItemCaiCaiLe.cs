@@ -14,12 +14,15 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
 
         textTitle.gameObject.SetActive(false);
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        if ((Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU))
         {
             LanguageManager.main.UpdateLanguagePlace();
             textTitle.gameObject.SetActive(true);
-            textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_"+info.id);
+            textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_" + info.id);
         }
+
+
+
         TextureUtil.UpdateRawImageTexture(imageBg, info.pic, true);
         imageIcon.gameObject.SetActive(info.isAd);
         LayOut();

@@ -46,13 +46,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
     public void UpadteItem(CaiCaiLeItemInfo info)
     {
-
-        string str = UIGameCaiCaiLe.languageWord.GetString(info.id);
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (isonlytext)
-        {
-            str = wordBoard.GetStringAnswer(info);
-        }
+        string str = wordBoard.GetGuankaAnswer(info);
         Debug.Log("UIWordBar UpadteItem:" + str);
         int len = str.Length;
         wordNumMax = len;
@@ -106,7 +100,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             listItem.Add(item);
             item.ClearWord();
             item.SetWordColor(colorNormal);
-            item.SetFontSize(100);
+            //item.SetFontSize(100);
             item.imageBg.sprite = spriteBg;
 
             //item.UpdateTitle(word);
@@ -122,13 +116,6 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
     public void AddWord(string word)
     {
-        // bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        // if (isonlytext)
-        // {
-        //     CheckAnswerOnlyText(word);
-        //     return;
-        // }
-
         foreach (UIWordItem item in listItem)
         {
             if (Common.BlankString(item.strWord))

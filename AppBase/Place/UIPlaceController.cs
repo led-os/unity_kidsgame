@@ -86,6 +86,10 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         // }
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         oneCellNum = (int)(sizeCanvas.x / heightCell);
+        if (((int)sizeCanvas.x) % heightCell != 0)
+        {
+            oneCellNum++;
+        }
         int total = listItem.Count;
         totalItem = total;
         Debug.Log("total:" + total + " oneCellNum=" + oneCellNum);
@@ -174,7 +178,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 
     public void OnClickBtnBack()
     {
-         AudioPlay.main.PlayBtnSound();
+        AudioPlay.main.PlayBtnSound();
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {
@@ -189,7 +193,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             return;
         }
         LevelManager.main.placeLevel = item.index;
-         AudioPlay.main.PlayBtnSound();
+        AudioPlay.main.PlayBtnSound();
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;

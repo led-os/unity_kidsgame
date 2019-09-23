@@ -203,7 +203,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     }
 
     public void OnClickBtnBack()
-    { 
+    {
         NaviViewController navi = this.controller.naviController;
         if (navi != null)
         {
@@ -222,7 +222,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         if (item.IsLock())
         {
             return;
-        } 
+        }
         tick = Common.GetCurrentTimeMs();
         GotoGame(item.index);
 
@@ -240,6 +240,11 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
         // }
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         oneCellNum = (int)(sizeCanvas.x / heightCell);
+        if (((int)sizeCanvas.x) % heightCell != 0)
+        {
+            oneCellNum++;
+        }
+
         int total = LevelManager.main.maxGuankaNum;
         totalItem = total;
         Debug.Log("total:" + total);

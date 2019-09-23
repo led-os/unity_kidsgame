@@ -31,12 +31,18 @@ public class CaiCaiLeItemInfo : ItemInfo
     public string intro;
     public string translation;
     public string appreciation;
+    public string pinyin;
+    public string xiehouyuHead;
+    public string xiehouyuEnd;
+
     public List<PoemContentInfo> listPoemContent;
 }
 public class GameGuankaParse : GuankaParseBase
 {
 
     public const string STR_APPKEYNAME_POEM = "poem";
+    public const string STR_APPKEYNAME_CHENGYU = "chengyu";
+    public const string STR_APPKEYNAME_XIEHOUYU = "xiehouyu";
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
     static private GameGuankaParse _main = null;
@@ -134,6 +140,25 @@ public class GameGuankaParse : GuankaParseBase
             {
                 info.icon = info.pic;
             }
+            string key = "xiehouyu";
+            if (JsonUtil.ContainsKey(item, key))
+            {
+                JsonData xiehouyu = item[key];
+                for (int j = 0; j < xiehouyu.Count; j++)
+                {
+                    JsonData item_xhy = xiehouyu[j];
+                    if (j == 0)
+                    {
+                        info.xiehouyuHead = (string)item_xhy["content"];
+                    }
+                    if (j == 1)
+                    {
+                        info.xiehouyuEnd = (string)item_xhy["content"];
+                    }
+                }
+
+            }
+
             listGuanka.Add(info);
         }
 
@@ -193,6 +218,36 @@ public class GameGuankaParse : GuankaParseBase
 
         }
         return listRet;
+    }
+
+    public void ParseItem(CaiCaiLeItemInfo info)
+    {
+
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_CHENGYU)
+        {
+            ParseChengyuItem(info);
+        }
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        {
+            ParsePoemItem(info);
+        }
+    }
+
+    public void ParseChengyuItem(CaiCaiLeItemInfo info)
+    {
+        string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
+        if (!FileUtil.FileIsExistAsset(filepath))
+        {
+            return;
+        }
+        //
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        info.title = (string)root["title"];
+        info.album = (string)root["album"];
+        info.translation = (string)root["translation"];
+        info.pinyin = (string)root["pinyin"];
     }
 
     //诗词

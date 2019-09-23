@@ -23,6 +23,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
     public Text textLine0;
     public Text textLine1;
+    public Text textXieHouYu;
     public GameObject objText;
 
     public GameObject objGoldBar;
@@ -78,6 +79,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         UpdateLanguage();
         UpdateBtnMusic();
 
+        textXieHouYu.gameObject.SetActive(false);
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
         objText.gameObject.SetActive(isonlytext);
         imagePic.gameObject.SetActive(!isonlytext);
@@ -114,7 +116,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         base.UpdateGuankaLevel(level);
         AppSceneBase.main.ClearMainWorld();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        GameGuankaParse.main.ParsePoemItem(info);
+        GameGuankaParse.main.ParseItem(info);
 
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
         if (isonlytext)
@@ -173,7 +175,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
         }
 
-        TextureUtil.UpdateImageTexture(imagePicBoard, "App/UI/Game/BoardPic", true);
+        //  TextureUtil.UpdateImageTexture(imagePicBoard, "App/UI/Game/BoardPic", true);
 
 
         UpdateWord();
@@ -209,9 +211,22 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             if (Device.isLandscape)
             {
                 w = (this.frame.width / 2) * ratio;
-                h = (this.frame.height - topbarHeightCanvas * 2) * ratio;
                 x = -this.frame.width / 4 - w / 2;
-                y = 0 - h / 2;
+                if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU)
+                {
+                    h = (this.frame.height - topbarHeightCanvas * 3) * ratio;
+                    float y1 = -sizeCanvas.y / 2 + topbarHeightCanvas * 2;
+                    float y2 = sizeCanvas.y / 2 - topbarHeightCanvas;
+                    y = (y1 + y2) / 2 - h / 2;
+                }
+                else
+                {
+
+                    h = (this.frame.height - topbarHeightCanvas * 2) * ratio;
+                    y = 0 - h / 2;
+                }
+
+
             }
             else
             {
@@ -219,6 +234,10 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                 // w = this.frame.width - topbarHeightCanvas * 2;
                 w = this.frame.width;
                 h = (this.frame.height / 2 - topbarHeightCanvas * 2);
+                if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU)
+                {
+                    h = (this.frame.height / 2 - topbarHeightCanvas * 3);
+                }
                 y = this.frame.height / 4 - h / 2;
                 x = 0 - w / 2;
             }
@@ -474,6 +493,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     string GetDisplayText(bool isAnswr, bool isSucces, int indexAnswer, string word)
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        if ((!Common.BlankString(info.xiehouyuHead)) && (!Common.BlankString(info.xiehouyuEnd)))
+        {
+            return info.xiehouyuHead;
+        }
+
         PoemContentInfo infopoem0 = info.listPoemContent[0];
         string strPoem = infopoem0.content;
 
@@ -559,8 +583,15 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             // PoemContentInfo infopoem1 = info.listPoemContent[1];  
             // textLine1.text = infopoem1.content;
         }
-
-
+        else
+        {
+            if ((!Common.BlankString(info.xiehouyuHead)) && (!Common.BlankString(info.xiehouyuEnd)))
+            {
+                objText.gameObject.SetActive(false);
+                textXieHouYu.gameObject.SetActive(true);
+                textXieHouYu.text = GetDisplayText(false, false, 0, "");
+            }
+        }
 
         //先计算行列数
         LayOut();
@@ -601,8 +632,13 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         Debug.Log("UIWordBoardDidClick");
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
         int index = 0;
+
+
+
         if (isonlytext)
         {
+
+
             bool isInAnswerList = false;
             foreach (AnswerInfo info in listAnswerInfo)
             {
@@ -626,6 +662,26 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                 Debug.Log("GetDisplayText error index=" + index);
 
                 textLine0.text = GetDisplayText(true, false, index, item.strWord);
+            }
+
+            bool isAllFill = true;
+            foreach (AnswerInfo info in listAnswerInfo)
+            {
+                if (!info.isFillWord)
+                {
+                    isAllFill = false;
+                }
+            }
+            if (isAllFill)
+            {
+                if (CheckAllAnswerFinish())
+                {
+                    OnGameWinFinish(uiWordBar, false);
+                }
+                else
+                {
+                    OnGameWinFinish(uiWordBar, true);
+                }
             }
         }
     }
@@ -703,12 +759,22 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         bool isonlytext = GameGuankaParse.main.OnlyTextGame();
         if (isonlytext)
         {
+            if (Common.gold <= 0)
+            {
+                OnNotEnoughGold(uiWordBar, false);
+                return;
+            }
 
             int index = GetFirstUnFinishAnswer();
             AnswerInfo info = listAnswerInfo[index];
             textLine0.text = GetDisplayText(true, true, index, "");
             info.isFinish = true;
-
+            Common.gold--;
+            if (Common.gold < 0)
+            {
+                Common.gold = 0;
+            }
+            OnNotEnoughGold(uiWordBar, true);
             if (CheckAllAnswerFinish())
             {
                 OnGameWinFinish(uiWordBar, false);

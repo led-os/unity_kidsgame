@@ -77,7 +77,7 @@ namespace Dummiesman
             }
         }
 
-      
+
         /// <summary>
         /// Loads a texture from a file
         /// </summary>
@@ -111,45 +111,48 @@ namespace Dummiesman
                 case ".bmp":
                     returnTex = new BMPLoader().LoadBMP(textureBytes).ToTexture2D();
                     break;
-                case ".crn":
-                    byte[] crnBytes = textureBytes;
-                    ushort crnWidth = System.BitConverter.ToUInt16(new byte[2] { crnBytes[13], crnBytes[12] }, 0);
-                    ushort crnHeight = System.BitConverter.ToUInt16(new byte[2] { crnBytes[15], crnBytes[14] }, 0);
-                    byte crnFormatByte = crnBytes[18];
+                /* @moon 
+            case ".crn":
+                byte[] crnBytes = textureBytes;
+                ushort crnWidth = System.BitConverter.ToUInt16(new byte[2] { crnBytes[13], crnBytes[12] }, 0);
+                ushort crnHeight = System.BitConverter.ToUInt16(new byte[2] { crnBytes[15], crnBytes[14] }, 0);
+                byte crnFormatByte = crnBytes[18];
 
-                    var crnTextureFormat = UnityEngine.TextureFormat.RGB24;
-                    if (crnFormatByte == 0)
-                    {
-                        crnTextureFormat = UnityEngine.TextureFormat.DXT1Crunched;
-                    }else if(crnFormatByte == 2)
-                    {
-                        crnTextureFormat = UnityEngine.TextureFormat.DXT5Crunched;
-                    }
-                    else if(crnFormatByte == 12)
-                    {
-                        crnTextureFormat = UnityEngine.TextureFormat.ETC2_RGBA8Crunched;
-                    }
-                    else
-                    {
-                        Debug.LogError("Could not load crunched texture " + name + " because its format is not supported (" + crnFormatByte + "): " + fn);
-                        break;
-                    }
-
-                    returnTex = new Texture2D(crnWidth, crnHeight, crnTextureFormat, true);
-                    returnTex.LoadRawTextureData(crnBytes);
-                    returnTex.Apply(true);
-
+                var crnTextureFormat = UnityEngine.TextureFormat.RGB24;
+                if (crnFormatByte == 0)
+                {
+                    crnTextureFormat = UnityEngine.TextureFormat.DXT1Crunched;
+                }else if(crnFormatByte == 2)
+                {
+                    crnTextureFormat = UnityEngine.TextureFormat.DXT5Crunched;
+                }
+                else if(crnFormatByte == 12)
+                {
+                    crnTextureFormat = UnityEngine.TextureFormat.ETC2_RGBA8Crunched;
+                }
+                else
+                {
+                    Debug.LogError("Could not load crunched texture " + name + " because its format is not supported (" + crnFormatByte + "): " + fn);
                     break;
+                }
+
+                returnTex = new Texture2D(crnWidth, crnHeight, crnTextureFormat, true);
+                returnTex.LoadRawTextureData(crnBytes);
+                returnTex.Apply(true);
+
+                break;
+@moon 
+                */
                 default:
                     Debug.LogError("Could not load texture " + name + " because its format is not supported : " + fn);
                     break;
             }
-            
+
             if (returnTex != null)
             {
                 returnTex = ImageLoaderHelper.VerifyFormat(returnTex);
                 returnTex.name = Path.GetFileNameWithoutExtension(fn);
-            }                                           
+            }
 
             return returnTex;
         }

@@ -76,7 +76,7 @@ public class BuildPlayer
         //==================这里是比较重要的东西=======================
 
         //PlayerSettings.applicationIdentifier = "com.moonma.kidsgame";
-        PlayerSettings.bundleVersion = "v0.0.1";
+        PlayerSettings.bundleVersion = "0.0.1";
         PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, "QQ");
 
 

@@ -40,12 +40,19 @@ public class UIGameFail : UIViewPop
     public override void LayOut()
     {
         float x = 0, y = 0, w = 0, h = 0;
+        float ratio = 0.8f;
+        if (Device.isLandscape)
+        {
+            ratio = 0.7f;
+        }
+
+        RectTransform rctranRoot = this.GetComponent<RectTransform>();
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
-            RectTransform rctran = this.GetComponent<RectTransform>();
-            w = sizeCanvas.x * 0.8f;
-            h = rctran.rect.size.y * w / rctran.rect.size.x;
-            rctran.sizeDelta = new Vector2(w, h);
+
+            w = sizeCanvas.x * ratio;
+            h = sizeCanvas.y * ratio;//rctran.rect.size.y * w / rctran.rect.size.x;
+            rctranRoot.sizeDelta = new Vector2(w, h);
 
         }
     }

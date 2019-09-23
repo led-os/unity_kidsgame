@@ -157,10 +157,23 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
     }
 
-    public string GetStringAnswer(CaiCaiLeItemInfo info)
+    public string GetGuankaAnswer(CaiCaiLeItemInfo info)
     {
         //真正的答案
         string str = UIGameCaiCaiLe.languageWord.GetString(info.id);
+        //歇后语
+        if ((!Common.BlankString(info.xiehouyuHead)) && (!Common.BlankString(info.xiehouyuEnd)))
+        {
+            return info.xiehouyuEnd;
+        }
+        return str;
+    }
+
+    //插入答案
+    public string GetInsertToBoardAnswer(CaiCaiLeItemInfo info)
+    {
+        //真正的答案
+        string str = GetGuankaAnswer(info);
         //随机抽取其他关卡的答案
         int gamelevel = LevelManager.main.gameLevel;
         int total = LevelManager.main.maxGuankaNum;
@@ -185,10 +198,10 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
                 rdm = size - 1;
             }
             idx = idxTmp[rdm];
-            ItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx);
+            CaiCaiLeItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
             if (infoOther != null)
             {
-                string strOther = UIGameCaiCaiLe.languageWord.GetString(infoOther.id);
+                string strOther = GetGuankaAnswer(infoOther);
                 string strtmp = RemoveSameWord(str, strOther);
                 str += strtmp;
                 Debug.Log("other guanka item:" + strOther + " RemoveSameWord:" + strtmp);
@@ -226,8 +239,8 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             item.ShowContent(true);
         }
 
-        string str = GetStringAnswer(info);
-        Debug.Log("UIWordBoard GetStringAnswer:" + str);
+        string str = GetInsertToBoardAnswer(info);
+        Debug.Log("UIWordBoard GetInsertToBoardAnswer:" + str);
         int len = str.Length;
         int total = row * col;
         InitWord(str);

@@ -5,10 +5,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
+/*
+成语大全
+http://chengyu.t086.com/
+ */
 public class GameCaiCaiLe : GameBase
 {
 
+    public enum Type
+    {
+        IMAGE = 0,
+        TEXT = 1,
+        IMAGE_TEXT = 1
+    }
+
+    public Type _scaleType;
+    public Type scaleType
+    {
+        get
+        {
+            return _scaleType;
+        }
+
+        set
+        {
+            _scaleType = value;
+        }
+
+    }
 
     void Awake()
     {

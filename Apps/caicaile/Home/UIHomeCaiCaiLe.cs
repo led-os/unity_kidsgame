@@ -120,6 +120,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
     {
         Vector2 sizeCanvas = this.frame.size;
         float x = 0, y = 0, w = 0, h = 0;
+        RectTransform rctranPlay = btnPlay.transform as RectTransform;
         //image name
         {
             RectTransform rctran = imageBgName.GetComponent<RectTransform>();
@@ -144,7 +145,9 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
 
             x = 0;
-            y = (sizeCanvas.y / 2 - topBarHeight) / 2;
+
+            y = (sizeCanvas.y / 2 + (rctranPlay.anchoredPosition.y + rctranPlay.rect.height / 2)) / 2;
+
         }
         return new Vector4(x, y, w, h);
     }
@@ -227,6 +230,25 @@ public class UIHomeCaiCaiLe : UIHomeBase
         float x = 0, y = 0, w = 0, h = 0;
         RectTransform rctranAppIcon = uiHomeAppCenter.transform as RectTransform;
         RectTransform rctranImageName = imageBgName.GetComponent<RectTransform>();
+
+        RectTransform rctranPlay = btnPlay.transform as RectTransform;
+        //play
+        {
+
+
+            x = 0;
+
+            if (Device.isLandscape)
+            {
+                y = 0;
+            }
+            else
+            {
+                y = -rctranPlay.rect.size.y / 2;
+            }
+            rctranPlay.anchoredPosition = new Vector2(x, y);
+        }
+
         Vector4 ptImageName = GetPosOfImageName();
         //image name
         {
@@ -239,15 +261,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
 
         UpdateLayoutBtn();
-        RectTransform rctranPlay = btnPlay.transform as RectTransform;
-        //play
-        {
 
-
-            x = 0;
-            y = -rctranPlay.rect.size.y / 2;
-            rctranPlay.anchoredPosition = new Vector2(x, y);
-        }
         //layoutBtn
         {
 
@@ -257,14 +271,25 @@ public class UIHomeCaiCaiLe : UIHomeBase
             layoutBtn.col = child_count;
             layoutBtn.LayOut();
             RectTransform rctran = layoutBtn.transform as RectTransform;
-            x = 0;
+
             float h_item = rctran.rect.size.y;
             float w_item = h_item;
             float oft = layoutBtn.space.x;
             h = (h_item + oft) * layoutBtn.row;
-            rctran.sizeDelta = new Vector2((w_item + oft) * layoutBtn.col, h);
+            w = (w_item + oft) * layoutBtn.col;
+            rctran.sizeDelta = new Vector2(w, h);
 
-            y = rctranPlay.anchoredPosition.y - rctranPlay.rect.size.y / 2 - h / 2;
+
+            if (Device.isLandscape)
+            {
+                x = rctranPlay.anchoredPosition.x + rctranPlay.rect.size.x / 2 + w / 2 + 16;
+                y = 0;
+            }
+            else
+            {
+                x = 0;
+                y = rctranPlay.anchoredPosition.y - rctranPlay.rect.size.y / 2 - h / 2;
+            }
             rctran.anchoredPosition = new Vector2(x, y);
 
 
