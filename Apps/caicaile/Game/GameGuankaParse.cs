@@ -32,8 +32,9 @@ public class CaiCaiLeItemInfo : ItemInfo
     public string translation;
     public string appreciation;
     public string pinyin;
-    public string xiehouyuHead;
-    public string xiehouyuEnd;
+    public string head;
+    public string end;
+    public string tips;
 
     public List<PoemContentInfo> listPoemContent;
 }
@@ -43,6 +44,7 @@ public class GameGuankaParse : GuankaParseBase
     public const string STR_APPKEYNAME_POEM = "poem";
     public const string STR_APPKEYNAME_CHENGYU = "chengyu";
     public const string STR_APPKEYNAME_XIEHOUYU = "xiehouyu";
+    public const string STR_APPKEYNAME_RIDDLE = "Riddle";
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
     static private GameGuankaParse _main = null;
@@ -65,6 +67,11 @@ public class GameGuankaParse : GuankaParseBase
         {
             ret = true;
         }
+        if (Common.appKeyName == STR_APPKEYNAME_RIDDLE)
+        {
+            ret = true;
+        }
+
         return ret;
     }
     public CaiCaiLeItemInfo GetItemInfo()
@@ -118,7 +125,8 @@ public class GameGuankaParse : GuankaParseBase
         if (!FileUtil.FileIsExistAsset(filepath))
         {
             filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
-        }
+        } 
+
         //
         //FILE_PATH
         string json = FileUtil.ReadStringAsset(filepath);
@@ -131,7 +139,7 @@ public class GameGuankaParse : GuankaParseBase
         {
             JsonData item = items[i];
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
-            info.id = (string)item["id"];
+            info.id = JsonUtil.JsonGetString(item, "id", "");
             //string str = "aa";// = languageGame.GetString(info.id);
             //Debug.Log(i + ":ParseGame:" + str);
             info.pic = Common.GAME_RES_DIR + "/image/" + strPlace + "/" + info.id + ".png";
@@ -149,14 +157,24 @@ public class GameGuankaParse : GuankaParseBase
                     JsonData item_xhy = xiehouyu[j];
                     if (j == 0)
                     {
-                        info.xiehouyuHead = (string)item_xhy["content"];
+                        info.head = (string)item_xhy["content"];
                     }
                     if (j == 1)
                     {
-                        info.xiehouyuEnd = (string)item_xhy["content"];
+                        info.end = (string)item_xhy["content"];
                     }
                 }
 
+            }
+
+            key = "head";
+            if (JsonUtil.ContainsKey(item, key))
+            {
+                //Riddle
+                info.head = (string)item["head"];
+                info.end = (string)item["end"];
+                info.tips = (string)item["tips"];
+                info.type = (string)item["type"];
             }
 
             listGuanka.Add(info);
@@ -231,6 +249,11 @@ public class GameGuankaParse : GuankaParseBase
         {
             ParsePoemItem(info);
         }
+        if (Common.appKeyName == STR_APPKEYNAME_RIDDLE)
+        {
+            ParseRiddleItem(info);
+        }
+
     }
 
     public void ParseChengyuItem(CaiCaiLeItemInfo info)
@@ -286,5 +309,10 @@ public class GameGuankaParse : GuankaParseBase
                 info.listPoemContent.Add(infoPoem);
             }
         }
+    }
+
+    //谜语
+    public void ParseRiddleItem(CaiCaiLeItemInfo info)
+    {
     }
 }

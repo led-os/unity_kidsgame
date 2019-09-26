@@ -29,7 +29,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     void Awake()
     {
         spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/wordbar_item_bg");
-
+        colorNormal = GameRes.main.colorGameText;
     }
 
     // Use this for initialization
@@ -291,6 +291,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
                 UIWordItem item = listRet[rdx];
                 item.SetWordColor(colorTips);
                 item.UpdateTitle(item.strWordAnswer);
+                wordBoard.OnTips(item.strWordAnswer);
                 item.isWordTips = true;
                 Common.gold--;
                 if (Common.gold < 0)

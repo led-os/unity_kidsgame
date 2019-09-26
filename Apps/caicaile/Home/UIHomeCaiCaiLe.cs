@@ -25,6 +25,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
+        TextName.color = GameRes.main.colorTitle;
         timeAction = 0.3f;
         isActionFinish = false;
 

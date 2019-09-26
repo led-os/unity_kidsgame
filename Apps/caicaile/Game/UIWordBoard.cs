@@ -121,9 +121,25 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             item.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             item.UpdateTitle(word);
             item.imageBg.sprite = spriteBg;
-            item.SetWordColor(Color.white);
+            item.SetWordColor(GameRes.main.colorTitle);
             item.SetFontSize(80);
             listItem.Add(item);
+        }
+    }
+
+
+    public void OnTips(string word)
+    {
+        foreach (UIWordItem item in listItem)
+        {
+            if (item.isShowContent)
+            {
+                if (word == item.strWord)
+                {
+                    item.ShowContent(false);
+                    break;
+                }
+            }
         }
     }
     void UpdateWord(int count, string strAnswer)
@@ -162,9 +178,9 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         //真正的答案
         string str = UIGameCaiCaiLe.languageWord.GetString(info.id);
         //歇后语
-        if ((!Common.BlankString(info.xiehouyuHead)) && (!Common.BlankString(info.xiehouyuEnd)))
+        if ((!Common.BlankString(info.head)) && (!Common.BlankString(info.end)))
         {
-            return info.xiehouyuEnd;
+            return info.end;
         }
         return str;
     }

@@ -119,7 +119,8 @@ class ThreadParser //extends Thread
             $str = strip_tags($str);
             $str = str_replace("小贴士：", "", $str);
             $str = removeHtmlSpace($str);
-            //echo   $str . "\n";
+            $str = str_replace("\"", "'", $str);
+            $str = str_replace("\\", "/", $str);
             $info->tips =  $str;
         }
 
@@ -165,7 +166,7 @@ class ThreadParser //extends Thread
     public function ParserListThread($url, $id, $channel)
     {
 
-        $file_list = "Riddle/" . $id . ".json";
+        $file_list = "Riddle/item_" . $id . ".json";
         $ret = file_exists($file_list);
         if ($ret) {
             return;
@@ -179,8 +180,11 @@ class ThreadParser //extends Thread
         }
         if (count($this->listItem)) {
 
-            $jsn = urldecode(json_encode($this->listItem));
-
+            $element = array(
+                'items' => urlencode($this->listItem),
+            );
+            //$jsn = urldecode(json_encode($this->listItem));
+            $jsn = urldecode(json_encode($element));
             $fp = fopen($file_list, "w");
             if (!$fp) {
                 echo "打开文件失败<br>";
@@ -448,6 +452,11 @@ ng 列表：
 */
 
 $url = "http://www.cmiyu.com/";
+$dir = "Riddle";
+if (!is_dir($dir)) {
+    mkdir("Riddle");
+}
+
 $filepath = "Riddle/riddle_sort.json";
 ParserSortList($url, $filepath);
 

@@ -14,17 +14,20 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
 
         textTitle.gameObject.SetActive(false);
-        if ((Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU))
+        if ((Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU))
         {
             LanguageManager.main.UpdateLanguagePlace();
             textTitle.gameObject.SetActive(true);
             textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_" + info.id);
         }
-
-
-
-        TextureUtil.UpdateRawImageTexture(imageBg, info.pic, true);
+        string pic = info.pic;
+        if (!FileUtil.FileIsExistAsset(pic))
+        {
+            pic = Common.GAME_RES_DIR + "/place/image/PlaceItemBg.png";
+        }
+        TextureUtil.UpdateRawImageTexture(imageBg, pic, true);
         imageIcon.gameObject.SetActive(info.isAd);
+        textTitle.color = GameRes.main.colorTitle;
         LayOut();
     }
     public override bool IsLock()

@@ -24,14 +24,14 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     public Text textTitle;
     public Text textPinyin;
     public Image imageBg;
-    public Image imageHead;
+    public RawImage imageHead;
     public Button btnClose;
 
     public Button btnFriend;
     public Button btnNext;
     public Button btnAddLove;
     public GameObject objLayoutBtn;
-    Color colorTitle = new Color32(192, 90, 59, 255);
+  
 
     int indexSegment;
 
@@ -56,17 +56,20 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
-
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+        {
+            str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
+        }
         textTitle.text = str;
 
 
         textView.SetFontSize(80);
-        textView.SetTextColor(colorTitle);
+        textView.SetTextColor(GameRes.main.colorGameWinTextView);
 
-        textTitle.color = colorTitle;
+        textTitle.color = GameRes.main.colorGameWinTitle;
         if (textPinyin != null)
         {
-            textPinyin.color = colorTitle;
+            textPinyin.color = GameRes.main.colorGameWinTitle;
             textPinyin.gameObject.SetActive(false);
         }
 
@@ -240,6 +243,8 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
             }
             lg.LayOut();
         }
+
+       // imageHead.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public void UpdateText(ItemInfo info)
@@ -340,7 +345,16 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
 
         if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU)
         {
-            str = infoGuanka.xiehouyuHead + "\n" + infoGuanka.xiehouyuEnd;
+            str = infoGuanka.head + "\n" + infoGuanka.end;
+        }
+        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+        {
+            str = infoGuanka.tips;
+            if (Common.BlankString(str))
+            {
+                str = Language.main.GetString("STR_UNKNOWN");
+            }
+            str = Language.main.GetString("STR_GameWin_TIPS") + ":" + str;
         }
 
         if (Common.BlankString(str))
