@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class GameRes
 {
+    public const string GAME_XIEHOUYU = "xiehouyu";
+    public const string GAME_IDIOM = "chengyu";
+    public const string GAME_POEM = "poem";
+
+    public const string GAME_RIDDLE = "Riddle";
+    public const string GAME_IdiomConnect = "IdiomConnect";
+    //type 
+    public const string GAME_TYPE_IMAGE = "Image";
+    public const string GAME_TYPE_TEXT = "Text";
+    public const string GAME_TYPE_IMAGE_TEXT = "ImageText";
+    public const string GAME_TYPE_CONNECT = "Connect";//接龙
     //color
     //f88816 248,136,22
     static private GameRes _main = null;
@@ -24,7 +35,7 @@ public class GameRes
         get
         {
             Color32 cr = new Color32(255, 255, 255, 255);
-            if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+            if (Common.appKeyName == GAME_RIDDLE)
             {
                 cr = new Color32(89, 45, 6, 255);
             }
@@ -37,7 +48,7 @@ public class GameRes
         get
         {
             Color32 cr = new Color32(0, 0, 0, 255);
-            if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+            if (Common.appKeyName == GAME_RIDDLE)
             {
                 cr = new Color32(255, 255, 255, 255);
             }
@@ -50,7 +61,7 @@ public class GameRes
         get
         {
             Color32 cr = new Color32(192, 90, 59, 255);
-            if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+            if (Common.appKeyName == GAME_RIDDLE)
             {
                 cr = new Color32(255, 255, 255, 255);
             }
@@ -62,7 +73,7 @@ public class GameRes
         get
         {
             Color32 cr = new Color32(192, 90, 59, 255);
-            if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+            if (Common.appKeyName == GAME_RIDDLE)
             {
                 cr = new Color32(89, 45, 6, 255);
             }

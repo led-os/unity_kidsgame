@@ -18,8 +18,8 @@ public class UIWordItem : UIView
     public Image imageBg;
     public Text textTitle;
     public int index;
-    public string strWord;
-    public string strWordAnswer;//答案字符
+    public string wordDisplay;
+    public string wordAnswer;//答案字符
     public bool isShowContent = true;
     private IUIWordItemDelegate _delegate;
 
@@ -99,7 +99,7 @@ public class UIWordItem : UIView
     }
     public void UpdateTitle(string title)
     {
-        strWord = title;
+        wordDisplay = title;
         textTitle.text = title;
     }
     public void ShowContent(bool isShow)
@@ -113,7 +113,7 @@ public class UIWordItem : UIView
     public bool IsAnswer()
     {
         bool ret = false;
-        if (strWord == strWordAnswer)
+        if (wordDisplay == wordAnswer)
         {
             ret = true;
         }

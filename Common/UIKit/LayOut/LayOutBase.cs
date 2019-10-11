@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class LayOutBase : MonoBehaviour
 {
+    public enum DispLayVertical
+    {
+        TOP_TO_BOTTOM = 0,
+        BOTTOM_TO_TOP,
+    }
+
+    public enum DispLayHorizontal
+    {
+        LEFT_TO_RIGHT = 0,
+        RIGHT_TO_LEFT,
+    }
+
+    public DispLayVertical dispLayVertical;
+    public DispLayHorizontal dispLayHorizontal;
     public bool enableLayout = true;
     public bool enableHide = true;//是否过虑Hide
     public Vector2 space = Vector2.zero;

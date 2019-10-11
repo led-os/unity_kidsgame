@@ -35,16 +35,26 @@ public class CaiCaiLeItemInfo : ItemInfo
     public string head;
     public string end;
     public string tips;
+    public string gameType;
 
     public List<PoemContentInfo> listPoemContent;
+
+
+    //idiomconnet
+
+
+    public List<string> listWord;
+    public List<string> listIdiom;
+    public List<int> listPosX;
+    public List<int> listPosY;
+    public List<int> listWordAnswer;
+
+
 }
 public class GameGuankaParse : GuankaParseBase
 {
 
-    public const string STR_APPKEYNAME_POEM = "poem";
-    public const string STR_APPKEYNAME_CHENGYU = "chengyu";
-    public const string STR_APPKEYNAME_XIEHOUYU = "xiehouyu";
-    public const string STR_APPKEYNAME_RIDDLE = "Riddle";
+
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
     static private GameGuankaParse _main = null;
@@ -63,11 +73,11 @@ public class GameGuankaParse : GuankaParseBase
     public bool OnlyTextGame()
     {
         bool ret = false;
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        if (Common.appKeyName == GameRes.GAME_POEM)
         {
             ret = true;
         }
-        if (Common.appKeyName == STR_APPKEYNAME_RIDDLE)
+        if (Common.appKeyName == GameRes.GAME_RIDDLE)
         {
             ret = true;
         }
@@ -107,6 +117,15 @@ public class GameGuankaParse : GuankaParseBase
         }
 
     }
+    public void ParseWord3500()
+    {
+        //word3500
+        string filepath = Common.GAME_DATA_DIR + "/words_3500.json";
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        strWord3500 = (string)root["words"];
+        Debug.Log(strWord3500);
+    }
 
     public override int ParseGuanka()
     {
@@ -118,6 +137,12 @@ public class GameGuankaParse : GuankaParseBase
         }
 
         listGuanka = new List<object>();
+
+        if (Common.appKeyName == GameRes.GAME_IdiomConnect)
+        {
+            return ParseGuankaIdiomConnect();
+        }
+
         int idx = LevelManager.main.placeLevel;
 
         ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
@@ -125,7 +150,7 @@ public class GameGuankaParse : GuankaParseBase
         if (!FileUtil.FileIsExistAsset(filepath))
         {
             filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
-        } 
+        }
 
         //
         //FILE_PATH
@@ -177,19 +202,110 @@ public class GameGuankaParse : GuankaParseBase
                 info.type = (string)item["type"];
             }
 
+
+            if (Common.appKeyName == GameRes.GAME_IDIOM)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE;
+            }
+            else if (Common.appKeyName == GameRes.GAME_POEM)
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_RIDDLE)
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_IdiomConnect)
+            {
+                info.gameType = GameRes.GAME_TYPE_CONNECT;
+            }
+            else
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
+
+
             listGuanka.Add(info);
         }
 
         count = listGuanka.Count;
+        ParseWord3500();
 
-        //word3500
-        filepath = Common.GAME_DATA_DIR + "/words_3500.json";
-        json = FileUtil.ReadStringAsset(filepath);
-        root = JsonMapper.ToObject(json);
-        strWord3500 = (string)root["words"];
-        Debug.Log(strWord3500);
 
         Debug.Log("ParseGame::count=" + count);
+        return count;
+    }
+
+    public int ParseGuankaIdiomConnect()
+    {
+        int count = 11;
+        int idx = LevelManager.main.placeLevel;
+
+        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
+
+        // string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
+        string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
+        //
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        string strPlace = infoPlace.id;
+        //JsonData items = root["items"];
+        for (int i = 0; i < count; i++)
+        {
+            JsonData item = root[(i + 1).ToString()];
+            CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
+            JsonData word = item["word"];
+            info.listWord = new List<string>();
+            for (int j = 0; j < word.Count; j++)
+            {
+                string strword = (string)word[j];
+                info.listWord.Add(strword);
+            }
+
+            info.listIdiom = new List<string>();
+            JsonData idiom = item["idiom"];
+            for (int j = 0; j < idiom.Count; j++)
+            {
+                string strword = (string)idiom[j];
+                info.listIdiom.Add(strword);
+            }
+
+            info.listPosX = new List<int>();
+            JsonData posx = item["posx"];
+            for (int j = 0; j < posx.Count; j++)
+            {
+                int v = (int)posx[j];
+                info.listPosX.Add(v);
+            }
+
+            info.listPosY = new List<int>();
+            JsonData posy = item["posy"];
+            for (int j = 0; j < posy.Count; j++)
+            {
+                int v = (int)posy[j];
+                info.listPosY.Add(v);
+            }
+
+            info.listWordAnswer = new List<int>();
+            JsonData answer = item["answer"];
+            for (int j = 0; j < answer.Count; j++)
+            {
+                int v = (int)answer[j];
+                info.listWordAnswer.Add(v);
+            }
+
+
+            info.id = ((int)item["id"]).ToString();
+            info.gameType = GameRes.GAME_TYPE_CONNECT;
+            listGuanka.Add(info);
+        }
+
+        ParseWord3500();
         return count;
     }
 
@@ -241,15 +357,15 @@ public class GameGuankaParse : GuankaParseBase
     public void ParseItem(CaiCaiLeItemInfo info)
     {
 
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_CHENGYU)
+        if (Common.appKeyName == GameRes.GAME_IDIOM)
         {
             ParseChengyuItem(info);
         }
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        if (Common.appKeyName == GameRes.GAME_POEM)
         {
             ParsePoemItem(info);
         }
-        if (Common.appKeyName == STR_APPKEYNAME_RIDDLE)
+        if (Common.appKeyName == GameRes.GAME_RIDDLE)
         {
             ParseRiddleItem(info);
         }

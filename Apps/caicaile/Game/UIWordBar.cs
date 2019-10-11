@@ -46,7 +46,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
     public void UpadteItem(CaiCaiLeItemInfo info)
     {
-        string str = wordBoard.GetGuankaAnswer(info);
+        string str = GameAnswer.main.GetGuankaAnswer(info);
         Debug.Log("UIWordBar UpadteItem:" + str);
         int len = str.Length;
         wordNumMax = len;
@@ -91,7 +91,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             UIWordItem item = GameObject.Instantiate(wordItemPrefab);
             item.index = i;
             item.iDelegate = this;
-            item.strWordAnswer = word;
+            item.wordAnswer = word;
             rctran = item.gameObject.GetComponent<RectTransform>();
             rctran.sizeDelta = new Vector2(w, h);
 
@@ -118,7 +118,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     {
         foreach (UIWordItem item in listItem)
         {
-            if (Common.BlankString(item.strWord))
+            if (Common.BlankString(item.wordDisplay))
             {
                 item.UpdateTitle(word);
                 wordNumCur++;
@@ -143,7 +143,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         bool ret = true;
         foreach (UIWordItem item in listItem)
         {
-            if (Common.BlankString(item.strWord))
+            if (Common.BlankString(item.wordDisplay))
             {
                 ret = false;
             }
@@ -215,11 +215,11 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
         if (!isAllAnswer)
         {
-            if (!Common.BlankString(item.strWord))
+            if (!Common.BlankString(item.wordDisplay))
             {
                 Debug.Log("WordItemDidClick 3");
                 //字符退回
-                wordBoard.BackWord(item.strWord);
+                wordBoard.BackWord(item.wordDisplay);
                 item.ClearWord();
                 //item.StopAnimateError();
                 wordNumCur--;
@@ -243,7 +243,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         List<UIWordItem> listRet = new List<UIWordItem>();
         foreach (UIWordItem item in listItem)
         {
-            if (!item.IsAnswer() && !Common.BlankString(item.strWord))
+            if (!item.IsAnswer() && !Common.BlankString(item.wordDisplay))
             {
                 listRet.Add(item);
             }
@@ -257,7 +257,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
         List<UIWordItem> listRet = new List<UIWordItem>();
         foreach (UIWordItem item in listItem)
         {
-            if (Common.BlankString(item.strWord))
+            if (Common.BlankString(item.wordDisplay))
             {
                 listRet.Add(item);
             }
@@ -290,8 +290,8 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             {
                 UIWordItem item = listRet[rdx];
                 item.SetWordColor(colorTips);
-                item.UpdateTitle(item.strWordAnswer);
-                wordBoard.OnTips(item.strWordAnswer);
+                item.UpdateTitle(item.wordAnswer);
+                wordBoard.OnTips(item.wordAnswer);
                 item.isWordTips = true;
                 Common.gold--;
                 if (Common.gold < 0)

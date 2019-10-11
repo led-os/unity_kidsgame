@@ -14,7 +14,7 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
 
         textTitle.gameObject.SetActive(false);
-        if ((Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM) || (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU))
+        if ((Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_POEM) || (Common.appKeyName == GameRes.GAME_XIEHOUYU))
         {
             LanguageManager.main.UpdateLanguagePlace();
             textTitle.gameObject.SetActive(true);

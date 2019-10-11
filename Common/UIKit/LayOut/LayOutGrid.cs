@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //方格布局
 public class LayOutGrid : LayOutBase
 {
+
+
     public int row = 1;//行
     public int col = 1;//列  
 
@@ -60,6 +63,13 @@ public class LayOutGrid : LayOutBase
             {
                 continue;
             }
+
+            LayoutElement le = objtmp.GetComponent<LayoutElement>();
+            if (le != null && le.ignoreLayout)
+            {
+                continue;
+            }
+
             if (!enableHide)
             {
                 if (!objtmp.activeSelf)
@@ -80,7 +90,16 @@ public class LayOutGrid : LayOutBase
             c = idx - r * col;
 
             //从顶部往底部显示
-            r = row - 1 - r;
+            if (dispLayVertical == DispLayVertical.TOP_TO_BOTTOM)
+            {
+                r = row - 1 - r;
+            }
+
+            //从右往左显示
+            if (dispLayHorizontal == DispLayHorizontal.RIGHT_TO_LEFT)
+            {
+                c = col - 1 - c;
+            }
 
             Vector2 pt = GetItemPostion(r, c);
             RectTransform rctran = child.gameObject.GetComponent<RectTransform>();

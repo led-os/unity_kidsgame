@@ -52,11 +52,11 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             str = LanguageManager.main.languageGame.GetString(info.id);
         }
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU)
+        if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+        if (Common.appKeyName == GameRes.GAME_RIDDLE)
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
@@ -79,11 +79,11 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
 
         uiSegment.gameObject.SetActive(true);
 
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        if (Common.appKeyName == GameRes.GAME_POEM)
         {
             UpdateSegmentPoem();
         }
-        else if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_CHENGYU)
+        else if (Common.appKeyName == GameRes.GAME_IDIOM)
         {
             uiSegment.gameObject.SetActive(false);
             textPinyin.gameObject.SetActive(true);
@@ -259,7 +259,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         // public string translation;
         // public string appreciation;
         // public List<PoemContentInfo> listPoemContent;
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_POEM)
+        if (Common.appKeyName == GameRes.GAME_POEM)
         {
             if (info.id == KEY_GAMEWIN_INFO_INTRO)
             {
@@ -337,17 +337,17 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         }
 
 
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_CHENGYU)
+        if (Common.appKeyName == GameRes.GAME_IDIOM)
         {
             textPinyin.text = infoGuanka.pinyin;
             str = Language.main.GetString(KEY_GAMEWIN_INFO_TRANSLATION) + ":" + infoGuanka.translation + "\n\n" + Language.main.GetString(KEY_GAMEWIN_INFO_ALBUM) + ":" + infoGuanka.album;
         }
 
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_XIEHOUYU)
+        if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
         {
             str = infoGuanka.head + "\n" + infoGuanka.end;
         }
-        if (Common.appKeyName == GameGuankaParse.STR_APPKEYNAME_RIDDLE)
+        if (Common.appKeyName == GameRes.GAME_RIDDLE)
         {
             str = infoGuanka.tips;
             if (Common.BlankString(str))
