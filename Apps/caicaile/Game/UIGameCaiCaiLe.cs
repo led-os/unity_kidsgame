@@ -555,6 +555,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                 uiWordFillBox.OnAddWord(item.wordDisplay);
                 item.ShowContent(false);
                 bool ret = uiWordFillBox.CheckAllAnswer();
+                Debug.Log("CheckAllAnswer ret="+ret);
                 if (ret)
                 {
                     OnGameWinFinish(uiWordBar, false);

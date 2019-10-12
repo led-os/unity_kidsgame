@@ -5,6 +5,14 @@ using DG.Tweening;
 using Moonma.Share;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+public interface IUILetterItemDelegate
+{
+    //回退word
+    void OnUILetterItemDidClick(UILetterItem ui);
+
+}
 public class UILetterItem : UIView
 {
     public enum Type
@@ -25,6 +33,7 @@ public class UILetterItem : UIView
     }
     public Image imageBg;
     public Image imageIcon;
+    public Image imageSel;
     public Text textTitle;
     public int indexRow;
     public int indexCol;
@@ -32,6 +41,14 @@ public class UILetterItem : UIView
     public string wordDisplay;
     public string wordAnswer;
     Status status;
+
+    private IUILetterItemDelegate _delegate;
+
+    public IUILetterItemDelegate iDelegate
+    {
+        get { return _delegate; }
+        set { _delegate = value; }
+    }
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -49,6 +66,7 @@ public class UILetterItem : UIView
     public void SetStatus(Status st)
     {
         status = st;
+        imageSel.gameObject.SetActive(false);
         if (st == Status.LOCK)
         {
             imageBg.gameObject.SetActive(true);
@@ -62,6 +80,8 @@ public class UILetterItem : UIView
             imageBg.gameObject.SetActive(true);
             textTitle.gameObject.SetActive(false);
             imageIcon.gameObject.SetActive(false);
+            imageSel.gameObject.SetActive(true);
+
 
         }
         if (st == Status.LOCK_UNSEL)
@@ -124,5 +144,14 @@ public class UILetterItem : UIView
     {
         wordDisplay = letter;
         textTitle.text = letter;
+    }
+
+    public void OnClickItem()
+    {
+        Debug.Log("OnUILetterItemDidClick OnClickItem");
+        if (iDelegate != null)
+        {
+            iDelegate.OnUILetterItemDidClick(this);
+        }
     }
 }
