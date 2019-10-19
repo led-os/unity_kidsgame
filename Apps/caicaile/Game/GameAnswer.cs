@@ -62,15 +62,17 @@ public class GameAnswer
     {
         string ret = "";
         string str = GetInsertToBoardAnswer(info);
-        Debug.Log("UIWordBoard GetInsertToBoardAnswer:" + str);
+
         int len = str.Length;
         int total = row * col;
+
         InitWord(str);
         UpdateWord(total - len, str);
         foreach (string strtmp in listWordSel)
         {
             ret += strtmp;
         }
+        Debug.Log("UIWordBoard GetWordBoardString:" + str + " total=" + total + " ret=" + ret);
         return ret;
     }
 
@@ -150,6 +152,7 @@ public class GameAnswer
     {
         //真正的答案
         string str = GameAnswer.main.GetGuankaAnswer(info);
+        Debug.Log("UIWordBoard GetGuankaAnswer:" + str);
         //随机抽取其他关卡的答案
         int gamelevel = LevelManager.main.gameLevel;
         int total = LevelManager.main.maxGuankaNum;
@@ -173,19 +176,19 @@ public class GameAnswer
             {
                 rdm = size - 1;
             }
-            idx = idxTmp[rdm];
+            idx = idxTmp[rdm]; 
             CaiCaiLeItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
             if (infoOther != null)
             {
                 string strOther = GameAnswer.main.GetGuankaAnswer(infoOther);
                 string strtmp = RemoveSameWord(str, strOther);
                 str += strtmp;
-                Debug.Log("other guanka item:" + strOther + " RemoveSameWord:" + strtmp);
+                Debug.Log("UIWordBoard other strOther=:" + strOther + " RemoveSameWord:" + strtmp);
             }
 
         }
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (isonlytext)
+
+        if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
             str = GameAnswer.main.strWordAnswer;
         }
@@ -210,6 +213,6 @@ public class GameAnswer
     }
 
 
-    
+
 
 }

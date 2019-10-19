@@ -13,6 +13,9 @@ public interface IUIWordFillBoxDelegate
     //回退word
     void UIWordFillBoxDidBackWord(UIWordFillBox ui, string word);
 
+    //提示
+    void UIWordFillBoxDidTipsWord(UIWordFillBox ui, string word);
+
 }
 public class UIWordFillBox : UIView, IUILetterItemDelegate
 {
@@ -22,6 +25,7 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
     public int row = 7;
     public int col = 7;
     public List<UILetterItem> listItem;
+    public CaiCaiLeItemInfo infoItem;
     LayOutGrid lygrid;
     int indexFillWord;
     int indexAnswer;
@@ -85,7 +89,7 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
     }
     public void UpdateItem()
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = infoItem;
 
         for (int i = 0; i < info.listPosX.Count; i++)
         {
@@ -145,7 +149,34 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
 
     }
 
+    public UILetterItem GetSelItem()
+    {
+        UILetterItem ui = listItem[indexFillWord];
+        return ui;
+    }
 
+    public UILetterItem GetFistUnSelItem()
+    {
+        foreach (UILetterItem item in listItem)
+        {
+            if (item.GetStatus() == UILetterItem.Status.LOCK_UNSEL)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+    public UILetterItem GetItem(int idx)
+    {
+        foreach (UILetterItem item in listItem)
+        {
+            if (idx == item.index)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
     public UILetterItem GetItem(int idxRow, int idxCol)
     {
         foreach (UILetterItem item in listItem)
@@ -210,10 +241,10 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
     }
 
     //判断答案是否正确
-    public bool CheckAllAnswer()
+    public bool CheckAllAnswerFinish()
     {
         bool isAllAnswer = true;
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = infoItem;
         for (int i = 0; i < info.listWordAnswer.Count; i++)
         {
             int idx = info.listWordAnswer[i];
@@ -262,12 +293,31 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
     int GetIndexAnswer(UILetterItem uiSel)
     {
         int ret = -1;
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = infoItem;
+        for (int i = 0; i < info.listWordAnswer.Count; i++)
+        {
+            int idx = info.listWordAnswer[i];
+            Debug.Log("GetIndexAnswer idx = " + idx + " listItem=" + listItem.Count + " level=" + LevelManager.main.gameLevel);
+            UILetterItem ui = listItem[idx];
+            if (ui.index == uiSel.index)
+            {
+                ret = i;
+                break;
+            }
+
+        }
+        return ret;
+    }
+
+    public int GetFirstUnFinishAnswer()
+    {
+        CaiCaiLeItemInfo info = infoItem;
+        int ret = -1;
         for (int i = 0; i < info.listWordAnswer.Count; i++)
         {
             int idx = info.listWordAnswer[i];
             UILetterItem ui = listItem[idx];
-            if (ui.index == uiSel.index)
+            if (ui.GetStatus() != UILetterItem.Status.RIGHT_ANSWER)
             {
                 ret = i;
                 break;
@@ -279,7 +329,7 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
     public void OnAddWord(string word)
     {
         UILetterItem ui = listItem[indexFillWord];
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = infoItem;
         if (UILetterItem.Status.ERROR_ANSWER == ui.GetStatus())
         {
             //先字符退回
@@ -307,21 +357,31 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
         {
             ui.SetStatus(UILetterItem.Status.ERROR_ANSWER);
         }
-        // foreach (UIWordItem item in listItem)
-        // {
-        //     if (Common.BlankString(item.wordDisplay))
-        //     {
-        //         item.UpdateTitle(word);
-        //         wordNumCur++;
-        //         break;
-        //     }
-        // }
 
-        // if (IsWordFull())
-        // {
-        //     CheckAnswer();
-        // }
     }
+
+    public void OnTips()
+    {
+        CaiCaiLeItemInfo info = infoItem;
+        int idx = GetFirstUnFinishAnswer();
+        if (idx >= 0)
+        {
+            indexAnswer = idx;
+            if (indexAnswer < info.listWordAnswer.Count)
+            {
+                indexFillWord = info.listWordAnswer[indexAnswer];
+                string strword = info.listWord[indexFillWord];
+                OnAddWord(strword);
+                if (iDelegate != null)
+                {
+                    iDelegate.UIWordFillBoxDidTipsWord(this, strword);
+                }
+            }
+
+        }
+
+    }
+
     void UpdateSelItem(UILetterItem ui, CaiCaiLeItemInfo info)
     {
         //更新选中项目
@@ -345,8 +405,8 @@ public class UIWordFillBox : UIView, IUILetterItemDelegate
 
     public void OnUILetterItemDidClick(UILetterItem ui)
     {
-        Debug.Log("OnUILetterItemDidClick");
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        Debug.Log("OnUILetterItemDidClick status=" + ui.GetStatus());
+        CaiCaiLeItemInfo info = infoItem;
         if (ui.GetStatus() == UILetterItem.Status.LOCK_UNSEL)
         {
             //更新选中项目

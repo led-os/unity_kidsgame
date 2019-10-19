@@ -15,7 +15,7 @@ public interface IUIWordBoardDelegate
 
 public class UIWordBoard : UIView, IUIWordItemDelegate
 {
-    public UIWordItem wordItemPrefab; 
+    public UIWordItem wordItemPrefab;
     List<object> listItem;
     public int row = 6;
     public int col = 4;
@@ -81,25 +81,21 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
     }
 
-
-    public void OnTips(string word)
+    public UIWordItem GetItem(int idx)
     {
         foreach (UIWordItem item in listItem)
         {
-            if (item.isShowContent)
+            if (idx == item.index)
             {
-                if (word == item.wordDisplay)
-                {
-                    item.ShowContent(false);
-                    break;
-                }
+                return item;
             }
         }
+        return null;
     }
 
 
 
-    public void UpadteItem(CaiCaiLeItemInfo info)
+    public void UpadteItem(CaiCaiLeItemInfo info, string strBoard)
     {
         foreach (UIWordItem item in listItem)
         {
@@ -107,7 +103,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
 
         int idx = 0;
-        string strBoard = GameAnswer.main.GetWordBoardString(info, row, col);
+
         for (int i = 0; i < strBoard.Length; i++)
         {
             string word = strBoard.Substring(i, 1);
@@ -131,10 +127,25 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             if (word == item.wordDisplay)
             {
                 item.ShowContent(true);
+                break;
             }
         }
     }
 
+    public void HideWord(string word)
+    {
+        foreach (UIWordItem item in listItem)
+        {
+            if (item.isShowContent)
+            {
+                if (word == item.wordDisplay)
+                {
+                    item.ShowContent(false);
+                    break;
+                }
+            }
+        }
+    }
 
     public void WordItemDidClick(UIWordItem item)
     {
@@ -149,6 +160,6 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             _delegate.UIWordBoardDidClick(this, item);
         }
 
-   
+
     }
 }

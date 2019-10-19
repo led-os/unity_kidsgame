@@ -5,10 +5,22 @@ using UnityEngine.UI;
 
 public delegate void OnUIWordBarDidGameFinish(UIWordBar bar, bool isFail);
 public delegate void OnUIWordBarNotEnoughGold(UIWordBar bar, bool isUpdate);
+
+
+public interface IUIWordBarDelegate
+{
+    //回退word
+    void UIWordBarDidBackWord(UIWordBar ui, string word);
+
+    //提示
+    void UIWordBarDidTipsWord(UIWordBar ui, string word);
+
+}
+
 public class UIWordBar : UIView, IUIWordItemDelegate
 {
     public UIWordItem wordItemPrefab;
-    public UIWordBoard wordBoard;
+    // public UIWordBoard wordBoard;
 
     int wordNumMax;//最大字符数
     int wordNumCur;//当前字符数
@@ -22,7 +34,13 @@ public class UIWordBar : UIView, IUIWordItemDelegate
     public OnUIWordBarDidGameFinish callbackGameFinish { get; set; }
     public OnUIWordBarNotEnoughGold callbackGold { get; set; }
 
+    private IUIWordBarDelegate _delegate;
 
+    public IUIWordBarDelegate iDelegate
+    {
+        get { return _delegate; }
+        set { _delegate = value; }
+    }
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -126,13 +144,13 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             }
         }
 
-        if (IsWordFull())
+        if (CheckAllFill())
         {
             CheckAnswer();
         }
     }
 
-    public bool IsWordFull()
+    public bool CheckAllFill()
     {
         // bool ret = false;
         // if (wordNumCur >= wordNumMax)
@@ -218,8 +236,11 @@ public class UIWordBar : UIView, IUIWordItemDelegate
             if (!Common.BlankString(item.wordDisplay))
             {
                 Debug.Log("WordItemDidClick 3");
-                //字符退回
-                wordBoard.BackWord(item.wordDisplay);
+                //字符退回 
+                if (iDelegate != null)
+                {
+                    iDelegate.UIWordBarDidBackWord(this, item.wordDisplay);
+                }
                 item.ClearWord();
                 //item.StopAnimateError();
                 wordNumCur--;
@@ -267,16 +288,8 @@ public class UIWordBar : UIView, IUIWordItemDelegate
 
 
 
-    public void OnClickBtnTips()
+    public void OnTips()
     {
-        if (Common.gold <= 0)
-        {
-            if (this.callbackGold != null)
-            {
-                this.callbackGold(this, false);
-            }
-            return;
-        }
         //先提示空白的
         List<UIWordItem> listRet = GetBlankList();
         if (listRet.Count == 0)
@@ -291,7 +304,11 @@ public class UIWordBar : UIView, IUIWordItemDelegate
                 UIWordItem item = listRet[rdx];
                 item.SetWordColor(colorTips);
                 item.UpdateTitle(item.wordAnswer);
-                wordBoard.OnTips(item.wordAnswer);
+                // wordBoard.HideWord(item.wordAnswer);
+                if (iDelegate != null)
+                {
+                    iDelegate.UIWordBarDidTipsWord(this, item.wordAnswer);
+                }
                 item.isWordTips = true;
                 Common.gold--;
                 if (Common.gold < 0)
@@ -311,7 +328,7 @@ public class UIWordBar : UIView, IUIWordItemDelegate
                     it.StopAnimateError();
                 }
 
-                if (IsWordFull())
+                if (CheckAllFill())
                 {
                     CheckAnswer();
                 }

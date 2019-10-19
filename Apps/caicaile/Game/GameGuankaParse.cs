@@ -70,20 +70,6 @@ public class GameGuankaParse : GuankaParseBase
         }
     }
 
-    public bool OnlyTextGame()
-    {
-        bool ret = false;
-        if (Common.appKeyName == GameRes.GAME_POEM)
-        {
-            ret = true;
-        }
-        if (Common.appKeyName == GameRes.GAME_RIDDLE)
-        {
-            ret = true;
-        }
-
-        return ret;
-    }
     public CaiCaiLeItemInfo GetItemInfo()
     {
         int idx = LevelManager.main.gameLevel;
@@ -242,17 +228,19 @@ public class GameGuankaParse : GuankaParseBase
 
     public int ParseGuankaIdiomConnect()
     {
-        int count = 11;
+        int count = 1;
         int idx = LevelManager.main.placeLevel;
 
         ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
 
-        // string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
-        string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
+        string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
+        //string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
         //
         //FILE_PATH
         string json = FileUtil.ReadStringAsset(filepath);
         JsonData root = JsonMapper.ToObject(json);
+        count = root.Count;
+        Debug.Log("ParseGuankaIdiomConnect count=" + count);
         string strPlace = infoPlace.id;
         //JsonData items = root["items"];
         for (int i = 0; i < count; i++)
@@ -357,9 +345,9 @@ public class GameGuankaParse : GuankaParseBase
     public void ParseItem(CaiCaiLeItemInfo info)
     {
 
-        if (Common.appKeyName == GameRes.GAME_IDIOM)
+        if ((Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_IdiomConnect))
         {
-            ParseChengyuItem(info);
+            ParseIdiomItem(info);
         }
         if (Common.appKeyName == GameRes.GAME_POEM)
         {
@@ -369,13 +357,22 @@ public class GameGuankaParse : GuankaParseBase
         {
             ParseRiddleItem(info);
         }
-
     }
 
-    public void ParseChengyuItem(CaiCaiLeItemInfo info)
+    public void ParseIdiomItem(CaiCaiLeItemInfo info)
     {
         string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
+        Debug.Log("ParseIdiomItem filepath=" + filepath);
         if (!FileUtil.FileIsExistAsset(filepath))
+        {
+            filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
+            if (!FileUtil.FileIsExistAsset(filepath))
+            {
+                Debug.Log("ParseIdiomItem filepath is not exist");
+                return;
+            }
+        }
+        if (!Common.BlankString(info.translation))
         {
             return;
         }

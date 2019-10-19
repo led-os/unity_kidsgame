@@ -28,9 +28,18 @@ public class UIWordImageText : UIView
     void Awake()
     {
         textXieHouYu.gameObject.SetActive(false);
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        objText.gameObject.SetActive(isonlytext);
-        imagePic.gameObject.SetActive(!isonlytext);
+        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        if (info.gameType == GameRes.GAME_TYPE_TEXT)
+        {
+            objText.gameObject.SetActive(true);
+            imagePic.gameObject.SetActive(false);
+        }
+        else
+        {
+            objText.gameObject.SetActive(false);
+            imagePic.gameObject.SetActive(true);
+        }
+
         textLine0.color = GameRes.main.colorGameText;
     }
     // Use this for initialization
@@ -66,9 +75,7 @@ public class UIWordImageText : UIView
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
         TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
-
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (isonlytext)
+        if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
 
             if (Common.appKeyName == GameRes.GAME_POEM)
@@ -154,6 +161,18 @@ public class UIWordImageText : UIView
         return index;
     }
 
+    public bool CheckAllFill()
+    {
+        bool isAllFill = true;
+        foreach (AnswerInfo info in listAnswerInfo)
+        {
+            if (!info.isFillWord)
+            {
+                isAllFill = false;
+            }
+        }
+        return isAllFill;
+    }
     public bool CheckAllAnswerFinish()
     {
         bool ret = true;
@@ -177,8 +196,7 @@ public class UIWordImageText : UIView
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
 
-        bool isonlytext = GameGuankaParse.main.OnlyTextGame();
-        if (isonlytext)
+        if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
             textLine0.text = GetDisplayText(false, false, 0, "");
             // PoemContentInfo infopoem1 = info.listPoemContent[1];  
@@ -331,6 +349,44 @@ public class UIWordImageText : UIView
     {
         textTitle.fontSize = size;
     }
+
+    public void OnTips()
+    {
+        int index = GetFirstUnFinishAnswer();
+        AnswerInfo info = listAnswerInfo[index];
+        UpdateGameWordString(GetDisplayText(true, true, index, ""));
+        info.isFinish = true;
+    }
+
+    public void OnAddWord(string word)
+    {
+        bool isInAnswerList = false;
+        int index = 0;
+        foreach (AnswerInfo info in listAnswerInfo)
+        {
+            if (info.word == word)
+            {
+                //回答正确
+                Debug.Log("GetDisplayText ok index =" + index);
+                UpdateGameWordString(GetDisplayText(true, true, index, ""));
+                info.isFinish = true;
+                isInAnswerList = true;
+                break;
+
+            }
+            index++;
+        }
+
+        if (!isInAnswerList)
+        {
+            //回答错误
+            index = GetFirstUnFillAnswer();
+            Debug.Log("GetDisplayText error index=" + index);
+
+            UpdateGameWordString(GetDisplayText(true, false, index, word));
+        }
+    }
+
     public void OnClickItem()
     {
 

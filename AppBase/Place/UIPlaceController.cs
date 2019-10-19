@@ -4,6 +4,7 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Moonma.AdKit.AdConfig;
 
 public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 {
@@ -214,7 +215,26 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         ItemInfo info = listItem[item.index] as ItemInfo;
         if (info.isAd)
         {
-            AdKitCommon.main.ShowAdVideo();
+            bool isAdVideo = true;
+            int type = AdConfigParser.SOURCE_TYPE_VIDEO;
+            string keyAdVideo = AdConfig.main.GetAdKey(Source.GDT, type);
+            if (Common.isAndroid)
+            {
+                if ((Common.BlankString(keyAdVideo)) || (keyAdVideo == "0"))
+                {
+                    //android 显示插屏广告
+                    isAdVideo = false;
+                }
+            }
+            if (isAdVideo)
+            {
+                AdKitCommon.main.ShowAdVideo();
+            }
+            else
+            {
+                AdKitCommon.main.InitAdInsert();
+                AdKitCommon.main.ShowAdInsert(100);
+            }
         }
 
     }

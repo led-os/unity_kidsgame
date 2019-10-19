@@ -33,7 +33,7 @@ public class AppRes
     public const string Audio_PopupClose = "AppCommon/Audio/PopUp/PopupClose";
 
     //prefab  
-
+    public const string PREFAB_UIHowToPlayController = "AppCommon/Prefab/HowToPlay/UIHowToPlayController";
     public const string PREFAB_GUANKA_CELL_ITEM = "AppCommon/Prefab/Guanka/UIGuankaCellItem";
     public const string PREFAB_CmdItem = "AppCommon/Prefab/CmdItem/UICmdItem";
     public const string PREFAB_SETTING = "AppCommon/Prefab/Setting/UISettingController";
