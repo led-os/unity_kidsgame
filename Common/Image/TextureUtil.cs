@@ -302,12 +302,22 @@ public class TextureUtil : MonoBehaviour
     {
         if (tex)
         {
+            RectTransform rctranOrigin = image.GetComponent<RectTransform>();
+            Vector2 offsetMin = rctranOrigin.offsetMin;
+            Vector2 offsetMax = rctranOrigin.offsetMax;
             Sprite sp = LoadTexture.CreateSprieFromTex(tex, border);
             image.sprite = sp;
             if (isUpdateSize)
             {
-                RectTransform rctan = image.GetComponent<RectTransform>();
-                rctan.sizeDelta = new Vector2(tex.width, tex.height);
+                RectTransform rctran = image.GetComponent<RectTransform>();
+
+                rctran.sizeDelta = new Vector2(tex.width, tex.height);
+
+                //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                rctran.offsetMin = offsetMin;
+                rctran.offsetMax = offsetMax;
+                Debug.Log("rctranOrigin rctran.offsetMin=" + rctran.offsetMin + " rctran.offsetMax=" + rctran.offsetMax);
+
             }
 
         }
