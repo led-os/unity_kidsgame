@@ -239,7 +239,7 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
 
     public void OnClickBtnAdd()
     {
-        Close();
-        //   LevelManager.main.GotoNextLevel();
+        // Close();
+        LoveDB.main.AddItem(infoItem);
     }
 }

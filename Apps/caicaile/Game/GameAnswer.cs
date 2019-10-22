@@ -6,12 +6,6 @@ using UnityEngine;
 public class GameAnswer
 {
 
-
-    List<string> listWord3500;
-    List<string> listWordSel;//从3500汉字中随机选出的字
-                             /// <summary>
-                             /// Awake is called when the script instance is being loaded.
-                             /// </summary>
     public string strWordAnswer = "";
 
     static private GameAnswer _main = null;
@@ -72,40 +66,35 @@ public class GameAnswer
     public string GetWordBoardString(CaiCaiLeItemInfo info, int row, int col)
     {
         string ret = "";
-        string str = GetInsertToBoardAnswer(info);
+        string answer = GetInsertToBoardAnswer(info);
 
-        int len = str.Length;
+        int len = answer.Length;
         int total = row * col;
-        Debug.Log("UIWordBoard GetWordBoardString:" + str + " str.len=" + len);
-        InitWord(str);
-        UpdateWord(total - len, str);
-        foreach (string strtmp in listWordSel)
-        {
-            ret += strtmp;
-        }
-        Debug.Log("UIWordBoard GetWordBoardString:" + str + " str.len=" + len + " total=" + total + " ret=" + ret + " ret.count=" + ret.Length);
+        Debug.Log("UIWordBoard GetWordBoardString:" + answer + " answer.len=" + len);
+        string strAllWord = GetAllWordWithoutAnswer(answer);
+        string strRandom = GetRandomWordFromAllWord(total - len, strAllWord);
+        ret = answer + strRandom;
+        ret = Common.RandomString(ret);
+        Debug.Log("UIWordBoard GetWordBoardString:" + " total=" + total + " ret=" + ret + " ret.count=" + ret.Length);
         return ret;
     }
 
-    void InitWord(string strAnswer)
+    //从常用3500的汉字中去除答案字符 避免重复
+    string GetAllWordWithoutAnswer(string answer)
     {
-        if (listWord3500 == null)
-        {
-            listWord3500 = new List<string>();
-            listWordSel = new List<string>();
-        }
-
+        string strret = "";
         string strAllWord = GameGuankaParse.main.strWord3500;
         int len = strAllWord.Length;
         for (int i = 0; i < len; i++)
         {
             string word = strAllWord.Substring(i, 1);
-            if (!IsWordInString(word, strAnswer))
+            if (!IsWordInString(word, answer))
             {
-                listWord3500.Add(word);
+                strret += word;
             }
 
         }
+        return strret;
     }
 
 
@@ -128,43 +117,25 @@ public class GameAnswer
         return ret;
     }
 
-    void UpdateWord(int count, string strAnswer)
+
+
+    //从allword中随机抽取count个word
+    string GetRandomWordFromAllWord(int count, string strAll)
     {
-        listWordSel.Clear();
-        //随机生成汉字
-        for (int i = 0; i < count; i++)
+        string strret = "";
+        int[] indexSel = Common.RandomIndex(strAll.Length, count);
+        for (int i = 0; i < indexSel.Length; i++)
         {
-            int size = listWord3500.Count;
-            int rdm = UnityEngine.Random.Range(0, size);
-            string str = listWord3500[rdm] as string;
-            listWordSel.Add(str);
-            listWord3500.RemoveAt(rdm);
+            int idx = indexSel[i];
+            string str = strAll.Substring(idx, 1);
+            strret += str;
         }
-
-        //恢复3500汉字列表
-        foreach (string str in listWordSel)
-        {
-            listWord3500.Add(str);
-        }
-
-        //插入答案 
-        int len = strAnswer.Length;
-        for (int i = 0; i < len; i++)
-        {
-            string str = strAnswer.Substring(i, 1);
-            int size = listWordSel.Count;
-            int rdm = UnityEngine.Random.Range(0, size);
-            listWordSel.Insert(rdm, str);
-        }
+        return strret;
     }
 
-    //插入答案
-    public string GetInsertToBoardAnswer(CaiCaiLeItemInfo info)
+    public int GetOtherGuankaIndex()
     {
-        //真正的答案
-        string str = GameAnswer.main.GetGuankaAnswer(info);
-        Debug.Log("UIWordBoard GetGuankaAnswer:" + str);
-        //随机抽取其他关卡的答案
+        int idx = 0;
         int gamelevel = LevelManager.main.gameLevel;
         int total = LevelManager.main.maxGuankaNum;
         if (total > 1)
@@ -173,7 +144,7 @@ public class GameAnswer
             int size = total - 1;
             int[] idxTmp = new int[size];
 
-            int idx = 0;
+
             for (int i = 0; i < total; i++)
             {
                 if (i != gamelevel)
@@ -188,25 +159,50 @@ public class GameAnswer
                 rdm = size - 1;
             }
             idx = idxTmp[rdm];
-            CaiCaiLeItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
-            if (infoOther != null)
-            {
-                string strOther = GameAnswer.main.GetGuankaAnswer(infoOther);
-                string strtmp = RemoveSameWord(str, strOther);
-                str += strtmp;
-                Debug.Log("UIWordBoard other strOther=:" + strOther + " RemoveSameWord:" + strtmp);
-            }
+        }
+        return idx;
+    }
+
+    //插入Board的最终答案
+    public string GetInsertToBoardAnswer(CaiCaiLeItemInfo info)
+    {
+        //真正的答案
+        string str = GameAnswer.main.GetGuankaAnswer(info);
+        Debug.Log("UIWordBoard GetGuankaAnswer:" + str);
+        switch (info.gameType)
+        {
+            case GameRes.GAME_TYPE_TEXT:
+                {
+                    str = GameAnswer.main.strWordAnswer;
+                }
+                break;
+            case GameRes.GAME_TYPE_CONNECT:
+                {
+                    //str = GameAnswer.main.GetGuankaAnswer(info);
+                }
+                break;
+            case GameRes.GAME_TYPE_IMAGE:
+                {
+                    //随机抽取其他关卡的答案
+                    int total = LevelManager.main.maxGuankaNum;
+                    if (total > 1)
+                    {
+                        int idx = GetOtherGuankaIndex();
+                        CaiCaiLeItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
+                        if (infoOther != null)
+                        {
+                            string strOther = GameAnswer.main.GetGuankaAnswer(infoOther);
+                            string strtmp = RemoveSameWord(str, strOther);
+                            str += strtmp;
+                            Debug.Log("UIWordBoard other strOther=:" + strOther + " RemoveSameWord:" + strtmp);
+                        }
+
+                    }
+                }
+                break;
 
         }
 
-        if (info.gameType == GameRes.GAME_TYPE_TEXT)
-        {
-            str = GameAnswer.main.strWordAnswer;
-        }
-        if (info.gameType == GameRes.GAME_TYPE_CONNECT)
-        {
-            str = GameAnswer.main.GetGuankaAnswer(info);
-        }
         return str;
     }
 

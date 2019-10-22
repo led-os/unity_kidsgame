@@ -49,7 +49,8 @@ public class CaiCaiLeItemInfo : ItemInfo
     public List<int> listPosY;
     public List<int> listWordAnswer;
 
-
+    public string date;
+    public string addtime;
 }
 public class GameGuankaParse : GuankaParseBase
 {

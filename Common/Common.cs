@@ -366,6 +366,19 @@ public class Common
         return color;
     }
 
+    //随机打乱string
+    static public string RandomString(string str)
+    {
+        string strret = "";
+        int[] indexSel = Common.RandomIndex(str.Length, str.Length);
+        for (int i = 0; i < indexSel.Length; i++)
+        {
+            int idx = indexSel[i];
+            string strtmp = str.Substring(idx, 1);
+            strret += strtmp;
+        }
+        return strret;
+    }
     //从数组里随机抽取newsize个元素
     static public int[] RandomIndex(int size, int newsize)
     {
