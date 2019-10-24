@@ -63,6 +63,16 @@ public class UIWordImageText : UIWordContentBase
             rctran.offsetMin = new Vector2(oft, oft);
             rctran.offsetMax = new Vector2(-oft, -oft);
         }
+        if (Common.appKeyName == GameRes.GAME_IDIOM)
+        {
+            LayOutScale ls = imagePic.GetComponent<LayOutScale>();
+            if (ls != null)
+            {
+                ls.ratio = 0.5f;
+                ls.LayOut();
+            }
+        }
+
     }
     public void UpdateGuankaLevel(int level)
     {

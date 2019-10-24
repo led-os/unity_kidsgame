@@ -47,7 +47,7 @@ public class UIWordBar : UIWordContentBase, IUIWordItemDelegate
     void Awake()
     {
         spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/wordbar_item_bg");
-        colorNormal = GameRes.main.colorGameText;
+        // colorNormal = GameRes.main.colorGameText;
     }
 
     // Use this for initialization
@@ -93,7 +93,7 @@ public class UIWordBar : UIWordContentBase, IUIWordItemDelegate
             oft = ly.space.x;
         }
         float w = (rctran.rect.size.x - oft * (len - 1)) / len;
-        float limit_max = 160f;
+        float limit_max = 128f;
         if (w > limit_max)
         {
             w = limit_max;

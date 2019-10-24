@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameRes
 {
     public const string GAME_XIEHOUYU = "xiehouyu";
-    public const string GAME_IDIOM = "chengyu";
+    public const string GAME_IDIOM = "Idiom";
     public const string GAME_POEM = "poem";
 
     public const string GAME_RIDDLE = "Riddle";

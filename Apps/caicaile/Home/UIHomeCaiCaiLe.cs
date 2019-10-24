@@ -16,6 +16,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
     public Button btnShare;
     public Button btnNoAd;
     public Button btnLearn;
+    public Button btnAddLove;
     public GameObject objLogo;
     //public ActionHomeBtn actionBtnLearn;
     public void Awake()
@@ -66,6 +67,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
         if (Config.main.APP_FOR_KIDS)
         {
             objLogo.gameObject.SetActive(false);
+            btnAddLove.gameObject.SetActive(false);
         }
         else
         {
@@ -321,12 +323,18 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
     public void OnClickBtnLearn()
     {
-
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;
             navi.Push(LearnViewController.main);
-
+        }
+    }
+    public void OnClickBtnAddLove()
+    {
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            navi.Push(LoveViewController.main);
         }
     }
 }

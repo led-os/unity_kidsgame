@@ -4,43 +4,35 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.UI;
 //using static UnityEngine.UI.Button;
-
+public delegate void OnUILoveCellItemDelegate(UILoveCellItem ui);
 public class UILoveCellItem : UICellItemBase
 {
 
     public Image imageBg;
-    public Image imageIcon;
-    public GameObject objIconContent;
+    public Button btnDelete;
     public Text textTitle;
-    public Text textDetail;
+    public Text textPinyin;
     public float itemWidth;
     public float itemHeight;
-    public int itemType;
-    //public TableView tableView; 
-
     public Color colorSel;
     public Color colorUnSel;
-
-    Shader shaderColor;
-
-
-
+    CaiCaiLeItemInfo infoItem;
+    public OnUILoveCellItemDelegate callbackClickDelete { get; set; }
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
     {
-        string strshader = "Custom/ShapeColor";
-        shaderColor = Shader.Find(strshader);
         LevelManager.main.ParseGuanka();
-
+        Common.SetButtonText(btnDelete, Language.main.GetString("STR_IdiomDetail_DELETE_LOVE"), 0, false);
     }
 
 
     public override void UpdateItem(List<object> list)
     {
-        ItemInfo info = list[index] as ItemInfo;
-        UpdateInfo(info);
+        infoItem = list[index] as CaiCaiLeItemInfo;
+        GameGuankaParse.main.ParseIdiomItem(infoItem);
+        UpdateInfo(infoItem);
 
     }
     public override bool IsLock()
@@ -50,30 +42,9 @@ public class UILoveCellItem : UICellItemBase
 
     public override void LayOut()
     {
-        if (imageIcon.sprite == null)
-        {
-            return;
-        }
-        if (imageIcon.sprite.texture == null)
-        {
-            return;
-        }
-        int width = imageIcon.sprite.texture.width;
-        int height = imageIcon.sprite.texture.height;
-        RectTransform rctran = objIconContent.transform as RectTransform;
-        LayOutScale lyscale = imageIcon.gameObject.GetComponent<LayOutScale>();
-        if (lyscale != null)
-        {
-            lyscale.LayOut();
-        }
+
 
     }
-    public void SetItemType(int type)
-    {
-        itemType = type;
-
-    }
-
     void SetSelect(bool isSel)
     {
         if (isSel)
@@ -86,44 +57,20 @@ public class UILoveCellItem : UICellItemBase
         }
     }
 
-    public void UpdateInfo(ItemInfo info)
+    public void UpdateInfo(CaiCaiLeItemInfo info)
     {
-        Debug.Log("UpdateInfo info.pic=" + info.pic + " info.id=" + info.id);
-        Texture2D tex = TextureCache.main.Load(info.pic);
-        UpdateIcon(tex, colorSel);
-        string str = LanguageManager.main.LanguageOfGameItem(info);
-        textTitle.text = str;
-        int status = PlayerPrefs.GetInt(GameBase.KEY_GAME_STATUS_ITEM + info.id);
-        if (status != GameBase.GAME_STATUS_FINISH)
-        {
-            textTitle.text = "******";
-        }
-        textDetail.text = LanguageManager.main.StringOfGameStatusItem(info);
+        textTitle.text = info.id;
+        textPinyin.text = info.pinyin;
         LayOut();
 
-
     }
 
-    Texture2D GetIconFillColor(Texture2D tex, Color color)
+    public void OnClickBtnDelete()
     {
-        int w = tex.width;
-        int h = tex.height;
-        RenderTexture rt = new RenderTexture(w, h, 0);
-        Material mat = new Material(shaderColor);
-        mat.SetColor("_ColorShape", color);
-        Graphics.Blit(tex, rt, mat);
-        Texture2D texRet = TextureUtil.RenderTexture2Texture2D(rt, tex.format, new Rect(0, 0, rt.width, rt.height));
-        return texRet;
+        if (this.callbackClickDelete != null)
+        {
+            this.callbackClickDelete(this);
+        }
     }
 
-    void UpdateIcon(Texture2D tex, Color color)
-    {
-        Debug.Log("UpdateIcon color=" + color);
-        //Texture2D texNew = GetIconFillColor(tex, color);
-        // imageIcon.sprite = LoadTexture.CreateSprieFromTex(texNew);
-        // RectTransform rctan = imageIcon.GetComponent<RectTransform>();
-        // rctan.sizeDelta = new Vector2(texNew.width, texNew.height);
-        TextureUtil.UpdateImageTexture(imageIcon, tex, true);
-
-    }
 }

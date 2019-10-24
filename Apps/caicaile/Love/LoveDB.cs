@@ -28,8 +28,9 @@ public class LoveDB
 
 
     public const string KEY_text = "text";
-    string[] item_col = new string[] { KEY_id, KEY_intro, KEY_album, KEY_translation, KEY_author, KEY_year, KEY_style, KEY_pinyin, KEY_appreciation, KEY_head, KEY_end, KEY_tips, KEY_date, KEY_addtime };
-    string[] item_coltype = new string[] { KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text };
+    string[] item_col = new string[] { KEY_id, KEY_pinyin, KEY_date, KEY_addtime, };
+    //string[] item_col = new string[] { KEY_id, KEY_intro, KEY_album, KEY_translation, KEY_author, KEY_year, KEY_style, KEY_pinyin, KEY_appreciation, KEY_head, KEY_end, KEY_tips, KEY_date, KEY_addtime };
+    //string[] item_coltype = new string[] { KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text, KEY_text };
     static public string strSaveWordShotDir//字截图保存目录
     {
         get
@@ -44,7 +45,7 @@ public class LoveDB
         {
 
             string appDBPath = Application.temporaryCachePath + "/" + dbFileName;
-            Debug.Log(appDBPath);
+            Debug.Log("appDBPath=" + appDBPath);
 
             return appDBPath;
         }
@@ -84,7 +85,11 @@ public class LoveDB
     {
         dbTool = new DBToolSqliteKit();
         OpenDB();
-
+        string[] item_coltype = new string[item_col.Length];
+        for (int i = 0; i < item_coltype.Length; i++)
+        {
+            item_coltype[i] = KEY_text;
+        }
 
         if (item_col.Length != item_coltype.Length)
         {
@@ -138,11 +143,11 @@ public class LoveDB
         DirectoryInfo TheFolder = new DirectoryInfo(dir);
 
         // //遍历文件
-        foreach (FileInfo NextFile in TheFolder.GetFiles())
-        {
-            NextFile.Delete();
+        // foreach (FileInfo NextFile in TheFolder.GetFiles())
+        // {
+        //     NextFile.Delete();
 
-        }
+        // }
         OpenDB();
         dbTool.DeleteContents(TABLE_NAME);
         CloseDB();
@@ -164,30 +169,44 @@ public class LoveDB
     public void AddItem(CaiCaiLeItemInfo info)
     {
         OpenDB();
-        string[] values = new string[item_col.Length];
+        int lengh = item_col.Length;
+        string[] values = new string[lengh];
         //id,filesave,date,addtime 
 
         values[0] = info.id;
+        //values[0] = "性";//ng
+
+        values[1] = info.pinyin;
+
+        /* 
         values[1] = info.intro;
         values[2] = info.album;
-        values[3] = info.translation;
+        Debug.Log("translation=" + info.translation);
+        //values[3] = "成千上万匹马在奔跑腾跃。形容群众性的活动声势浩大或场面热烈。";
+        //values[3] = "成千上万匹马在奔跑腾跃。形容群众性";//ng
+        // values[3] = "性";//ng
+        // values[3] = "性";//ng
+
+        values[3] = "u6027";//\u6027
+
         values[4] = info.author;
         values[5] = info.year;
         values[6] = info.style;
-        values[7] = info.pinyin;
+       
         values[8] = info.appreciation;
         values[9] = info.head;
         values[10] = info.end;
         values[11] = info.tips;
+        */
 
         int year = System.DateTime.Now.Year;
         int month = System.DateTime.Now.Month;
         int day = System.DateTime.Now.Day;
         string str = year + "." + month + "." + day;
         Debug.Log("date:" + str);
-        values[item_col.Length - 2] = str;
+        values[lengh - 2] = str;
         long time_ms = Common.GetCurrentTimeMs();//GetCurrentTimeSecond
-        values[item_col.Length - 1] = time_ms.ToString();
+        values[lengh - 1] = time_ms.ToString();
         dbTool.InsertInto(TABLE_NAME, values);
 
         CloseDB();
@@ -196,31 +215,62 @@ public class LoveDB
 
     }
 
+
+    public void DeleteItem(CaiCaiLeItemInfo info)
+    {
+        OpenDB();
+        // string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'" + " and addtime = '" + info.addtime + "'";
+        string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
+        dbTool.ExecuteQuery(strsql, true);
+        CloseDB();
+    }
+
+
+    public bool IsItemExist(CaiCaiLeItemInfo info)
+    {
+        bool ret = false;
+        OpenDB();
+        //string strsql = "SELECT count(*) FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
+        string strsql = "SELECT * FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
+        SQLiteQuery qr = dbTool.ExecuteQuery(strsql, false);
+        int count = 0;//qr.GetCount();
+        while (qr.Step())// 循环遍历数据 
+        {
+            count++;
+        }
+        qr.Release();
+        Debug.Log("IsItemExist count=" + count);
+        CloseDB();
+        if (count > 0)
+        {
+            ret = true;
+        }
+        return ret;
+    }
+
     void ReadInfo(CaiCaiLeItemInfo info, SQLiteQuery rd)
     {
         info.id = rd.GetString(KEY_id);
+        // info.pinyin = rd.GetString(KEY_pinyin);
+        // Debug.Log("ReadInfo info.pinyin=" + info.pinyin);
+        /* 
         info.intro = rd.GetString(KEY_intro);
         info.album = rd.GetString(KEY_album);
         info.translation = rd.GetString(KEY_translation);
         info.author = rd.GetString(KEY_author);
         info.year = rd.GetString(KEY_year);
         info.style = rd.GetString(KEY_style);
-        info.pinyin = rd.GetString(KEY_pinyin);
+    
         info.appreciation = rd.GetString(KEY_appreciation);
         info.head = rd.GetString(KEY_head);
-        info.end = rd.GetString(KEY_end);
+        info.end = rd
+        .GetString(KEY_end);
         info.tips = rd.GetString(KEY_tips);
-        info.addtime = rd.GetString(KEY_addtime);
-        info.date = rd.GetString(KEY_date);
+        */
+        //  info.addtime = rd.GetString(KEY_addtime);
+        // info.date = rd.GetString(KEY_date);
     }
 
-    public void DeleteItem(CaiCaiLeItemInfo info)
-    {
-        OpenDB();
-        string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'" + " and addtime = '" + info.addtime + "'";
-        dbTool.ExecuteQuery(strsql, true);
-        CloseDB();
-    }
 
     public List<CaiCaiLeItemInfo> GetAllItem()
     {
@@ -237,7 +287,7 @@ public class LoveDB
         {
             Debug.Log("GetAllItem reading");
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
-            info.id = reader.GetString(KEY_id);
+            ReadInfo(info, reader);
             listRet.Add(info);
         }
 

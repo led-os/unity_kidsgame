@@ -111,7 +111,7 @@ public class GameGuankaParse : GuankaParseBase
         string json = FileUtil.ReadStringAsset(filepath);
         JsonData root = JsonMapper.ToObject(json);
         strWord3500 = (string)root["words"];
-        Debug.Log(strWord3500);
+        // Debug.Log(strWord3500);
     }
 
     public override int ParseGuanka()

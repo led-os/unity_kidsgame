@@ -192,9 +192,5 @@ public class UIGameWinIdiomConnect : UIViewPop
     }
     public void OnClickBtnAddLove()
     {
-    }
-    public void OnClickIdiom()
-    {
-        PopUpManager.main.Show<UIIdiomDetail>("App/Prefab/Game/UIIdiomDetail");
-    }
+    } 
 }

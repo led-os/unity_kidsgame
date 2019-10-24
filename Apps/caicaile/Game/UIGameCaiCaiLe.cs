@@ -137,7 +137,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     void Start()
     {
         UpdateGuankaLevel(LevelManager.main.gameLevel);
-        //OnGameWinFinish(uiWordBar, false);
+        // OnGameWinFinish(uiWordBar, false);
     }
 
     // Update is called once per frame
@@ -196,6 +196,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
         //  TextureUtil.UpdateImageTexture(imagePicBoard, "App/UI/Game/BoardPic", true);
 
+        objLayouBtn.transform.SetAsLastSibling();
 
         UpdateWord();
         UpdateTitle();

@@ -40,10 +40,6 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
     {
         base.Awake();
 
-        //Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
-        Common.SetButtonText(btnAdd, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
-        //Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
-
         textView.SetFontSize(80);
         textView.SetTextColor(GameRes.main.colorGameWinTextView);
 
@@ -200,7 +196,25 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
         textTitle.text = str;
         textPinyin.text = info.pinyin;
         uiSegment.Select(indexSegment, true);
+        UpdateLoveStatus();
+
     }
+
+    public void UpdateLoveStatus()
+    {
+        string strBtn = "";
+        if (LoveDB.main.IsItemExist(infoItem))
+        {
+            strBtn = Language.main.GetString("STR_IdiomDetail_DELETE_LOVE");
+        }
+        else
+        {
+            strBtn = Language.main.GetString("STR_IdiomDetail_ADD_LOVE");
+        }
+
+        Common.SetButtonText(btnAdd, strBtn, 0, false);
+    }
+
 
     public void UpdateText(ItemInfo info)
     {
@@ -240,6 +254,14 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
     public void OnClickBtnAdd()
     {
         // Close();
-        LoveDB.main.AddItem(infoItem);
+        if (LoveDB.main.IsItemExist(infoItem))
+        {
+            LoveDB.main.DeleteItem(infoItem);
+        }
+        else
+        {
+            LoveDB.main.AddItem(infoItem);
+        }
+        UpdateLoveStatus();
     }
 }

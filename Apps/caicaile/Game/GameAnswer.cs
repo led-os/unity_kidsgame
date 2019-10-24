@@ -28,7 +28,8 @@ public class GameAnswer
         //真正的答案
         if ((info.gameType == GameRes.GAME_TYPE_IMAGE) || (info.gameType == GameRes.GAME_TYPE_IMAGE_TEXT))
         {
-            str = UIGameCaiCaiLe.languageWord.GetString(info.id);
+            //str = UIGameCaiCaiLe.languageWord.GetString(info.id);
+            str = info.id;
             //歇后语
             if ((!Common.BlankString(info.head)) && (!Common.BlankString(info.end)))
             {

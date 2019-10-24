@@ -4,14 +4,13 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.UI;
 public delegate void OnUILoveControllerDidCloseDelegate(UILoveController ui);
-public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
+public class UILoveController : UIView, ITableViewDataSource
 {
     public OnUILoveControllerDidCloseDelegate callbackClose { get; set; }
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;
     public RawImage imageBg;
-    public UISegment uiSegment;
-
+    public Button btnDeleteAll;
     public int numRows;
     private int numInstancesCreated = 0;
 
@@ -21,8 +20,8 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
     public TableView tableView;
 
     List<object> listItem;
-    List<object> listItemGuanka;
     public Text textTitle;
+    public Text textDetail;
 
     Color colorSel;
     Color colorUnSel;
@@ -50,11 +49,9 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
 
         indexSegment = LevelManager.main.placeLevel;
 
-        listItemGuanka = LevelManager.main.GetGuankaListOfPlace(indexSegment);
-
-        uiSegment.InitValue(64, Color.red, Color.black);
-        uiSegment.iDelegate = this;
-        ParserSortList();
+        listItem = new List<object>();
+        LanguageManager.main.UpdateLanguagePlace();
+        LanguageManager.main.UpdateLanguage(indexSegment);
     }
 
     // Use this for initialization
@@ -107,71 +104,27 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
     }
     void UpdateTitle()
     {
-        string str = Language.main.GetString("STR_TITLE_LEARN_PROGRESS");
+        string str = Language.main.GetString("STR_TITLE_LOVE");
         textTitle.text = str;
+        textDetail.text = Language.main.GetString("STR_TITLE_LOVE_DBEmpty");
+        Common.SetButtonText(btnDeleteAll, Language.main.GetString("STR_TITLE_LOVE_DELETE_ALL"), 64, true);
     }
     void UpdateList()
     {
-        listItem = listItemGuanka;//UIGameShapeColor.listShape;
-
+        List<CaiCaiLeItemInfo> ls = LoveDB.main.GetAllItem();
+        listItem.Clear();
+        listItem.AddRange(ls);
         totalItem = listItem.Count;
         numRows = totalItem / oneCellNum;
         if (totalItem % oneCellNum != 0)
         {
             numRows++;
         }
-
+        textDetail.gameObject.SetActive(LoveDB.main.DBEmpty());
+        btnDeleteAll.gameObject.SetActive(!LoveDB.main.DBEmpty());
         tableView.ReloadData();
     }
 
-
-
-    public void ParserSortList()
-    {
-        LanguageManager.main.UpdateLanguagePlace();
-
-        for (int i = 0; i < GameGuankaParse.main.listPlace.Count; i++)
-        {
-            ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(i);
-            if (uiSegment != null)
-            {
-                ItemInfo infoSeg = new ItemInfo();
-                infoSeg.id = infoPlace.id;
-                infoSeg.title = LanguageManager.main.LanguageOfPlaceItem(infoPlace);
-                uiSegment.AddItem(infoSeg);
-            }
-        }
-        if (uiSegment != null)
-        {
-            uiSegment.UpdateList();
-        }
-        uiSegment.Select(indexSegment);
-        LanguageManager.main.UpdateLanguage(indexSegment);
-    }
-    public void UpdateSortList(int idx)
-    {
-        indexSegment = idx;
-        if (idx > 5)
-        {
-            LevelManager.main.ParseGuankaItemId(indexSegment);
-            listItemGuanka = LevelManager.main.listGuankaItemId;
-        }
-        else
-        {
-
-            listItemGuanka = LevelManager.main.GetGuankaListOfPlace(idx);
-        }
-
-
-        LanguageManager.main.UpdateLanguage(indexSegment);
-        UpdateList();
-
-    }
-    public void SegmentDidClick(UISegment seg, SegmentItem item)
-    {
-        UpdateSortList(item.index);
-
-    }
     public void OnBtnClickBack()
     {
         NaviViewController navi = this.controller.naviController;
@@ -181,9 +134,11 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
         }
     }
 
-
-
-
+    public void OnBtnClickDeleteAll()
+    {
+        LoveDB.main.ClearDB();
+        UpdateList();
+    }
 
     public void OnCellItemDidClick(UICellItemBase item)
     {
@@ -191,7 +146,27 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
         {
             return;
         }
+        CaiCaiLeItemInfo info = listItem[item.index] as CaiCaiLeItemInfo;
+        PopUpManager.main.Show<UIIdiomDetail>("App/Prefab/Game/UIIdiomDetail", popup =>
+           {
+               Debug.Log("UIIdiomDetail Open ");
+               popup.UpdateItem(info);
 
+           }, popup =>
+           {
+               Debug.Log("UIIdiomDetail Close ");
+
+           });
+    }
+
+    public void OnCellItemDidClickDelete(UILoveCellItem ui)
+    {
+        CaiCaiLeItemInfo info = listItem[ui.index] as CaiCaiLeItemInfo;
+        if (info != null)
+        {
+            LoveDB.main.DeleteItem(info);
+        }
+        UpdateList();
     }
 
     #region ITableViewDataSource
@@ -237,7 +212,8 @@ public class UILoveController : UIView, ITableViewDataSource, ISegmentDelegate
                 item.index = itemIndex;
                 item.totalItem = totalItem;
                 item.callbackClick = OnCellItemDidClick;
-
+                UILoveCellItem loveitem = item as UILoveCellItem;
+                loveitem.callbackClickDelete = OnCellItemDidClickDelete;
                 cell.AddItem(item);
 
             }
