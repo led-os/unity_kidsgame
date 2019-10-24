@@ -64,6 +64,7 @@ public class UIHowToPlayController : UIView
         UpdateItem();
         LayOut();
         ShowAction();
+        AdKitCommon.main.ShowAdBanner(false);
     }
 
     void LoadPrefab()
@@ -129,7 +130,7 @@ public class UIHowToPlayController : UIView
         {
             pop.Close();
         }
-
+        AdKitCommon.main.ShowAdBanner(true);
     }
 
     public override void LayOut()
@@ -155,14 +156,17 @@ public class UIHowToPlayController : UIView
             RectTransform rctran = objContent.GetComponent<RectTransform>();
             if (Device.isLandscape)
             {
-                ratio = 0.7f;
+                ratio = 1f;
+                h = this.frame.height * ratio;//w;
+                w = this.frame.height * h / this.frame.width;
             }
             else
             {
                 ratio = 0.7f;
+                w = this.frame.width * ratio;//Mathf.Min(this.frame.width, this.frame.height) * 0.7f;
+                h = this.frame.height * ratio;//w;
             }
-            w = this.frame.width * ratio;//Mathf.Min(this.frame.width, this.frame.height) * 0.7f;
-            h = this.frame.height * ratio;//w;
+
             rctran.sizeDelta = new Vector2(w, h);
 
 

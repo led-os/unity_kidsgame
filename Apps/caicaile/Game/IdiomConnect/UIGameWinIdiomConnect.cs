@@ -21,7 +21,7 @@ public class UIGameWinIdiomConnect : UIViewPop
 
     public Text textTitle;
     public Image imageBg;
-    public RawImage imageHead;
+    public Image imageHead;
     public Button btnClose;
     public GameObject objIdiom;
 
@@ -44,13 +44,7 @@ public class UIGameWinIdiomConnect : UIViewPop
         Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
         //Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
 
-        string str = info.title;
-        if (Common.BlankString(str))
-        {
-            str = LanguageManager.main.languageGame.GetString(info.id);
-        }
-
-        textTitle.text = str; 
+        textTitle.text = Language.main.GetString("STR_TITLE_GameWin");
         textTitle.color = GameRes.main.colorGameWinTitle;
 
         UpdateIdiom();
@@ -121,14 +115,14 @@ public class UIGameWinIdiomConnect : UIViewPop
         //objLayoutBtn
         {
             RectTransform rctran = objLayoutBtn.GetComponent<RectTransform>();
-            if (Device.isLandscape)
-            {
-                w = w_btns_landscape;
-                h = rctranRoot.rect.height;
-                y = 0;
-                x = rctranRoot.rect.width / 2 - w / 2 - space;
-            }
-            else
+            // if (Device.isLandscape)
+            // {
+            //     w = w_btns_landscape;
+            //     h = rctranRoot.rect.height;
+            //     y = 0;
+            //     x = rctranRoot.rect.width / 2 - w / 2 - space;
+            // }
+            // else
             {
                 w = rctranRoot.rect.width;
                 h = 160;
@@ -192,5 +186,5 @@ public class UIGameWinIdiomConnect : UIViewPop
     }
     public void OnClickBtnAddLove()
     {
-    } 
+    }
 }

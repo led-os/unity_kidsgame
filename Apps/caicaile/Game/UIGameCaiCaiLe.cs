@@ -137,7 +137,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     void Start()
     {
         UpdateGuankaLevel(LevelManager.main.gameLevel);
-        // OnGameWinFinish(uiWordBar, false);
+        OnGameWinFinish(uiWordBar, false);
     }
 
     // Update is called once per frame
@@ -442,29 +442,38 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             RectTransform rctran = objLayouBtn.GetComponent<RectTransform>();
             LayOutGrid lg = objLayouBtn.GetComponent<LayOutGrid>();
             lg.enableHide = false;
-            if (Common.appKeyName == GameRes.GAME_IdiomConnect)
+
+            if (info.gameType == GameRes.GAME_TYPE_CONNECT)
             {
                 //横排显示
-                w = rectImage.size.x;
+                w = rctranBoard.rect.size.x;
                 h = topbarHeightCanvas;
                 float y1 = rctranBoard.anchoredPosition.y + rctranBoard.rect.height / 2;
                 float y2 = rectImage.center.y - rectImage.size.y / 2;
+                if (Device.isLandscape)
+                {
+                    y2 = this.frame.height / 2 - topbarHeightCanvas;
+                }
                 y = (y1 + y2) / 2;
-                x = rectImage.center.x;
+                x = rctranBoard.anchoredPosition.x;
 
                 lg.row = 1;
                 lg.col = lg.GetChildCount(lg.enableHide);
             }
             else
             {
-                //竖排显示
-                w = topbarHeightCanvas;
-                h = rectImage.size.y;
-                x = sizeCanvas.x / 2 - w - 32 + w / 2;
-                // y = rctranWordBar.anchoredPosition.y;
-                y = rectImage.center.y;
-                lg.col = 1;
-                lg.row = lg.GetChildCount(lg.enableHide);
+
+                {
+                    //竖排显示
+                    w = topbarHeightCanvas;
+                    h = rectImage.size.y;
+                    x = sizeCanvas.x / 2 - w - 32 + w / 2;
+                    // y = rctranWordBar.anchoredPosition.y;
+                    y = rectImage.center.y;
+                    lg.col = 1;
+                    lg.row = lg.GetChildCount(lg.enableHide);
+                }
+
             }
 
             rctran.sizeDelta = new Vector2(w, h);

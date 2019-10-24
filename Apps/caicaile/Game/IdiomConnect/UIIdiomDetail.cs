@@ -125,14 +125,14 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
             {
                 oftLeft = space;
                 oftRight = w_btns_landscape + space;
-                oftTop = 300;
+                oftTop = 400;
                 oftBottom = space;
             }
             else
             {
                 oftLeft = space;
                 oftRight = space;
-                oftTop = 300;
+                oftTop = 400;
                 oftBottom = 200;
             }
             w = rctranRoot.rect.width - oftLeft - oftRight;
