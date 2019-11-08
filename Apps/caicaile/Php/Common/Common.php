@@ -21,3 +21,10 @@ function BlankString($str)
 
     return false;
 }
+
+function RemoveHtmlSpace($str)
+{
+    $ret = str_replace("&nbsp;", "", $str);
+    $ret = str_replace(" ", "", $ret);
+    return  $ret;
+}

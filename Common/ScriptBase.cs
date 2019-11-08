@@ -18,6 +18,32 @@ public class ScriptBase : MonoBehaviour
     public int tickUpdateStep;
 
     public OnInitUIFinishDelegate callbackInitUIFinish { get; set; }
+
+    public void SetCanvasScalerMatch(GameObject obj)
+    {
+        float w, h;
+        CanvasScaler canvasScaler = obj.GetComponent<CanvasScaler>();
+        if (canvasScaler == null)
+        {
+            return;
+        }
+        sizeRef = canvasScaler.referenceResolution;
+        float scale = canvasScaler.scaleFactor;
+        w = sizeRef.x;
+        h = sizeRef.y;
+
+        if (Screen.height > Screen.width)
+        {
+            canvasScaler.matchWidthOrHeight = 1;
+            canvasScaler.referenceResolution = new Vector2(Mathf.Min(w, h), Mathf.Max(w, h));
+        }
+        else
+        {
+            canvasScaler.matchWidthOrHeight = 0;
+            canvasScaler.referenceResolution = new Vector2(Mathf.Max(w, h), Mathf.Min(w, h));
+        }
+    }
+
     //必须在InitUiScaler前面执行
     public void InitScalerMatch()
     {

@@ -573,6 +573,14 @@ public class Common
         ptCanvas.y = pt.y * canvasSize.y / Screen.height;
         return ptCanvas;
     }
+
+    static public Vector2 CanvasToScreenPoint(Vector2 canvasSize, Vector2 ptCanvas)
+    {
+        Vector2 pt = Vector2.zero;
+        pt.x = ptCanvas.x * Screen.width / canvasSize.x;
+        pt.y = ptCanvas.y * Screen.height / canvasSize.y;
+        return pt;
+    }
     //one screen width half  size  in the world
     static public float GetCameraWorldSizeWidth(Camera cam)
     {

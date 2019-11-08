@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoardDelegate, IUIWordFillBoxDelegate, IUIWordBarDelegate
+public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoardDelegate, IUIWordContentBaseDelegate, IUIWordBarDelegate
 {
 
 
@@ -20,11 +20,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
 
     public UIWordFillBox uiWordFillBoxPrefab;
-    public UIWordFillBox uiWordFillBox;
+    //public UIWordFillBox uiWordFillBox;
 
     public UIWordImageText uiWordImageTextPrefab;
-    public UIWordImageText uiWordImageText;
-
+    //public UIWordImageText uiWordImageText;
+    UIWordContentBase uiWordContent;
 
     public GameObject objGoldBar;
     public Image imageGoldBg;
@@ -61,10 +61,13 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         {
             btnRetry.gameObject.SetActive(false);
         }
+
+        btnHelp.gameObject.SetActive(false);
         if (Common.appKeyName == GameRes.GAME_IdiomConnect)
         {
             btnTips.gameObject.SetActive(true);
             btnRetry.gameObject.SetActive(true);
+            btnHelp.gameObject.SetActive(true);
         }
 
         objTopBar.SetActive(AppVersion.appCheckHasFinished);
@@ -137,7 +140,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     void Start()
     {
         UpdateGuankaLevel(LevelManager.main.gameLevel);
-        OnGameWinFinish(uiWordBar, false);
+        //OnGameWinFinish(uiWordBar, false);
     }
 
     // Update is called once per frame
@@ -163,27 +166,34 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         AppSceneBase.main.ClearMainWorld();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
         GameGuankaParse.main.ParseItem(info);
-
-        if (info.gameType == GameRes.GAME_TYPE_CONNECT)
+        switch (info.gameType)
         {
-            uiWordFillBox = (UIWordFillBox)GameObject.Instantiate(uiWordFillBoxPrefab);
-            uiWordFillBox.transform.SetParent(this.transform);
-            uiWordFillBox.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            UIViewController.ClonePrefabRectTransform(uiWordFillBoxPrefab.gameObject, uiWordFillBox.gameObject);
-            uiWordFillBox.iDelegate = this;
-            uiWordFillBox.infoItem = info;
-            uiWordFillBox.UpdateGuankaLevel(level);
+            case GameRes.GAME_TYPE_CONNECT:
+                {
+                    uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordFillBoxPrefab);
+                }
+                break;
+            case GameRes.GAME_TYPE_IMAGE:
+            case GameRes.GAME_TYPE_TEXT:
+            case GameRes.GAME_TYPE_IMAGE_TEXT:
+                {
+                    uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordImageTextPrefab);
+                }
+                break;
+
+
+            default:
+                break;
         }
-        if ((info.gameType == GameRes.GAME_TYPE_IMAGE) || (info.gameType == GameRes.GAME_TYPE_IMAGE_TEXT))
+        if (uiWordContent != null)
         {
-            uiWordImageText = (UIWordImageText)GameObject.Instantiate(uiWordImageTextPrefab);
-            uiWordImageText.transform.SetParent(this.transform);
-            uiWordImageText.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            UIViewController.ClonePrefabRectTransform(uiWordImageTextPrefab.gameObject, uiWordImageText.gameObject);
-            uiWordImageText.UpdateGuankaLevel(level);
+            uiWordContent.transform.SetParent(this.transform);
+            uiWordContent.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            UIViewController.ClonePrefabRectTransform(uiWordFillBoxPrefab.gameObject, uiWordContent.gameObject);
+            uiWordContent.iDelegate = this;
+            uiWordContent.infoItem = info;
+            uiWordContent.UpdateGuankaLevel(level);
         }
-
-
         // ShowAdInsert(GAME_AD_INSERT_SHOW_STEP,true);
         if (gameBase != null)
         {
@@ -305,22 +315,18 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             rectImage = new Rect(x, y, w, h);
             Debug.Log("rectImage =" + rectImage);
 
-            if (uiWordImageText != null)
+            if (uiWordContent != null)
             {
-                RectTransform rctran = uiWordImageText.GetComponent<RectTransform>();
+                RectTransform rctran = uiWordContent.GetComponent<RectTransform>();
+                UIWordFillBox ui = uiWordContent as UIWordFillBox;
+                if (ui != null)
+                {
+                    w = Mathf.Min(w, h);
+                    h = w;
+                }
                 rctran.sizeDelta = new Vector2(w, h);
                 rctran.anchoredPosition = rectImage.center;
-                uiWordImageText.LayOut();
-            }
-
-            if (uiWordFillBox != null)
-            {
-                RectTransform rctran = uiWordFillBox.GetComponent<RectTransform>();
-                w = Mathf.Min(w, h);
-                h = w;
-                rctran.sizeDelta = new Vector2(w, h);
-                rctran.anchoredPosition = rectImage.center;
-                uiWordFillBox.LayOut();
+                uiWordContent.LayOut();
             }
         }
 
@@ -467,8 +473,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                     //竖排显示
                     w = topbarHeightCanvas;
                     h = rectImage.size.y;
-                    x = sizeCanvas.x / 2 - w - 32 + w / 2;
-                    // y = rctranWordBar.anchoredPosition.y;
+                    x = rectImage.center.x - rectImage.size.x / 2 + w / 2 + 32;
                     y = rectImage.center.y;
                     lg.col = 1;
                     lg.row = lg.GetChildCount(lg.enableHide);
@@ -510,9 +515,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     void UpdateWord()
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        if (uiWordImageText != null)
+        if (uiWordContent != null)
         {
-            uiWordImageText.UpdateWord();
+            uiWordContent.UpdateWord();
         }
         //先计算行列数
         LayOut();
@@ -531,13 +536,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public bool CheckAllAnswerFinish()
     {
         bool ret = false;
-        if (uiWordFillBox != null)
+        if (uiWordContent != null)
         {
-            ret = uiWordFillBox.CheckAllAnswerFinish();
-        }
-        if (uiWordImageText != null)
-        {
-            ret = uiWordImageText.CheckAllAnswerFinish();
+            ret = uiWordContent.CheckAllAnswerFinish();
         }
         return ret;
     }
@@ -569,9 +570,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
         if (infoGuanka.gameType == GameRes.GAME_TYPE_TEXT)
         {
-            if (uiWordImageText.CheckAllFill())
+            if (uiWordContent.CheckAllFill())
             {
-                uiWordImageText.OnAddWord(item.wordDisplay);
+                uiWordContent.OnAddWord(item.wordDisplay);
                 item.ShowContent(false);
                 if (CheckAllAnswerFinish())
                 {
@@ -593,11 +594,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         }
         else
         {
-            if (uiWordFillBox != null)
+            if (uiWordContent != null)
             {
-                uiWordFillBox.OnAddWord(item.wordDisplay);
+                uiWordContent.OnAddWord(item.wordDisplay);
                 item.ShowContent(false);
-                bool ret = uiWordFillBox.CheckAllAnswerFinish();
+                bool ret = uiWordContent.CheckAllAnswerFinish();
                 Debug.Log("CheckAllAnswer ret=" + ret);
                 if (ret)
                 {
@@ -682,11 +683,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
     }
 
-    public void UIWordFillBoxDidBackWord(UIWordFillBox ui, string word)
+    public void UIWordContentBaseDidBackWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.BackWord(word);
     }
-    public void UIWordFillBoxDidTipsWord(UIWordFillBox ui, string word)
+    public void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.HideWord(word);
     }
@@ -722,16 +723,10 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         {
 
 
-            if (uiWordFillBox != null)
+            if (uiWordContent != null)
             {
-                uiWordFillBox.OnTips();
+                uiWordContent.OnTips();
             }
-
-            if (uiWordImageText != null)
-            {
-                uiWordImageText.OnTips();
-            }
-
 
             Common.gold--;
             if (Common.gold < 0)

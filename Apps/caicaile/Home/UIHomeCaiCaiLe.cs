@@ -74,8 +74,10 @@ public class UIHomeCaiCaiLe : UIHomeBase
             objLogo.gameObject.SetActive(false);
             //imageBgName.gameObject.SetActive(false);
         }
-
-
+        if (Common.appKeyName == GameRes.GAME_Image)
+        {
+            btnAddLove.gameObject.SetActive(false);
+        }
 
         UpdateLayoutBtn();
     }

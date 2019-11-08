@@ -10,7 +10,7 @@ define("NAME_TITLE", "词目");
 define("NAME_PINYIN", "发音");
 define("NAME_TRANSLATION", "成语解释");
 define("NAME_ALBUM", "成语出处");
-
+define("NAME_ID", "成语简拼");
 
 class ParseIdiomItem
 {
@@ -64,7 +64,7 @@ class ParseIdiomItem
             $ret = strstr($div->class, 'gray mt f16');
             if ($div->class == "gray mt f16") {
                 //  echo "div class =" . $div->class . "\n";
-                $infoRet->pinyin  = $div->innertext;
+                $infoRet->pronunciation  = $div->innertext;
 
                 // echo "div parent =" . $div->parent->innertext . "\n";
                 $str = strip_html_tags(array('div'), $div->parent->innertext);
@@ -73,12 +73,13 @@ class ParseIdiomItem
                 $str = strip_tags($str);
 
                 $infoRet->title = removeHtmlSpace($str);
+                //$infoRet->id = $infoRet->title;
             }
         }
 
         $infoRet->translation = $this->ParseIdiomItemInfoByType($html, constant("NAME_TRANSLATION"));
         $infoRet->album = $this->ParseIdiomItemInfoByType($html, constant("NAME_ALBUM"));
-
+        $infoRet->id = $this->ParseIdiomItemInfoByType($html, constant("NAME_ID"));
 
 
         return $infoRet;
@@ -87,7 +88,7 @@ class ParseIdiomItem
     {
         $element = array(
             'title' => urlencode($info->title),
-            'pinyin' => urlencode($info->pinyin),
+            'pinyin' => urlencode($info->pronunciation),
             'album' => urlencode($info->album),
             // 'url' => urlencode($gUrl),
             'translation' => urlencode($info->translation),
@@ -149,13 +150,7 @@ function strip_html_tags($tags, $str)
     }
     $data = preg_replace($html, '', $str);
     return $data;
-}
-function removeHtmlSpace($str)
-{
-    $ret = str_replace("&nbsp;", "", $str);
-    $ret = str_replace(" ", "", $ret);
-    return  $ret;
-}
+} 
 //
 
 

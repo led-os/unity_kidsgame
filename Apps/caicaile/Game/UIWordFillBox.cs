@@ -8,15 +8,6 @@ using UnityEngine.UI;
 https://www.taptap.com/app/167939
  */
 
-public interface IUIWordFillBoxDelegate
-{
-    //回退word
-    void UIWordFillBoxDidBackWord(UIWordFillBox ui, string word);
-
-    //提示
-    void UIWordFillBoxDidTipsWord(UIWordFillBox ui, string word);
-
-}
 public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 {
     public Image imageBg;
@@ -25,18 +16,9 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     public int row = 7;
     public int col = 7;
     public List<UILetterItem> listItem;
-    public CaiCaiLeItemInfo infoItem;
     LayOutGrid lygrid;
     int indexFillWord;
-    int indexAnswer;
-    private IUIWordFillBoxDelegate _delegate;
-
-    public IUIWordFillBoxDelegate iDelegate
-    {
-        get { return _delegate; }
-        set { _delegate = value; }
-    }
-
+    int indexAnswer; 
     void Awake()
     {
         lygrid = this.GetComponent<LayOutGrid>();
@@ -83,13 +65,13 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 
 
     }
-    public void UpdateGuankaLevel(int level)
+    public override void UpdateGuankaLevel(int level)
     {
         UpdateItem();
     }
     public void UpdateItem()
     {
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
 
         for (int i = 0; i < info.listPosX.Count; i++)
         {
@@ -253,10 +235,10 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     }
 
     //判断答案是否正确
-    public bool CheckAllAnswerFinish()
+    public override bool CheckAllAnswerFinish()
     {
         bool isAllAnswer = true;
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         for (int i = 0; i < info.listWordAnswer.Count; i++)
         {
             int idx = info.listWordAnswer[i];
@@ -305,7 +287,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     int GetIndexAnswer(UILetterItem uiSel)
     {
         int ret = -1;
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         for (int i = 0; i < info.listWordAnswer.Count; i++)
         {
             int idx = info.listWordAnswer[i];
@@ -323,7 +305,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 
     public int GetFirstUnFinishAnswer()
     {
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         int ret = -1;
         for (int i = 0; i < info.listWordAnswer.Count; i++)
         {
@@ -341,13 +323,13 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     public override void OnAddWord(string word)
     {
         UILetterItem ui = listItem[indexFillWord];
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         if (UILetterItem.Status.ERROR_ANSWER == ui.GetStatus())
         {
             //先字符退回
             if (iDelegate != null)
             {
-                iDelegate.UIWordFillBoxDidBackWord(this, ui.wordDisplay);
+                iDelegate.UIWordContentBaseDidBackWord(this, ui.wordDisplay);
             }
         }
         ui.UpdateItem(word);
@@ -374,7 +356,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 
     public override void OnTips()
     {
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         int idx = GetFirstUnFinishAnswer();
         if (idx >= 0)
         {
@@ -386,7 +368,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
                 OnAddWord(strword);
                 if (iDelegate != null)
                 {
-                    iDelegate.UIWordFillBoxDidTipsWord(this, strword);
+                    iDelegate.UIWordContentBaseDidTipsWord(this, strword);
                 }
             }
 
@@ -398,7 +380,8 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     {
         int idx = 0;
         indexAnswer = 0;
-        indexFillWord = infoItem.listWordAnswer[indexAnswer];
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
+        indexFillWord = info.listWordAnswer[indexAnswer];
         foreach (UILetterItem item in listItem)
         {
             if (item.isAnswerItem)
@@ -449,7 +432,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     public void OnUILetterItemDidClick(UILetterItem ui)
     {
         Debug.Log("OnUILetterItemDidClick status=" + ui.GetStatus());
-        CaiCaiLeItemInfo info = infoItem;
+        CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         if (ui.GetStatus() == UILetterItem.Status.LOCK_UNSEL)
         {
             //更新选中项目
@@ -462,7 +445,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
             UpdateSelItem(ui, info);
             if (iDelegate != null)
             {
-                iDelegate.UIWordFillBoxDidBackWord(this, ui.wordDisplay);
+                iDelegate.UIWordContentBaseDidBackWord(this, ui.wordDisplay);
             }
         }
 

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class UIPay : ScriptBase, ITableViewDataSource
+public class UIPay : UIView, ITableViewDataSource
 {
     public const string KEY_HAS_COMMENT = "KEY_HAS_COMMENT";
 
@@ -36,13 +36,13 @@ public class UIPay : ScriptBase, ITableViewDataSource
     RectTransform rctranTableviewNoarml;
 
     List<ItemInfo> listItem;
+    float topBarOffsetYNormal;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
     {
-        InitScalerMatch();
         heightCell = 256 + 128;
 
         //bg
@@ -84,7 +84,6 @@ public class UIPay : ScriptBase, ITableViewDataSource
     // Use this for initialization
     void Start()
     {
-        isHasStarted = true;
         // InitUiScaler();
         InitAlert();
         {
@@ -111,18 +110,14 @@ public class UIPay : ScriptBase, ITableViewDataSource
             OnClickBtnBack();
         }
 
-        if (isHasStarted)
-        {
-            isHasStarted = false;
-            InitUiScaler();
-            LayOutChild();
-        }
+
     }
 
 
 
-    void LayOutChild()
+    public override void LayOut()
     {
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         {
             RectTransform rctran = imageBg.GetComponent<RectTransform>();
             float w_image = rctran.rect.width;

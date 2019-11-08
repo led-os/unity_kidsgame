@@ -27,7 +27,6 @@ public class UIGameWinIdiomConnect : UIViewPop
 
     public Button btnFriend;
     public Button btnNext;
-    public Button btnAddLove;
     public GameObject objLayoutBtn;
 
     public UIButtonIdiom uiButtonIdiomPrefab;
@@ -42,9 +41,8 @@ public class UIGameWinIdiomConnect : UIViewPop
 
         //Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
         Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
-        //Common.SetButtonText(btnAddLove, Language.main.GetString("STR_GameWin_BtnAddLove"));
 
-        textTitle.text = Language.main.GetString("STR_TITLE_GameWin");
+        textTitle.text = Language.main.GetString("STR_GameWin_TITLE");
         textTitle.color = GameRes.main.colorGameWinTitle;
 
         UpdateIdiom();
@@ -183,8 +181,5 @@ public class UIGameWinIdiomConnect : UIViewPop
     {
         Close();
         LevelManager.main.GotoNextLevel();
-    }
-    public void OnClickBtnAddLove()
-    {
     }
 }

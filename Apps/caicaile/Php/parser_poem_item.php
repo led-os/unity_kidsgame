@@ -95,13 +95,7 @@ function strip_html_tags($tags, $str)
     }
     $data = preg_replace($html, '', $str);
     return $data;
-}
-function removeHtmlSpace($str)
-{
-    $ret = str_replace("&nbsp;", "", $str);
-    $ret = str_replace(" ", "", $ret);
-    return  $ret;
-}
+} 
 
 
 function ParserPoemInfo($html, $type)

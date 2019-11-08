@@ -6,6 +6,7 @@ include_once('IdiomItemInfo.php');
 include_once('../Common/Download.php');
 include_once('../Common/Common.php');
 
+
 class IdiomImageParser //extends Thread
 {
 
@@ -78,6 +79,7 @@ class IdiomImageParser //extends Thread
 
 
     //疯狂猜成语图片答案、疯狂猜成语所有答案 500个  http://www.hydcd.com/cy/fkccy/index.htm
+    //http://www.caichengyu.com/
     function PaserImageList0($url)
     {
 

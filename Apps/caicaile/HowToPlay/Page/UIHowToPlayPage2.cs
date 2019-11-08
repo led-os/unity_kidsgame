@@ -13,7 +13,7 @@ public class HowPlayWordInfo
 
 }
 
-public class UIHowToPlayPage2 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordFillBoxDelegate
+public class UIHowToPlayPage2 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordContentBaseDelegate
 {
     Sequence seqAnimate;
     /// <summary>
@@ -263,11 +263,11 @@ public class UIHowToPlayPage2 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordFi
         }
     }
 
-    public void UIWordFillBoxDidBackWord(UIWordFillBox ui, string word)
+      public void UIWordContentBaseDidBackWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.BackWord(word);
     }
-    public void UIWordFillBoxDidTipsWord(UIWordFillBox ui, string word)
+    public void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.HideWord(word);
     }

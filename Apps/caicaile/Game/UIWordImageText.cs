@@ -74,10 +74,8 @@ public class UIWordImageText : UIWordContentBase
         }
 
     }
-    public void UpdateGuankaLevel(int level)
+    public override void UpdateGuankaLevel(int level)
     {
-
-
         UpdateItem();
     }
 
@@ -171,7 +169,7 @@ public class UIWordImageText : UIWordContentBase
         return index;
     }
 
-    public bool CheckAllFill()
+    public override bool CheckAllFill()
     {
         bool isAllFill = true;
         foreach (AnswerInfo info in listAnswerInfo)
@@ -183,7 +181,7 @@ public class UIWordImageText : UIWordContentBase
         }
         return isAllFill;
     }
-    public bool CheckAllAnswerFinish()
+    public override bool CheckAllAnswerFinish()
     {
         bool ret = true;
         foreach (AnswerInfo info in listAnswerInfo)
@@ -202,7 +200,7 @@ public class UIWordImageText : UIWordContentBase
     {
         textLine0.text = str;
     }
-    public void UpdateWord()
+    public override void UpdateWord()
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
 

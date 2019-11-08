@@ -244,8 +244,6 @@ public class DBToolSqliteKit
  
         return ExecuteQuery(query,true);
 
-
-
     }
 
 

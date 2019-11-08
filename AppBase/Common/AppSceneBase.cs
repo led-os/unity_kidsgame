@@ -11,6 +11,7 @@ public class AppSceneBase : ScriptBase
     public Image imageBg;
     public UIViewController rootViewController;
     public Canvas canvasMain;
+    public Light lightMain;
     public GameObject objMainWorld;
     public GameObject objSpriteBg;
 
@@ -171,8 +172,20 @@ public class AppSceneBase : ScriptBase
             Language.main.SetLanguage(lan);
 
         }
-    }
 
+        SetMode3D(Config.main.Is3D);
+
+    }
+    void SetMode3D(bool is3D)
+    {
+        lightMain.gameObject.SetActive(is3D);
+        if (is3D)
+        {
+            mainCamera.orthographic = false;
+            //-10f
+            mainCamera.transform.position = new Vector3(0, 0, -10f);
+        }
+    }
     void RunCheckApp()
     {
         appVersion = AppVersion.main;

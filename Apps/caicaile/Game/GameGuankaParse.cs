@@ -55,7 +55,7 @@ public class CaiCaiLeItemInfo : ItemInfo
 public class GameGuankaParse : GuankaParseBase
 {
 
-
+    public string strWordEnglish = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
     static private GameGuankaParse _main = null;
@@ -209,6 +209,10 @@ public class GameGuankaParse : GuankaParseBase
             else if (Common.appKeyName == GameRes.GAME_IdiomConnect)
             {
                 info.gameType = GameRes.GAME_TYPE_CONNECT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_Image)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE;
             }
             else
             {

@@ -8,7 +8,8 @@ public class GameRes
     public const string GAME_XIEHOUYU = "xiehouyu";
     public const string GAME_IDIOM = "Idiom";
     public const string GAME_POEM = "poem";
-
+    public const string GAME_Image = "Image";
+    public const string GAME_Guess = "Guess";
     public const string GAME_RIDDLE = "Riddle";
     public const string GAME_IdiomConnect = "IdiomConnect";
     //type 
@@ -62,6 +63,10 @@ public class GameRes
                 cr = new Color32(89, 45, 6, 255);
             }
             if (info.gameType == GameRes.GAME_TYPE_CONNECT)
+            {
+                cr = new Color32(0, 0, 0, 255);
+            }
+            if (Common.appKeyName == GameRes.GAME_Image)
             {
                 cr = new Color32(0, 0, 0, 255);
             }

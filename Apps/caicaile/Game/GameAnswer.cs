@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class GameAnswer
@@ -20,7 +21,18 @@ public class GameAnswer
             return _main;
         }
     }
-
+    //判断时候英文
+    bool IsEnglshString(string str)
+    {
+        bool ret = false;
+        Regex regEnglish = new Regex("[a-zA-Z]");
+        if (regEnglish.IsMatch(str))
+        {
+            ret = true;
+        }
+        Debug.Log("IsEnglshString str=" + str + " ret=" + ret);
+        return ret;
+    }
 
     public string GetGuankaAnswer(CaiCaiLeItemInfo info, bool isRandom = true)
     {
@@ -85,6 +97,11 @@ public class GameAnswer
     {
         string strret = "";
         string strAllWord = GameGuankaParse.main.strWord3500;
+        if (IsEnglshString(answer))
+        {
+            strAllWord = GameGuankaParse.main.strWordEnglish;
+        }
+
         int len = strAllWord.Length;
         for (int i = 0; i < len; i++)
         {

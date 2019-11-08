@@ -142,7 +142,15 @@ public class Config
             return ret;
         }
     }
-
+    public bool Is3D
+    {
+        get
+        {
+            string key = "3D";
+            bool ret = GetBoolKeyCommon(key, false);
+            return ret;
+        }
+    }
 
     public bool isHaveShare
     {
@@ -529,6 +537,10 @@ public class Config
             info.source = (string)data["source"];
             info.appId = (string)data["id"];
             info.appKey = (string)data["key"];
+            if (info.appId == "0")
+            {
+                continue;
+            }
             listSharePlatform.Add(info);
             if (info.source == Source.WEIXIN)
             {

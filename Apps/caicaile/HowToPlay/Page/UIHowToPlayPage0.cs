@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHowToPlayPage0 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordFillBoxDelegate
+public class UIHowToPlayPage0 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordContentBaseDelegate
 {
 
     Sequence seqAnimate;
@@ -206,11 +206,11 @@ public class UIHowToPlayPage0 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordFi
         }
     }
 
-    public void UIWordFillBoxDidBackWord(UIWordFillBox ui, string word)
+    public void UIWordContentBaseDidBackWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.BackWord(word);
     }
-    public void UIWordFillBoxDidTipsWord(UIWordFillBox ui, string word)
+    public void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.HideWord(word);
     }

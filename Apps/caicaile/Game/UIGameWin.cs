@@ -31,7 +31,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     public Button btnNext;
     public Button btnAddLove;
     public GameObject objLayoutBtn;
-  
+
 
     int indexSegment;
 
@@ -57,6 +57,10 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
         if (Common.appKeyName == GameRes.GAME_RIDDLE)
+        {
+            str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
+        }
+        if (Common.appKeyName == GameRes.GAME_Image)
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
@@ -93,6 +97,10 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             UpdateText(null);
         }
+        if (Common.appKeyName == GameRes.GAME_Image)
+        {
+            btnAddLove.gameObject.SetActive(false);
+        }
 
     }
 
@@ -102,6 +110,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     protected override void Start()
     {
         base.Start();
+        UpdateLoveStatus();
         LayOut();
     }
 
@@ -244,7 +253,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
             lg.LayOut();
         }
 
-       // imageHead.transform.localScale = new Vector3(1f, 1f, 1f);
+        // imageHead.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public void UpdateText(ItemInfo info)
@@ -363,7 +372,21 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         }
         textView.text = str;
     }
+    public void UpdateLoveStatus()
+    {
+        CaiCaiLeItemInfo infoItem = GameGuankaParse.main.GetItemInfo();
+        string strBtn = "";
+        if (LoveDB.main.IsItemExist(infoItem))
+        {
+            strBtn = Language.main.GetString("STR_IdiomDetail_DELETE_LOVE");
+        }
+        else
+        {
+            strBtn = Language.main.GetString("STR_IdiomDetail_ADD_LOVE");
+        }
 
+        Common.SetButtonText(btnAddLove, strBtn, 0, false);
+    }
     public void SegmentDidClick(UISegment seg, SegmentItem item)
     {
         // UpdateSortList(item.index);
@@ -385,5 +408,15 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     }
     public void OnClickBtnAddLove()
     {
+        CaiCaiLeItemInfo infoItem = GameGuankaParse.main.GetItemInfo();
+        if (LoveDB.main.IsItemExist(infoItem))
+        {
+            LoveDB.main.DeleteItem(infoItem);
+        }
+        else
+        {
+            LoveDB.main.AddItem(infoItem);
+        }
+        UpdateLoveStatus();
     }
 }
