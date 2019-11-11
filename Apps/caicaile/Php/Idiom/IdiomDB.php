@@ -108,6 +108,18 @@ class IdiomDB  extends SqlDBUtil
 		$result = $this->query($sql);
 	}
 
+	//
+	public function GetCount()
+	{
+		$sql = "select  *  from  " . self::TABLE_NAME;
+		$result = $this->query($sql);
+		$count = 0;
+		while ($item = $result->fetchArray(SQLITE3_ASSOC)) {
+			$count++;
+		}
+		return $count;
+	}
+
 	public function GetAllItem()
 	{
 		// Distinct 去掉重复

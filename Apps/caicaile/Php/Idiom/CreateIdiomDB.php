@@ -34,19 +34,39 @@ class CreateIdiomDB //extends Thread
     public $id;
     public $channel;
     public $listItem;
+    public $listSort;
     public  $page_total = 10; //10
     public $htmlItem;
     public $dbIdiom;
 
     public $WEB_HOME = "http://www.leleketang.com";
     public $ROOT_SAVE_DIR = "Data";
+    public $sortJsonList;
+
+    function get_html($url)
+    {
+        $html = new simple_html_dom();
+
+        // // 从url中加载  
+        // $html->load_file('http://www.jb51.net');  
+
+        // // 从字符串中加载  
+        // $html->load('<html><body>从字符串中加载html文档演示</body></html>');  
+
+        //从文件中加载  
+        $html->load_file($url);
+
+        return $html;
+    }
 
     public function DoCreate()
     {
 
         $this->listItem =   array();
-        $this->htmlItem =   new simple_html_dom();
+        $this->listSort =   array();
 
+        $this->htmlItem =   new simple_html_dom();
+        $this->sortJsonList = $this->ROOT_SAVE_DIR . "/idiom_sort_list.json";
         $this->InitDB();
 
         //https://chengyu.911cha.com/pinyin_a.html
@@ -54,39 +74,15 @@ class CreateIdiomDB //extends Thread
         if (!is_dir($save_dir)) {
             mkdir($save_dir);
         }
-        $this->PaserSort();
-        //save
-        $savefilepath = $save_dir . "/idiom_list.json";
-        $ret = file_exists($savefilepath);
-        if ($ret) {
-            // return;
+
+        $fiel_exist = file_exists($this->sortJsonList);
+        if (!$fiel_exist) {
+            $this->PaserSort();
         }
+        $this->PaserIdiom();
 
-        $count = count($this->listItem);
-        echo "count =" . $count . "\n";
-        if ($count) {
-
-            $element = array(
-                'items' => ($this->listItem),
-            );
-            //JSON_UNESCAPED_SLASHES json去除反斜杠 JSON_UNESCAPED_UNICODE中文不用\u格式
-            $jsn = urldecode(json_encode($element, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-
-            // "[  ]"
-            //$jsn = str_replace("\"[", "[", $jsn);
-            //$jsn = str_replace("]\"", "]", $jsn);
-
-            $fp = fopen($savefilepath, "w");
-            if (!$fp) {
-                echo "打开文件失败<br>";
-                return;
-            }
-            $flag = fwrite($fp, $jsn);
-            if (!$flag) {
-                echo "写入文件失败<br>";
-            }
-            fclose($fp);
-        }
+        $total = $this->dbIdiom->GetCount();
+        echo "total idiom=" . $total . "\n";
     }
 
 
@@ -117,11 +113,93 @@ class CreateIdiomDB //extends Thread
             if (($title != "Y") && ($title != "Z")) {
                 //  continue;
             }
-            echo "PaserSort url:  " . $url . " title:" . $title . "\n";
             $total_page = $this->GetPageCount($url);
+            // echo "PaserSort url:  " . $url . " title:" . $title . "total_page=" . $total_page . "\n";
             for ($i = 0; $i < $total_page; $i++) {
-                $this->PaserIdiomList($this->GetPageUrl($this->GetChannelIdOfUrl($url), $i));
+                // $this->PaserIdiomList($this->GetPageUrl($this->GetChannelIdOfUrl($url), $i));
             }
+
+            $element = array(
+                'title' => urlencode($title),
+                'url' => urlencode($url),
+                'total' => urlencode($total_page),
+                "id"  => urlencode($this->GetChannelIdOfUrl($url)),
+            );
+            if ($total_page > 0) {
+                array_push($this->listSort, $element);
+            }
+        }
+        $this->SaveSortJsonList();
+    }
+
+    function PaserIdiom()
+    {
+        $save_file = $this->sortJsonList;
+        $fiel_exist = file_exists($save_file);
+        if ($fiel_exist) {
+            $json_string = file_get_contents($save_file);
+            $root = json_decode($json_string, true);
+            $data = $root['items'];
+            foreach ($data as $item) {
+                $url = $item['url'];
+                $title =  $item['title']; 
+                $total_page =  $item['total'];
+                $id = $item['id'];
+                echo "PaserIdiom url 1=:  " . $url . " title:" . $title . "total_page=" . $total_page . "\n";
+                for ($i = 0; $i < $total_page; $i++) {
+                    $this->PaserIdiomList($this->GetPageUrl($id, $i));
+                }
+            }
+        } else {
+            foreach ($this->listSort as $sort) {
+                $url = $sort['url'];
+                $title =  $sort['title'];
+                if ($title != "D") { //error B 
+                    continue;
+                }
+                $total_page =  $sort['total'];
+                $id = $sort['id'];
+                echo "PaserIdiom url 2=:  " . $url . " title:" . $title . "total_page=" . $total_page . "\n";
+                for ($i = 0; $i < $total_page; $i++) {
+                    $this->PaserIdiomList($this->GetPageUrl($id, $i));
+                }
+            }
+        }
+    }
+
+    function SaveSortJsonList()
+    {
+        //save 
+        $savefilepath = $this->sortJsonList;
+        $ret = file_exists($savefilepath);
+        if ($ret) {
+            // return;
+        }
+
+        $count = count($this->listSort);
+        echo "count =" . $count . "\n";
+        if ($count) {
+
+            $element = array(
+                'items' => ($this->listSort),
+            );
+            //JSON_UNESCAPED_SLASHES json去除反斜杠 JSON_UNESCAPED_UNICODE中文不用\u格式
+            $jsn = urldecode(json_encode($element, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+            // "[  ]"
+            //$jsn = str_replace("\"[", "[", $jsn);
+            //$jsn = str_replace("]\"", "]", $jsn);
+
+            $fp = fopen($savefilepath, "w");
+            if (!$fp) {
+                echo "打开文件失败<br>";
+                return;
+            }
+            $flag = fwrite($fp, $jsn);
+            if (!$flag) {
+                echo "写入文件失败<br>";
+            }
+            fclose($fp);
         }
     }
 
@@ -140,7 +218,7 @@ class CreateIdiomDB //extends Thread
             $str = substr($url, $pos + strlen($strfind));
             $strfind = "-";
             $pos = strpos($str, $strfind);
-            $ret = substr($str, 0, $pos - strlen($strfind));
+            $ret = substr($str, 0, $pos - strlen($strfind) + 1);
         } else {
             echo "GetChannelIdOfUrl url:  " . $url . " pos=" . $pos . "\n";
         }
@@ -175,6 +253,7 @@ class CreateIdiomDB //extends Thread
     //https://chengyu.911cha.com/pinyin_a.html
     function PaserIdiomList($url)
     {
+        echo "PaserIdiomList url:  " . $url . "\n";
         $html = get_html($url);
         if (!$html) {
             echo "PaserIdiomList open html fail\n";
@@ -191,12 +270,17 @@ class CreateIdiomDB //extends Thread
         $arry_a = $div_main->find('a');
         $count = count($arry_a);
         echo "arry_a count =" . $count . "\n";
-        foreach ($arry_a as $a) {
-            $url = $this->WEB_HOME . "/chengyu/" . $a->href;
-            $info = $this->ParseIdiomItemInfo($url);
-            $title =  $a->plaintext;
-            echo "url:  " . $url . " title:" . $title . "\n";
 
+
+        foreach ($arry_a as $a) {
+            if ($a->class) {
+                continue;
+            }
+            $url = $this->WEB_HOME . "/chengyu/" . $a->href;
+            // echo "arry_a url:  " . $url  . "\n";
+            $info = $this->ParseIdiomItemInfo($url);
+
+            $title =  $a->plaintext;
             $element = array(
                 'url' => $url, //谜面
                 'title' => $title,
@@ -207,8 +291,6 @@ class CreateIdiomDB //extends Thread
             array_push($this->listItem, $element);
             $this->SaveOneIdiom($info);
         }
-
-        $this->Save();
     }
 
     function ParseIdiomItemInfoByType($html, $type)
@@ -237,8 +319,17 @@ class CreateIdiomDB //extends Thread
         //网页空格
         $str_ret = str_replace("	", "", $str_ret);
 
-        //普通空格
-        $str_ret = str_replace(" ", "", $str_ret);
+        if ($type != self::NAME_pronunciation) {
+            //普通空格
+            $str_ret = str_replace(" ", "", $str_ret);
+            $str_ret = RemoveHtmlSpace($str_ret);
+        } else {
+            //读音去除开头和结尾的2个空格
+            $str_ret = str_replace("  ", "", $str_ret);
+        }
+
+        //'为DB 关键字 转换为’
+        $str_ret = str_replace("'", "\"", $str_ret);
 
         return $str_ret;
     }
@@ -247,14 +338,16 @@ class CreateIdiomDB //extends Thread
     {
         $infoRet = new IdiomItemInfo();
         // get DOM from URL or file
-        $html = get_html($url);
+        $html =  $this->get_html($url);
         if (!$html) {
             echo "open html fail\n";
             return false;
         }
-        $infoRet->title = $this->ParseIdiomItemInfoByType($html, self::NAME_title);
+        echo "ParseIdiomItemInfo start url=" . $url . "\n";
+        $infoRet->title = $this->ParseIdiomItemInfoByType($html, self::NAME_title); // 
+        echo "ParseIdiomItemInfo end title=" . $infoRet->title . "\n";
         $infoRet->id = GetPinyin($infoRet->title); // $this->ParseIdiomItemInfoByType($html, self::NAME_id);
-        echo "infoRet->id=" . $infoRet->id . "title=" . $infoRet->title . "\n";
+        echo "infoRet->id=" . $infoRet->id . "  title=" . $infoRet->title . "\n";
         $infoRet->album = $this->ParseIdiomItemInfoByType($html, self::NAME_album);
         $infoRet->translation = $this->ParseIdiomItemInfoByType($html, self::NAME_translation);
         $infoRet->pronunciation = $this->ParseIdiomItemInfoByType($html, self::NAME_pronunciation);
@@ -323,53 +416,16 @@ class CreateIdiomDB //extends Thread
         //     fclose($fp);
         // }
     }
-
-    function  Save()
-    {
-        $save_dir = $this->ROOT_SAVE_DIR;
-        if (!is_dir($save_dir)) {
-            mkdir($save_dir);
-        }
-        //save
-        $savefilepath = $save_dir . "/idiom_db_list.json";
-        $ret = file_exists($savefilepath);
-        if ($ret) {
-            // return;
-        }
-
-        $count = count($this->listItem);
-        echo "count =" . $count . "\n";
-        if ($count) {
-
-            $element = array(
-                'items' => ($this->listItem),
-            );
-            //JSON_UNESCAPED_SLASHES json去除反斜杠 JSON_UNESCAPED_UNICODE中文不用\u格式
-            $jsn = urldecode(json_encode($element, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-
-            // "[  ]"
-            //$jsn = str_replace("\"[", "[", $jsn);
-            //$jsn = str_replace("]\"", "]", $jsn);
-
-            $fp = fopen($savefilepath, "w");
-            if (!$fp) {
-                echo "打开文件失败<br>";
-                return;
-            }
-            $flag = fwrite($fp, $jsn);
-            if (!$flag) {
-                echo "写入文件失败<br>";
-            }
-            fclose($fp);
-        }
-    }
 }
 
 $p = new CreateIdiomDB();
 $p->DoCreate();
 
-
+//http://www.leleketang.com/chengyu/8489.shtml
+//http://www.leleketang.com/chengyu/7530.shtml
+//http://www.leleketang.com/chengyu/11871.shtml
 // $p->InitDB();
+// $info = $p->ParseIdiomItemInfo("http://www.leleketang.com/chengyu/11871.shtml");
 // $info = $p->ParseIdiomItemInfo("http://www.leleketang.com/chengyu/7530.shtml");
 // $p->SaveOneIdiom($info);
 

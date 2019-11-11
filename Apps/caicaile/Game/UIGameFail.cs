@@ -24,6 +24,11 @@ public class UIGameFail : UIViewPop
 
         Common.SetButtonText(btnRevive, Language.main.GetString("STR_GameFail_btnRevive"), 128);
         Common.SetButtonText(btnRestart, Language.main.GetString("STR_GameFail_btnRestart"), 128);
+
+        if (!AppVersion.appCheckHasFinished)
+        {
+            btnRevive.gameObject.SetActive(false);
+        }
     }
     // Use this for initialization
     protected override void Start()

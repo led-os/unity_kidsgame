@@ -1,52 +1,61 @@
 ﻿<?php
-    //获取整条字符串所有汉字拼音首字母
-    function GetPinyin($zh){
-        $ret = "";
-        $s1 = iconv("UTF-8","GBK//IGNORE", $zh);
-        $s2 = iconv("GBK","UTF-8", $s1);
-        if($s2 == $zh){$zh = $s1;}
-        for($i = 0; $i < strlen($zh); $i++){
-            $s1 = substr($zh,$i,1);
-            $p = ord($s1);
-            if($p > 160){
-                $s2 = substr($zh,$i++,2);
-                $ret .= getfirstchar($s2);
-            }else{
-                $ret .= $s1;
-            }
-        }
-        return $ret;
+//获取整条字符串所有汉字拼音首字母
+function GetPinyin($zh)
+{
+    $ret = "";
+    $s1 = iconv("UTF-8", "GBK//IGNORE", $zh);
+    $s2 = iconv("GBK", "UTF-8", $s1);
+    if ($s2 == $zh) {
+        $zh = $s1;
     }
+    for ($i = 0; $i < strlen($zh); $i++) {
+        $s1 = substr($zh, $i, 1);
+        $p = ord($s1);
+        if ($p > 160) {
+            $s2 = substr($zh, $i++, 2);
+            $ret .= getfirstchar($s2);
+        } else {
+            $ret .= $s1;
+        }
+    }
+    return $ret;
+}
 
-    //获取单个汉字拼音首字母。注意:此处不要纠结。汉字拼音是没有以U和V开头的
+//获取单个汉字拼音首字母。注意:此处不要纠结。汉字拼音是没有以U和V开头的
 /**
  * 取汉字的第一个字的首字母
  * @param string $str
  * @return string|null
  */
-function getFirstChar($str) {
+function getFirstChar($str)
+{
     if (empty($str)) {
         return '';
     }
- 
+
     $fir = $fchar = ord($str[0]);
     if ($fchar >= ord('A') && $fchar <= ord('z')) {
         return strtoupper($str[0]);
     }
- 
-    $s1 = @iconv('UTF-8', 'gb2312//IGNORE', $str);
-    $s2 = @iconv('gb2312', 'UTF-8', $s1);
+    $s1 = $str;
+    $s2 = $s1;
+
+    //@moon 导致HTML解析error
+    // $s1 = @iconv('UTF-8', 'gb2312//IGNORE', $str);
+    // $s2 = @iconv('gb2312', 'UTF-8', $s1);
+    //@moon 
+
     $s = $s2 == $str ? $s1 : $str;
     if (!isset($s[0]) || !isset($s[1])) {
         return '';
     }
- 
+
     $asc = ord($s[0]) * 256 + ord($s[1]) - 65536;
- 
+
     if (is_numeric($str)) {
         return $str;
     }
- 
+
     if (($asc >= -20319 && $asc <= -20284) || $fir == 'A') {
         return 'A';
     }
@@ -116,7 +125,7 @@ function getFirstChar($str) {
     if (($asc >= -11055 && $asc <= -10247) || $fir == 'Z') {
         return 'Z';
     }
- 
+
     return '';
 }
 
