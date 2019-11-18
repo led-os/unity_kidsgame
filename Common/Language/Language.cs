@@ -11,6 +11,7 @@ public class Language
 
     private LTLocalization ltLocalization;
     static private Language _common = null;
+    static private Language _appCommon = null;
     static private Language _main = null;
     public static Language main//GameData
     {
@@ -24,6 +25,15 @@ public class Language
                 string fileName = Common.RES_CONFIG_DATA_COMMON + "/language/language.csv";
                 _common.Init(fileName);
                 //_common.SetLanguage(SystemLanguage.Chinese);
+
+                //appcommon
+
+                fileName = "AppCommon/language/language";//.csv//resource
+                if (FileUtil.FileIsExist(fileName))
+                {
+                    _appCommon = new Language();
+                    _appCommon.Init(fileName);
+                }
 
                 _main = new Language();
                 // _main.Init("Language/Language");
@@ -78,21 +88,29 @@ public class Language
     {
         // Init();
         ltLocalization.SetLanguage(lan);
-        _common.ltLocalization.SetLanguage(lan);
+        if (_common != null)
+        {
+            _common.ltLocalization.SetLanguage(lan);
+        }
         if (_game != null)
         {
             _game.ltLocalization.SetLanguage(lan);
         }
+        if (_appCommon != null)
+        {
+            _appCommon.ltLocalization.SetLanguage(lan);
+        }
+
     }
 
     public bool IsChinese()
     {
         SystemLanguage lan = GetLanguage();
-        if ((lan == SystemLanguage.Chinese)|| (lan == SystemLanguage.ChineseSimplified)|| (lan == SystemLanguage.ChineseTraditional))
+        if ((lan == SystemLanguage.Chinese) || (lan == SystemLanguage.ChineseSimplified) || (lan == SystemLanguage.ChineseTraditional))
         {
             return true;
         }
-        return false; 
+        return false;
     }
 
     public SystemLanguage GetLanguage()
@@ -108,10 +126,15 @@ public class Language
         {
             str = ltLocalization.GetText(key);
         }
+        else if ((_appCommon != null) && _appCommon.IsContainsKey(key))
+        {
+            str = _appCommon.ltLocalization.GetText(key);
+        }
         else
         {
             str = _common.ltLocalization.GetText(key);
         }
+
         return str;
 
     }

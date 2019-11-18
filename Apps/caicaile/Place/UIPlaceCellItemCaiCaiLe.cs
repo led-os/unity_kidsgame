@@ -14,7 +14,7 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
 
         textTitle.gameObject.SetActive(false);
-        if ((Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_POEM) || (Common.appKeyName == GameRes.GAME_XIEHOUYU))
+        if ((Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_POEM) || (Common.appKeyName == GameRes.GAME_XIEHOUYU))
         {
             LanguageManager.main.UpdateLanguagePlace();
             textTitle.gameObject.SetActive(true);
@@ -27,7 +27,7 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         }
         TextureUtil.UpdateRawImageTexture(imageBg, pic, true);
         imageIcon.gameObject.SetActive(info.isAd);
-        textTitle.color = GameRes.main.colorTitle;
+        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_PlaceItemTitle, Color.black);
         LayOut();
     }
     public override bool IsLock()

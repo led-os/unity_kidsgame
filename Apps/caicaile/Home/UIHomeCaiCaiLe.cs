@@ -26,7 +26,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
-        TextName.color = GameRes.main.colorTitle;
+        TextName.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_TITLE, Color.black);
         timeAction = 0.3f;
         isActionFinish = false;
 
@@ -79,12 +79,18 @@ public class UIHomeCaiCaiLe : UIHomeBase
             btnAddLove.gameObject.SetActive(false);
         }
 
+        if (Common.appKeyName == GameRes.GAME_RIDDLE)
+        {
+            btnAddLove.gameObject.SetActive(false);
+        }
+
         UpdateLayoutBtn();
     }
 
     // Use this for initialization
-    void Start()
+    public void Start()
     {
+        base.Start();
         isActionFinish = false;
         RunActionImageName();
         //   actionBtnLearn.RunAction();

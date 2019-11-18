@@ -328,7 +328,8 @@ public class Common
     }
 
 
-    //255,100,200 to color
+
+    //color to 255,100,200
     static public string Color2RGBString(Color color)
     {
         int r = (int)(color.r * 255);
@@ -339,7 +340,7 @@ public class Common
         return ret;
     }
 
-    //color to 255,100,200
+    //255,100,200 to color
     static public Color RGBString2Color(string strrgb)
     {
         float r, g, b;
@@ -745,6 +746,7 @@ public class Common
     }
 
 
+    //android 启动logo结束
     static public void UnityStartUpFinish()
     {
         CommonBasePlatformWrapper platformWrapper = CommonPlatformWrapper.platform;

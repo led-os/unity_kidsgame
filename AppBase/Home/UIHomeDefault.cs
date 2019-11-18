@@ -11,6 +11,7 @@ public class UIHomeDefault : UIHomeBase
     bool isActionFinish;
     void Awake()
     {
+        base.Awake();
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
@@ -21,6 +22,7 @@ public class UIHomeDefault : UIHomeBase
     // Use this for initialization
     void Start()
     {
+        base.Start();
         isActionFinish = false;
         LayOut();
         OnUIDidFinish();

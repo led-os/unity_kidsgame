@@ -11,7 +11,8 @@ public class AppSceneBase : ScriptBase
     public Image imageBg;
     public UIViewController rootViewController;
     public Canvas canvasMain;
-    public Light lightMain;
+	public Light lightMain;
+   public Canvas canvasCamera;
     public GameObject objMainWorld;
     public GameObject objSpriteBg;
 
@@ -37,6 +38,10 @@ public class AppSceneBase : ScriptBase
         isReLayout = false;
         IPInfo.main.StartParserInfo();
         InitScalerMatch();
+        if(canvasCamera!=null)
+        {
+            SetCanvasScalerMatch(canvasCamera.gameObject);
+        }
         Common.CleanCache();
         InitValue();
 
@@ -109,6 +114,10 @@ public class AppSceneBase : ScriptBase
         if (Device.isScreenDidChange)
         {
             InitScalerMatch();
+               if(canvasCamera!=null)
+        {
+            SetCanvasScalerMatch(canvasCamera.gameObject);
+        }
             isReLayout = true;
 
         }
@@ -205,7 +214,7 @@ public class AppSceneBase : ScriptBase
     {
         Debug.Log("base RunApp");
 
-        Common.UnityStartUpFinish();
+        //  Common.UnityStartUpFinish();
     }
 
     public void SetRootViewController(UIViewController controller)
@@ -389,10 +398,21 @@ public class AppSceneBase : ScriptBase
         obj.transform.parent = canvasMain.transform;
         obj.transform.localScale = new Vector3(1f, 1f, 1f);
     }
+
+    public void AddObjToCanvasCamera(GameObject obj)
+    {
+        obj.transform.parent = canvasCamera.transform;
+        obj.transform.localScale = new Vector3(1f, 1f, 1f);
+    }
     public RectTransform GetRectMainWorld()
     {
         RectTransform rcTran = objMainWorld.GetComponent<RectTransform>();
         return rcTran;
+    }
+
+    public void ShowMainCamera2D(bool isShow)
+    {
+        mainCamera.gameObject.SetActive(isShow);
     }
 
 }

@@ -65,7 +65,7 @@ public class FileUtil : MonoBehaviour
         }
         return null;
     }
- 
+
 
     /* 
    ios下边的目录可以使用FIle.Read 直接读取，
@@ -253,9 +253,31 @@ public class FileUtil : MonoBehaviour
 
     static public bool FileIsExist(string file)
     {
-        return File.Exists(file);
+        if (File.Exists(file))
+        {
+            return true;
+        }
+        if (FileIsExistResource(file))
+        {
+            return true;
+        }
+        if (FileIsExistAsset(file))
+        {
+            return true;
+        }
+
+        return false;
     }
 
+    static public bool FileIsExistResource(string file)
+    {
+        System.Object obj = Resources.Load(GetFileBeforeExtWithOutDot(file));
+        if (obj == null)
+        {
+            return false;
+        }
+        return true;
+    }
 
     //file 为相对路径
     static public bool FileIsExistAsset(string file)

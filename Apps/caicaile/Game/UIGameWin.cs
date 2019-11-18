@@ -50,7 +50,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         string str = info.title;
         if (Common.BlankString(str))
         {
-            str = LanguageManager.main.languageGame.GetString(info.id);
+            str = info.id;
         }
         if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
         {
@@ -64,16 +64,20 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
+        if (Common.BlankString(str))
+        {
+            str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
+        }
         textTitle.text = str;
 
 
         textView.SetFontSize(80);
-        textView.SetTextColor(GameRes.main.colorGameWinTextView);
+        textView.SetTextColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTextView, Color.black));
 
-        textTitle.color = GameRes.main.colorGameWinTitle;
+        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle, Color.black);
         if (textPinyin != null)
         {
-            textPinyin.color = GameRes.main.colorGameWinTitle;
+            textPinyin.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle, Color.black);
             textPinyin.gameObject.SetActive(false);
         }
 
@@ -259,6 +263,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     public void UpdateText(ItemInfo info)
     {
         CaiCaiLeItemInfo infoGuanka = GameGuankaParse.main.GetItemInfo();
+        GameGuankaParse.main.ParseIdiomItem(infoGuanka);
         string str = "";
         //         public string author;
         // public string year;

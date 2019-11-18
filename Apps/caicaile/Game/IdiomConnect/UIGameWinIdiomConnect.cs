@@ -43,7 +43,7 @@ public class UIGameWinIdiomConnect : UIViewPop
         Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
 
         textTitle.text = Language.main.GetString("STR_GameWin_TITLE");
-        textTitle.color = GameRes.main.colorGameWinTitle;
+        textTitle.color =ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle);
 
         UpdateIdiom();
 

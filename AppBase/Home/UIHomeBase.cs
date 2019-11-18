@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIHomeBase : UIView
+public class UIHomeBase : UIView, IPopViewControllerDelegate
 {
     public const string STR_KEYNAME_VIEWALERT_NOAD = "STR_KEYNAME_VIEWALERT_NOAD";
     public const string STR_KEYNAME_VIEWALERT_UPDATE_VERSION = "STR_KEYNAME_VIEWALERT_UPDATE_VERSION";
@@ -76,6 +76,11 @@ public class UIHomeBase : UIView
     {
         UpdateBtnMusic();
         UpdateBtnSound();
+    }
+
+    public void Start()
+    {
+        Common.UnityStartUpFinish();
     }
 
     // Update is called once per frame
@@ -256,7 +261,7 @@ public class UIHomeBase : UIView
     }
 
     public void OnClickBtnMusic()
-    { 
+    {
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         bool value = !ret;
         Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
@@ -271,7 +276,7 @@ public class UIHomeBase : UIView
         UpdateBtnMusic();
     }
     public void OnClickBtnSound()
-    { 
+    {
         bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
         bool value = !ret;
         Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, value);
@@ -280,35 +285,35 @@ public class UIHomeBase : UIView
     }
 
     public void OnClickBtnMore()
-    { 
+    {
         MoreViewController.main.Show(null, null);
     }
     public void OnClickBtnSetting()
-    { 
+    {
 
         // TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);//IMAGE_SETTING_BG 导致PlayBtnSound声音播放不完整 延迟执行
-       // Invoke("DoClickBtnSetting", 0.1f);
-       DoClickBtnSetting();
+        // Invoke("DoClickBtnSetting", 0.1f);
+        DoClickBtnSetting();
     }
 
     public void DoClickBtnSetting()
     {
-        SettingViewController.main.Show(null, null);
+        SettingViewController.main.Show(null, this);
     }
 
     public void OnClickBtnShare()
-    { 
+    {
         ShareViewController.main.callBackClick = OnUIShareDidClick;
         ShareViewController.main.Show(null, null);
     }
 
     public void OnClickBtnAdVideo()
-    { 
+    {
         AdKitCommon.main.ShowAdVideo();
     }
 
     public void OnClickBtnNoAd()
-    { 
+    {
         if (Config.main.APP_FOR_KIDS)
         {
             ParentGateViewController.main.Show(null, null);
@@ -342,6 +347,12 @@ public class UIHomeBase : UIView
         string detail = Language.main.GetString("UIMAIN_SHARE_DETAIL");
         string url = Config.main.shareAppUrl;
         Share.main.ShareWeb(item.source, title, detail, url);
+    }
+
+    public void OnPopViewControllerDidClose(PopViewController controller)
+    {
+        UpdateBtnMusic();
+        UpdateBtnSound();
     }
 }
 

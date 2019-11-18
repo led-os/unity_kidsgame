@@ -40,7 +40,7 @@ public class UIWordImageText : UIWordContentBase
             imagePic.gameObject.SetActive(true);
         }
 
-        textLine0.color = GameRes.main.colorGameText;
+        textLine0.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameText, Color.black);
     }
     // Use this for initialization
     void Start()
@@ -82,7 +82,6 @@ public class UIWordImageText : UIWordContentBase
     public void UpdateItem()
     {
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
         if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
 
@@ -137,6 +136,11 @@ public class UIWordImageText : UIWordContentBase
                     Debug.Log("listAnswerInfo add " + word_answer);
                 }
             }
+        }
+        else
+        {
+
+            TextureUtil.UpdateRawImageTexture(imagePic, info.pic, true);
         }
     }
 

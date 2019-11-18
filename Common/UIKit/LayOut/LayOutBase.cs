@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LayOutBase : MonoBehaviour
 {
@@ -49,6 +50,12 @@ public class LayOutBase : MonoBehaviour
                     //过虑隐藏的
                     continue;
                 }
+            }
+
+            LayoutElement le = objtmp.GetComponent<LayoutElement>();
+            if (le != null && le.ignoreLayout)
+            {
+                continue;
             }
 
             if (objtmp.transform.parent != this.gameObject.transform)
