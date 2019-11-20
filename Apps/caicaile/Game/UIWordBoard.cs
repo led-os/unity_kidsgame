@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,7 +58,8 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         {
             foreach (UIWordItem item in listItem)
             {
-                Destroy(item.gameObject);
+                //Destroy会导致莫名其妙的异常闪退@moon
+                DestroyImmediate(item.gameObject);
             }
             listItem.Clear();
         }
@@ -75,8 +76,8 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             item.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             item.UpdateTitle(word);
             item.imageBg.sprite = spriteBg;
-            item.SetWordColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_BoardTitle, Color.black));
-            item.SetFontSize(80);
+            item.SetWordColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_BoardTitle));
+            //item.SetFontSize(80);
             listItem.Add(item);
         }
     }
@@ -113,6 +114,8 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
 
         int idx = 0;
+        //ok
+        // return;
 
         for (int i = 0; i < strBoard.Length; i++)
         {
@@ -123,7 +126,6 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
                 continue;
             }
             UIWordItem item = listItem[idx] as UIWordItem;
-
             item.UpdateTitle(word);
             idx++;
         }

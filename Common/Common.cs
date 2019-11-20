@@ -367,6 +367,34 @@ public class Common
         return color;
     }
 
+
+    static public Color RGBString2ColorA(string strrgb)
+    {
+        float r, g, b, a;
+        string[] rgb = strrgb.Split(',');
+        int v = 0;
+        v = Common.String2Int(rgb[0]);
+        r = v / 255f;
+
+        v = Common.String2Int(rgb[1]);
+        g = v / 255f;
+
+        v = Common.String2Int(rgb[2]);
+        b = v / 255f;
+
+        
+        a = 1f;
+        if (rgb.Length > 3)
+        {
+            v = Common.String2Int(rgb[3]);
+            a = v / 255f;
+        }
+
+
+        Color color = new Color(r, g, b, a);
+        return color;
+    }
+
     //随机打乱string
     static public string RandomString(string str)
     {

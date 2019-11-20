@@ -14,20 +14,21 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
 
         textTitle.gameObject.SetActive(false);
-        if ((Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_POEM) || (Common.appKeyName == GameRes.GAME_XIEHOUYU))
-        {
-            LanguageManager.main.UpdateLanguagePlace();
-            textTitle.gameObject.SetActive(true);
-            textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_" + info.id);
-        }
+        // if ((Common.appKeyName == GameRes.GAME_IdiomConnect) || (Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_POEM) || (Common.appKeyName == GameRes.GAME_XIEHOUYU))
+        // {
+
+        // }
         string pic = info.pic;
         if (!FileUtil.FileIsExistAsset(pic))
         {
             pic = Common.GAME_RES_DIR + "/place/image/PlaceItemBg.png";
-        }
+            LanguageManager.main.UpdateLanguagePlace();
+            textTitle.gameObject.SetActive(true);
+            textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_" + info.id);
+        } 
         TextureUtil.UpdateRawImageTexture(imageBg, pic, true);
         imageIcon.gameObject.SetActive(info.isAd);
-        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_PlaceItemTitle, Color.black);
+        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_PlaceItemTitle);
         LayOut();
     }
     public override bool IsLock()

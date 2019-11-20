@@ -40,7 +40,7 @@ public class UIWordImageText : UIWordContentBase
             imagePic.gameObject.SetActive(true);
         }
 
-        textLine0.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameText, Color.black);
+        textLine0.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameText);
     }
     // Use this for initialization
     void Start()

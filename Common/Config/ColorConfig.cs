@@ -27,7 +27,7 @@ public class ColorConfig
     void Init(string filePath)
     {
         string json = FileUtil.ReadStringAuto(filePath);
-        JsonData rootJson = JsonMapper.ToObject(json); 
+        rootJson = JsonMapper.ToObject(json);
     }
 
     public Color GetColor(string key)
@@ -42,7 +42,11 @@ public class ColorConfig
         if (JsonUtil.ContainsKey(rootJson, key))
         {
             string str = (string)rootJson[key];
-            cr = Common.RGBString2Color(str);
+            cr = Common.RGBString2ColorA(str);
+        }
+        else
+        {
+            Debug.Log("ColorConfig ContainsKey no key =" + key);
         }
         return cr;
     }

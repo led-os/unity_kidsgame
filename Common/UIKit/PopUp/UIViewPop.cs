@@ -60,7 +60,7 @@ public class UIViewPop : UIView
     void DoClose()
     {
         PopUpManager.main.OnClose();
-        Destroy(gameObject);
+        DestroyImmediate(gameObject);
     }
 
     /// <summary>

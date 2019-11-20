@@ -26,7 +26,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
-        TextName.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_TITLE, Color.black);
+        TextName.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_TITLE);
         timeAction = 0.3f;
         isActionFinish = false;
 
@@ -80,6 +80,10 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
 
         if (Common.appKeyName == GameRes.GAME_RIDDLE)
+        {
+            btnAddLove.gameObject.SetActive(false);
+        }
+        if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
         {
             btnAddLove.gameObject.SetActive(false);
         }

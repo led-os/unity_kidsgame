@@ -166,10 +166,18 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         AppSceneBase.main.ClearMainWorld();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
         GameGuankaParse.main.ParseItem(info);
+
+        if (uiWordContent != null)
+        {
+            DestroyImmediate(uiWordContent.gameObject);
+        }
+
+        GameObject objPrefab = null;
         switch (info.gameType)
         {
             case GameRes.GAME_TYPE_CONNECT:
                 {
+                    objPrefab = uiWordFillBoxPrefab.gameObject;
                     uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordFillBoxPrefab);
                 }
                 break;
@@ -177,6 +185,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             case GameRes.GAME_TYPE_TEXT:
             case GameRes.GAME_TYPE_IMAGE_TEXT:
                 {
+                    objPrefab = uiWordImageTextPrefab.gameObject;
                     uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordImageTextPrefab);
                 }
                 break;
@@ -189,7 +198,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         {
             uiWordContent.transform.SetParent(this.transform);
             uiWordContent.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            UIViewController.ClonePrefabRectTransform(uiWordFillBoxPrefab.gameObject, uiWordContent.gameObject);
+            UIViewController.ClonePrefabRectTransform(objPrefab, uiWordContent.gameObject);
             uiWordContent.iDelegate = this;
             uiWordContent.infoItem = info;
             uiWordContent.UpdateGuankaLevel(level);
@@ -521,9 +530,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         }
         //先计算行列数
         LayOut();
-        uiWordBoard.InitItem();
-        string strBoard = GameAnswer.main.GetWordBoardString(info, uiWordBoard.row, uiWordBoard.col);
-        uiWordBoard.UpadteItem(info, strBoard);
+        uiWordBoard.InitItem();//ok
+        string strBoard = GameAnswer.main.GetWordBoardString(info, uiWordBoard.row, uiWordBoard.col);//ok
+        uiWordBoard.UpadteItem(info, strBoard);//ng
         uiWordBar.UpadteItem(info);
     }
 

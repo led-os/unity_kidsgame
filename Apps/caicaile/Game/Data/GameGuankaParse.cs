@@ -244,7 +244,8 @@ public class GameGuankaParse : GuankaParseBase
         //JsonData items = root["items"];
         for (int i = 0; i < count; i++)
         {
-            JsonData item = root[(i + 1).ToString()];
+            // JsonData item = root[(i + 1).ToString()];
+            JsonData item = root[i];
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
             JsonData word = item["word"];
             info.listWord = new List<string>();

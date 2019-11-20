@@ -101,7 +101,7 @@ public class ActionBase : MonoBehaviour
         {
             callbackComplete(this.gameObject);
         }
-        Destroy(this);
+        DestroyImmediate(this);
 
     }
 

@@ -96,6 +96,10 @@ public class UIHowToPlayPage0 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
 
     void RunAnimate()
     {
+        if (uiWordFillBox == null)
+        {
+            return;
+        }
         //position 屏幕坐标
         Vector2 pt0 = imageHand.transform.position;
         UIWordItem uiWordItem = uiWordBoard.GetItem(0);
@@ -104,6 +108,7 @@ public class UIHowToPlayPage0 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
         if (uiLetterItem == null)
         {
             Debug.Log("RunAnimate  ui is null");
+            return;
         }
         Vector2 pt2 = uiLetterItem.transform.position;
         Debug.Log("RunAnimate pt0=" + pt0 + " pt1=" + pt1 + " pt2" + pt2);

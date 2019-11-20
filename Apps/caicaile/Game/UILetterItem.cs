@@ -64,7 +64,14 @@ public class UILetterItem : UIView
 
     public override void LayOut()
     {
+        RectTransform rctran = this.GetComponent<RectTransform>();
 
+        //Text 打开BestFit 会导致 android上 crash，慎用，手动动态设置字体大小 @moon
+        int limit = (int)(rctran.rect.width * 0.8f);
+        if (textTitle.fontSize > limit)
+        {
+            textTitle.fontSize = limit;
+        }
     }
     public void SetStatus(Status st)
     {

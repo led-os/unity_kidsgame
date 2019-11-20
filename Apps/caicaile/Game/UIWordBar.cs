@@ -150,7 +150,7 @@ public class UIWordBar : UIWordContentBase, IUIWordItemDelegate
         }
     }
 
-    public bool CheckAllFill()
+    public override bool CheckAllFill()
     {
         // bool ret = false;
         // if (wordNumCur >= wordNumMax)

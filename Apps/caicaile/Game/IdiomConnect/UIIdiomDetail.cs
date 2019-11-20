@@ -41,10 +41,10 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
         base.Awake();
 
         textView.SetFontSize(80);
-        textView.SetTextColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTextView, Color.black));
+        textView.SetTextColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTextView));
 
-        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle, Color.black);
-        textPinyin.color =ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle, Color.black);
+        textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle);
+        textPinyin.color =ColorConfig.main.GetColor(GameRes.KEY_COLOR_GameWinTitle);
 
 
         indexSegment = 0;

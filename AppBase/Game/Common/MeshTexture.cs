@@ -54,7 +54,7 @@ public class MeshTexture : MonoBehaviour
         {
             if (meshCollider != null)
             {
-                Destroy(meshCollider);
+                DestroyImmediate(meshCollider);
                 meshCollider = null;
             }
             return;

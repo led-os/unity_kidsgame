@@ -47,7 +47,7 @@ public class UIScrollViewDot : UIView
     {
         foreach (UIDot dot in listItem)
         {
-            Destroy(dot);
+            DestroyImmediate(dot);
         }
         listItem.Clear();
     }

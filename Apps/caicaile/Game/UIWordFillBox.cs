@@ -18,7 +18,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     public List<UILetterItem> listItem;
     LayOutGrid lygrid;
     int indexFillWord;
-    int indexAnswer; 
+    int indexAnswer;
     void Awake()
     {
         lygrid = this.GetComponent<LayOutGrid>();
@@ -135,6 +135,10 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 
     public UILetterItem GetSelItem()
     {
+        if (indexFillWord >= listItem.Count)
+        {
+            return null;
+        }
         UILetterItem ui = listItem[indexFillWord];
         return ui;
     }
@@ -322,6 +326,10 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     }
     public override void OnAddWord(string word)
     {
+        if (indexFillWord >= listItem.Count)
+        {
+            return;
+        }
         UILetterItem ui = listItem[indexFillWord];
         CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         if (UILetterItem.Status.ERROR_ANSWER == ui.GetStatus())
