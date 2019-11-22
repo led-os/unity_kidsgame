@@ -11,12 +11,6 @@ public class UIHomeCaiCaiLe : UIHomeBase
     public LayOutGrid layoutBtnSide;
     public LayOutGrid layoutBtn;
     public AnimateButton btnPlay;
-    public Button btnSetting;
-    public Button btnMore;
-    public Button btnShare;
-    public Button btnNoAd;
-    public Button btnLearn;
-    public Button btnAddLove;
     public GameObject objLogo;
     //public ActionHomeBtn actionBtnLearn;
     public void Awake()
@@ -37,56 +31,20 @@ public class UIHomeCaiCaiLe : UIHomeBase
         LoadPrefab();
         UpdateBtnMusic();
         UpdateBtnSound();
+ 
 
-
-        if (btnShare != null)
-        {
-            btnShare.gameObject.SetActive(Config.main.isHaveShare);
-        }
-        if (btnNoAd != null)
-        {
-            btnNoAd.gameObject.SetActive(Config.main.isHaveRemoveAd);
-        }
-        if (!AppVersion.appCheckHasFinished)
-        {
-            btnMore.gameObject.SetActive(false);
-        }
-        if (Common.isAndroid)
-        {
-            if ((Config.main.channel == Source.HUAWEI) || (Config.main.channel == Source.GP))
-            {
-                //华为市场不显示
-                btnMore.gameObject.SetActive(false);
-            }
-        }
-
-        if (!Config.main.APP_FOR_KIDS)
-        {
-            btnLearn.gameObject.SetActive(false);
-        }
         if (Config.main.APP_FOR_KIDS)
         {
             objLogo.gameObject.SetActive(false);
-            btnAddLove.gameObject.SetActive(false);
         }
         else
         {
             objLogo.gameObject.SetActive(false);
             //imageBgName.gameObject.SetActive(false);
         }
-        if (Common.appKeyName == GameRes.GAME_Image)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
 
-        if (Common.appKeyName == GameRes.GAME_RIDDLE)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
-        if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
+
+
 
         UpdateLayoutBtn();
     }
@@ -333,20 +291,4 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
     }
 
-    public void OnClickBtnLearn()
-    {
-        if (this.controller != null)
-        {
-            NaviViewController navi = this.controller.naviController;
-            navi.Push(LearnViewController.main);
-        }
-    }
-    public void OnClickBtnAddLove()
-    {
-        if (this.controller != null)
-        {
-            NaviViewController navi = this.controller.naviController;
-            navi.Push(LoveViewController.main);
-        }
-    }
 }

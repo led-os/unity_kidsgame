@@ -165,7 +165,10 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         base.UpdateGuankaLevel(level);
         AppSceneBase.main.ClearMainWorld();
         CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
-        GameGuankaParse.main.ParseItem(info);
+        if (info.gameType != GameRes.GAME_TYPE_CONNECT)
+        {
+            GameGuankaParse.main.ParseItem(info);
+        }
 
         if (uiWordContent != null)
         {
@@ -717,6 +720,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public void OnClickBtnRetry()
     {
         UpdateGuankaLevel(LevelManager.main.gameLevel);
+        // uiWordContent.OnReset();
+        // uiWordBoard.OnReset();
+        // uiWordBar.OnReset();
     }
     public void OnClickBtnTips()
     {
