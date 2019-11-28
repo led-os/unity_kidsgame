@@ -74,8 +74,8 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
 
     public void Awake()
     {
-        UpdateBtnMusic();
-        UpdateBtnSound();
+        UpdateBtnMusic(btnMusic);
+        UpdateBtnSound(btnSound);
     }
 
     public void Start()
@@ -243,20 +243,26 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
     }
 
 
-    public void UpdateBtnMusic()
+    static public void UpdateBtnMusic(Button btn)
     {
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        if (btnMusic != null)
+        if (btn != null)
         {
-            TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
+            Image imageBg = btn.gameObject.GetComponent<UITypeButton>().imageBg;
+            TextureUtil.UpdateImageTexture(imageBg, ret ? AppRes.IMAGE_BtnMusicBgOn : AppRes.IMAGE_BtnMusicBgOff, false);
+            Image imageIcon = btn.gameObject.GetComponent<UITypeButton>().imageIcon;
+            TextureUtil.UpdateImageTexture(imageIcon, ret ? AppRes.IMAGE_BtnMusicIconOn : AppRes.IMAGE_BtnMusicIconOff, false);
         }
     }
-    public void UpdateBtnSound()
+    static public void UpdateBtnSound(Button btn)
     {
         bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
-        if (btnSound != null)
+        if (btn != null)
         {
-            TextureUtil.UpdateButtonTexture(btnSound, ret ? AppRes.IMAGE_BtnSoundOn : AppRes.IMAGE_BtnSoundOff, false);
+            Image imageBg = btn.gameObject.GetComponent<UITypeButton>().imageBg;
+            TextureUtil.UpdateImageTexture(imageBg, ret ? AppRes.IMAGE_BtnSoundBgOn : AppRes.IMAGE_BtnSoundBgOff, false);
+            Image imageIcon = btn.gameObject.GetComponent<UITypeButton>().imageIcon;
+            TextureUtil.UpdateImageTexture(imageIcon, ret ? AppRes.IMAGE_BtnSoundIconOn : AppRes.IMAGE_BtnSoundIconOff, false);
         }
     }
 
@@ -273,7 +279,7 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
         {
             MusicBgPlay.main.Stop();
         }
-        UpdateBtnMusic();
+        UpdateBtnMusic(btnMusic);
     }
     public void OnClickBtnSound()
     {
@@ -281,7 +287,7 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
         bool value = !ret;
         Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, value);
 
-        UpdateBtnSound();
+        UpdateBtnSound(btnSound);
     }
 
     public void OnClickBtnMore()
@@ -351,8 +357,8 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
 
     public void OnPopViewControllerDidClose(PopViewController controller)
     {
-        UpdateBtnMusic();
-        UpdateBtnSound();
+        UpdateBtnMusic(btnMusic);
+        UpdateBtnSound(btnSound);
     }
 }
 

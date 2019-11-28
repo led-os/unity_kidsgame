@@ -9,6 +9,7 @@ public class GameAnswer
 
     public string strWordAnswer = "";
 
+    public Language languageWord;
     static private GameAnswer _main = null;
     public static GameAnswer main
     {
@@ -17,6 +18,7 @@ public class GameAnswer
             if (_main == null)
             {
                 _main = new GameAnswer();
+                _main.UpdateLanguageWord();
             }
             return _main;
         }
@@ -33,15 +35,27 @@ public class GameAnswer
         Debug.Log("IsEnglshString str=" + str + " ret=" + ret);
         return ret;
     }
+    public void UpdateLanguageWord()
+    {
+        ItemInfo info = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
+        string strlan = Common.GAME_RES_DIR + "/language/" + info.language + ".csv";
+        languageWord = new Language();
+        languageWord.Init(strlan);
+        languageWord.SetLanguage(SystemLanguage.Chinese);
 
+    }
     public string GetGuankaAnswer(CaiCaiLeItemInfo info, bool isRandom = true)
     {
         string str = "";
         //真正的答案
         if ((info.gameType == GameRes.GAME_TYPE_IMAGE) || (info.gameType == GameRes.GAME_TYPE_IMAGE_TEXT))
         {
-            //str = UIGameCaiCaiLe.languageWord.GetString(info.id);
+            //
             str = info.id;
+            if (Common.appKeyName == GameRes.GAME_ANIMAL)
+            {
+                str = languageWord.GetString(info.id);
+            }
             //歇后语
             if ((!Common.BlankString(info.head)) && (!Common.BlankString(info.end)))
             {
@@ -96,10 +110,10 @@ public class GameAnswer
     string GetAllWordWithoutAnswer(string answer)
     {
         string strret = "";
-        string strAllWord = GameGuankaParse.main.strWord3500;
+        string strAllWord = GameLevelParse.main.strWord3500;
         if (IsEnglshString(answer))
         {
-            strAllWord = GameGuankaParse.main.strWordEnglish;
+            strAllWord = GameLevelParse.main.strWordEnglish;
         }
 
         int len = strAllWord.Length;
@@ -206,7 +220,7 @@ public class GameAnswer
                     if (total > 1)
                     {
                         int idx = GetOtherGuankaIndex();
-                        CaiCaiLeItemInfo infoOther = GameGuankaParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
+                        CaiCaiLeItemInfo infoOther = GameLevelParse.main.GetGuankaItemInfo(idx) as CaiCaiLeItemInfo;
                         if (infoOther != null)
                         {
                             string strOther = GameAnswer.main.GetGuankaAnswer(infoOther);

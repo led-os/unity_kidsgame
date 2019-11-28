@@ -17,6 +17,7 @@ public class ItemInfo
     public string category;
     public string sound;
     public string game;
+    public string gameType;
     public string language;
     public int tag;
     public int index;

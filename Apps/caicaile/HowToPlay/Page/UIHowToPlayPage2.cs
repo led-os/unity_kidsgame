@@ -31,7 +31,7 @@ public class UIHowToPlayPage2 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
     void Start()
     {
         gameLevel = index;
-        infoItem = GameGuankaParse.main.GetGuankaItemInfo(gameLevel) as CaiCaiLeItemInfo;
+        infoItem = GameLevelParse.main.GetGuankaItemInfo(gameLevel) as CaiCaiLeItemInfo;
         LayOut();
         // LevelManager.main.gameLevel = 0;
         UpdateGuankaLevel(gameLevel);
@@ -41,7 +41,7 @@ public class UIHowToPlayPage2 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
 
     public void UpdateGuankaLevel(int level)
     {
-        //GameGuankaParse.main.ParseItem(infoItem);
+        //GameLevelParse.main.ParseItem(infoItem);
         uiWordFillBox = (UIWordFillBox)GameObject.Instantiate(uiWordFillBoxPrefab);
         uiWordFillBox.transform.SetParent(objTop.transform);
         uiWordFillBox.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);

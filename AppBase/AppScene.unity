@@ -458,6 +458,7 @@ MonoBehaviour:
   imageBg: {fileID: 0}
   canvasMain: {fileID: 2041948832}
   lightMain: {fileID: 801014285}
+  canvasCamera: {fileID: 0}
   objMainWorld: {fileID: 1999997266}
   objSpriteBg: {fileID: 461238913}
   objuAudio: {fileID: 0}

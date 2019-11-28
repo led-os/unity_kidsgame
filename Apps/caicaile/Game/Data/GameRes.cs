@@ -12,6 +12,8 @@ public class GameRes
     public const string GAME_Guess = "Guess";
     public const string GAME_RIDDLE = "Riddle";
     public const string GAME_IdiomConnect = "IdiomConnect";
+    public const string GAME_ANIMAL = "animal";
+
     //type 
     public const string GAME_TYPE_IMAGE = "Image";
     public const string GAME_TYPE_TEXT = "Text";
@@ -32,8 +34,8 @@ public class GameRes
     public const string KEY_COLOR_BoardTitle = "BoardTitle";
     public const string KEY_COLOR_GameText = "GameText";
     public const string KEY_COLOR_GameWinTitle = "GameWinTitle";
-    public const string KEY_COLOR_GameWinTextView = "GameWinTextView"; 
-      
+    public const string KEY_COLOR_GameWinTextView = "GameWinTextView";
+
     static private GameRes _main = null;
     public static GameRes main
     {
@@ -82,7 +84,7 @@ public class GameRes
     {
         get
         {
-            CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+            CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
             Color32 cr = new Color32(255, 255, 255, 255);
             if (info.gameType == GameRes.GAME_TYPE_TEXT)
             {

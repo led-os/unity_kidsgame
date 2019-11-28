@@ -11,7 +11,7 @@ public class IconInfo
     public int h;
 }
 
-public class IconConvert : MonoBehaviour
+public class IconConvert
 {
     List<IconInfo> listItem;
     int[] imageSizeIos = new int[] { 20, 29, 40, 50, 57, 58, 60, 72, 76, 80, 87, 100, 114, 120, 144, 152, 167, 180, 1024 };
@@ -25,14 +25,26 @@ public class IconConvert : MonoBehaviour
     int[] imageSizeXiaomi = new int[] { 90, 136, 168, 192, 224 };
     int[] imageSizeHuawei = new int[] { 216 };
 
-    int[] imageSizeMicrosoft = new int[] { 88,24,24,300,50,48 };
-    string[] resMicrosoft = new string[] { "Square44x44Logo.scale-200", "Square44x44Logo.targetsize-24", "Square44x44Logo.targetsize-24_altform-unplated", "Square150x150Logo.scale-200", "StoreLogo","LockScreenLogo.scale-200" };
-
+    int[] imageSizeMicrosoft = new int[] { 88, 24, 24, 300, 50, 48 };
+    string[] resMicrosoft = new string[] { "Square44x44Logo.scale-200", "Square44x44Logo.targetsize-24", "Square44x44Logo.targetsize-24_altform-unplated", "Square150x150Logo.scale-200", "StoreLogo", "LockScreenLogo.scale-200" };
+    static private IconConvert _main = null;
+    public static IconConvert main
+    {
+        get
+        {
+            if (_main == null)
+            {
+                _main = new IconConvert();
+                _main.Init();
+            }
+            return _main;
+        }
+    }
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    void Awake()
+    public void Init()
     {
         listItem = new List<IconInfo>();
 
@@ -87,7 +99,7 @@ public class IconConvert : MonoBehaviour
         }
     }
 
-     void InitMicrosoft(bool ishd)
+    void InitMicrosoft(bool ishd)
     {
         int[] listsize = imageSizeMicrosoft;
         for (int i = 0; i < listsize.Length; i++)
@@ -129,7 +141,12 @@ public class IconConvert : MonoBehaviour
 
     void ConvertMainIcon(bool ishd)
     {
-        string icon_path = GetRootDir(ishd) + "/icon.png";
+        string icon_path = GetRootDir(ishd) + "/icon.jpg";//png
+        if (!FileUtil.FileIsExist(icon_path))
+        {
+            icon_path = GetRootDir(ishd) + "/icon.png";
+        }
+        Debug.Log("IconConvert icon_path=" + icon_path);
         string icon_path_android = GetRootDir(ishd) + "/icon_android.png";
         Texture2D texIcon = LoadTexture.LoadFromFile(icon_path);
         //保存圆角的android  icon 

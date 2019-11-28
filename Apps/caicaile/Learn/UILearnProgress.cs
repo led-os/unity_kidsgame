@@ -130,7 +130,7 @@ public class UILearnProgress : UIView, ITableViewDataSource, ISegmentDelegate
     {
         LanguageManager.main.UpdateLanguagePlace();
 
-        for (int i = 0; i < GameGuankaParse.main.listPlace.Count; i++)
+        for (int i = 0; i < GameLevelParse.main.listPlace.Count; i++)
         {
             ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(i);
             if (uiSegment != null)

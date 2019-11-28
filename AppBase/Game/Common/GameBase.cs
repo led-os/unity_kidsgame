@@ -57,4 +57,8 @@ public class GameBase : UIView
         string key = GameBase.KEY_GAME_STATUS_ITEM + info.id;
         PlayerPrefs.SetInt(key, status);
     }
+
+    public virtual void UpdateGuankaLevel(int level)
+    {
+    }
 }

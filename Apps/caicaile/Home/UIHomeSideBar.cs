@@ -58,21 +58,15 @@ public class UIHomeSideBar : UIView
 
     }
 
+
     public void UpdateBtnMusic()
     {
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        if (btnMusic != null)
-        {
-            TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
-        }
+        UIHomeBase.UpdateBtnMusic(btnMusic);
     }
+
     public void UpdateBtnSound()
     {
-        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
-        if (btnSound != null)
-        {
-            TextureUtil.UpdateButtonTexture(btnSound, ret ? AppRes.IMAGE_BtnSoundOn : AppRes.IMAGE_BtnSoundOff, false);
-        }
+        UIHomeBase.UpdateBtnSound(btnSound);
     }
 
     public void OnClickBtnMusic()

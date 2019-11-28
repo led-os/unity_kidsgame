@@ -29,8 +29,8 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
         // actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
         LoadPrefab();
-        UpdateBtnMusic();
-        UpdateBtnSound();
+        UpdateBtnMusic(btnMusic);
+        UpdateBtnSound(btnSound);
  
 
         if (Config.main.APP_FOR_KIDS)

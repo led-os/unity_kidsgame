@@ -41,7 +41,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     protected override void Awake()
     {
         base.Awake();
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
 
         //Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
         Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
@@ -51,6 +51,10 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         if (Common.BlankString(str))
         {
             str = info.id;
+            if (Common.appKeyName == GameRes.GAME_ANIMAL)
+            {
+                str = GameAnswer.main.languageWord.GetString(info.id);
+            }
         }
         if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
         {
@@ -64,6 +68,8 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
         }
+
+
         if (Common.BlankString(str))
         {
             str = Language.main.GetString("STR_UIVIEWALERT_TITLE_GAME_FINISH");
@@ -262,8 +268,8 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
 
     public void UpdateText(ItemInfo info)
     {
-        CaiCaiLeItemInfo infoGuanka = GameGuankaParse.main.GetItemInfo();
-        GameGuankaParse.main.ParseIdiomItem(infoGuanka);
+        CaiCaiLeItemInfo infoGuanka = GameLevelParse.main.GetItemInfo();
+        GameLevelParse.main.ParseIdiomItem(infoGuanka);
         string str = "";
         //         public string author;
         // public string year;
@@ -379,7 +385,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     }
     public void UpdateLoveStatus()
     {
-        CaiCaiLeItemInfo infoItem = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo infoItem = GameLevelParse.main.GetItemInfo();
         string strBtn = "";
         if (LoveDB.main.IsItemExist(infoItem))
         {
@@ -413,7 +419,7 @@ public class UIGameWin : UIViewPop, ISegmentDelegate
     }
     public void OnClickBtnAddLove()
     {
-        CaiCaiLeItemInfo infoItem = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo infoItem = GameLevelParse.main.GetItemInfo();
         if (LoveDB.main.IsItemExist(infoItem))
         {
             LoveDB.main.DeleteItem(infoItem);

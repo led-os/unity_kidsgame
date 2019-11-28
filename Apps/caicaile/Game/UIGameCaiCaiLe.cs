@@ -36,7 +36,6 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     float goldBaroffsetYNormal;
 
     GameBase gameBase;
-    static public Language languageWord;
 
     int rowWordBoard = 3;
     int colWordBoard = 8;
@@ -44,13 +43,13 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     void Awake()
     {
         LoadPrefab();
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         gameBase = this.gameObject.AddComponent<GameBase>();
         if (gameBase == null)
         {
             Debug.Log("gameBase is null");
         }
-        UpdateLanguageWord();
+
         btnTips.gameObject.SetActive(Config.main.isHaveShop);
 
         if (info.gameType == GameRes.GAME_TYPE_TEXT)
@@ -98,35 +97,6 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         UpdateLanguage();
         UpdateBtnMusic();
 
-        switch (info.gameType)
-        {
-            case GameRes.GAME_TYPE_IMAGE:
-                {
-                    uiWordBar.gameObject.SetActive(true);
-                }
-                break;
-            case GameRes.GAME_TYPE_IMAGE_TEXT:
-                {
-                    uiWordBar.gameObject.SetActive(true);
-                }
-                break;
-            case GameRes.GAME_TYPE_TEXT:
-                {
-                    uiWordBar.gameObject.SetActive(false);
-                    if (Common.appKeyName == GameRes.GAME_RIDDLE)
-                    {
-                        uiWordBar.gameObject.SetActive(true);
-                    }
-                }
-                break;
-            case GameRes.GAME_TYPE_CONNECT:
-                {
-                    uiWordBar.gameObject.SetActive(false);
-                }
-                break;
-
-        }
-
         Common.SetButtonText(btnHelp, Language.main.GetString("STR_BTN_HELP"), 64);
         Common.SetButtonText(btnTips, Language.main.GetString("STR_BTN_TIPS"), 64);
         Common.SetButtonText(btnRetry, Language.main.GetString("STR_BTN_Retry"), 64);
@@ -144,30 +114,51 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-
+        base.Update();
     }
 
-
-    public void UpdateLanguageWord()
-    {
-        ItemInfo info = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
-        string strlan = Common.GAME_RES_DIR + "/language/" + info.language + ".csv";
-        languageWord = new Language();
-        languageWord.Init(strlan);
-        languageWord.SetLanguage(SystemLanguage.Chinese);
-
-    }
 
     public override void UpdateGuankaLevel(int level)
     {
         base.UpdateGuankaLevel(level);
         AppSceneBase.main.ClearMainWorld();
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
+
+
+        switch (info.gameType)
+        {
+            case GameRes.GAME_TYPE_IMAGE:
+                {
+                    uiWordBar.gameObject.SetActive(true);
+                }
+                break;
+            case GameRes.GAME_TYPE_IMAGE_TEXT:
+                {
+                    uiWordBar.gameObject.SetActive(true);
+                }
+                break;
+            case GameRes.GAME_TYPE_TEXT:
+                {
+                    uiWordBar.gameObject.SetActive(false);
+                    if ((Common.appKeyName == GameRes.GAME_RIDDLE) || (Common.appKeyName == GameRes.GAME_Guess))
+                    {
+                        uiWordBar.gameObject.SetActive(true);
+                    }
+                }
+                break;
+            case GameRes.GAME_TYPE_CONNECT:
+                {
+                    uiWordBar.gameObject.SetActive(false);
+                }
+                break;
+
+        }
+
         if (info.gameType != GameRes.GAME_TYPE_CONNECT)
         {
-            GameGuankaParse.main.ParseItem(info);
+            GameLevelParse.main.ParseItem(info);
         }
 
         if (uiWordContent != null)
@@ -250,7 +241,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     {
         float x = 0, y = 0, w = 0, h = 0;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         {
             RectTransform rctran = imageBg.GetComponent<RectTransform>();
             float w_image = rctran.rect.width;
@@ -526,7 +517,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
     void UpdateWord()
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         if (uiWordContent != null)
         {
             uiWordContent.UpdateWord();
@@ -578,7 +569,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public void UIWordBoardDidClick(UIWordBoard bd, UIWordItem item)
     {
         Debug.Log("UIWordBoardDidClick");
-        CaiCaiLeItemInfo infoGuanka = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo infoGuanka = GameLevelParse.main.GetItemInfo();
 
         if (infoGuanka.gameType == GameRes.GAME_TYPE_TEXT)
         {
@@ -624,7 +615,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public void OnGameWinFinish(UIWordBar bar, bool isFail)
     {
 
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         //show game win
         if (isFail)
         {
@@ -668,7 +659,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
         ViewAlertManager.main.ShowFull(title, msg, yes, no, false, STR_KEYNAME_VIEWALERT_GAME_FINISH, OnUIViewAlertFinished);
 
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         string str = languageGame.GetString(info.id);
         TTS.main.Speak(str);
     }

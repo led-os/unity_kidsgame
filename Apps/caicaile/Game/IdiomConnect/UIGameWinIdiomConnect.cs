@@ -37,7 +37,7 @@ public class UIGameWinIdiomConnect : UIViewPop
     protected override void Awake()
     {
         base.Awake();
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
 
         //Common.SetButtonText(btnFriend, Language.main.GetString("STR_GameWin_BtnFriend"));
         Common.SetButtonText(btnNext, Language.main.GetString("STR_GameWin_BtnNext"), 0, false);
@@ -70,7 +70,7 @@ public class UIGameWinIdiomConnect : UIViewPop
         {
             listIdiom = new List<UIButtonIdiom>();
         }
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         for (int i = 0; i < info.listIdiom.Count; i++)
         {
             CaiCaiLeItemInfo infoIdiom = new CaiCaiLeItemInfo();

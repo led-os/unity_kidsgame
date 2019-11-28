@@ -71,7 +71,7 @@ public class UIHomeTopBar : UIView
             }
         }
 
-        UpdateBtnMusic();
+        UIHomeBase.UpdateBtnMusic(btnMusic);
         UpdateBtnSound();
     }
     // Use this for initialization
@@ -99,15 +99,11 @@ public class UIHomeTopBar : UIView
     }
 
 
-    public void UpdateBtnMusic()
-    {
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
-    }
+
+
     public void UpdateBtnSound()
     {
-        bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
-        TextureUtil.UpdateButtonTexture(btnSound, ret ? AppRes.IMAGE_BtnSoundOn : AppRes.IMAGE_BtnSoundOff, false);
+        UIHomeBase.UpdateBtnSound(btnSound);
     }
 
     public void OnUIShareDidClick(ItemInfo item)
@@ -192,7 +188,7 @@ public class UIHomeTopBar : UIView
         {
             MusicBgPlay.main.Stop();
         }
-        UpdateBtnMusic();
+        UIHomeBase.UpdateBtnMusic(btnMusic);
     }
 
     public void OnClickBtnSound()
@@ -230,7 +226,7 @@ public class UIHomeTopBar : UIView
 
     public void OnClickBtnLearn()
     {
-       // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
+        // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
     }
 

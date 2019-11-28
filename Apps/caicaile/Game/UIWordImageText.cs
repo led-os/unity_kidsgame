@@ -28,7 +28,7 @@ public class UIWordImageText : UIWordContentBase
     void Awake()
     {
         textXieHouYu.gameObject.SetActive(false);
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
             objText.gameObject.SetActive(true);
@@ -81,7 +81,7 @@ public class UIWordImageText : UIWordContentBase
 
     public void UpdateItem()
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
 
@@ -91,7 +91,7 @@ public class UIWordImageText : UIWordContentBase
                 PoemContentInfo infopoem0 = info.listPoemContent[0];
                 string strPoem = infopoem0.content;
                 //过虑标点符号
-                List<int> listIndexGuanka = GameGuankaParse.main.IndexListNotPunctuation(strPoem);
+                List<int> listIndexGuanka = GameLevelParse.main.IndexListNotPunctuation(strPoem);
                 //GUANKA_GROUP_ITEM_NUM
                 int[] fillWordNum = { 1, 1, 2, 2, 3 };
                 int idxfill = LevelManager.main.gameLevel % GUANKA_GROUP_ITEM_NUM;
@@ -206,7 +206,7 @@ public class UIWordImageText : UIWordContentBase
     }
     public override void UpdateWord()
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
 
         if (info.gameType == GameRes.GAME_TYPE_TEXT)
         {
@@ -228,7 +228,7 @@ public class UIWordImageText : UIWordContentBase
 
     public string GetDisplayText(bool isAnswr, bool isSucces, int indexAnswer, string word)
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         if ((!Common.BlankString(info.head)) && (!Common.BlankString(info.end)))
         {
             if (Common.appKeyName == GameRes.GAME_RIDDLE)
@@ -243,7 +243,7 @@ public class UIWordImageText : UIWordContentBase
         string strPoem = infopoem0.content;
 
         //过虑标点符号
-        List<int> listIndexGuanka = GameGuankaParse.main.IndexListNotPunctuation(strPoem);
+        List<int> listIndexGuanka = GameLevelParse.main.IndexListNotPunctuation(strPoem);
         List<string> listStr = GetSplitStringByAnswerIndex(listIndexAnswer, listIndexGuanka);
         string strShow = "";
         for (int i = 0; i < listStr.Count; i++)
@@ -317,7 +317,7 @@ public class UIWordImageText : UIWordContentBase
 
     List<string> GetSplitStringByAnswerIndex(int[] listIndex, List<int> listIndexGuanka)
     {
-        CaiCaiLeItemInfo info = GameGuankaParse.main.GetItemInfo();
+        CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
         PoemContentInfo infopoem0 = info.listPoemContent[0];
         string strPoem = infopoem0.content;
 

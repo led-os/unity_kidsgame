@@ -31,6 +31,15 @@ public class UIGameBase : UIView
 
 
     static public int gameMode;//已经通关 
+
+
+    public void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            OnClickBtnBack();
+        }
+    }
     public void Init()
     {
         Debug.Log("UIGameBase Init");
@@ -151,12 +160,8 @@ public class UIGameBase : UIView
 
     }
     public void UpdateBtnMusic()
-    {
-        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
-        if (btnMusic != null)
-        {
-            TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, false);
-        }
+    { 
+        UIHomeBase.UpdateBtnMusic(btnMusic);
     }
 
     public void OnGameWinBase()

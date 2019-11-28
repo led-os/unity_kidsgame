@@ -122,7 +122,7 @@ public class UIScreenShotController : UIView
     void Awake()
     {
         GameManager.main.isLoadGameScreenShot = true;
-        iconConvert = this.gameObject.AddComponent<IconConvert>();
+        iconConvert = IconConvert.main;//this.gameObject.AddComponent<IconConvert>();
         screenShotConfig = new ScreenShotConfig();
         //mainCam = Common.GetMainCamera();
         LevelManager.main.ParsePlaceList();

@@ -32,7 +32,7 @@ public class LevelManager
         get
         {
             int ret = 0;
-            ret = GameGuankaParse.main.listPlace.Count;//GameScene.gameBase.GetPlaceTotal();
+            ret = GameLevelParse.main.listPlace.Count;//GameScene.gameBase.GetPlaceTotal();
             return ret;
         }
     }
@@ -76,28 +76,28 @@ public class LevelManager
     {
         get
         {
-            int ret = GameGuankaParse.main.GetGuankaTotal();
+            int ret = GameLevelParse.main.GetGuankaTotal();
             return ret;
         }
     }
     public List<object> ParsePlaceList()
     {
-        return GameGuankaParse.main.listPlace;
+        return GameLevelParse.main.listPlace;
     }
     public void CleanGuankaList()
     {
-        GameGuankaParse.main.CleanGuankaList();
+        GameLevelParse.main.CleanGuankaList();
     }
     public ItemInfo GetPlaceItemInfo(int idx)
     {
-        return GameGuankaParse.main.GetPlaceItemInfo(idx);
+        return GameLevelParse.main.GetPlaceItemInfo(idx);
     }
 
     public void ParseGuanka()
     {
         CleanGuankaList();
         //GameViewController.main.gameBase.ParseGuanka();
-        GameGuankaParse.main.ParseGuanka();
+        GameLevelParse.main.ParseGuanka();
     }
 
 
@@ -221,13 +221,13 @@ public class LevelManager
             //必须在placeLevel设置之后再设置gameLevel
             gameLevel = 0;
             ParseGuanka();
-            if (GameGuankaParse.main.listGuanka == null)
+            if (GameLevelParse.main.listGuanka == null)
             {
                 Debug.Log("listGuanka is null");
             }
             else
             {
-                foreach (object obj in GameGuankaParse.main.listGuanka)
+                foreach (object obj in GameLevelParse.main.listGuanka)
                 {
                     listRet.Add(obj);
                 }
@@ -248,13 +248,13 @@ public class LevelManager
             //必须在placeLevel设置之后再设置gameLevel
             gameLevel = 0;
             ParseGuanka();
-            if (GameGuankaParse.main.listGuanka == null)
+            if (GameLevelParse.main.listGuanka == null)
             {
                 Debug.Log("listGuanka is null");
             }
             else
             {
-                foreach (object obj in GameGuankaParse.main.listGuanka)
+                foreach (object obj in GameLevelParse.main.listGuanka)
                 {
                     listRet.Add(obj);
                 }
