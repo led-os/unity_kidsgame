@@ -149,6 +149,8 @@ public class UIViewController
         LayOutView();
     }
 
+
+    //需要在SetParent 之后复位
     static public void ClonePrefabRectTransform(GameObject objPrefab, GameObject obj)
     {
         RectTransform rctranPrefab = objPrefab.GetComponent<RectTransform>();
