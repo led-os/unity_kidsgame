@@ -14,16 +14,16 @@ public class ScreenShotConfig
         ShotItemInfo info = new ShotItemInfo();
         UIViewController controller = null;
         info.isRealGameUI = true;
-        if (dev.name == UIScreenShotController.DEVICE_NAME_ICON)
+        if (dev.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
             controller = IconViewController.main;
             IconViewController.main.deviceInfo = dev;
         }
-        else if (dev.name == UIScreenShotController.DEVICE_NAME_AD)
+        else if (dev.name == ScreenDeviceInfo.DEVICE_NAME_AD)
         {
             controller = AdHomeViewController.main;
         }
-        else if (dev.name == UIScreenShotController.DEVICE_NAME_COPY_RIGHT_HUAWEI)
+        else if (dev.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI)
         {
             controller = CopyRightViewController.main;
             CopyRightViewController.main.deviceInfo = dev;

@@ -10,9 +10,11 @@ public class AppSceneBase : ScriptBase
     AppVersion appVersion;
     public Image imageBg;
     public UIViewController rootViewController;
+    public List<UIViewPop> listPopup;
+
     public Canvas canvasMain;
-	public Light lightMain;
-   public Canvas canvasCamera;
+    public Light lightMain;
+    public Canvas canvasCamera;
     public GameObject objMainWorld;
     public GameObject objSpriteBg;
 
@@ -38,7 +40,7 @@ public class AppSceneBase : ScriptBase
         isReLayout = false;
         IPInfo.main.StartParserInfo();
         InitScalerMatch();
-        if(canvasCamera!=null)
+        if (canvasCamera != null)
         {
             SetCanvasScalerMatch(canvasCamera.gameObject);
         }
@@ -114,10 +116,10 @@ public class AppSceneBase : ScriptBase
         if (Device.isScreenDidChange)
         {
             InitScalerMatch();
-               if(canvasCamera!=null)
-        {
-            SetCanvasScalerMatch(canvasCamera.gameObject);
-        }
+            if (canvasCamera != null)
+            {
+                SetCanvasScalerMatch(canvasCamera.gameObject);
+            }
             isReLayout = true;
 
         }
@@ -153,6 +155,8 @@ public class AppSceneBase : ScriptBase
         bool isFirstRun = !Common.GetBool(AppString.STR_KEY_NOT_FIRST_RUN);
         mainCamera = Common.GetMainCamera();
 
+        listPopup = new List<UIViewPop>();
+
 
         Tongji.Init(Config.main.GetString("APPTONGJI_ID", "0"));
         Device.InitOrientation();
@@ -187,7 +191,10 @@ public class AppSceneBase : ScriptBase
     }
     void SetMode3D(bool is3D)
     {
-        lightMain.gameObject.SetActive(is3D);
+        if (lightMain != null)
+        {
+            lightMain.gameObject.SetActive(is3D);
+        }
         if (is3D)
         {
             mainCamera.orthographic = false;
@@ -356,7 +363,7 @@ public class AppSceneBase : ScriptBase
         {
             TextureCache.main.AddCache(filepath, tex);
             SpriteRenderer render = objSpriteBg.GetComponent<SpriteRenderer>();
-            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+            render.sprite = TextureUtil.CreateSpriteFromTex(tex);
             LayoutChild();
         }
 
@@ -413,6 +420,19 @@ public class AppSceneBase : ScriptBase
     public void ShowMainCamera2D(bool isShow)
     {
         mainCamera.gameObject.SetActive(isShow);
+    }
+    public void UpdateLanguage()
+    {
+        if (rootViewController != null)
+        {
+            rootViewController.UpdateLanguage();
+        }
+        int len = AppSceneBase.main.listPopup.Count;
+        for (int i = 0; i < len; i++)
+        {
+            UIViewPop ui = AppSceneBase.main.listPopup[i];
+            ui.UpdateLanguage();
+        }
     }
 
 }

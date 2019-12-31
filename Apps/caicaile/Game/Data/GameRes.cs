@@ -12,8 +12,6 @@ public class GameRes
     public const string GAME_Guess = "Guess";
     public const string GAME_RIDDLE = "Riddle";
     public const string GAME_IdiomConnect = "IdiomConnect";
-    public const string GAME_ANIMAL = "animal";
-
     //type 
     public const string GAME_TYPE_IMAGE = "Image";
     public const string GAME_TYPE_TEXT = "Text";
@@ -29,13 +27,6 @@ public class GameRes
 
     //color
     //f88816 248,136,22
-    public const string KEY_COLOR_TITLE = "title";
-    public const string KEY_COLOR_PlaceItemTitle = "PlaceItemTitle";
-    public const string KEY_COLOR_BoardTitle = "BoardTitle";
-    public const string KEY_COLOR_GameText = "GameText";
-    public const string KEY_COLOR_GameWinTitle = "GameWinTitle";
-    public const string KEY_COLOR_GameWinTextView = "GameWinTextView";
-
     static private GameRes _main = null;
     public static GameRes main
     {
@@ -50,7 +41,6 @@ public class GameRes
     }
     public Color32 colorTitle
     {
-
         get
         {
             Color32 cr = new Color32(255, 255, 255, 255);
@@ -58,24 +48,6 @@ public class GameRes
             {
                 cr = new Color32(89, 45, 6, 255);
             }
-            return cr;
-        }
-    }
-
-    public Color32 colorPlaceItemTitle
-    {
-        get
-        {
-            Color32 cr = new Color32(255, 255, 255, 255);
-            if (Common.appKeyName == GAME_RIDDLE)
-            {
-                cr = new Color32(89, 45, 6, 255);
-            }
-            if (Common.appKeyName == GAME_IDIOM)
-            {
-                cr = new Color32(0, 0, 0, 255);
-            }
-
             return cr;
         }
     }
@@ -97,11 +69,6 @@ public class GameRes
             if (Common.appKeyName == GameRes.GAME_Image)
             {
                 cr = new Color32(0, 0, 0, 255);
-            }
-
-            if (Common.appKeyName == GAME_IDIOM)
-            {
-                cr = new Color32(255, 255, 255, 255);
             }
             return cr;
         }

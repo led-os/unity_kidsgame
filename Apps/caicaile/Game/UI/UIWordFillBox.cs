@@ -18,7 +18,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     public List<UILetterItem> listItem;
     LayOutGrid lygrid;
     int indexFillWord;
-    int indexAnswer;
+    int indexAnswer; 
     void Awake()
     {
         lygrid = this.GetComponent<LayOutGrid>();
@@ -53,7 +53,7 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
             lygrid.LayOut();
             foreach (UILetterItem item in listItem)
             {
-                Vector2 pos = lygrid.GetItemPostion(item.indexRow, item.indexCol);
+                Vector2 pos = lygrid.GetItemPostion(item.gameObject,item.indexRow, item.indexCol);
                 RectTransform rctran = item.GetComponent<RectTransform>();
                 w = (rctranRoot.rect.width - (lygrid.space.x) * (col - 1)) / col;
                 h = w;
@@ -135,10 +135,6 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
 
     public UILetterItem GetSelItem()
     {
-        if (indexFillWord >= listItem.Count)
-        {
-            return null;
-        }
         UILetterItem ui = listItem[indexFillWord];
         return ui;
     }
@@ -326,10 +322,6 @@ public class UIWordFillBox : UIWordContentBase, IUILetterItemDelegate
     }
     public override void OnAddWord(string word)
     {
-        if (indexFillWord >= listItem.Count)
-        {
-            return;
-        }
         UILetterItem ui = listItem[indexFillWord];
         CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
         if (UILetterItem.Status.ERROR_ANSWER == ui.GetStatus())

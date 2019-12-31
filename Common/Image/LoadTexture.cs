@@ -136,42 +136,8 @@ public class LoadTexture : MonoBehaviour
 
     static public Texture2D LoadFromResource(string file)
     {
-        Texture2D tex = (Texture2D)Resources.Load(file);
+        Texture2D tex = (Texture2D)Resources.Load(FileUtil.GetFileBeforeExtWithOutDot(file));
         return tex;
-    }
-
- 
-
-    static public Sprite CreateSprieFromResource(string file)
-    {
-        Texture2D tex = LoadFromResource(file);
-        Sprite sp = CreateSprieFromTex(tex);
-        return sp;
-    }
-
-    static public Sprite CreateSprieFromResource(string file, Vector4 border)
-    {
-        Texture2D tex = LoadFromResource(file);
-        Sprite sp = CreateSprieFromTex(tex, border);
-        return sp;
-    }
-    static public Sprite CreateSprieFromTex(Texture2D tex)
-    {
-        Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        return sp;
-    }
-
-    static public Sprite CreateSprieFromTex(Texture2D tex, Vector4 border)
-    {
-        Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.Tight, border);
-        return sp;
-    }
-
-    static public Sprite CreateSprieFromAsset(string file)
-    {
-        Texture2D tex = LoadFromAsset(file);
-        Sprite sp = CreateSprieFromTex(tex);
-        return sp;
     }
 
 }

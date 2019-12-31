@@ -46,7 +46,7 @@ public class UIWordBar : UIWordContentBase, IUIWordItemDelegate
     /// </summary>
     void Awake()
     {
-        spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/wordbar_item_bg");
+        spriteBg = TextureUtil.CreateSpriteFromResource("App/UI/Common/wordbar_item_bg");
         // colorNormal = GameRes.main.colorGameText;
     }
 
@@ -150,7 +150,7 @@ public class UIWordBar : UIWordContentBase, IUIWordItemDelegate
         }
     }
 
-    public override bool CheckAllFill()
+    public bool CheckAllFill()
     {
         // bool ret = false;
         // if (wordNumCur >= wordNumMax)

@@ -65,13 +65,11 @@ public class FileUtil : MonoBehaviour
         }
         return null;
     }
-
-
     /* 
-   ios下边的目录可以使用FIle.Read 直接读取，
-   但是StreamAsseting目录文件流只能使用myStream = File.OpenRead(myPath); 来读。原因是FileMode.Open有读写权限 而StreamAsseting只有读的权限 
-   所以 用FIle.Open会出错:Access to the path "/..Raw/4.page" is denied.
-*/
+        ios下边的目录可以使用FIle.Read 直接读取，
+        但是StreamAsseting目录文件流只能使用myStream = File.OpenRead(myPath); 来读。原因是FileMode.Open有读写权限 而StreamAsseting只有读的权限 
+        所以 用FIle.Open会出错:Access to the path "/..Raw/4.page" is denied.
+    */
     static public byte[] ReadDataAssetIos(string filePath)
     {
         FileStream fs = File.OpenRead(filePath);

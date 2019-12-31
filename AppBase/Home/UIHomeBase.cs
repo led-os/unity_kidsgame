@@ -74,14 +74,21 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
 
     public void Awake()
     {
-        UpdateBtnMusic(btnMusic);
-        UpdateBtnSound(btnSound);
+        Debug.Log(" UIHomeBase Awake");
+        UpdateBtns();
     }
 
     public void Start()
     {
         Common.UnityStartUpFinish();
     }
+
+    public void UpdateBtns()
+    {
+        UpdateBtnMusic(btnMusic);
+        UpdateBtnSound(btnSound);
+    }
+
 
     // Update is called once per frame
     public void UpdateBase()
@@ -248,21 +255,31 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
         bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
         if (btn != null)
         {
-            Image imageBg = btn.gameObject.GetComponent<UITypeButton>().imageBg;
-            TextureUtil.UpdateImageTexture(imageBg, ret ? AppRes.IMAGE_BtnMusicBgOn : AppRes.IMAGE_BtnMusicBgOff, false);
-            Image imageIcon = btn.gameObject.GetComponent<UITypeButton>().imageIcon;
-            TextureUtil.UpdateImageTexture(imageIcon, ret ? AppRes.IMAGE_BtnMusicIconOn : AppRes.IMAGE_BtnMusicIconOff, false);
+            UIImage imageBg = btn.gameObject.GetComponent<UIButton>().imageBg;
+            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"));
+
+            UIImage imageIcon = btn.gameObject.GetComponent<UIButton>().imageIcon;
+            imageIcon.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnMusicIcon") : ImageRes.main.GetImage("IMAGE_BtnMusicIcon"));
+
         }
     }
     static public void UpdateBtnSound(Button btn)
     {
         bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
+        Debug.Log(" UIHomeBase UpdateBtnSound ret=" + ret);
         if (btn != null)
         {
-            Image imageBg = btn.gameObject.GetComponent<UITypeButton>().imageBg;
-            TextureUtil.UpdateImageTexture(imageBg, ret ? AppRes.IMAGE_BtnSoundBgOn : AppRes.IMAGE_BtnSoundBgOff, false);
-            Image imageIcon = btn.gameObject.GetComponent<UITypeButton>().imageIcon;
-            TextureUtil.UpdateImageTexture(imageIcon, ret ? AppRes.IMAGE_BtnSoundIconOn : AppRes.IMAGE_BtnSoundIconOff, false);
+            UIImage imageBg = btn.gameObject.GetComponent<UIButton>().imageBg;
+            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"));
+
+            string pic = ret ? ImageRes.main.GetImage("IMAGE_BtnSoundIcon") : ImageRes.main.GetImage("IMAGE_BtnSoundIcon");
+            Debug.Log(" UIHomeBase UpdateBtnSound  imageIcon.UpdateImage pic=" + pic);
+            UIImage imageIcon = btn.gameObject.GetComponent<UIButton>().imageIcon;
+            imageIcon.UpdateImage(pic);
+        }
+        else
+        {
+            Debug.Log(" UIHomeBase btn is null ");
         }
     }
 

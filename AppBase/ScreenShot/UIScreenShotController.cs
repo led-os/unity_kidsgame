@@ -5,16 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ShotDeviceInfo
-{
-    public string name;
-    public int width;
-    public int height;
-    public bool isIconHd;
-    public SystemLanguage lan;
-    public bool isMain;
-    public int index;
-}
 
 public class UIScreenShotController : UIView
 {
@@ -24,65 +14,11 @@ public class UIScreenShotController : UIView
     public Text textScreen;
     public Button btnClear;
     RenderTexture renderTextureScreen;
-    IconConvert iconConvert;
-    //ipadpro
-    public const int SCREEN_WIDTH_IPADPRO = 2732;
-    public const int SCREEN_HEIGHT_IPADPRO = 2048;
-    public const string DEVICE_NAME_IPADPRO = "ipadpro";
-    //ipad
-    public const int SCREEN_WIDTH_IPAD = 2048;
-    public const int SCREEN_HEIGHT_IPAD = 1536;
-    public const string DEVICE_NAME_IPAD = "ipad";
 
-    //iphone
-    public const int SCREEN_WIDTH_IPHONE = 2208;
-    public const int SCREEN_HEIGHT_IPHONE = 1242;
-    public const string DEVICE_NAME_IPHONE = "iphone";
-
-    //1242x2688
-    //iPhone X Plus将配备6.5 英寸屏幕 分辨率1242x2688
-    public const int SCREEN_WIDTH_IPHONE_6_5 = 2688;
-    public const int SCREEN_HEIGHT_IPHONE_6_5 = 1242;
-    public const string DEVICE_NAME_IPHONE_6_5 = "iphone_6_5";
-
-    //1080p
-    public const int SCREEN_WIDTH_1080P = 1920;
-    public const int SCREEN_HEIGHT_1080P = 1080;
-    public const string DEVICE_NAME_1080P = "1080p";
-
-    //
-    public const int SCREEN_WIDTH_480P = 800;
-    public const int SCREEN_HEIGHT_480P = 480;
-    public const string DEVICE_NAME_480P = "480p";
-
-    //weibo
-    public const int SCREEN_WIDTH_WEIBO = 450;
-    public const int SCREEN_HEIGHT_WEIBO = 300;
-    public const string DEVICE_NAME_WEIBO = "weibo";
-
-    //ad
-    public const string DEVICE_NAME_AD = "ad";
-
-    //icon
-    public const string DEVICE_NAME_ICON = "icon";
-    public const int SCREEN_WIDTH_ICON = 1024;
-    public const int SCREEN_HEIGHT_ICON = 1024;
-
-    //copy right huawei
-    public const string DEVICE_NAME_COPY_RIGHT_HUAWEI = "copyright";
-    public const string DEVICE_NAME_COPY_RIGHT_HD_HUAWEI = "copyright_hd";
-    public const int SCREEN_WIDTH_COPY_RIGHT_HUAWEI = 750;
-    public const int SCREEN_HEIGHT_COPY_RIGHT_HUAWEI = 1334;
-
-
-    //pc
-    public const int WIDTH_SCREEN_PC = 1920;
-    public const int HEIGHT_SCREEN_PC = 1080;
 
     float screenDisplayWordWidth;
     float screenDisplayWordHeight;
 
-    List<SystemLanguage> listLanguage;
     List<ShotDeviceInfo> listDevice;
     ShotDeviceInfo deviceInfoNow;
     public int indexScreenShot;
@@ -121,14 +57,21 @@ public class UIScreenShotController : UIView
     /// </summary>
     void Awake()
     {
+        Debug.Log("UIScreenShotController Awake");
         GameManager.main.isLoadGameScreenShot = true;
-        iconConvert = IconConvert.main;//this.gameObject.AddComponent<IconConvert>();
         screenShotConfig = new ScreenShotConfig();
         //mainCam = Common.GetMainCamera();
         LevelManager.main.ParsePlaceList();
         LevelManager.main.ParseGuanka();
-        InitDevice();
+        listDevice = ScreenDeviceInfo.main.listDevice;
+        // InitDevice();
+        indexScreenShot = 0;
+        indexDevice = 0;
+        deviceInfoNow = listDevice[indexDevice];
         SetScreen(deviceInfoNow.width, deviceInfoNow.height);
+
+
+
     }
     // Use this for initialization
     void Start()
@@ -162,58 +105,7 @@ public class UIScreenShotController : UIView
         UpdateTitle();
         LayOutChild();
     }
-    public void InitDevice()
-    {
-        indexScreenShot = 0;
-        indexDevice = 0;
 
-        listLanguage = new List<SystemLanguage>();
-        listLanguage.Add(SystemLanguage.Chinese);
-        listLanguage.Add(SystemLanguage.English);
-
-        listDevice = new List<ShotDeviceInfo>();
-
-
-        {
-            // //ipadpro
-            CreateDevice(DEVICE_NAME_IPADPRO, SCREEN_WIDTH_IPADPRO, SCREEN_HEIGHT_IPADPRO, true
-            , true);
-
-            //iphone
-            CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
-
-            //iphone_6_5
-            CreateDevice(DEVICE_NAME_IPHONE_6_5, SCREEN_WIDTH_IPHONE_6_5, SCREEN_HEIGHT_IPHONE_6_5, true, true);
-
-            //  ipad
-            CreateDevice(DEVICE_NAME_IPAD, SCREEN_WIDTH_IPAD, SCREEN_HEIGHT_IPAD, true, false);
-
-            //  1080p
-            CreateDevice(DEVICE_NAME_1080P, SCREEN_WIDTH_1080P, SCREEN_HEIGHT_1080P, true, false);
-            //  480p
-            CreateDevice(DEVICE_NAME_480P, SCREEN_WIDTH_480P, SCREEN_HEIGHT_480P, true, true);
-
-
-            //   weibo
-            CreateDevice(DEVICE_NAME_WEIBO, SCREEN_WIDTH_WEIBO, SCREEN_HEIGHT_WEIBO, false, true);
-
-            //   copy right huawei
-            CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
-
-        }
-
-        {
-            // //ICON
-            CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
-            //adhome
-            CreateDevice(DEVICE_NAME_AD, 1024, 500, false, true);
-
-            CreateDevice(DEVICE_NAME_AD, 1080, 480, false, true);
-
-        }
-        deviceInfoNow = listDevice[0];
-
-    }
     void LayOutChild()
     {
         screenDisplayWordWidth = Common.ScreenToWorldWidth(mainCam, deviceInfoNow.width);
@@ -230,79 +122,8 @@ public class UIScreenShotController : UIView
 
         // }
     }
-    ShotDeviceInfo CreateDeviceItem(string name, int w, int h, SystemLanguage lan, bool isMain, bool isHd)
-    {
-        ShotDeviceInfo info = new ShotDeviceInfo();
-        info.width = w;
-        info.height = h;
-        info.lan = lan;
-        info.name = name;
-        info.isIconHd = isHd;
-        info.isMain = isMain;
-        info.index = listDevice.Count;
-        listDevice.Add(info);
-        return info;
-    }
-    void CreateDevice(string name, int w, int h, bool isBoth, bool isMain)
-    {
-        if (name == DEVICE_NAME_ICON)
-        {
-            {
-                //icon
-                ShotDeviceInfo info = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, false);
-
-            }
-
-            {
-                //iconhd
-                ShotDeviceInfo info = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
-            }
-            return;
-        }
 
 
-        if (name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
-        {
-            //copyright
-            ShotDeviceInfo info = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, false);
-            ShotDeviceInfo infohd = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
-            return;
-        }
-
-        if (name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI)
-        {
-            //copyright hd
-            //ShotDeviceInfo infohd = CreateDeviceItem(name, w, h, SystemLanguage.Chinese, isMain, true);
-            return;
-        }
-
-        if (isBoth)
-        {
-            foreach (SystemLanguage lan in listLanguage)
-            {
-                //竖屏
-                ShotDeviceInfo info = CreateDeviceItem(name, Mathf.Min(w, h), Mathf.Max(w, h), lan, isMain, false);
-
-            }
-
-            foreach (SystemLanguage lan in listLanguage)
-            {
-                //横屏
-                ShotDeviceInfo info = CreateDeviceItem(name, Mathf.Max(w, h), Mathf.Min(w, h), lan, isMain, false);
-            }
-        }
-        else
-        {
-            foreach (SystemLanguage lan in listLanguage)
-            {
-
-                ShotDeviceInfo info = CreateDeviceItem(name, w, h, lan, isMain, false);
-            }
-
-        }
-
-
-    }
     void UpdateTitle()
     {
         string strlan = GetLanguageNameKey();
@@ -322,8 +143,8 @@ public class UIScreenShotController : UIView
         if (Common.isWin)
         {
             //windows 超出屏幕不显示,需要適配屏幕大小
-            float scalex = WIDTH_SCREEN_PC * 1.0f / w;
-            float scaley = HEIGHT_SCREEN_PC * 1.0f / h;
+            float scalex = ScreenDeviceInfo.WIDTH_SCREEN_PC * 1.0f / w;
+            float scaley = ScreenDeviceInfo.HEIGHT_SCREEN_PC * 1.0f / h;
             float scale = Mathf.Min(scalex, scaley);
             w_new = (int)(w * scale);
             h_new = (int)(h * scale);
@@ -393,7 +214,7 @@ public class UIScreenShotController : UIView
     {
         string ret = deviceInfoNow.name;
 
-        if (deviceInfoNow.name == DEVICE_NAME_AD)
+        if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_AD)
         {
             ret = "AdHome";
         }
@@ -426,12 +247,12 @@ public class UIScreenShotController : UIView
         string strlan = GetLanguageNameKey();
 
 
-        if (deviceInfoNow.name == DEVICE_NAME_AD)
+        if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_AD)
         {
             ret = rootDir + "/" + info.name;
             ret += "/" + strlan;
         }
-        else if (deviceInfoNow.name == DEVICE_NAME_ICON)
+        else if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
             ret = rootDir + "/" + info.name;
             if (info.isIconHd)
@@ -439,7 +260,7 @@ public class UIScreenShotController : UIView
                 ret += "hd";
             }
         }
-        else if ((deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI) || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI))
+        else if ((deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI) || (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HD_HUAWEI))
         {
             ret = rootDir + "/" + info.name;
             if (info.isIconHd)
@@ -509,9 +330,9 @@ public class UIScreenShotController : UIView
         {
             return;
         }
-        if ((deviceInfoNow.name == DEVICE_NAME_ICON) || (deviceInfoNow.name == DEVICE_NAME_AD)
-         || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
-          || (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HD_HUAWEI)
+        if ((deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON) || (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_AD)
+         || (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI)
+          || (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HD_HUAWEI)
          )
         {
             totalScreenShot = 1;
@@ -777,14 +598,14 @@ public class UIScreenShotController : UIView
     public void OnClickBtnWeibo()
     {
         isClickNextPreDevice = true;
-        indexDevice = FindDeviceByName(DEVICE_NAME_WEIBO);
+        indexDevice = FindDeviceByName(ScreenDeviceInfo.DEVICE_NAME_WEIBO);
         GotoDevice(indexDevice);
 
     }
     public void OnClickBtnIcon()
     {
         isClickNextPreDevice = true;
-        indexDevice = FindDeviceByName(DEVICE_NAME_ICON);
+        indexDevice = FindDeviceByName(ScreenDeviceInfo.DEVICE_NAME_ICON);
         GotoDevice(indexDevice);
     }
 
@@ -794,8 +615,8 @@ public class UIScreenShotController : UIView
         indexDevice = 0;
         listDevice.Clear();
         {           //   copy right huawei
-            CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
-            //CreateDevice(DEVICE_NAME_COPY_RIGHT_HD_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+            ScreenDeviceInfo.main.CreateDevice(ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI, ScreenDeviceInfo.SCREEN_WIDTH_COPY_RIGHT_HUAWEI, ScreenDeviceInfo.SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+            //CreateDevice(ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HD_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
         }
         deviceInfoNow = listDevice[0];
 
@@ -803,15 +624,20 @@ public class UIScreenShotController : UIView
         Invoke("OnClickSaveAuto", 2f);
     }
 
-    public void OnClickBtnIconConVert()
+    public void OnClickBtnIconConvert()
     {
-        iconConvert.OnConvertAll();
+        ImageConvert.main.OnConvertIcon();
     }
 
     public void OnClickBtnPngConVert()
     {
-        Debug.Log("OnClickBtnPngConVert start");
+        Debug.Log("UIScreenShotController OnClickBtnPngConVert start");
         OnScreenShotImageConvert();
+    }
+
+    public void OnPngConVert()
+    {
+        Invoke("OnScreenShotImageConvert", 2f);
     }
 
 
@@ -1130,18 +956,18 @@ public class UIScreenShotController : UIView
         bool isSavePng24Bit = false;
 
         string filepath = GetSaveScreenShotFilePath(deviceInfoNow, false);
-        if (deviceInfoNow.name == DEVICE_NAME_AD)
+        if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_AD)
         {
             filepath = filedir + "/ad_home_" + deviceInfoNow.width + "x" + deviceInfoNow.height + ".png";
             isSavePng24Bit = true;
         }
-        if (deviceInfoNow.name == DEVICE_NAME_ICON)
+        if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
             filepath = filedir + "/icon.png";
             //没有alpha
             isSavePng24Bit = true;
         }
-        if (deviceInfoNow.name == DEVICE_NAME_COPY_RIGHT_HUAWEI)
+        if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI)
         {
             filepath = filedir + "/huawei.png";
         }
@@ -1180,7 +1006,7 @@ public class UIScreenShotController : UIView
             texSave = TextureUtil.ConvertSize(texSave, deviceInfoNow.width, deviceInfoNow.height, texSave.format);
         }
         bool isSaveFile = true;
-        //if (deviceInfoNow.name == DEVICE_NAME_ICON)
+        //if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
             if (FileUtil.FileIsExist(filepath))
             {
@@ -1198,7 +1024,7 @@ public class UIScreenShotController : UIView
         //ScreenCapture.CaptureScreenshot(filepath);
 
         //保存圆角的android  icon
-        // if (deviceInfoNow.name == DEVICE_NAME_ICON)
+        // if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         // {
         //     filepath = filedir + "/icon_android.png";
         //     Texture2D texTmp = RoundRectTexture(screenShot);

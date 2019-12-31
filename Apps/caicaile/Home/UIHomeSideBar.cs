@@ -20,6 +20,7 @@ public class UIHomeSideBar : UIView
     public Button btnNoAd;
     public void Awake()
     {
+        base.Awake();
         if (!AppVersion.appCheckHasFinished)
         {
             btnMore.gameObject.SetActive(false);
@@ -41,29 +42,33 @@ public class UIHomeSideBar : UIView
         {
             btnNoAd.gameObject.SetActive(Config.main.isHaveRemoveAd);
         }
-
+        UpdateBtns();
     }
 
     // Use this for initialization
-    void Start()
+    public void Start()
     {
+        base.Start();
         LayOut();
 
     }
 
+    public void UpdateBtns()
+    {
+        UpdateBtnMusic();
+        UpdateBtnSound();
+    }
 
 
     public override void LayOut()
     {
-
+        base.LayOut();
     }
-
 
     public void UpdateBtnMusic()
     {
         UIHomeBase.UpdateBtnMusic(btnMusic);
     }
-
     public void UpdateBtnSound()
     {
         UIHomeBase.UpdateBtnSound(btnSound);

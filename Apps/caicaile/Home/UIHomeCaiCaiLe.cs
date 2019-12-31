@@ -10,12 +10,8 @@ public class UIHomeCaiCaiLe : UIHomeBase
     bool isActionFinish;
     public LayOutGrid layoutBtnSide;
     public LayOutGrid layoutBtn;
-    public AnimateButton btnPlay;
+    public AnimateButton btnPlay;    
     public GameObject objLogo;
-
-    UIBgHome uiBgHomePrefab;
-    UIBgHome uiBgHome;
-
     //public ActionHomeBtn actionBtnLearn;
     public void Awake()
     {
@@ -24,7 +20,7 @@ public class UIHomeCaiCaiLe : UIHomeBase
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_HOME_BG);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
-        TextName.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_TITLE);
+        TextName.color = GameRes.main.colorTitle;
         timeAction = 0.3f;
         isActionFinish = false;
 
@@ -32,44 +28,28 @@ public class UIHomeCaiCaiLe : UIHomeBase
 
 
         // actionBtnLearn.ptNormal = layoutBtn.GetItemPostion(0, 0);
-        LoadPrefab();
-        UpdateBtnMusic(btnMusic);
-        UpdateBtnSound(btnSound);
+        LoadPrefab(); 
 
-
+ 
         if (Config.main.APP_FOR_KIDS)
         {
-            objLogo.gameObject.SetActive(false);
+            objLogo.gameObject.SetActive(false); 
         }
         else
         {
             objLogo.gameObject.SetActive(false);
             //imageBgName.gameObject.SetActive(false);
         }
-
-
-
+      
 
         UpdateLayoutBtn();
     }
 
     // Use this for initialization
-    public void Start()
+    void Start()
     {
-        base.Start();
         isActionFinish = false;
         RunActionImageName();
-
-        // if (uiBgHomePrefab != null)
-        // {
-        //     uiBgHome = (UIBgHome)GameObject.Instantiate(uiBgHomePrefab);
-        //     uiBgHome.transform.SetParent(this.transform);
-        //     uiBgHome.transform.SetAsFirstSibling();
-        //     uiBgHome.transform.localScale = new Vector3(1f, 1f, 1f);
-        //     UIViewController.ClonePrefabRectTransform(uiBgHomePrefab.gameObject, uiBgHome.gameObject);
-
-        // }
-
         //   actionBtnLearn.RunAction();
         LayOut();
 
@@ -95,14 +75,6 @@ public class UIHomeCaiCaiLe : UIHomeBase
             z = -1f;
             AppSceneBase.main.AddObjToMainWorld(obj);
             obj.transform.localPosition = new Vector3(x, y, z);
-        }
-
-        {
-            GameObject obj = PrefabCache.main.Load("App/Prefab/Bg/UIBgHome");
-            if (obj != null)
-            {
-                uiBgHomePrefab = obj.GetComponent<UIBgHome>();
-            }
         }
 
     }
@@ -314,4 +286,20 @@ public class UIHomeCaiCaiLe : UIHomeBase
         }
     }
 
+    public void OnClickBtnLearn()
+    {
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            navi.Push(LearnViewController.main);
+        }
+    }
+    public void OnClickBtnAddLove()
+    {
+        if (this.controller != null)
+        {
+            NaviViewController navi = this.controller.naviController;
+            navi.Push(LoveViewController.main);
+        }
+    }
 }

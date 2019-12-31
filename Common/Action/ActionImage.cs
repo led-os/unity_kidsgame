@@ -34,7 +34,7 @@ public class ActionImage : ActionBase
             if ((rd != null) && (tex != null))
             {
                 //  Debug.Log("UpdateImage:index=" + index + " update sprite");
-                rd.sprite = LoadTexture.CreateSprieFromTex(tex);
+                rd.sprite = TextureUtil.CreateSpriteFromTex(tex);
             }
 
             if ((rd == null) && (tex != null))
@@ -43,7 +43,7 @@ public class ActionImage : ActionBase
                 if (image != null)
                 {
                     //image
-                    image.sprite = LoadTexture.CreateSprieFromTex(tex);
+                    image.sprite = TextureUtil.CreateSpriteFromTex(tex);
                 }
                 else
                 {

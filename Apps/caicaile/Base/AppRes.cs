@@ -39,19 +39,11 @@ public class AppRes
     public const string PREFAB_SETTING = "AppCommon/Prefab/Setting/UISettingController";
     public const string PREFAB_MOREAPP_CELL_ITEM = "AppCommon/Prefab/MoreApp/UIMoreAppCellItem";
 
-    //image 
-    public const string IMAGE_BtnMusicBgOn = "App/UI/Common/Button/BtnBg";
-    public const string IMAGE_BtnMusicBgOff = "App/UI/Common/Button/BtnBgGrey";
-
-    public const string IMAGE_BtnMusicIconOn = "App/UI/Common/Button/BtnIconMusic";
-    public const string IMAGE_BtnMusicIconOff = "App/UI/Common/Button/BtnIconMusic";
-
-
-    public const string IMAGE_BtnSoundBgOn = IMAGE_BtnMusicBgOn;
-    public const string IMAGE_BtnSoundBgOff = IMAGE_BtnMusicBgOff;
-
-    public const string IMAGE_BtnSoundIconOn = "App/UI/Common/Button/BtnIconSound";
-    public const string IMAGE_BtnSoundIconOff = "App/UI/Common/Button/BtnIconSound";
+    //image
+    public const string IMAGE_BtnMusicOn = "App/UI/Home/BtnMusicOn";
+    public const string IMAGE_BtnMusicOff = "App/UI/Home/BtnMusicOff";
+    public const string IMAGE_BtnSoundOn = "App/UI/Home/BtnSoundOn";
+    public const string IMAGE_BtnSoundOff = "App/UI/Home/BtnSoundOff";
 
     public const string IMAGE_UIVIEWALERT_BG_BOARD = "App/UI/Setting/SettingCellBgBlue";
     static public Vector4 borderUIViewAlertBgBoard = new Vector4(18f, 18f, 18f, 18f);

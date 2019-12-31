@@ -9,7 +9,7 @@ using Moonma.AdKit.AdConfig;
 public class UIPlaceController : UIPlaceBase, ITableViewDataSource
 {
     public Button btnBack;
-    public Text textTitle;
+    public UIText textTitle;
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
@@ -30,6 +30,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     /// </summary>
     void Awake()
     {
+        //textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_LevelTitle, Color.white);
         LoadPrefab();
         switch (Common.appType)
         {
@@ -42,7 +43,9 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             case AppType.PAINT:
                 heightCell = 400;
                 break;
-
+            case AppType.WORDCONNECT:
+                heightCell = 360;
+                break;
             default:
                 //
                 heightCell = 512;
@@ -92,7 +95,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             oneCellNum++;
         }
 
-        heightCell = (int)(sizeCanvas.x / oneCellNum); 
+        heightCell = (int)(sizeCanvas.x / oneCellNum);
 
         int total = listItem.Count;
         totalItem = total;

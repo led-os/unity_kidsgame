@@ -16,4 +16,5 @@ public class AppType
 
 
     //minigame
+    public const string WORDCONNECT = "WordCollect";
 }

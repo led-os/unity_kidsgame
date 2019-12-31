@@ -20,23 +20,82 @@ public class UIKitEditor : Editor
 
     }
 
-    [MenuItem(KEY_MENU_GameObject_UI + "/UITypeButton", false, 4)]
-    static void CreateTypeButton()
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIView", false, 4)]
+    static void CreateUIView()
     {
-        // GameObject obj = new GameObject("UITypeButton");
-        // UITypeButton ui = obj.AddComponent<UITypeButton>();
-
         var selectedObj = Selection.activeObject as GameObject;
         if (selectedObj != null)
         {
-            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIButton/UITypeButton");
+            GameObject obj = new GameObject("UIView");
             if (obj != null)
             {
-                UITypeButton uiPrefab = obj.GetComponent<UITypeButton>();
-                UITypeButton ui = (UITypeButton)GameObject.Instantiate(uiPrefab);
+                UIView ui = obj.AddComponent<UIView>();
                 ui.transform.SetParent(selectedObj.transform);
                 Selection.activeGameObject = ui.gameObject;
-                ui.transform.localScale = new Vector3(1f,1f,1f);
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = obj.AddComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
+
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIButton", false, 4)]
+    static void CreateUIButton()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIButton/UIButton");
+            if (obj != null)
+            {
+                UIButton uiPrefab = obj.GetComponent<UIButton>();
+                UIButton ui = (UIButton)GameObject.Instantiate(uiPrefab);
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = ui.GetComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
+
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIImage", false, 4)]
+    static void CreateUIImage()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIImage/UIImage");
+            if (obj != null)
+            {
+                UIImage uiPrefab = obj.GetComponent<UIImage>();
+                UIImage ui = (UIImage)GameObject.Instantiate(uiPrefab);
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = ui.GetComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
+
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIText", false, 4)]
+    static void CreateUIText()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIText/UIText");
+            if (obj != null)
+            {
+                UIText uiPrefab = obj.GetComponent<UIText>();
+                UIText ui = (UIText)GameObject.Instantiate(uiPrefab);
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
                 RectTransform rctran = ui.GetComponent<RectTransform>();
                 rctran.anchoredPosition = Vector2.zero;
             }

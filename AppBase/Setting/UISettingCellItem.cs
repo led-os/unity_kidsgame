@@ -65,11 +65,11 @@ public class UISettingCellItem : UICellItemBase
         Image img = btnSwitch.GetComponent<Image>();
         if (isSel)
         {
-            img.sprite = LoadTexture.CreateSprieFromTex(TextureCache.main.Load(IMAGE_BTN_SWITCH_SEL));
+            img.sprite = TextureUtil.CreateSpriteFromTex(TextureCache.main.Load(IMAGE_BTN_SWITCH_SEL));
         }
         else
         {
-            img.sprite = LoadTexture.CreateSprieFromTex(TextureCache.main.Load(IMAGE_BTN_SWITCH_UNSEL));
+            img.sprite = TextureUtil.CreateSpriteFromTex(TextureCache.main.Load(IMAGE_BTN_SWITCH_UNSEL));
         }
     }
     public void CellSwitchDidClick()

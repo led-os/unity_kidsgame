@@ -17,11 +17,27 @@ public class LayOutBase : MonoBehaviour
         RIGHT_TO_LEFT,
     }
 
+
+    public enum Align
+    {
+        UP = 0,
+        DOWN,
+        LEFT,
+        RIGHT,
+        CENTER
+    }
+
+
     public DispLayVertical dispLayVertical;
     public DispLayHorizontal dispLayHorizontal;
     public bool enableLayout = true;
     public bool enableHide = true;//是否过虑Hide
     public Vector2 space = Vector2.zero;
+
+    protected TextAnchor childAlignment;
+    public Align align=Align.CENTER;
+
+
     public virtual void LayOut()
     {
 

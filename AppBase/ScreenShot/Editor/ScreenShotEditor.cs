@@ -23,7 +23,19 @@ public class ScreenShotEditor : Editor
     [MenuItem(KEY_MENU_GameObject_UI + "/ConverIcon", false, 4)]
     static void OnConverIcon()
     {
-        IconConvert.main.OnConvertAll();
+        ImageConvert.main.OnConvertIcon();
+    }
+
+
+    [MenuItem(KEY_MENU_GameObject_UI + "/ConvertBg", false, 4)]
+    static void OnConvertBg()
+    {
+        ImageConvert.main.OnConvertBg();
+    }
+    [MenuItem(KEY_MENU_GameObject_UI + "/ConvertScreenShot", false, 4)]
+    static void OnConvertScreenShot()
+    {
+        ImageConvert.main.OnConvertScreenShot();
     }
 
     [MenuItem(KEY_MENU_GameObject_UI + "/CopyRight", false, 4)]

@@ -69,6 +69,7 @@ public class PopUpManager : MonoBehaviour
 
         //popup.GetComponent<Popup>().parentScene = this;
 
+        AppSceneBase.main.listPopup.Add(popup.GetComponent<UIViewPop>());
 
 
         if (onOpened != null)
@@ -84,17 +85,6 @@ public class PopUpManager : MonoBehaviour
     {
 
     }
-    /// <summary>
-    /// Closes the topmost popup.
-    /// </summary>
-    public void CloseCurrentPopup()
-    {
-        var currentPopup = currentPopups.Peek();
-        if (currentPopup != null)
-        {
-            currentPopup.GetComponent<UIViewPop>().Close();
-        }
-    }
 
     /// <summary>
     /// Closes the topmost popup.
@@ -105,6 +95,11 @@ public class PopUpManager : MonoBehaviour
         if (topmostPopup == null)
         {
             return;
+        }
+        int len = AppSceneBase.main.listPopup.Count;
+        if (len > 0)
+        {
+            AppSceneBase.main.listPopup.RemoveAt(len - 1);
         }
 
         var topmostPanel = currentPanels.Pop();

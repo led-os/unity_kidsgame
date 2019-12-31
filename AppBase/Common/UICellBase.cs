@@ -16,6 +16,7 @@ public class UICellBase : TableViewCell
     {
         listItem = new List<UICellItemBase>();
     }
+
     public void UpdateItem(List<object> list)
     {
         Debug.Log("UICellBase UpdateItem count=" + listItem.Count);

@@ -226,7 +226,7 @@ public class UIHomeTopBar : UIView
 
     public void OnClickBtnLearn()
     {
-        // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
+       // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
     }
 

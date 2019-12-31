@@ -31,7 +31,7 @@ public class PayCellItem : MonoBehaviour
         textItem.text = info.title;
         Texture2D tex = LoadTexture.LoadFromResource(info.pic);
 
-        imageItem.sprite = LoadTexture.CreateSprieFromTex(tex);
+        imageItem.sprite = TextureUtil.CreateSpriteFromTex(tex);
 
         RectTransform rctran = imageItem.GetComponent<RectTransform>();
         float w = imageItem.sprite.texture.width;//rectTransform.rect.width;

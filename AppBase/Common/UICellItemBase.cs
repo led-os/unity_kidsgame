@@ -17,7 +17,7 @@ public class UICellItemBase : UIView
     /// </summary>
     void Awake()
     {
- 
+
     }
     // Use this for initialization
     void Start()
@@ -30,6 +30,11 @@ public class UICellItemBase : UIView
     void Update()
     {
 
+    }
+
+    public virtual int GetCellHeight()
+    {
+        return 0;
     }
     public virtual void UpdateItem(List<object> list)
     {

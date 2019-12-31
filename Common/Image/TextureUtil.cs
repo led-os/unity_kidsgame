@@ -17,6 +17,39 @@ public class TextureUtil : MonoBehaviour
 
 
     public OnTextureHttpRequestFinishedDelegate callbackHttp { get; set; }
+
+    static public Sprite CreateSpriteFromResource(string file)
+    {
+        Texture2D tex = LoadTexture.LoadFromResource(file);
+        Sprite sp = CreateSpriteFromTex(tex);
+        return sp;
+    }
+
+    static public Sprite CreateSpriteFromResource(string file, Vector4 border)
+    {
+        Texture2D tex = LoadTexture.LoadFromResource(file);
+        Sprite sp = CreateSpriteFromTex(tex, border);
+        return sp;
+    }
+    static public Sprite CreateSpriteFromTex(Texture2D tex)
+    {
+        Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        return sp;
+    }
+
+    static public Sprite CreateSpriteFromTex(Texture2D tex, Vector4 border)
+    {
+        Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.Tight, border);
+        return sp;
+    }
+
+    static public Sprite CreateSpriteFromAsset(string file)
+    {
+        Texture2D tex = LoadTexture.LoadFromAsset(file);
+        Sprite sp = CreateSpriteFromTex(tex);
+        return sp;
+    }
+
     static public Rect GetRectNotAlpha(Texture2D tex)
     {
         int fillXLeft = tex.width;
@@ -171,7 +204,7 @@ public class TextureUtil : MonoBehaviour
         SpriteRenderer rd = obj.GetComponent<SpriteRenderer>();
         if (rd != null)
         {
-            rd.sprite = LoadTexture.CreateSprieFromTex(tex);
+            rd.sprite = CreateSpriteFromTex(tex);
         }
 
     }
@@ -198,7 +231,7 @@ public class TextureUtil : MonoBehaviour
         {
             TextureCache.main.AddCache(filepath, tex);
             SpriteRenderer render = objSprite.GetComponent<SpriteRenderer>();
-            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+            render.sprite = CreateSpriteFromTex(tex);
 
         }
         if (!isLocal)
@@ -217,7 +250,7 @@ public class TextureUtil : MonoBehaviour
             TextureCache.main.AddCache(filepath, tex);
             if (isAutoUpdateImage)
             {
-                imageHttp.sprite = LoadTexture.CreateSprieFromTex(tex);
+                imageHttp.sprite = CreateSpriteFromTex(tex);
             }
 
 
@@ -305,7 +338,7 @@ public class TextureUtil : MonoBehaviour
             RectTransform rctranOrigin = image.GetComponent<RectTransform>();
             Vector2 offsetMin = rctranOrigin.offsetMin;
             Vector2 offsetMax = rctranOrigin.offsetMax;
-            Sprite sp = LoadTexture.CreateSprieFromTex(tex, border);
+            Sprite sp = CreateSpriteFromTex(tex, border);
             image.sprite = sp;
             if (isUpdateSize)
             {

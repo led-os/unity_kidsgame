@@ -33,7 +33,7 @@ public class UIShop : UIView, ITableViewDataSource
     //public GameObject objTableViewTemplate;
     public Image imageBg;
     public Image imageBar;
-    public Text textTitle;
+    public UIText textTitle;
     public Text textAd;
 
     public TableView tableView;
@@ -60,7 +60,7 @@ public class UIShop : UIView, ITableViewDataSource
         LoadPrefab();
         heightCell = 256;
         IAP.main.SetObjectInfo(this.gameObject.name, "IAPCallBack");
-
+        //textTitle.color = ColorConfig.main.GetColor(GameRes.KEY_COLOR_LevelTitle, Color.white);
 
         InitAd();
         //bg 
@@ -172,8 +172,8 @@ public class UIShop : UIView, ITableViewDataSource
     void Start()
     {
         {
-            string str = Language.main.GetString(AppString.STR_SHOP);
-            textTitle.text = str;
+            string str = textTitle.text;//Language.main.GetString(AppString.STR_SHOP);
+                                        // textTitle.text = str;
             int fontsize = textTitle.fontSize;
             float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
             RectTransform rctran = imageBar.transform as RectTransform;

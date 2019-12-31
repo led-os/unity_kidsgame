@@ -13,16 +13,17 @@ public class UIHomeCenterBar : UIView
     public Button btnAdVideo;
     public Button btnAddLove;
 
-
-    public UIViewController controllerHome;
     void Awake()
     {
-        controllerHome = HomeViewController.main;
         if (!Config.main.APP_FOR_KIDS)
         {
             btnLearn.gameObject.SetActive(false);
+            // btnAddLove.gameObject.SetActive(false);
         }
-
+        if (Common.appKeyName == GameRes.GAME_Image)
+        {
+            btnAddLove.gameObject.SetActive(false);
+        }
         if (btnAdVideo != null)
         {
             btnAdVideo.gameObject.SetActive(true);
@@ -38,27 +39,6 @@ public class UIHomeCenterBar : UIView
                     btnAdVideo.gameObject.SetActive(false);
                 }
             }
-        }
-
-        if (Config.main.APP_FOR_KIDS)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
-        else
-        {
-        }
-
-        if (Common.appKeyName == GameRes.GAME_Image)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
-        if (Common.appKeyName == GameRes.GAME_RIDDLE)
-        {
-            btnAddLove.gameObject.SetActive(false);
-        }
-        if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
-        {
-            btnAddLove.gameObject.SetActive(false);
         }
 
     }
@@ -82,9 +62,9 @@ public class UIHomeCenterBar : UIView
     public void OnClickBtnLearn()
     {
 
-        if (controllerHome != null)
+        if (this.controller != null)
         {
-            NaviViewController navi = controllerHome.naviController;
+            NaviViewController navi = this.controller.naviController;
             //  navi.Push(LearnViewController.main);
 
         }
@@ -96,10 +76,11 @@ public class UIHomeCenterBar : UIView
     }
     public void OnClickBtnAddLove()
     {
-        if (controllerHome != null)
+
+        if (this.controller != null)
         {
-            NaviViewController navi = controllerHome.naviController;
-            navi.Push(LoveViewController.main);
+            NaviViewController navi = this.controller.naviController;
+            //  navi.Push(SettingViewController.main);
         }
     }
 }

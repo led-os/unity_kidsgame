@@ -123,6 +123,7 @@ public class UIGameBase : UIView
     {
         UpdateLanguage();
         AdKitCommon.main.callbackFinish = OnAdKitFinish;
+        AppSceneBase.main.ClearMainWorld();
     }
     public virtual void UpdatePlaceLevel(int level)
     {

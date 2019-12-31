@@ -35,7 +35,7 @@ public class CaiCaiLeItemInfo : ItemInfo
     public string head;
     public string end;
     public string tips;
-    
+    public string gameType;
 
     public List<PoemContentInfo> listPoemContent;
 
@@ -125,13 +125,14 @@ public class GameLevelParse : LevelParseBase
 
         listGuanka = new List<object>();
 
-        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
-        if (infoPlace.game == GameRes.GAME_TYPE_CONNECT)
+        if (Common.appKeyName == GameRes.GAME_IdiomConnect)
         {
             return ParseGuankaIdiomConnect();
         }
 
         int idx = LevelManager.main.placeLevel;
+
+        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
         string filepath = Common.GAME_RES_DIR + "/guanka/guanka_list_place" + idx + ".json";
         if (!FileUtil.FileIsExistAsset(filepath))
         {
@@ -187,31 +188,36 @@ public class GameLevelParse : LevelParseBase
                 info.tips = (string)item["tips"];
                 info.type = (string)item["type"];
             }
-            info.gameType = infoPlace.game;
-            // else if (Common.appKeyName == GameRes.GAME_POEM)
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_TEXT;
-            // }
-            // else if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_IMAGE_TEXT;
-            // }
-            // else if (Common.appKeyName == GameRes.GAME_RIDDLE)
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_TEXT;
-            // }
-            // else if (Common.appKeyName == GameRes.GAME_IdiomConnect)
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_CONNECT;
-            // }
-            // else if (Common.appKeyName == GameRes.GAME_Image)
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_IMAGE;
-            // }
-            // else
-            // {
-            //     info.gameType = GameRes.GAME_TYPE_TEXT;
-            // }
+
+
+            if (Common.appKeyName == GameRes.GAME_IDIOM)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE;
+            }
+            else if (Common.appKeyName == GameRes.GAME_POEM)
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_XIEHOUYU)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_RIDDLE)
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_IdiomConnect)
+            {
+                info.gameType = GameRes.GAME_TYPE_CONNECT;
+            }
+            else if (Common.appKeyName == GameRes.GAME_Image)
+            {
+                info.gameType = GameRes.GAME_TYPE_IMAGE;
+            }
+            else
+            {
+                info.gameType = GameRes.GAME_TYPE_TEXT;
+            }
 
 
             listGuanka.Add(info);
@@ -244,8 +250,7 @@ public class GameLevelParse : LevelParseBase
         //JsonData items = root["items"];
         for (int i = 0; i < count; i++)
         {
-            // JsonData item = root[(i + 1).ToString()];
-            JsonData item = root[i];
+            JsonData item = root[(i + 1).ToString()];
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
             JsonData word = item["word"];
             info.listWord = new List<string>();
@@ -361,34 +366,29 @@ public class GameLevelParse : LevelParseBase
 
     public void ParseIdiomItem(CaiCaiLeItemInfo info)
     {
-        IdiomItemInfo infoIdiom = IdiomDB.main.GetItemByTitle(info.id);
-        info.title = infoIdiom.title;
-        info.album = infoIdiom.album;
-        info.translation = infoIdiom.translation;
-        info.pinyin = infoIdiom.pronunciation;
-        // string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
-        // Debug.Log("ParseIdiomItem filepath=" + filepath);
-        // if (!FileUtil.FileIsExistAsset(filepath))
-        // {
-        //     filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
-        //     if (!FileUtil.FileIsExistAsset(filepath))
-        //     {
-        //         Debug.Log("ParseIdiomItem filepath is not exist");
-        //         return;
-        //     }
-        // }
-        // if (!Common.BlankString(info.translation))
-        // {
-        //     return;
-        // }
+        string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
+        Debug.Log("ParseIdiomItem filepath=" + filepath);
+        if (!FileUtil.FileIsExistAsset(filepath))
+        {
+            filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
+            if (!FileUtil.FileIsExistAsset(filepath))
+            {
+                Debug.Log("ParseIdiomItem filepath is not exist");
+                return;
+            }
+        }
+        if (!Common.BlankString(info.translation))
+        {
+            return;
+        }
         //
         //FILE_PATH
-        // string json = FileUtil.ReadStringAsset(filepath);
-        // JsonData root = JsonMapper.ToObject(json);
-        // info.title = (string)root["title"];
-        // info.album = (string)root["album"];
-        // info.translation = (string)root["translation"];
-        // info.pinyin = (string)root["pinyin"];
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        info.title = (string)root["title"];
+        info.album = (string)root["album"];
+        info.translation = (string)root["translation"];
+        info.pinyin = (string)root["pinyin"];
     }
 
     //诗词

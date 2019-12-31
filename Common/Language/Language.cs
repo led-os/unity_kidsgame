@@ -84,7 +84,7 @@ public class Language
         ltLocalization = new LTLocalization();
         ltLocalization.Init(data);
     }
-    public void SetLanguage(SystemLanguage lan)
+    public void SetLanguage(SystemLanguage lan, bool isUpdateUI = false)
     {
         // Init();
         ltLocalization.SetLanguage(lan);
@@ -101,6 +101,11 @@ public class Language
             _appCommon.ltLocalization.SetLanguage(lan);
         }
 
+        //更新ui
+        if (isUpdateUI)
+        {
+            AppSceneBase.main.UpdateLanguage();
+        }
     }
 
     public bool IsChinese()

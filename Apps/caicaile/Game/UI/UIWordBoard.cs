@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,7 +31,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
 
     void Awake()
     {
-        spriteBg = LoadTexture.CreateSprieFromResource("App/UI/Common/word");
+        spriteBg = TextureUtil.CreateSpriteFromResource("App/UI/Common/word");
         InitItem();
     }
     // Use this for initialization
@@ -58,8 +58,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         {
             foreach (UIWordItem item in listItem)
             {
-                //Destroy会导致莫名其妙的异常闪退@moon
-                DestroyImmediate(item.gameObject);
+                Destroy(item.gameObject);
             }
             listItem.Clear();
         }
@@ -76,8 +75,8 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             item.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             item.UpdateTitle(word);
             item.imageBg.sprite = spriteBg;
-            item.SetWordColor(ColorConfig.main.GetColor(GameRes.KEY_COLOR_BoardTitle));
-            //item.SetFontSize(80);
+            item.SetWordColor(GameRes.main.colorBoardTitle);
+            item.SetFontSize(64);
             listItem.Add(item);
         }
     }
@@ -114,8 +113,6 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
         }
 
         int idx = 0;
-        //ok
-        // return;
 
         for (int i = 0; i < strBoard.Length; i++)
         {
@@ -126,6 +123,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
                 continue;
             }
             UIWordItem item = listItem[idx] as UIWordItem;
+
             item.UpdateTitle(word);
             idx++;
         }

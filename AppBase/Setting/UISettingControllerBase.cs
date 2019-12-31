@@ -163,7 +163,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     {
         int tag = PlayerPrefs.GetInt(AppString.STR_KEY_LANGUAGE);
         SystemLanguage lan = (SystemLanguage)tag;
-        Language.main.SetLanguage(lan);
+        Language.main.SetLanguage(lan,true);
 
         {
             string str = Language.main.GetString(AppString.STR_SETTING);

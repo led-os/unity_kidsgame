@@ -201,7 +201,7 @@ public class UIHomeAppCenter : UIView
                 btn.GetComponent<Image>().color = Color.white;
                 Texture2D tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);
                 tex.LoadImage(data);
-                btn.GetComponent<Image>().sprite = LoadTexture.CreateSprieFromTex(RoundRectTexture(tex));
+                btn.GetComponent<Image>().sprite = TextureUtil.CreateSpriteFromTex(RoundRectTexture(tex));
 
             }
         }

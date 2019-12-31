@@ -456,6 +456,7 @@ MonoBehaviour:
   tickUpdateCur: 0
   tickUpdateStep: 0
   imageBg: {fileID: 0}
+  listPopup: []
   canvasMain: {fileID: 2041948832}
   lightMain: {fileID: 801014285}
   canvasCamera: {fileID: 0}

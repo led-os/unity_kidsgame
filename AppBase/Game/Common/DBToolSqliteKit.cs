@@ -115,7 +115,6 @@ public class DBToolSqliteKit
         }
 
         query += "')";
-        Debug.Log("InsertInto="+query);
 
         return ExecuteQuery(query,true);
 

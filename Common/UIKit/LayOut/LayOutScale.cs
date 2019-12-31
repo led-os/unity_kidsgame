@@ -109,6 +109,8 @@ public class LayOutScale : LayOutBase
     {
 
         float x, y, w = 0, h = 0;
+        RectTransform rctranParent = this.transform.parent as RectTransform;
+        RectTransform rctran = this.transform as RectTransform;
         SpriteRenderer rd = obj.GetComponent<SpriteRenderer>();
         if (rd != null)
         {
@@ -117,6 +119,7 @@ public class LayOutScale : LayOutBase
         }
         else
         {
+            //image
             RawImage rawimage = obj.GetComponent<RawImage>();
             if (rawimage != null)
             {
@@ -143,12 +146,18 @@ public class LayOutScale : LayOutBase
                     w = image.sprite.texture.width;
                     h = image.sprite.texture.height;
                 }
+                else
+                {
+                    //empty gameobject
+                    w = rctran.rect.width;
+                    h = rctran.rect.height;
+                }
             }
         }
-        RectTransform rctran = this.transform.parent as RectTransform;
 
-        var w_parent = rctran.rect.width;
-        var h_parent = rctran.rect.height;
+
+        var w_parent = rctranParent.rect.width;
+        var h_parent = rctranParent.rect.height;
         w_parent -= (this.offsetMin.x + this.offsetMax.x);
         h_parent -= (this.offsetMin.y + this.offsetMax.y);
 
