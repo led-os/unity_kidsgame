@@ -58,6 +58,9 @@ public class GameLevelParse : LevelParseBase
     public string strWordEnglish = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
+
+    LevelParseBase levelParse;
+
     static private GameLevelParse _main = null;
     public static GameLevelParse main
     {
@@ -117,6 +120,29 @@ public class GameLevelParse : LevelParseBase
     public override int ParseGuanka()
     {
         int count = 0;
+        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
+        if (infoPlace.gameType == GameRes.GAME_TYPE_IMAGE)
+        {
+            levelParse = LevelParseIdiom.main;
+        }
+        if (infoPlace.gameType == GameRes.GAME_TYPE_CONNECT)
+        {
+            levelParse = LevelParseIdiomConnect.main;
+        }
+
+        if (levelParse != null)
+        {
+            levelParse.ParseGuanka();
+            listGuanka = levelParse.listGuanka;
+        }
+        count = listGuanka.Count;
+        ParseWord3500();
+        return count;
+    }
+
+    public int ParseGuankaOld()
+    {
+        int count = 0;
 
         if ((listGuanka != null) && (listGuanka.Count != 0))
         {
@@ -152,6 +178,11 @@ public class GameLevelParse : LevelParseBase
             JsonData item = items[i];
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
             info.id = JsonUtil.JsonGetString(item, "id", "");
+            info.title = JsonUtil.JsonGetString(item, "title", "");
+            info.pinyin = JsonUtil.JsonGetString(item, "pronunciation", "");
+            info.translation = JsonUtil.JsonGetString(item, "translation", "");
+            info.album = JsonUtil.JsonGetString(item, "album", "");
+
             //string str = "aa";// = languageGame.GetString(info.id);
             //Debug.Log(i + ":ParseGame:" + str);
             info.pic = Common.GAME_RES_DIR + "/image/" + strPlace + "/" + info.id + ".png";
@@ -366,29 +397,29 @@ public class GameLevelParse : LevelParseBase
 
     public void ParseIdiomItem(CaiCaiLeItemInfo info)
     {
-        string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
-        Debug.Log("ParseIdiomItem filepath=" + filepath);
-        if (!FileUtil.FileIsExistAsset(filepath))
-        {
-            filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
-            if (!FileUtil.FileIsExistAsset(filepath))
-            {
-                Debug.Log("ParseIdiomItem filepath is not exist");
-                return;
-            }
-        }
-        if (!Common.BlankString(info.translation))
-        {
-            return;
-        }
+        // string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
+        // Debug.Log("ParseIdiomItem filepath=" + filepath);
+        // if (!FileUtil.FileIsExistAsset(filepath))
+        // {
+        //     filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
+        //     if (!FileUtil.FileIsExistAsset(filepath))
+        //     {
+        //         Debug.Log("ParseIdiomItem filepath is not exist");
+        //         return;
+        //     }
+        // }
+        // if (!Common.BlankString(info.translation))
+        // {
+        //     return;
+        // }
         //
         //FILE_PATH
-        string json = FileUtil.ReadStringAsset(filepath);
-        JsonData root = JsonMapper.ToObject(json);
-        info.title = (string)root["title"];
-        info.album = (string)root["album"];
-        info.translation = (string)root["translation"];
-        info.pinyin = (string)root["pinyin"];
+        // string json = FileUtil.ReadStringAsset(filepath);
+        // JsonData root = JsonMapper.ToObject(json);
+        // info.title = (string)root["title"];
+        // info.album = (string)root["album"];
+        // info.translation = (string)root["translation"];
+        // info.pinyin = (string)root["pinyin"];
     }
 
     //诗词

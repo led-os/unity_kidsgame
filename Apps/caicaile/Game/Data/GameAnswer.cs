@@ -41,7 +41,7 @@ public class GameAnswer
         if ((info.gameType == GameRes.GAME_TYPE_IMAGE) || (info.gameType == GameRes.GAME_TYPE_IMAGE_TEXT))
         {
             //str = UIGameCaiCaiLe.languageWord.GetString(info.id);
-            str = info.id;
+            str = info.title;
             //歇后语
             if ((!Common.BlankString(info.head)) && (!Common.BlankString(info.end)))
             {

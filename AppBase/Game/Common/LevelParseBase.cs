@@ -96,7 +96,7 @@ public class LevelParseBase
             {
                 info.pic = filepath + ".jpg";
             }
-            info.game = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
+            info.gameType = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
             info.type = JsonUtil.JsonGetString(item, "type", PLACE_ITEM_TYPE_NONE);
             info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
             info.icon = info.pic;
