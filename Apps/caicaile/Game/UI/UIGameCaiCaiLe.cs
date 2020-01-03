@@ -611,6 +611,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     }
     public void OnGameWinFinish(UIWordBar bar, bool isFail)
     {
+        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
         //show game win
         if (isFail)
         {
@@ -632,16 +633,22 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                 gameBase.SetGameItemStatus(info, GameBase.GAME_STATUS_FINISH);
             }
 
-            if (Common.appKeyName == GameRes.GAME_IdiomConnect)
+            string strPrefab = "";
+            switch (infoPlace.id)
             {
-                PopUpManager.main.Show<UIGameWinIdiomConnect>("App/Prefab/Game/UIGameWin");
-            }
-            else
-            {
-                PopUpManager.main.Show<UIGameWin>("App/Prefab/Game/UIGameWin");
-            }
+                case GameRes.GAME_IdiomConnect:
+                    {
+                        strPrefab = "App/Prefab/Game/UIGameWinIdiomConnect";
+                    }
+                    break;
 
-
+                default:
+                    {
+                        strPrefab = "App/Prefab/Game/UIGameWin";
+                        break;
+                    }
+            }
+            PopUpManager.main.Show<UIGameWinBase>(strPrefab);
         }
 
     }

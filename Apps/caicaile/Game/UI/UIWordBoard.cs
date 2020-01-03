@@ -75,7 +75,7 @@ public class UIWordBoard : UIView, IUIWordItemDelegate
             item.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             item.UpdateTitle(word);
             item.imageBg.sprite = spriteBg;
-            item.SetWordColor(GameRes.main.colorBoardTitle);
+            item.SetWordColor(ColorConfig.main.GetColor("BoardTitle"));
             item.SetFontSize(64);
             listItem.Add(item);
         }

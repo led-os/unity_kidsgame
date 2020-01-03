@@ -31,7 +31,7 @@ public class UILoveCellItem : UICellItemBase
     public override void UpdateItem(List<object> list)
     {
         infoItem = list[index] as CaiCaiLeItemInfo;
-        GameLevelParse.main.ParseIdiomItem(infoItem);
+        GameLevelParse.main.ParseItem(infoItem);
         UpdateInfo(infoItem);
 
     }

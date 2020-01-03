@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System.IO;
 using System.Text;
 
-public class LevelParseIdiom : LevelParseBase
+public class LevelParseIdiom : GameLevelParseBase
 { 
     static private LevelParseIdiom _main = null;
     public static LevelParseIdiom main
@@ -109,7 +109,7 @@ public class LevelParseIdiom : LevelParseBase
 
 
  
-    public void ParseItem(CaiCaiLeItemInfo info)
+    public override void ParseItem(CaiCaiLeItemInfo info)
     {
 
         

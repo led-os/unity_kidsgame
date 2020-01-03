@@ -34,25 +34,29 @@ public class UIHomeTopBar : UIView
         {
             btnNoAd.gameObject.SetActive(Config.main.isHaveRemoveAd);
         }
-        if (!AppVersion.appCheckHasFinished)
+        if (btnMore != null)
         {
-            btnMore.gameObject.SetActive(false);
-        }
-        if (Common.isAndroid)
-        {
-            if ((Config.main.channel == Source.HUAWEI) || (Config.main.channel == Source.GP))
+            if (!AppVersion.appCheckHasFinished)
             {
-                //华为市场不显示
                 btnMore.gameObject.SetActive(false);
             }
-        }
-        if (Common.isWinUWP)
-        {
-            btnMore.gameObject.SetActive(false);
-        }
-        if (Application.isEditor)
-        {
-            btnMore.gameObject.SetActive(true);
+            if (Common.isAndroid)
+            {
+                if ((Config.main.channel == Source.HUAWEI) || (Config.main.channel == Source.GP))
+                {
+                    //华为市场不显示
+                    btnMore.gameObject.SetActive(false);
+                }
+            }
+            if (Common.isWinUWP)
+            {
+                btnMore.gameObject.SetActive(false);
+            }
+            if (Application.isEditor)
+            {
+                btnMore.gameObject.SetActive(true);
+            }
+
         }
         if (btnAdVideo != null)
         {
@@ -226,7 +230,7 @@ public class UIHomeTopBar : UIView
 
     public void OnClickBtnLearn()
     {
-       // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
+        // LearnViewController.main.Show(AppSceneBase.main.rootViewController, null);
 
     }
 

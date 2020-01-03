@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 
 
-public class LevelParseIdiomConnect : LevelParseBase
+public class LevelParseIdiomConnect : GameLevelParseBase
 {
     static private LevelParseIdiomConnect _main = null;
     public static LevelParseIdiomConnect main
@@ -99,6 +99,15 @@ public class LevelParseIdiomConnect : LevelParseBase
         return count;
     }
 
+    public override void ParseItem(CaiCaiLeItemInfo info)
+    {
+        IdiomItemInfo idiom = IdiomDB.main.GetItemByTitle(info.title);
+        info.title = idiom.title;
+        info.album = idiom.album;
+        info.translation = idiom.translation;
+        info.pinyin = idiom.pronunciation;
+
+    }
 
 
 }

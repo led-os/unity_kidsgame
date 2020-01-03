@@ -187,7 +187,7 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
     public void UpdateItem(CaiCaiLeItemInfo info)
     {
         infoItem = info;
-        GameLevelParse.main.ParseIdiomItem(info);
+        GameLevelParse.main.ParseItem(info);
         string str = info.title;
         if (Common.BlankString(str))
         {

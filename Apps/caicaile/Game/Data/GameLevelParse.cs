@@ -59,7 +59,7 @@ public class GameLevelParse : LevelParseBase
     public string strWord3500;
     string[] arrayPunctuation = { "。", "？", "！", "，", "、", "；", "：" };
 
-    LevelParseBase levelParse;
+    GameLevelParseBase levelParse;
 
     static private GameLevelParse _main = null;
     public static GameLevelParse main
@@ -151,10 +151,6 @@ public class GameLevelParse : LevelParseBase
 
         listGuanka = new List<object>();
 
-        if (Common.appKeyName == GameRes.GAME_IdiomConnect)
-        {
-            return ParseGuankaIdiomConnect();
-        }
 
         int idx = LevelManager.main.placeLevel;
 
@@ -262,76 +258,6 @@ public class GameLevelParse : LevelParseBase
         return count;
     }
 
-    public int ParseGuankaIdiomConnect()
-    {
-        int count = 1;
-        int idx = LevelManager.main.placeLevel;
-
-        ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
-
-        string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
-        //string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
-        //
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(filepath);
-        JsonData root = JsonMapper.ToObject(json);
-        count = root.Count;
-        Debug.Log("ParseGuankaIdiomConnect count=" + count);
-        string strPlace = infoPlace.id;
-        //JsonData items = root["items"];
-        for (int i = 0; i < count; i++)
-        {
-            JsonData item = root[(i + 1).ToString()];
-            CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
-            JsonData word = item["word"];
-            info.listWord = new List<string>();
-            for (int j = 0; j < word.Count; j++)
-            {
-                string strword = (string)word[j];
-                info.listWord.Add(strword);
-            }
-
-            info.listIdiom = new List<string>();
-            JsonData idiom = item["idiom"];
-            for (int j = 0; j < idiom.Count; j++)
-            {
-                string strword = (string)idiom[j];
-                info.listIdiom.Add(strword);
-            }
-
-            info.listPosX = new List<int>();
-            JsonData posx = item["posx"];
-            for (int j = 0; j < posx.Count; j++)
-            {
-                int v = (int)posx[j];
-                info.listPosX.Add(v);
-            }
-
-            info.listPosY = new List<int>();
-            JsonData posy = item["posy"];
-            for (int j = 0; j < posy.Count; j++)
-            {
-                int v = (int)posy[j];
-                info.listPosY.Add(v);
-            }
-
-            info.listWordAnswer = new List<int>();
-            JsonData answer = item["answer"];
-            for (int j = 0; j < answer.Count; j++)
-            {
-                int v = (int)answer[j];
-                info.listWordAnswer.Add(v);
-            }
-
-
-            info.id = ((int)item["id"]).ToString();
-            info.gameType = GameRes.GAME_TYPE_CONNECT;
-            listGuanka.Add(info);
-        }
-
-        ParseWord3500();
-        return count;
-    }
 
     //过滤标点符号 点号：句号（ 。）、问号（ ？）、感叹号（ ！）、逗号（ ，）顿号（、）、分号（；）和冒号（：）。
     public string FilterPunctuation(string str)
@@ -381,46 +307,25 @@ public class GameLevelParse : LevelParseBase
     public void ParseItem(CaiCaiLeItemInfo info)
     {
 
-        if ((Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_IdiomConnect))
+        if (levelParse != null)
         {
-            ParseIdiomItem(info);
+            levelParse.ParseItem(info);
         }
-        if (Common.appKeyName == GameRes.GAME_POEM)
-        {
-            ParsePoemItem(info);
-        }
-        if (Common.appKeyName == GameRes.GAME_RIDDLE)
-        {
-            ParseRiddleItem(info);
-        }
-    }
 
-    public void ParseIdiomItem(CaiCaiLeItemInfo info)
-    {
-        // string filepath = Common.GAME_RES_DIR + "/guanka/data/" + LanguageManager.main.languageGame.GetString(info.id) + ".json";
-        // Debug.Log("ParseIdiomItem filepath=" + filepath);
-        // if (!FileUtil.FileIsExistAsset(filepath))
+        // if ((Common.appKeyName == GameRes.GAME_IDIOM) || (Common.appKeyName == GameRes.GAME_IdiomConnect))
         // {
-        //     filepath = Common.GAME_RES_DIR + "/guanka/data/" + info.id + ".json";
-        //     if (!FileUtil.FileIsExistAsset(filepath))
-        //     {
-        //         Debug.Log("ParseIdiomItem filepath is not exist");
-        //         return;
-        //     }
+        //     ParseIdiomItem(info);
         // }
-        // if (!Common.BlankString(info.translation))
+        // if (Common.appKeyName == GameRes.GAME_POEM)
         // {
-        //     return;
+        //     ParsePoemItem(info);
         // }
-        //
-        //FILE_PATH
-        // string json = FileUtil.ReadStringAsset(filepath);
-        // JsonData root = JsonMapper.ToObject(json);
-        // info.title = (string)root["title"];
-        // info.album = (string)root["album"];
-        // info.translation = (string)root["translation"];
-        // info.pinyin = (string)root["pinyin"];
+        // if (Common.appKeyName == GameRes.GAME_RIDDLE)
+        // {
+        //     ParseRiddleItem(info);
+        // }
     }
+ 
 
     //诗词
     public void ParsePoemItem(CaiCaiLeItemInfo info)
