@@ -6,17 +6,17 @@ using UnityEngine.UI;
 
 public class UIText : UIView
 {
-    public Text textTitle;
+    public Text title;
     public string text
     {
         get
         {
-            return textTitle.text;
+            return title.text;
         }
 
         set
         {
-            textTitle.text = value;
+            title.text = value;
             LayOut();
         }
 
@@ -26,12 +26,12 @@ public class UIText : UIView
     {
         get
         {
-            return textTitle.fontSize;
+            return title.fontSize;
         }
 
         set
         {
-            textTitle.fontSize = value;
+            title.fontSize = value;
             LayOut();
         }
 
@@ -40,12 +40,12 @@ public class UIText : UIView
     {
         get
         {
-            return textTitle.color;
+            return title.color;
         }
 
         set
         {
-            textTitle.color = value;
+            title.color = value;
         }
 
     }
@@ -79,7 +79,7 @@ public class UIText : UIView
 
     public void SetFontSize(int sz)
     {
-        textTitle.fontSize = sz;
+        title.fontSize = sz;
         LayOut();
     }
 

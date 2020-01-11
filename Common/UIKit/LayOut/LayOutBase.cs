@@ -24,7 +24,14 @@ public class LayOutBase : MonoBehaviour
         DOWN,
         LEFT,
         RIGHT,
-        CENTER
+        CENTER,
+        UP_LEFT,
+        UP_RIGHT,
+        DOWN_LEFT,
+        DOWN_RIGHT,
+        Horizontal,
+        Vertical,
+        SAME_POSTION,
     }
 
 
@@ -35,7 +42,7 @@ public class LayOutBase : MonoBehaviour
     public Vector2 space = Vector2.zero;
 
     protected TextAnchor childAlignment;
-    public Align align=Align.CENTER;
+    public Align align = Align.CENTER;
 
 
     public virtual void LayOut()

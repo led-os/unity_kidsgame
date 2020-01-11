@@ -53,9 +53,9 @@ public class BuildPlayer
         }
         if (target == "IOS")
         {
-            target_dir = applicationPath + "/OutPut";
-            target_name = app_name;
-            target_name = "iOS";
+            target_dir = applicationPath + "/OutPut/iOS";
+            // target_name = app_name;
+            target_name = PlayerSettings.productName + "_device";// "iOS";
             targetGroup = BuildTargetGroup.iOS;
             buildTarget = BuildTarget.iOS;
         }
@@ -83,7 +83,7 @@ public class BuildPlayer
         //==================这里是比较重要的东西=======================
 
         //开始Build场景，等待吧～
-        GenericBuild(SCENES, target_dir + "/" + target_name, targetGroup,buildTarget, BuildOptions.None);
+        GenericBuild(SCENES, target_dir + "/" + target_name, targetGroup, buildTarget, BuildOptions.None);
 
     }
 
@@ -100,7 +100,7 @@ public class BuildPlayer
 
     //https://docs.unity3d.com/ScriptReference/BuildPipeline.BuildPlayer.html
 
-    static void GenericBuild(string[] scenes, string target_dir, BuildTargetGroup targetGroup,BuildTarget build_target, BuildOptions build_options)
+    static void GenericBuild(string[] scenes, string target_dir, BuildTargetGroup targetGroup, BuildTarget build_target, BuildOptions build_options)
     {
 
         if (Directory.Exists(target_dir))
@@ -112,7 +112,7 @@ public class BuildPlayer
             Directory.CreateDirectory(target_dir);
         }
 
-        EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup,build_target);
+        EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, build_target);
         // string res =
         BuildReport report = BuildPipeline.BuildPlayer(scenes, target_dir, build_target, build_options);
 

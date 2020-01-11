@@ -98,24 +98,27 @@ public class GameViewController : PopViewController
     {
         string name = gameType;
         string strPrefab = dirRootPrefab + "/" + GetGamePrefabName();
-
+        if (!Common.isBlankString(GameManager.main.pathGamePrefab))
+        {
+            strPrefab = GameManager.main.pathGamePrefab;
+        }
         Debug.Log("strPrefab=" + strPrefab);
         //Resources.Load 文件可以不区分大小写字母
         GameObject obj = null;
-        if (!Device.isLandscape)
-        {
-            string strPrefab_shu = strPrefab + "_shu";
-            GameObject objShu = PrefabCache.main.Load(strPrefab_shu);
-            if (objShu != null)
-            {
-                obj = objShu;
-            }
-            else
-            {
-                obj = PrefabCache.main.Load(strPrefab);
-            }
-        }
-        else
+        // if (!Device.isLandscape)
+        // {
+        //     // string strPrefab_shu = strPrefab + "_shu";
+        //     // GameObject objShu = PrefabCache.main.Load(strPrefab_shu);
+        //     // if (objShu != null)
+        //     // {
+        //     //     obj = objShu;
+        //     // }
+        //     // else
+        //     {
+        //         obj = PrefabCache.main.Load(strPrefab);
+        //     }
+        // }
+        // else
         {
             obj = PrefabCache.main.Load(strPrefab);
         }

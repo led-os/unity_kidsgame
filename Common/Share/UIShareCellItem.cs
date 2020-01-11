@@ -19,8 +19,7 @@ public class UIShareCellItem : UICellItemBase
     {
         ItemInfo info = list[index] as ItemInfo;
         textItem.text = info.title;
-        textItem.color = AppRes.colorTitle;
-        Vector4 border = AppRes.borderCellSettingBg;
+        textItem.color = AppRes.colorTitle; 
         TextureUtil.UpdateImageTexture(imageItem, info.pic, true);
 
         RectTransform rctran = imageItem.GetComponent<RectTransform>();
@@ -33,7 +32,7 @@ public class UIShareCellItem : UICellItemBase
         float scalex = width / w;
         float scaley = (height - oft_y) / h;
         float scale = Mathf.Min(scalex, scaley);
-        Debug.Log(" rctranContent.RECT="+rctranContent.rect);
+        Debug.Log(" rctranContent.RECT="+rctranContent.rect+" width="+width+" height="+height+"w ="+w);
         imageItem.transform.localScale = new Vector3(scale, scale, 1.0f);
         float x = 0;
         float y = oft_y / 2;

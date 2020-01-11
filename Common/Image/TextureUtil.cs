@@ -340,15 +340,26 @@ public class TextureUtil : MonoBehaviour
             Vector2 offsetMax = rctranOrigin.offsetMax;
             Sprite sp = CreateSpriteFromTex(tex, border);
             image.sprite = sp;
+            if (border != Vector4.zero)
+            {
+                image.type = Image.Type.Sliced;
+            }
             if (isUpdateSize)
             {
                 RectTransform rctran = image.GetComponent<RectTransform>();
 
                 rctran.sizeDelta = new Vector2(tex.width, tex.height);
 
-                //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
-                rctran.offsetMin = offsetMin;
-                rctran.offsetMax = offsetMax;
+                if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
+                {
+
+                }
+                else
+                {
+                    //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                    rctran.offsetMin = offsetMin;
+                    rctran.offsetMax = offsetMax;
+                }
                 Debug.Log("rctranOrigin rctran.offsetMin=" + rctran.offsetMin + " rctran.offsetMax=" + rctran.offsetMax);
 
             }

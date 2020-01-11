@@ -43,7 +43,8 @@ public static class BuildiOSPlayer
         PBXProject pbxProj = new PBXProject();
         pbxProj.ReadFromFile(projPath);
 
-        string targetGuid = pbxProj.TargetGuidByName("Unity-iPhone");
+        //string targetGuid = pbxProj.TargetGuidByName("Unity-iPhone");
+        string targetGuid = pbxProj.GetUnityMainTargetGuid();
         //string debugConfig = pbxProj.BuildConfigByName(target, "Debug");
         //string releaseConfig = pbxProj.BuildConfigByName(target, "Release");
         //pbxProj.SetBuildProperty(targetGuid, "GCC_ENABLE_OBJC_EXCEPTIONS", "YES");

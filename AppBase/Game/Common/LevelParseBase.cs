@@ -104,6 +104,8 @@ public class LevelParseBase
             // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
             info.index = i;
 
+            GameManager.main.pathGamePrefab = JsonUtil.JsonGetString(item, "prefab", "");
+
             info.isAd = false;
             if (AppVersion.appCheckHasFinished && (!Common.noad))
             {

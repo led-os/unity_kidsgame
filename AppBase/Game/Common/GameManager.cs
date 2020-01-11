@@ -20,6 +20,8 @@ public class GameManager
 
     public bool isShowGameAdInsert;
 
+    public string pathGamePrefab;
+
     static private GameManager _main = null;
     public static GameManager main
     {
