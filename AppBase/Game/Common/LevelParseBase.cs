@@ -204,4 +204,8 @@ public class LevelParseBase
         }
 
     }
+
+    public virtual void ParseItem(ItemInfo info)
+    { 
+    }
 }
