@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class UIText : UIView
 {
     public Text title;
+    public bool isFitFontWidth;//和字串等宽
+    public float offsetW;
     public string text
     {
         get
@@ -86,6 +88,14 @@ public class UIText : UIView
     public override void LayOut()
     {
         base.LayOut();
+        if (isFitFontWidth)
+        {
+            float str_w = Common.GetStringLength(this.text, title.font.name, fontSize);
+            RectTransform rctran = this.transform as RectTransform;
+            Vector2 sizeDelta = rctran.sizeDelta;
+            sizeDelta.x = str_w + offsetW;
+            rctran.sizeDelta = sizeDelta;
+        }
     }
     public override void UpdateLanguage()
     {

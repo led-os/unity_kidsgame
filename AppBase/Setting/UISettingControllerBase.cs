@@ -28,7 +28,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     UICellBase cellPrefab;
     public GameObject objTableViewTemplate;
     public TableView tableView;
-    public Text textTitle;
+    public UIText textTitle;
     public UIImage imageBar;
     public Image imageBg;
     public int numRows;
@@ -46,17 +46,17 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
         LoadPrefab();
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);//IMAGE_SETTING_BG
         // 
-        {
-            string str = Language.main.GetString(AppString.STR_SETTING);
-            textTitle.text = str;
-            int fontsize = textTitle.fontSize;
-            float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
-            RectTransform rctran = imageBar.transform as RectTransform;
-            Vector2 sizeDelta = rctran.sizeDelta;
-            float oft = 0;
-            sizeDelta.x = str_w + fontsize + oft * 2;
-            rctran.sizeDelta = sizeDelta;
-        }
+        // {
+        //     string str = Language.main.GetString(AppString.STR_SETTING);
+        //    // textTitle.text = str;
+        //     int fontsize = textTitle.fontSize;
+        //     float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
+        //     RectTransform rctran = imageBar.transform as RectTransform;
+        //     Vector2 sizeDelta = rctran.sizeDelta;
+        //     float oft = 0;
+        //     sizeDelta.x = str_w + fontsize + oft * 2;
+        //     rctran.sizeDelta = sizeDelta;
+        // }
         listItem = new List<object>();
         UpdateItem();
         oneCellNum = 1;
@@ -163,7 +163,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     {
         int tag = PlayerPrefs.GetInt(AppString.STR_KEY_LANGUAGE);
         SystemLanguage lan = (SystemLanguage)tag;
-        Language.main.SetLanguage(lan,true);
+        Language.main.SetLanguage(lan, true);
 
         {
             string str = Language.main.GetString(AppString.STR_SETTING);

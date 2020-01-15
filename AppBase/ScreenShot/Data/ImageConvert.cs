@@ -290,8 +290,8 @@ public class ImageConvert
             Debug.Log("OnConvertBg pic=" + pic);
             Texture2D texImage = LoadTexture.LoadFromFile(pic);
 
-            int w_screen = ScreenDeviceInfo.SCREEN_WIDTH_IPHONE_6_5;
-            int h_screen = ScreenDeviceInfo.SCREEN_HEIGHT_IPHONE_6_5;
+            int w_screen = 2048;//ScreenDeviceInfo.SCREEN_WIDTH_IPHONE_6_5;
+            int h_screen = ScreenDeviceInfo.SCREEN_HEIGHT_IPHONE_6_5 * w_screen / ScreenDeviceInfo.SCREEN_WIDTH_IPHONE_6_5;//ScreenDeviceInfo.SCREEN_HEIGHT_IPHONE_6_5;
             int w, h;
             if (texImage.width < texImage.height)
             {

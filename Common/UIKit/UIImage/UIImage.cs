@@ -33,7 +33,14 @@ public class UIImage : UIView
 
     public void UpdateImage(string pic)
     {
-        TextureUtil.UpdateImageTexture(image, pic, true);
+        bool isBoard = ImageRes.main.IsHasBoard(keyImage);
+        Vector4 board = Vector4.zero;
+        if (isBoard)
+        {
+            board = ImageRes.main.GetImageBoard(keyImage);
+        }
+        TextureUtil.UpdateImageTexture(image, pic, true, board);
+
         LayOut();
     }
 

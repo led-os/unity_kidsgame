@@ -6,7 +6,7 @@ public class LayOutSize : LayOutBase
 {
     public float ratioW = 1f;
     public float ratioH = 1f;
-
+    public GameObject target;
 
     //左下角偏移量
     public Vector2 _offsetMin;
@@ -78,8 +78,8 @@ public class LayOutSize : LayOutBase
     public enum Type
     {
         MATCH_CONTENT = 0,//按内容设置
-        MATCH_PARENT,//与父窗口等大
-        MATCH_PARENT_RATIO,//按比例
+        MATCH_PARENT,//与父窗口等大或者按比例 
+        MATCH_TARGET,//与目标等大或者按比例 
     }
     void Awake()
     {
@@ -104,26 +104,34 @@ public class LayOutSize : LayOutBase
         RectTransform rctran = this.transform as RectTransform;
         var w_parent = rctranParent.rect.width;
         var h_parent = rctranParent.rect.height;
-
+        w = rctran.rect.width;
+        h = rctran.rect.height;
         switch (this.typeX)
         {
             case Type.MATCH_CONTENT:
                 {
-                    w = rctran.rect.width; 
-                    x = rctran.anchoredPosition.x; 
-                }
-                break;
-            case Type.MATCH_PARENT:
-                {
-                    w = w_parent; 
-                    x = rctran.anchoredPosition.x; 
+                    w = rctran.rect.width;
+                    x = rctran.anchoredPosition.x;
                 }
                 break;
 
-            case Type.MATCH_PARENT_RATIO:
+
+            case Type.MATCH_PARENT:
                 {
-                    w = w_parent * ratioW; 
-                    x = rctran.anchoredPosition.x; 
+                    w = w_parent * ratioW;
+                    x = rctran.anchoredPosition.x;
+                }
+                break;
+            case Type.MATCH_TARGET:
+                {
+                    if (this.target != null)
+                    {
+                        RectTransform rctranTarget = this.target.GetComponent<RectTransform>();
+                        Vector2 ptTarget = rctranTarget.anchoredPosition;//this.target.getPosition();
+                        w = rctranTarget.rect.width * ratioW;
+                        x = rctran.anchoredPosition.x;
+                    }
+
                 }
                 break;
 
@@ -133,22 +141,29 @@ public class LayOutSize : LayOutBase
         switch (this.typeY)
         {
             case Type.MATCH_CONTENT:
-                { 
-                    h = rctran.rect.height; 
-                    y = rctran.anchoredPosition.y;
-                }
-                break;
-            case Type.MATCH_PARENT:
-                { 
-                    h = h_parent; 
+                {
+                    h = rctran.rect.height;
                     y = rctran.anchoredPosition.y;
                 }
                 break;
 
-            case Type.MATCH_PARENT_RATIO:
-                { 
-                    h = h_parent * ratioH; 
+            case Type.MATCH_PARENT:
+                {
+                    h = h_parent * ratioH;
                     y = rctran.anchoredPosition.y;
+                }
+                break;
+
+            case Type.MATCH_TARGET:
+                {
+                    if (this.target != null)
+                    {
+                        RectTransform rctranTarget = this.target.GetComponent<RectTransform>();
+                        Vector2 ptTarget = rctranTarget.anchoredPosition;//this.target.getPosition();
+                        h = rctranTarget.rect.height * ratioH;
+                        y = rctran.anchoredPosition.y;
+                    }
+
                 }
                 break;
 

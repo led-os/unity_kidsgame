@@ -49,12 +49,17 @@ public class ImageRes
 
     //9宫格图片边框参数 (left,right,top,bottom)
     //cc.Vec4 (left,right,top,bottom)
-    Vector4 GetImageBoard(string key)
+    public Vector4 GetImageBoard(string key)
     {
         var str = JsonUtil.JsonGetString(rootJson, GetBoardKey(key), "");
         return String2Vec4(str);
     }
 
+
+    public bool IsHasBoard(string key)
+    {
+        return JsonUtil.ContainsKey(rootJson, GetBoardKey(key));
+    }
     public string GetImage(string key)
     {
         return JsonUtil.JsonGetString(rootJson, key, "");

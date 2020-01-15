@@ -145,16 +145,16 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
         }
 
-        {
-            string str = textTitle.text; 
-            int fontsize = textTitle.fontSize;
-            float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
-            RectTransform rctran = imageBar.transform as RectTransform;
-            Vector2 sizeDelta = rctran.sizeDelta;
-            float oft = 0;
-            sizeDelta.x = str_w + fontsize + oft * 2;
-            rctran.sizeDelta = sizeDelta; 
-        }
+        // {
+        //     string str = textTitle.text; 
+        //     int fontsize = textTitle.fontSize;
+        //     float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
+        //     RectTransform rctran = imageBar.transform as RectTransform;
+        //     Vector2 sizeDelta = rctran.sizeDelta;
+        //     float oft = 0;
+        //     sizeDelta.x = str_w + fontsize + oft * 2;
+        //     rctran.sizeDelta = sizeDelta; 
+        // }
 
     }
 
