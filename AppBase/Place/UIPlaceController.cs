@@ -13,7 +13,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
-    public Image imageBar;
+    public UIImage imageBar;
     public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
@@ -69,18 +69,6 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
         }
 
 
-        {
-            string str = Language.main.GetString(AppString.STR_PLACE);
-            textTitle.text = str;
-            int fontsize = textTitle.fontSize;
-            float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
-            RectTransform rctran = imageBar.transform as RectTransform;
-            Vector2 sizeDelta = rctran.sizeDelta;
-            float oft = 0;
-            sizeDelta.x = str_w + fontsize + oft * 2;
-            rctran.sizeDelta = sizeDelta;
-            //rctran.anchoredPosition = new Vector2(sizeCanvas.x / 2, rctran.anchoredPosition.y);
-        }
 
 
         // oneCellNum = 2;
@@ -157,6 +145,16 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
             imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
         }
 
+        {
+            string str = textTitle.text; 
+            int fontsize = textTitle.fontSize;
+            float str_w = Common.GetStringLength(str, AppString.STR_FONT_NAME, fontsize);
+            RectTransform rctran = imageBar.transform as RectTransform;
+            Vector2 sizeDelta = rctran.sizeDelta;
+            float oft = 0;
+            sizeDelta.x = str_w + fontsize + oft * 2;
+            rctran.sizeDelta = sizeDelta; 
+        }
 
     }
 

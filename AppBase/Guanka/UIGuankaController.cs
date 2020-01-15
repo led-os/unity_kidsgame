@@ -12,7 +12,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
-    public Image imageBar;
+    public UIImage imageBar;
     public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;

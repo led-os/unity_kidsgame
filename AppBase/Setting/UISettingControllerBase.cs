@@ -29,7 +29,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     public GameObject objTableViewTemplate;
     public TableView tableView;
     public Text textTitle;
-    public Image imageBar;
+    public UIImage imageBar;
     public Image imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
