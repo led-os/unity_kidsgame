@@ -7,9 +7,9 @@ public delegate void OnUINaviBarClickBackDelegate(UINaviBar bar);
 
 public class UINaviBar : UIView
 {
-    public Image imageBg;
-    public Text textTitle;
-    public Button btnBack;
+    public UIImage imageBg;
+    public UIText textTitle;
+    public UIButton btnBack;
     public OnUINaviBarClickBackDelegate callbackBackClick { get; set; }
 
     /// <summary>
@@ -30,9 +30,16 @@ public class UINaviBar : UIView
     {
 
     }
+
+    public void ShowTitle(bool isShow)
+    {
+        textTitle.gameObject.SetActive(isShow);
+    }
+
     public void UpdateTitle(string title)
     {
         textTitle.text = title;
+        textTitle.color = GetColorOfKey("NaviBarTitle");
     }
 
     public void HideBtnBack(bool isHide)
@@ -41,7 +48,7 @@ public class UINaviBar : UIView
     }
 
     public void OnClickBtnBack()
-    { 
+    {
         if (callbackBackClick != null)
         {
             callbackBackClick(this);

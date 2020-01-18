@@ -61,6 +61,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
         float w_total = item_w * col + (space.x * (col - 1));
         float h_total = item_h * row + (space.y * (row - 1));
 
+        x_left = -w_total / 2;
         if (childForceExpandWidth)
         {
             x_left = -w / 2;
@@ -84,7 +85,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
 
         x = x_left + item_w * c + item_w / 2 + space.x * c;
 
-
+        y_bottom = -h_total / 2;
         if (childForceExpandHeight)
         {
             y_bottom = -h / 2;
@@ -136,10 +137,21 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
                 continue;
             }
 
-            LayoutElement le = objtmp.GetComponent<LayoutElement>();
-            if (le != null && le.ignoreLayout)
             {
-                continue;
+                LayoutElement le = objtmp.GetComponent<LayoutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
+            }
+
+            {
+                LayOutElement le = objtmp.GetComponent<LayOutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
+
             }
 
             if (!enableHide)

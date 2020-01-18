@@ -14,7 +14,7 @@ public class LayoutUtil
             }
             return _main;
         }
-    } 
+    }
 
     //两个node之间的中心位置x
     public float GetBetweenCenterX(GameObject obj1, GameObject obj2)
@@ -132,11 +132,23 @@ public class LayoutUtil
                 }
             }
 
-            LayoutElement le = objtmp.GetComponent<LayoutElement>();
-            if (le != null && le.ignoreLayout)
             {
-                continue;
+                LayoutElement le = objtmp.GetComponent<LayoutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
             }
+
+            {
+                LayOutElement le = objtmp.GetComponent<LayOutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
+
+            }
+
 
             if (objtmp.transform.parent != parent.transform)
             {

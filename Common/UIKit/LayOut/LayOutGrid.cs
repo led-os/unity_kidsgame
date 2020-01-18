@@ -197,10 +197,21 @@ public class LayOutGrid : LayOutBase
                 continue;
             }
 
-            LayoutElement le = objtmp.GetComponent<LayoutElement>();
-            if (le != null && le.ignoreLayout)
             {
-                continue;
+                LayoutElement le = objtmp.GetComponent<LayoutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
+            }
+
+            {
+                LayOutElement le = objtmp.GetComponent<LayOutElement>();
+                if (le != null && le.ignoreLayout)
+                {
+                    continue;
+                }
+
             }
 
             if (!enableHide)

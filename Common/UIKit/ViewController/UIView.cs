@@ -171,18 +171,31 @@ public class UIView : MonoBehaviour
         Color ret = def;
         if (!Common.isBlankString(keyColor))
         {
-            ret = ColorConfig.main.GetColor(keyColor);
+            ret = GetColorOfKey(keyColor);
         }
         return ret;
     }
 
+    public Color GetColorOfKey(string key)
+    {
+        Color ret = Color.black;
+        if (!Common.isBlankString(key))
+        {
+            ret = ColorConfig.main.GetColor(key);
+        }
+        return ret;
+    }
 
     public string GetKeyText()
     {
+        return GetTextOfKey(keyText);
+    }
+    public string GetTextOfKey(string key)
+    {
         string ret = "";
-        if (!Common.isBlankString(keyText))
+        if (!Common.isBlankString(key))
         {
-            ret = Language.main.GetString(keyText);
+            ret = Language.main.GetString(key);
         }
         return ret;
     }

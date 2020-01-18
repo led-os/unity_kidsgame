@@ -6,7 +6,8 @@ public class TabBarItemInfo
 {
     public UIViewController controller;
     public string title;
-
+    public string pic;
+    public string keyColor;
 }
 
 public class TabBarViewController : UIViewController

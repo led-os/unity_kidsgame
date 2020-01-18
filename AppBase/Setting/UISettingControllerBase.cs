@@ -30,6 +30,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     public TableView tableView;
     public UIText textTitle;
     public UIImage imageBar;
+    public UIButton btnBack;
     public Image imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
@@ -70,6 +71,13 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     // Use this for initialization
     void Start()
     {
+        if (this.controller != null)
+        {
+            if (this.controller.naviController != null)
+            {
+                btnBack.gameObject.SetActive(false);
+            }
+        }
         LayOut();
     }
 

@@ -18,6 +18,29 @@ public class LayOutRelation : LayOutBase
             this.LayOut();
         }
     }
+
+    public Type _type;
+    public Type type
+    {
+        get
+        {
+            return _type;
+        }
+
+        set
+        {
+            _type = value;
+            LayOut();
+        }
+
+    }
+    public enum Type
+    {
+        NONE = 0,// 
+        PARENT,//相对父窗口 
+        TARGET,//相对目标 
+    }
+
     void Awake()
     {
         this.LayOut();
@@ -43,61 +66,80 @@ public class LayOutRelation : LayOutBase
         Vector2 pt = rctran.anchoredPosition;//this.transform.position;//getPosition
         x = pt.x;
         y = pt.y;
-
         w = rctran.rect.width;
         h = rctran.rect.height;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
 
-        if (this.target == null)
+        switch (this.type)
         {
-            //相对屏幕
-            if (this.align == LayOutBase.Align.LEFT)
-            {
-                x = -sizeCanvas.x / 2 + w / 2 + this.offset.x;
-            }
-            if (this.align == LayOutBase.Align.RIGHT)
-            {
-                x = sizeCanvas.x / 2 - w / 2 - this.offset.x;
-            }
-            if (this.align == LayOutBase.Align.UP)
-            {
-                y = sizeCanvas.y / 2 - h / 2 - this.offset.y;
-            }
-            if (this.align == LayOutBase.Align.DOWN)
-            {
-                y = -sizeCanvas.y / 2 + h / 2 + this.offset.y;
-            }
-        }
-        else
-        {
-            //相对目标
+            case Type.NONE:
+                {
 
-            RectTransform rctranTarget = this.target.GetComponent<RectTransform>();
-            Vector2 ptTarget = rctranTarget.anchoredPosition;//this.target.getPosition();
-                                                             //位于target的左边
-            if (this.align == LayOutBase.Align.LEFT)
-            {
-                x = ptTarget.x - rctranTarget.rect.width / 2 - w / 2 - this.offset.x;
-            }
-            if (this.align == LayOutBase.Align.RIGHT)
-            {
-                x = ptTarget.x + rctranTarget.rect.width / 2 + w / 2 + this.offset.x;
-            }
-            if (this.align == LayOutBase.Align.UP)
-            {
-                y = ptTarget.y + rctranTarget.rect.height / 2 + h / 2 + this.offset.y;
-            }
-            if (this.align == LayOutBase.Align.DOWN)
-            {
-                y = ptTarget.y - rctranTarget.rect.height / 2 - h / 2 - this.offset.y;
-            }
+                }
+                break;
 
-            //相同位置
-            if (this.align == LayOutBase.Align.SAME_POSTION)
-            {
-                x = ptTarget.x;
-                y = ptTarget.y;
-            }
+
+            case Type.PARENT:
+                {
+
+                    RectTransform rctranParent = this.transform.parent as RectTransform;
+                    float w_parent = rctranParent.rect.width;
+                    float h_parent = rctranParent.rect.height;
+                    if (this.align == LayOutBase.Align.LEFT)
+                    {
+                        x = -w_parent / 2 + w / 2 + this.offset.x;
+                    }
+                    if (this.align == LayOutBase.Align.RIGHT)
+                    {
+                        x = w_parent / 2 - w / 2 - this.offset.x;
+                    }
+                    if (this.align == LayOutBase.Align.UP)
+                    {
+                        y = h_parent / 2 - h / 2 - this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.DOWN)
+                    {
+                        y = -h_parent / 2 + h / 2 + this.offset.y;
+                    }
+                }
+                break;
+            case Type.TARGET:
+                {
+                    if (this.target == null)
+                    {
+                        break;
+                    }
+                    //相对目标
+
+                    RectTransform rctranTarget = this.target.GetComponent<RectTransform>();
+                    Vector2 ptTarget = rctranTarget.anchoredPosition;//this.target.getPosition();
+                                                                     //位于target的左边
+                    if (this.align == LayOutBase.Align.LEFT)
+                    {
+                        x = ptTarget.x - rctranTarget.rect.width / 2 - w / 2 - this.offset.x;
+                    }
+                    if (this.align == LayOutBase.Align.RIGHT)
+                    {
+                        x = ptTarget.x + rctranTarget.rect.width / 2 + w / 2 + this.offset.x;
+                    }
+                    if (this.align == LayOutBase.Align.UP)
+                    {
+                        y = ptTarget.y + rctranTarget.rect.height / 2 + h / 2 + this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.DOWN)
+                    {
+                        y = ptTarget.y - rctranTarget.rect.height / 2 - h / 2 - this.offset.y;
+                    }
+
+                    //相同位置
+                    if (this.align == LayOutBase.Align.SAME_POSTION)
+                    {
+                        x = ptTarget.x;
+                        y = ptTarget.y;
+                    }
+                }
+                break;
+
         }
 
         //this.node.setPosition(x, y);

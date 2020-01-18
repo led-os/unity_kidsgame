@@ -43,7 +43,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     // Use this for initialization
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
@@ -51,7 +51,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
     {
 
     }
-  
+
     public void Stop()
     {
         audioSource.Stop();
@@ -128,6 +128,7 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
             // uAudioUI.Stop();
             // uAudioUI.targetFilePath = url;
             // uAudioUI.Play(null);
+            StartCoroutine(PlayUrlEnumerator(url));
         }
 
     }

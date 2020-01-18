@@ -101,6 +101,10 @@ public class LayOutSize : LayOutBase
     {
         float x = 0, y = 0, w = 0, h = 0;
         RectTransform rctranParent = this.transform.parent as RectTransform;
+        if (rctranParent == null)
+        {
+            return;
+        }
         RectTransform rctran = this.transform as RectTransform;
         var w_parent = rctranParent.rect.width;
         var h_parent = rctranParent.rect.height;

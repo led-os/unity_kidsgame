@@ -14,21 +14,26 @@ public class UIImage : UIView
     public void Awake()
     {
         base.Awake();
-        var pic = this.GetKeyImage();
-        // var board = null;
-        // if (cc.ImageRes.main().ContainsBoard(this.keyImage))
-        // {
-        //     board = cc.ImageRes.main().GetImageBoardSync(this.keyImage);
-        // }
-        if (!Common.isBlankString(pic))
-        {
-            UpdateImage(pic);
-        }
+        UpdateImageByKey(keyImage);
     }
     // Use this for initialization
     public void Start()
     {
         base.Start();
+    }
+
+    public void UpdateImageByKey(string key)
+    {
+        string pic = "";
+        if (!Common.isBlankString(key))
+        {
+            pic = ImageRes.main.GetImage(key);
+        }
+
+        if (!Common.isBlankString(pic))
+        {
+            UpdateImage(pic);
+        }
     }
 
     public void UpdateImage(string pic)
@@ -39,8 +44,10 @@ public class UIImage : UIView
         {
             board = ImageRes.main.GetImageBoard(keyImage);
         }
-        TextureUtil.UpdateImageTexture(image, pic, true, board);
-
+        Texture2D tex = TextureCache.main.Load(pic);
+        TextureUtil.UpdateImageTexture(image, tex, true, board); 
+        RectTransform rctan = this.GetComponent<RectTransform>();
+        rctan.sizeDelta = new Vector2(tex.width, tex.height);
         LayOut();
     }
 

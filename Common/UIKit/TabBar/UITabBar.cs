@@ -7,10 +7,9 @@ public delegate void OnUITabBarClickDelegate(UITabBar bar,UITabBarItem item);
 
 public class UITabBar : UIView
 {
-    public Image imageBg;
+    public UIImage imageBg;
     UITabBarItem uiTabBarItem;
-    UITabBarItem uiTabBarItemPrefab;
-	public GameObject objLayoutItem;
+    UITabBarItem uiTabBarItemPrefab; 
     public OnUITabBarClickDelegate callbackClick { get; set; }
 
     /// <summary>
@@ -38,7 +37,7 @@ public class UITabBar : UIView
     public void CreateTabItem()
     { 
         uiTabBarItem = (UITabBarItem)GameObject.Instantiate(uiTabBarItemPrefab);
-        uiTabBarItem.transform.parent = objLayoutItem.transform;
+        uiTabBarItem.transform.parent = this.transform;
         uiTabBarItem.callbackClick = OnUITabBarItemClick;
         UIViewController.ClonePrefabRectTransform(uiTabBarItemPrefab.gameObject,uiTabBarItem.gameObject);
     }

@@ -136,7 +136,7 @@ public class ScreenDeviceInfo
 
         {
             // //ICON
-            CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
+            //  CreateDevice(DEVICE_NAME_ICON, SCREEN_WIDTH_ICON, SCREEN_HEIGHT_ICON, false, true);
             //adhome
             CreateDevice(DEVICE_NAME_AD, 1024, 500, false, true);
 

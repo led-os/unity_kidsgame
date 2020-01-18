@@ -145,7 +145,13 @@ public class NaviViewController : UIViewController
             uiNaviBar.gameObject.SetActive(!isHide);
         }
     }
-
+    public void ShowTitle(bool isShow)
+    {
+        if (uiNaviBar)
+        {
+            uiNaviBar.ShowTitle(isShow);
+        }
+    }
     public void OnUINaviBarClickBack(UINaviBar bar)
     {
         Pop();

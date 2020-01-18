@@ -41,6 +41,10 @@ public class SettingViewController : PopViewController
 
     public void CreateUI()
     {
+        if (this.naviController != null)
+        {
+            this.naviController.HideNavibar(true);
+        }
         uiSetting = (UISettingControllerBase)GameObject.Instantiate(uiSettingPrefab);
         uiSetting.SetController(this);
         UIViewController.ClonePrefabRectTransform(uiSettingPrefab.gameObject, uiSetting.gameObject);
