@@ -963,9 +963,9 @@ public class UIScreenShotController : UIView
         }
         if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
-            filepath = filedir + "/icon.png";
+            filepath = filedir + "/icon.jpg";//png
             //没有alpha
-            isSavePng24Bit = true;
+            //isSavePng24Bit = true;
         }
         if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_COPY_RIGHT_HUAWEI)
         {

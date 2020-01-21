@@ -352,7 +352,6 @@ public class TextureUtil : MonoBehaviour
 
                 if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
                 {
-
                 }
                 else
                 {
@@ -404,11 +403,31 @@ public class TextureUtil : MonoBehaviour
     {
         if (tex)
         {
+            RectTransform rctranOrigin = image.GetComponent<RectTransform>();
+            Vector2 offsetMin = rctranOrigin.offsetMin;
+            Vector2 offsetMax = rctranOrigin.offsetMax;
             image.texture = tex;
+            if (border != Vector4.zero)
+            {
+                // image.type = Image.Type.Sliced;
+            }
             if (isUpdateSize)
             {
-                RectTransform rctan = image.GetComponent<RectTransform>();
-                rctan.sizeDelta = new Vector2(tex.width, tex.height);
+                RectTransform rctran = image.GetComponent<RectTransform>();
+
+                rctran.sizeDelta = new Vector2(tex.width, tex.height);
+
+                if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
+                {
+                }
+                else
+                {
+                    //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                    rctran.offsetMin = offsetMin;
+                    rctran.offsetMax = offsetMax;
+                }
+                Debug.Log("rctranOrigin rctran.offsetMin=" + rctran.offsetMin + " rctran.offsetMax=" + rctran.offsetMax);
+
             }
 
         }

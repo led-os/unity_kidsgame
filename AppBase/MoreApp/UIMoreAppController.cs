@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIMoreAppController : UIView, ITableViewDataSource
 {
-    //微信小程序id:wx621ff1107207384c
+    //疯狂成语大会 微信小程序id:wx621ff1107207384c  chenyuanfang_moon@foxmail.com 密码 Qianlizhiwai1
 
     //public const string APPCENTER_HTTP_URL_HOME = "http://42.96.196.180/moonma/app_center/applist_home.json";
     public const string APPCENTER_HTTP_URL_HOME_KIDS_GAME = "https://6d6f-moonma-dbb297-1258816908.tcb.qcloud.la/Unity/app_center/applist_moreapp_kids.json?sign=03a98060722081f3f1eb4214765177b9&t=1561688618";
@@ -25,7 +25,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     public int numRows;
     private int numInstancesCreated = 0;
 
-    private MoreAppParser moreAppParser; 
+    private MoreAppParser moreAppParser;
 
     List<object> listItem;
     int oneCellNum;
@@ -42,7 +42,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
         TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
         StartParse();
         LoadPrefab();
-        heightCell = 512; 
+        heightCell = 512;
 
         oneCellNum = 1;
         if (Screen.width > Screen.height)
@@ -123,7 +123,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
 
     }
     public void OnClickBtnBack()
-    { 
+    {
         PopViewController pop = (PopViewController)this.controller;
         if (pop != null)
         {

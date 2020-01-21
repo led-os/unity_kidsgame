@@ -4,9 +4,9 @@ using Tacticsoft;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIImage : UIView
+public class UIRawImage : UIView
 {
-    public Image image;
+    public RawImage image;
 
 
     /// Awake is called when the script instance is being loaded.
@@ -49,7 +49,7 @@ public class UIImage : UIView
         Vector2 offsetMax = rctranOrigin.offsetMax;
 
         Texture2D tex = TextureCache.main.Load(pic);
-        TextureUtil.UpdateImageTexture(image, tex, true, board);
+        TextureUtil.UpdateRawImageTexture(image, tex, true, board);
         RectTransform rctan = this.GetComponent<RectTransform>();
         rctan.sizeDelta = new Vector2(tex.width, tex.height);
 

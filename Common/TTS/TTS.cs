@@ -35,9 +35,9 @@ public class TTS
 
         if (Common.isAndroid || Common.isiOS)
         {
-            TTSBasePlatformWrapper platformWrapper = TTSPlatformWrapper.platform;
-
-            platformWrapper.Speak(text);
+            //TTSBasePlatformWrapper platformWrapper = TTSPlatformWrapper.platform;
+            // platformWrapper.Speak(text);
+            SpeakWeb(text);
         }
         else
         {

@@ -7,8 +7,11 @@ using UnityEngine.UI;
 using System.IO;
 using Moonma.Share;
 using SimpleSQL;
-//笔画顺序查询网： https://bihua.51240.com/e68891__bihuachaxun/
-
+//笔画顺序查询网： http://bishun.shufaji.com/0x6211.html
+//https://github.com/chanind/hanzi-writer
+//https://github.com/chanind/hanzi-writer-data
+//https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/%E6%88%91.json
+//
 
 
 public class UIGameLearnWord : UIGameBase

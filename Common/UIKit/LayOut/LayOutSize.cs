@@ -80,6 +80,8 @@ public class LayOutSize : LayOutBase
         MATCH_CONTENT = 0,//按内容设置
         MATCH_PARENT,//与父窗口等大或者按比例 
         MATCH_TARGET,//与目标等大或者按比例 
+        MATCH_PARENT_MIN,
+        MATCH_PARENT_MAX,
     }
     void Awake()
     {
@@ -126,6 +128,18 @@ public class LayOutSize : LayOutBase
                     x = rctran.anchoredPosition.x;
                 }
                 break;
+            case Type.MATCH_PARENT_MIN:
+                {
+                    w = Mathf.Min(w_parent, h_parent) * ratioW;
+                    x = rctran.anchoredPosition.x;
+                }
+                break;
+            case Type.MATCH_PARENT_MAX:
+                {
+                    w = Mathf.Max(w_parent, h_parent) * ratioW;
+                    x = rctran.anchoredPosition.x;
+                }
+                break;
             case Type.MATCH_TARGET:
                 {
                     if (this.target != null)
@@ -157,7 +171,18 @@ public class LayOutSize : LayOutBase
                     y = rctran.anchoredPosition.y;
                 }
                 break;
-
+            case Type.MATCH_PARENT_MIN:
+                {
+                    h = Mathf.Min(w_parent, h_parent) * ratioH;
+                    y = rctran.anchoredPosition.y;
+                }
+                break;
+            case Type.MATCH_PARENT_MAX:
+                {
+                    h = Mathf.Max(w_parent, h_parent) * ratioH;
+                    y = rctran.anchoredPosition.y;
+                }
+                break;
             case Type.MATCH_TARGET:
                 {
                     if (this.target != null)

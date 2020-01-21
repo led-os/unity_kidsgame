@@ -82,6 +82,28 @@ public class UIKitEditor : Editor
 
     }
 
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIRawImage", false, 4)]
+    static void CreateUIRawImage()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIImage/UIRawImage");
+            if (obj != null)
+            {
+                UIRawImage uiPrefab = obj.GetComponent<UIRawImage>();
+                UIRawImage ui = (UIRawImage)GameObject.Instantiate(uiPrefab);
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = ui.GetComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
+
+
     [MenuItem(KEY_MENU_GameObject_UI + "/UIText", false, 4)]
     static void CreateUIText()
     {

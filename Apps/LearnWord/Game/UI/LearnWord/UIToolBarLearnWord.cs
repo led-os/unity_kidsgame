@@ -37,7 +37,18 @@ public class UIToolBarLearnWord : UIView
 
     public void OnClickBtnDemo()
     {
-        PopUpManager.main.Show<UIViewPop>("App/Prefab/Game/UIWordGif");
+        PopUpManager.main.Show<UIViewPop>("AppCommon/Prefab/Game/UIWordGif", popup =>
+     {
+         Debug.Log("UIViewAlert Open ");
+         UIWordGif ui = popup as UIWordGif;
+         WordItemInfo info = GameLevelParse.main.GetItemInfo();
+         ui.Updateitem(info);
+
+     }, popup =>
+     {
+
+
+     });
 
     }
     public void OnClickBtnWrite()

@@ -7,8 +7,8 @@ using Moonma.AdKit.AdConfig;
 
 public class UIWordList : UITableViewControllerBase, IUIInputBarDelegate
 {
-    public RawImage imageBg;
-    public UIInputBar uiInputBar; 
+    public UIRawImage imageBg;
+    public UIInputBar uiInputBar;
     public UIButton btnBack;
     public UIWordSearchResult uiWordSearchResult;
 
@@ -63,13 +63,13 @@ public class UIWordList : UITableViewControllerBase, IUIInputBarDelegate
         //  textPlaceHold.text = Language.main.GetString("STR_SEARCH");
         uiInputBar.iDelegate = this;
         uiWordSearchResult.gameObject.SetActive(false);
-        heightCell = 512;
+        heightCell = 320;
         oneCellNum = 4;
         LevelManager.main.ParseGuanka();
         listItem = GameLevelParse.main.listGuanka;
         //bg
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_PLACE_BG, true);//IMAGE_GAME_BG
-
+        //TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_PLACE_BG, true);//IMAGE_GAME_BG
+        this.type = Type.LIST;
 
     }
     public void Start()

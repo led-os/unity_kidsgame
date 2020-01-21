@@ -128,7 +128,10 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
             // uAudioUI.Stop();
             // uAudioUI.targetFilePath = url;
             // uAudioUI.Play(null);
-            StartCoroutine(PlayUrlEnumerator(url));
+            if (!Application.isEditor)
+            {
+                StartCoroutine(PlayUrlEnumerator(url));
+            }
         }
 
     }
@@ -164,4 +167,5 @@ public class AudioPlay : MonoBehaviour//, uAudio_backend.IAudioPlayer
             PlayAudioClip(clip);
         }
     }
+
 }
