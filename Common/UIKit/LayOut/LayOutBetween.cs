@@ -10,6 +10,29 @@ public class LayOutBetween : LayOutBase
 {
     public GameObject targetMain;
     public GameObject target2;
+
+    public enum Type
+    {
+        NONE = 0,// 
+        PARENT,//相对父窗口 
+        TARGET,//相对目标 
+    }
+
+    public Type _type;
+    public Type type
+    {
+        get
+        {
+            return _type;
+        }
+
+        set
+        {
+            _type = value;
+            LayOut();
+        }
+
+    }
     public Vector2 _offset;
     public Vector2 offset
     {
@@ -23,6 +46,9 @@ public class LayOutBetween : LayOutBase
             this.LayOut();
         }
     }
+
+
+
     void Awake()
     {
         this.LayOut();
@@ -53,25 +79,50 @@ public class LayOutBetween : LayOutBase
         x = pt.x;
         y = pt.y;
 
-        //左右
-        if (this.align == LayOutBase.Align.Horizontal)
+
+
+
+
+
+        switch (this.type)
         {
-            x = LayoutUtil.main.GetBetweenCenterX(this.targetMain, this.target2) + this.offset.x;
-        }
-        if (this.align == LayOutBase.Align.Vertical)
-        {
-            y = LayoutUtil.main.GetBetweenCenterY(this.targetMain, this.target2) + this.offset.y;
+            case Type.NONE:
+                {
+
+                }
+                break;
+
+
+            case Type.PARENT:
+                {
+                    //边界
+                    if ((this.align == LayOutBase.Align.LEFT) || (this.align == LayOutBase.Align.RIGHT))
+                    {
+                        x = LayoutUtil.main.GetBetweenParentCenter(this.targetMain, this.align) + this.offset.x;
+                    }
+                    if ((this.align == LayOutBase.Align.UP) || (this.align == LayOutBase.Align.DOWN))
+                    {
+                        y = LayoutUtil.main.GetBetweenParentCenter(this.targetMain, this.align) + this.offset.y;
+                    }
+                }
+                break;
+            case Type.TARGET:
+                {
+                    //左右
+                    if (this.align == LayOutBase.Align.Horizontal)
+                    {
+                        x = LayoutUtil.main.GetBetweenCenterX(this.targetMain, this.target2) + this.offset.x;
+                    }
+                    //上下
+                    if (this.align == LayOutBase.Align.Vertical)
+                    {
+                        y = LayoutUtil.main.GetBetweenCenterY(this.targetMain, this.target2) + this.offset.y;
+                    }
+                }
+                break;
+
         }
 
-        //屏幕边界
-        if ((this.align == LayOutBase.Align.LEFT) || (this.align == LayOutBase.Align.RIGHT))
-        {
-            x = LayoutUtil.main.GetBetweenScreenCenter(this.targetMain, this.align) + this.offset.x;
-        }
-        if ((this.align == LayOutBase.Align.UP) || (this.align == LayOutBase.Align.DOWN)) 
-        {
-            y = LayoutUtil.main.GetBetweenScreenCenter(this.targetMain, this.align) + this.offset.y;
-        }
         Debug.Log("LayOutBetween x=" + x + " y=" + y + " align=" + this.align);
         // this.node.setPosition(x, y);
         rctran.anchoredPosition = new Vector2(x, y);

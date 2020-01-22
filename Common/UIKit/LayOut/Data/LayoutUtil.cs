@@ -106,6 +106,50 @@ public class LayoutUtil
         return (v1 + v2) / 2;
     }
 
+    public float GetBetweenParentCenter(GameObject obj, LayOutBase.Align align)
+    {
+        float v1 = 0, v2 = 0;
+
+        RectTransform rctranParent = obj.transform.parent as RectTransform;
+        float w_parent = rctranParent.rect.width;
+        float h_parent = rctranParent.rect.height;
+        RectTransform rctran = obj.GetComponent<RectTransform>();
+        switch (align)
+        {
+            case LayOutBase.Align.LEFT:
+                {
+                    //左边界
+                    v1 = -w_parent / 2;
+                    v2 = rctran.anchoredPosition.x - rctran.rect.width / 2;
+                }
+                break;
+            case LayOutBase.Align.RIGHT:
+                {
+                    //右边界
+                    v1 = w_parent / 2;
+                    v2 = rctran.anchoredPosition.x + rctran.rect.width / 2;
+                }
+                break;
+            case LayOutBase.Align.UP:
+                {
+                    //上边界
+                    v1 = h_parent / 2;
+                    v2 = rctran.anchoredPosition.y + rctran.rect.height / 2;
+                }
+                break;
+            case LayOutBase.Align.DOWN:
+                {
+                    //下边界
+                    v1 = -h_parent / 2;
+                    v2 = rctran.anchoredPosition.y - rctran.rect.height / 2;
+                }
+                break;
+        }
+
+        return (v1 + v2) / 2;
+    }
+
+
 
     public int GetChildCount(GameObject parent, bool includeHide = true)
     {
