@@ -79,7 +79,32 @@ public class UIButton : UIView
     {
         base.LayOut();
 
-      
+        if (type == Type.IMAGE_TEXT)
+        {
+            if (textTitle.isFitFontWidth)
+            {
+                //自动适配大小
+                RectTransform rctranOrigin = this.GetComponent<RectTransform>();
+                Vector2 offsetMin = rctranOrigin.offsetMin;
+                Vector2 offsetMax = rctranOrigin.offsetMax;
+                RectTransform rctran = this.transform as RectTransform;
+                Vector2 sizeDelta = rctran.sizeDelta;
+                sizeDelta.x = textTitle.width;
+                rctran.sizeDelta = sizeDelta;
+                if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
+                {
+                }
+                else
+                {
+                    //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                    rctran.offsetMin = offsetMin;
+                    rctran.offsetMax = offsetMax;
+                }
+
+            }
+        }
+
+
     }
 
 

@@ -55,7 +55,7 @@ public class BuildPlayer
         {
             target_dir = applicationPath + "/OutPut/iOS";
             // target_name = app_name;
-            target_name = PlayerSettings.productName + "_device";// "iOS";
+            target_name = PlayerSettings.productName + "_device" + "_" + Common.appType + "_" + Common.appKeyName;// "iOS";
             targetGroup = BuildTargetGroup.iOS;
             buildTarget = BuildTarget.iOS;
         }

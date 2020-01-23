@@ -17,7 +17,7 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
     public UIHomeAppCenter uiHomeAppCenter;
     public RawImage imageBg;
     public Image imageBgName;
-    public Text TextName;
+    public UIText TextName;
     //public GameObject objLayoutTopBar;
     //public Button btnPlay;
     public UIImageText uiPlay;

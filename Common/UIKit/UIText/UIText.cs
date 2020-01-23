@@ -9,6 +9,7 @@ public class UIText : UIView
     public Text title;
     public bool isFitFontWidth;//和字串等宽
     public float offsetW;
+    public float width;
     public string text
     {
         get
@@ -90,11 +91,25 @@ public class UIText : UIView
         base.LayOut();
         if (isFitFontWidth)
         {
+            RectTransform rctranOrigin = this.GetComponent<RectTransform>();
+            Vector2 offsetMin = rctranOrigin.offsetMin;
+            Vector2 offsetMax = rctranOrigin.offsetMax;
             float str_w = Common.GetStringLength(this.text, title.font.name, fontSize);
             RectTransform rctran = this.transform as RectTransform;
             Vector2 sizeDelta = rctran.sizeDelta;
-            sizeDelta.x = str_w + offsetW;
+            width = str_w + offsetW;
+            sizeDelta.x = width;
             rctran.sizeDelta = sizeDelta;
+            if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
+            {
+            }
+            else
+            {
+                //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                rctran.offsetMin = offsetMin;
+                rctran.offsetMax = offsetMax;
+            }
+
         }
     }
     public override void UpdateLanguage()
