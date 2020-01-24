@@ -338,6 +338,20 @@ public class FileUtil : MonoBehaviour
         return ret;
     }
 
+
+    //上一级目录
+    static public string GetLastDir(string filepath)
+    {
+        string ret = filepath;
+        int idx = filepath.LastIndexOf("/");
+        if (idx >= 0)
+        {
+            ret = filepath.Substring(0, idx);
+        }
+
+        return ret;
+    }
+
     //除去文件后缀 
     static public string GetFileBeforeExt(string filepath)
     {

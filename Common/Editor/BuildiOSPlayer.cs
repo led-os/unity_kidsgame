@@ -13,24 +13,25 @@ using System.Text.RegularExpressions;
 public static class BuildiOSPlayer
 {
     ////该属性是在build完成后，被调用的callback
-    [PostProcessBuild]
-    static void OnPostProcessBuild (BuildTarget target, string pathToBuiltProject)
+    // [PostProcessBuild]
+    [PostProcessBuildAttribute]
+    static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        Debug.Log("BuildiOSPlayer:"+pathToBuiltProject);
+        Debug.Log("BuildiOSPlayer:" + pathToBuiltProject);
 
         EditProj(pathToBuiltProject);
         //EditInfoPlist(pathToBuiltProject);
         //EditUnityAppController(pathToBuiltProject);
     }
 
-   //添加lib方法
+    //添加lib方法
     static void AddLibToProject(PBXProject inst, string targetGuid, string lib)
     {
         string fileGuid = inst.AddFile("usr/lib/" + lib, "Frameworks/" + lib, PBXSourceTree.Sdk);
         inst.AddFileToBuild(targetGuid, fileGuid);
     }
 
-  static void AddFileToProject(string projPath,PBXProject inst, string targetGuid, string filepath)
+    static void AddFileToProject(string projPath, PBXProject inst, string targetGuid, string filepath)
     {
         string fileGuid = inst.AddFile(filepath, filepath, PBXSourceTree.Source);
         inst.AddFileToBuild(targetGuid, fileGuid);
@@ -42,9 +43,28 @@ public static class BuildiOSPlayer
 
         PBXProject pbxProj = new PBXProject();
         pbxProj.ReadFromFile(projPath);
+        string unityVersion = Application.unityVersion;
+        Debug.Log("unityVersion=" + unityVersion);
+        string projectGuid = pbxProj.ProjectGuid();
+        string targetGuid="", unityFrameworkTargetGuid="";
+        bool isOldUnity = false;
+       
 
-        //string targetGuid = pbxProj.TargetGuidByName("Unity-iPhone");
-        string targetGuid = pbxProj.GetUnityMainTargetGuid();
+#if UNITY_2019_2_0
+         isOldUnity = true;
+        { 
+            targetGuid = pbxProj.TargetGuidByName("Unity-iPhone");
+            unityFrameworkTargetGuid = targetGuid;
+        }
+#else
+         {
+            targetGuid = pbxProj.GetUnityMainTargetGuid();
+            unityFrameworkTargetGuid = pbxProj.GetUnityFrameworkTargetGuid();
+        }
+#endif
+ 
+     
+
         //string debugConfig = pbxProj.BuildConfigByName(target, "Debug");
         //string releaseConfig = pbxProj.BuildConfigByName(target, "Release");
         //pbxProj.SetBuildProperty(targetGuid, "GCC_ENABLE_OBJC_EXCEPTIONS", "YES");
@@ -56,22 +76,31 @@ public static class BuildiOSPlayer
         pbxProj.AddFrameworkToProject(targetGuid, "CoreLocation.framework", false);
         pbxProj.AddFrameworkToProject(targetGuid, "CoreTelephony.framework", false);
         pbxProj.AddFrameworkToProject(targetGuid, "WebKit.framework", false);
-   
+
         //添加lib
-        AddLibToProject(pbxProj, targetGuid, "libz.tbd"); 
+        AddLibToProject(pbxProj, targetGuid, "libz.tbd");
         AddLibToProject(pbxProj, targetGuid, "libxml2.tbd");
 
-//多国语言
-        AddFileToProject(projPath,pbxProj, targetGuid, "appname/en.lproj/InfoPlist.strings");
-        AddFileToProject(projPath,pbxProj, targetGuid, "appname/zh-Hans.lproj/InfoPlist.strings");
+        //多国语言
+        AddFileToProject(projPath, pbxProj, targetGuid, "appname/en.lproj/InfoPlist.strings");
+        AddFileToProject(projPath, pbxProj, targetGuid, "appname/zh-Hans.lproj/InfoPlist.strings");
 
         //pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile("usr/lib/libsqlite3.dylib", "Frameworks/libsqlite3.dylib", PBXSourceTree.Sdk));
         //pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile("usr/lib/libz.dylib", "Frameworks/libz.dylib", PBXSourceTree.Sdk));
 
-        //pbxProj.SetBuildProperty(target, "FRAMEWORK_SEARCH_PATHS", "$(SRCROOT)/Frameworks");
-        //pbxProj.AddBuildProperty(target, "FRAMEWORK_SEARCH_PATHS", "$(inherited)");
 
-       
+        if (!isOldUnity)
+        {
+            //unity 2019.3 bug
+            //需要手动添加 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
+            pbxProj.SetBuildProperty(targetGuid, "FRAMEWORK_SEARCH_PATHS", "$(SRCROOT)/Frameworks");
+            pbxProj.AddBuildProperty(targetGuid, "FRAMEWORK_SEARCH_PATHS", "$(inherited)");
+            pbxProj.SetBuildProperty(unityFrameworkTargetGuid, "FRAMEWORK_SEARCH_PATHS", "$(SRCROOT)/Frameworks");
+            pbxProj.AddBuildProperty(unityFrameworkTargetGuid, "FRAMEWORK_SEARCH_PATHS", "$(inherited)");
+            //unity 2019.3 bug
+        }
+
+
 
         // 添加flag
         pbxProj.AddBuildProperty(targetGuid, "OTHER_LDFLAGS", "-ObjC");
@@ -79,10 +108,12 @@ public static class BuildiOSPlayer
         // 打开选项
         //pbxProj.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "YES");
         pbxProj.SetBuildProperty(targetGuid, "CLANG_ENABLE_MODULES", "YES");
+        pbxProj.SetBuildProperty(projectGuid, "CLANG_ENABLE_MODULES", "YES");
+
 
         //teamid 
-         pbxProj.SetTeamId(targetGuid, "Y9ZUK2WTEE");
-        
+        pbxProj.SetTeamId(targetGuid, "Y9ZUK2WTEE");
+
 #region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
         // string frameworksPath = Application.dataPath + "/Frameworks";
         // string[] directories = Directory.GetDirectories(frameworksPath, "*", SearchOption.TopDirectoryOnly);
@@ -109,65 +140,65 @@ public static class BuildiOSPlayer
 
     static void EditInfoPlist(string filePath)
     {
-//         string path = filePath + "/Info.plist";
+        //         string path = filePath + "/Info.plist";
 
-//         PlistDocument plistDocument = new PlistDocument();
-//         plistDocument.ReadFromFile(path);
+        //         PlistDocument plistDocument = new PlistDocument();
+        //         plistDocument.ReadFromFile(path);
 
-//         PlistElementDict dict = plistDocument.root.AsDict();
+        //         PlistElementDict dict = plistDocument.root.AsDict();
 
-//         PlistElementArray array = dict.CreateArray("CFBundleURLTypes");
-//         PlistElementDict dict2 = array.AddDict();
-//         dict2.SetString("CFBundleURLName", PlayerSettings.bundleIdentifier);
-//         PlistElementArray array2 = dict2.CreateArray("CFBundleURLSchemes");
-//         array2.AddString(PlayerSettings.bundleIdentifier);
+        //         PlistElementArray array = dict.CreateArray("CFBundleURLTypes");
+        //         PlistElementDict dict2 = array.AddDict();
+        //         dict2.SetString("CFBundleURLName", PlayerSettings.bundleIdentifier);
+        //         PlistElementArray array2 = dict2.CreateArray("CFBundleURLSchemes");
+        //         array2.AddString(PlayerSettings.bundleIdentifier);
 
-//         dict2 = array.AddDict();
-//         dict2.SetString("CFBundleURLName", "weixin");
-//         array2 = dict2.CreateArray("CFBundleURLSchemes");
-//         array2.AddString(BabybusConst.WEIXIN_ID);
+        //         dict2 = array.AddDict();
+        //         dict2.SetString("CFBundleURLName", "weixin");
+        //         array2 = dict2.CreateArray("CFBundleURLSchemes");
+        //         array2.AddString(BabybusConst.WEIXIN_ID);
 
-//         dict2 = array.AddDict();
-//         dict2.SetString("CFBundleURLName", "");
-//         array2 = dict2.CreateArray("CFBundleURLSchemes");
-//         array2.AddString("QQ" + BabybusConst.QQ_ID.ToString("X"));
+        //         dict2 = array.AddDict();
+        //         dict2.SetString("CFBundleURLName", "");
+        //         array2 = dict2.CreateArray("CFBundleURLSchemes");
+        //         array2.AddString("QQ" + BabybusConst.QQ_ID.ToString("X"));
 
-//         dict2 = array.AddDict();
-//         dict2.SetString("CFBundleURLName", "");
-//         array2 = dict2.CreateArray("CFBundleURLSchemes");
-//         array2.AddString("tencent" + BabybusConst.QQ_ID);
+        //         dict2 = array.AddDict();
+        //         dict2.SetString("CFBundleURLName", "");
+        //         array2 = dict2.CreateArray("CFBundleURLSchemes");
+        //         array2.AddString("tencent" + BabybusConst.QQ_ID);
 
 
-// #region quick action
-//         string[] quickActions = { "Poem", "Pet", "Movie", "Telephone" };
-//         string[] quickActionsIcon = { "PoemIcon", "PetIcon", "MovieIcon", "TelephoneIcon" };
-//         //string[] icons = { "UIApplicationShortcutIconTypeBookmark", "UIApplicationShortcutIconTypeLove", "UIApplicationShortcutIconTypeCaptureVideo", "UIApplicationShortcutIconTypeFavorite" };
-//         array = dict.CreateArray("UIApplicationShortcutItems");
-//         for(int i=0; i<quickActions.Length; ++i)
-//         {
-//             dict2 = array.AddDict();
-//             //dict2.SetString("UIApplicationShortcutItemIconType", icons[i]);
-//             dict2.SetString("UIApplicationShortcutItemIconFile", quickActionsIcon[i]);
-//             dict2.SetString("UIApplicationShortcutItemTitle", quickActions[i] + "Title");
-//             dict2.SetString("UIApplicationShortcutItemType", quickActions[i]);
-//             dict2.CreateDict("UIApplicationShortcutItemUserInfo");
-//             //dict2.SetString("UIApplicationShortcutItemSubtitle", quickActions[i]);
-//         }
-// #endregion
+        // #region quick action
+        //         string[] quickActions = { "Poem", "Pet", "Movie", "Telephone" };
+        //         string[] quickActionsIcon = { "PoemIcon", "PetIcon", "MovieIcon", "TelephoneIcon" };
+        //         //string[] icons = { "UIApplicationShortcutIconTypeBookmark", "UIApplicationShortcutIconTypeLove", "UIApplicationShortcutIconTypeCaptureVideo", "UIApplicationShortcutIconTypeFavorite" };
+        //         array = dict.CreateArray("UIApplicationShortcutItems");
+        //         for(int i=0; i<quickActions.Length; ++i)
+        //         {
+        //             dict2 = array.AddDict();
+        //             //dict2.SetString("UIApplicationShortcutItemIconType", icons[i]);
+        //             dict2.SetString("UIApplicationShortcutItemIconFile", quickActionsIcon[i]);
+        //             dict2.SetString("UIApplicationShortcutItemTitle", quickActions[i] + "Title");
+        //             dict2.SetString("UIApplicationShortcutItemType", quickActions[i]);
+        //             dict2.CreateDict("UIApplicationShortcutItemUserInfo");
+        //             //dict2.SetString("UIApplicationShortcutItemSubtitle", quickActions[i]);
+        //         }
+        // #endregion
 
-//         dict.SetString("CFBundleIdentifier", PlayerSettings.bundleIdentifier);
+        //         dict.SetString("CFBundleIdentifier", PlayerSettings.bundleIdentifier);
 
-//         var assetInfos = Utility.DeserializeXmlFromFile<List<AssetInfo>>(Application.dataPath + "/Resources/配置/APP.xml");
-//         array = dict.CreateArray("LSApplicationQueriesSchemes");
-//         foreach (var assetInfo in assetInfos)
-//         {
-//             if (string.IsNullOrEmpty(assetInfo.bundleIdentifier4iOS))
-//                 array.AddString(assetInfo.extra);
-//             else
-//                 array.AddString(assetInfo.bundleIdentifier4iOS);
-//         }
+        //         var assetInfos = Utility.DeserializeXmlFromFile<List<AssetInfo>>(Application.dataPath + "/Resources/配置/APP.xml");
+        //         array = dict.CreateArray("LSApplicationQueriesSchemes");
+        //         foreach (var assetInfo in assetInfos)
+        //         {
+        //             if (string.IsNullOrEmpty(assetInfo.bundleIdentifier4iOS))
+        //                 array.AddString(assetInfo.extra);
+        //             else
+        //                 array.AddString(assetInfo.bundleIdentifier4iOS);
+        //         }
 
-//         plistDocument.WriteToFile(path);
+        //         plistDocument.WriteToFile(path);
     }
 
     static void EditUnityAppController(string pathToBuiltProject)
