@@ -2,8 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Device : MonoBehaviour
+public class Device
 {
+
     static public ScreenOrientation orientationPre = ScreenOrientation.Unknown;
     static public ScreenOrientation orientationCur = ScreenOrientation.Unknown;
 
@@ -12,6 +13,23 @@ public class Device : MonoBehaviour
 
     static public int screenHeightPre = 0;
     static public int screenHeightCur = 0;
+
+    static private Camera _camera;
+    static public Camera camera
+    {
+        get
+        {
+            if (_camera == null)
+            {
+                _camera = AppSceneBase.main.mainCamera;
+            }
+            return _camera;
+        }
+        set
+        {
+            _camera = value;
+        }
+    }
 
     static public int heightSystemTopBar//异形全面屏顶部“刘海”等的高度
     {
@@ -41,6 +59,8 @@ public class Device : MonoBehaviour
         }
     }
 
+
+    //前面屏边界偏移量
     static public int offsetLeft//单位为像素
     {
         get
@@ -133,6 +153,51 @@ public class Device : MonoBehaviour
             }
             //ret = 64;
             return ret;
+        }
+    }
+
+
+    //camera
+    static public float offsetLeftWord//世界坐标
+    {
+        get
+        {
+            return Common.ScreenToWorldWidth(camera, Device.offsetLeft);
+        }
+    }
+
+    static public float offsetRightWord//世界坐标
+    {
+        get
+        {
+            return Common.ScreenToWorldWidth(camera, Device.offsetRight);
+        }
+    }
+
+
+    static public float offsetTopWord//世界坐标
+    {
+        get
+        {
+            return Common.ScreenToWorldWidth(camera, Device.offsetTop);
+        }
+    }
+
+
+    static public float offsetBottomWord//世界坐标
+    {
+        get
+        {
+            return Common.ScreenToWorldWidth(camera, Device.offsetBottom);
+        }
+    }
+
+
+    static public float offsetBottomWithAdBannerWord//世界坐标
+    {
+        get
+        {
+            return offsetBottomWord + GameManager.main.heightAdWorld;
         }
     }
 
