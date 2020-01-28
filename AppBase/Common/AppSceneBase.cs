@@ -45,6 +45,7 @@ public class AppSceneBase : ScriptBase
             SetCanvasScalerMatch(canvasCamera.gameObject);
         }
         Common.CleanCache();
+        AdConfig.main.InitSDK();
         InitValue();
 
         //Component

@@ -15,7 +15,7 @@ namespace Moonma.AdKit.AdConfig
 				return new iOSWrapper();
 #elif UNITY_WSA && !UNITY_EDITOR
 				return new WinWrapper();
-				#else
+#else
                 return new BasePlatformWrapper();
 #endif
             }
@@ -25,23 +25,28 @@ namespace Moonma.AdKit.AdConfig
 
     internal class BasePlatformWrapper
     {
-        public virtual void InitPlatform(string source,int type,string appId,string appKey,string adKey)
-		{
-			 
-		}
-
-         public virtual void SetEnableAdSplash(bool enable)
+        public virtual void InitPlatform(string source, int type, string appId, string appKey, string adKey)
         {
 
         }
+
+        public virtual void SetEnableAdSplash(bool enable)
+        {
+
+        }
+        public virtual void InitSDK()
+        {
+
+        }
+
         public virtual void SetNoAd()
         {
 
         }
-         public virtual void SetNoAdDay(int day)
-         {
+        public virtual void SetNoAdDay(int day)
+        {
 
-         }
+        }
         public virtual void SetAdSource(int type, string source)
         {
 

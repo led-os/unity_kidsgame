@@ -9,7 +9,8 @@ namespace Moonma.AdKit.AdConfig
 	{
 		[DllImport ("__Internal")]
 		public static extern void AdConfig_InitPlatform(string source,int type,string appId,string appKey, string adKey); 
-
+ 		[DllImport ("__Internal")]
+		public static extern void AdConfig_InitSDK();
 		 [DllImport ("__Internal")]
 		public static extern void AdConfig_SetNoAd();
 		[DllImport ("__Internal")]
@@ -33,7 +34,10 @@ namespace Moonma.AdKit.AdConfig
 
 [DllImport ("__Internal")]
    	public static extern void AdSplash_Show();
-
+  		public override void InitSDK()
+        {
+			AdConfig_InitSDK();
+        }
 		public override void InitPlatform(string source,int type,string appId,string appKey,string adKey)
 		{
 			 AdConfig_InitPlatform(source,type,appId,appKey,adKey);
@@ -80,6 +84,8 @@ namespace Moonma.AdKit.AdConfig
         {
 			AdSplash_Show();
         }
+		
+
 	}
 }
 

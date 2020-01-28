@@ -16,7 +16,9 @@ namespace Moonma.AdKit.AdNative
 		public static extern void AdNative_SetObjectInfo(string objName,string objMethod);
 		[DllImport ("__Internal")]
 		public static extern void AdNative_OnClickAd();	 
-	 
+		[DllImport ("__Internal")]
+		public static extern void AdNative_ShowSplash(string source);
+		
 	 	public override void SetObjectInfo(string objName, string objMethod)
         {
 			AdNative_SetObjectInfo( objName,objMethod);
@@ -36,6 +38,11 @@ namespace Moonma.AdKit.AdNative
 		{
 			 AdNative_OnClickAd();
 		}
+
+		  public override void ShowSplash(string source)
+        {
+	 		AdNative_ShowSplash(source);
+        }
 		 
 	}
 }

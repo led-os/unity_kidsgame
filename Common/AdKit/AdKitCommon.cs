@@ -6,6 +6,8 @@ using Moonma.AdKit.AdBanner;
 using Moonma.AdKit.AdInsert;
 using Moonma.AdKit.AdVideo;
 using Moonma.AdKit.AdConfig;
+using Moonma.AdKit.AdNative;
+
 public delegate void OnAdKitFinishDelegate(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str);
 public class AdKitCommon : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class AdKitCommon : MonoBehaviour
     {
         BANNER = 0,
         INSERT,
+        NATIVE,
         VIDEO
     }
     public enum AdStatus
@@ -196,6 +199,31 @@ public class AdKitCommon : MonoBehaviour
         AdInsert.ShowAd();
     }
 
+    //原生开机广告
+    public void ShowAdNativeSplash(string source)
+    {
+        if (!AppVersion.appCheckHasFinished)
+        {
+            return;
+        }
+
+        if (Common.noad)
+        {
+            return;
+        }
+
+        if (Common.isAndroid)
+        {
+            if (Common.GetDayIndexOfUse() <= Config.main.NO_AD_DAY)
+            {
+                return;
+            }
+        }
+
+        AdNative.ShowSplash(source);
+
+    }
+
     //c++调用c#的回调
     public void AdBannerCallbackUnity(string source, string method, int w, int h)
     {
@@ -318,6 +346,20 @@ public class AdKitCommon : MonoBehaviour
         }
 
     }
+
+    //AdNative CallBack
+    public void AdNativeDidFail(string adsource)
+    {
+        Debug.Log("AdNativeDidFail adsource=" + adsource);
+        if (callbackFinish != null)
+        {
+            callbackFinish(AdType.NATIVE, AdStatus.FAIL, adsource);
+        }
+    }
+    public void AdNativeDidLoad(string str)
+    {
+    }
+
 
     //c++调用c#的回调
     public void AdVideoCallbackUnity(string source, string method)
