@@ -394,6 +394,11 @@ public class FileUtil : MonoBehaviour
             Directory.CreateDirectory(dir);
         }
     }
+    static public bool DirIsExist(string dir)
+    {
+        return Directory.Exists(dir);
+
+    }
 
 
     static public void DeleteDir(string dir)

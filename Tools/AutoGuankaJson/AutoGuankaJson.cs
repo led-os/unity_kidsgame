@@ -13,18 +13,28 @@ public class AutoGuankaJson : ScriptBase
 {
     List<GuankaJsonItemInfo> listGuankaJson;
 
-    List<string> listImage;
-
+    List<ItemInfo> listImage;
+    string dirRootImage;
+    string dirRootImageThumb;
+    string dirRootGuanka;
     // Use this for initialization
     void Start()
     {
-        listImage = new List<string>();
+        listImage = new List<ItemInfo>();
+        List<object> listPlace = GameLevelParse.main.listPlace;
+        dirRootImage = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image/";
+        dirRootImageThumb = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image_thumb/";
 
-        string dirRoot = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image/";
+        dirRootGuanka = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/guanka_new/";
+        LevelManager.main.ParsePlaceList();
+        for (int i = 0; i < listPlace.Count; i++)
+        {
+            ItemInfo infoPlace = listPlace[i] as ItemInfo;
+            ItemInfo info = new ItemInfo();
+            info.id = infoPlace.id;
+            listImage.Add(info);
+        }
 
-        listImage.Add(dirRoot + "Livingroom");
-        listImage.Add(dirRoot + "Kitchen");
-        listImage.Add(dirRoot + "School");
 
 
 
@@ -36,32 +46,33 @@ public class AutoGuankaJson : ScriptBase
 
     }
 
-    void ConvertImage(string pathImgae, string dirname, GuankaJsonItemInfo info, string ext, int w, int h)
+
+    void ConvertImage(string pathImgae, string savedir, GuankaJsonItemInfo info, string ext, int w, int h)
     {
         Texture2D tex = LoadTexture.LoadFromFile(pathImgae);
         float scale = 1f;
-        string dir = dirname + "_" + w;
         {
             scale = Common.GetBestFitScale(tex.width, tex.height, w, h);
             w = (int)(tex.width * scale);
             h = (int)(tex.height * scale);
             Debug.Log("autoguankajson scale=" + scale + " tex.width=" + tex.width);
             Texture2D texNew = TextureUtil.ConvertSize(tex, w, h);
-            FileUtil.CreateDir(dir);
-            string filepath_new = dir + "/" + info.id + "." + ext;
+            FileUtil.CreateDir(savedir);
+            string filepath_new = savedir + "/" + info.id + "." + ext;
             TextureUtil.SaveTextureToFile(texNew, filepath_new);
         }
     }
 
-    void CreateGuankaJsonFile(string path)
+    void CreateGuankaJsonFile(ItemInfo infoImage)
     {
-        string strPlace = FileUtil.GetFileName(path);
+        string path = dirRootImage + infoImage.id;
+        string pathThumb = dirRootImageThumb + infoImage.id;
+        string strPlace = infoImage.id;
         //  string path = Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/image/" + strPlace;
-        string path_new = path + "_new";
+
         // int width_save = 1024;
         // int height_save = 768;
-        //创建文件夹
-        // Directory.CreateDirectory(path_new);
+
         string strLanguageContent = "KEY,CN,EN\n";
         listGuankaJson = new List<GuankaJsonItemInfo>();
         // C#遍历指定文件夹中的所有文件 
@@ -81,9 +92,12 @@ public class AutoGuankaJson : ScriptBase
                 GuankaJsonItemInfo info = new GuankaJsonItemInfo();
                 //info.pic = NextFile.Name;
                 info.id = FileUtil.GetFileName(NextFile.Name);
-
+                //将网上下载的图片 统一调整分辨率
+                //
                 ConvertImage(fullpath, path, info, ext, 1024, 1024);
-                ConvertImage(fullpath, path, info, ext, 256, 256);
+
+                //thumb
+                ConvertImage(fullpath, pathThumb, info, ext, 256, 256);
 
 
                 //重命名
@@ -98,7 +112,9 @@ public class AutoGuankaJson : ScriptBase
             }
 
         }
-
+        string pathGuanka = dirRootGuanka;
+        //创建文件夹 
+        FileUtil.CreateDir(pathGuanka);
         //save guanka json
         {
 
@@ -107,14 +123,14 @@ public class AutoGuankaJson : ScriptBase
             data["items"] = listGuankaJson;
             string strJson = JsonMapper.ToJson(data);
             //Debug.Log(strJson);
-            string filepath = path_new + "/guanka.json";
+            string filepath = pathGuanka + "/item_" + strPlace + ".json";
             byte[] bytes = Encoding.UTF8.GetBytes(strJson);
             System.IO.File.WriteAllBytes(filepath, bytes);
         }
 
         //save language
         {
-            string filepath = path_new + "/" + strPlace + ".csv";
+            string filepath = pathGuanka + "/" + strPlace + ".csv";
             SaveString(filepath, strLanguageContent);
         }
 
@@ -133,9 +149,12 @@ public class AutoGuankaJson : ScriptBase
     public void OnClickBtnGuanka()
     {
 
-        foreach (string pic in listImage)
+        foreach (ItemInfo pic in listImage)
         {
             CreateGuankaJsonFile(pic);
         }
     }
+
+
+
 }

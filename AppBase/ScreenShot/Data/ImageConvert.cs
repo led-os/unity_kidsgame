@@ -220,7 +220,7 @@ public class ImageConvert
     string GetRootDir(bool ishd)
     {
         string name = ishd ? "iconhd" : "icon";
-        string ret = UIScreenShotController.GetRootDir() + "/" + name;
+        string ret = UIScreenShotController.GetRootDirIcon() + "/" + name;
         return ret;
     }
 

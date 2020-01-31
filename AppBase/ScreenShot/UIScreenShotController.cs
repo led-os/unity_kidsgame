@@ -221,20 +221,26 @@ public class UIScreenShotController : UIView
 
         return ret;
     }
-    public static string GetRootDir()
+
+    public static string GetRootDirIcon()
+    {
+        string ret = AppsConfig.ROOT_DIR_PC + "/ProjectOutPut/" + Common.appType + "/" + Common.appKeyName;
+        return ret;
+    }
+    public static string GetRootDirOutPut()
     {
         string ret = "";
         //         ret = "/Users/moon/sourcecode/unity/product_unity/ScreenShot";
         // #if UNITY_STANDALONE_WIN
         //         ret = "/moon/ScreenShot";
         // #endif
-        ret = AppsConfig.ROOT_DIR_PC + "/ProjectIcon/" + Common.appType + "/" + Common.appKeyName;
+        ret = AppsConfig.ROOT_DIR_PC + "/ProjectOutPut/" + Common.appType + "/" + Common.appKeyName;
         return ret;
     }
     string GetSaveDir(ShotDeviceInfo info)
     {
         string ret = "";
-        string rootDir = GetRootDir();
+        string rootDir = GetRootDirOutPut();
         if (info.width > info.height)
         {
             ret = rootDir + "/screenshot/heng";
@@ -535,7 +541,7 @@ public class UIScreenShotController : UIView
             btnClear.gameObject.SetActive(false);
         }
 
-        string dir = GetRootDir();
+        string dir = GetRootDirOutPut();
         if (Directory.Exists(dir))
         {
             //删除文件夹
