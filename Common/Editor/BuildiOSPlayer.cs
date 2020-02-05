@@ -17,7 +17,7 @@ public static class BuildiOSPlayer
 #if UNITY_2019_2_0
     [PostProcessBuild]//PostProcessBuildAttribute
 #else
-    [PostProcessBuild]
+    [PostProcessBuildAttribute]
 #endif
     // 
     static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
@@ -40,6 +40,85 @@ public static class BuildiOSPlayer
     {
         string fileGuid = inst.AddFile(filepath, filepath, PBXSourceTree.Source);
         inst.AddFileToBuild(targetGuid, fileGuid);
+    }
+
+    //递归遍历如下：将已知路径和列表数组作为参数传递，
+    static public void ScanLibAFiles(string dir, List<string> list)
+    {
+        DirectoryInfo d = new DirectoryInfo(dir);
+        FileInfo[] files = d.GetFiles();//文件
+        DirectoryInfo[] directs = d.GetDirectories();//文件夹
+        foreach (FileInfo f in files)
+        {
+            string ext = FileUtil.GetFileExt(f.Name);
+            if (ext == "a")
+            {
+                list.Add(f.FullName);//添加文件名到列表中  
+            }
+        }
+        //获取子文件夹内的文件列表，递归遍历  
+        foreach (DirectoryInfo dd in directs)
+        {
+            string ext = FileUtil.GetFileExt(dd.FullName);
+            if ((ext != "framework"))
+            {
+                ScanLibAFiles(dd.FullName, list);
+            }
+        }
+
+    }
+
+    static public void ScanFrameworkFiles(string dir, List<string> list)
+    {
+        DirectoryInfo d = new DirectoryInfo(dir);
+        FileInfo[] files = d.GetFiles();//文件
+        DirectoryInfo[] directs = d.GetDirectories();//文件夹 
+        //获取子文件夹内的文件列表，递归遍历  
+        foreach (DirectoryInfo dd in directs)
+        {
+            string ext = FileUtil.GetFileExt(dd.FullName);
+            if ((ext == "framework"))
+            {
+                list.Add(dd.FullName);
+            }
+            else
+            {
+                ScanFrameworkFiles(dd.FullName, list);
+            }
+        }
+
+    }
+
+    static void AddThirdPartyLibToProject(string projPath, PBXProject inst, string targetGuid, string dirLib)
+    {
+        Debug.Log("AddThirdPartyLibToProject dirLib=" + dirLib);
+        DirectoryInfo TheFolder = new DirectoryInfo(dirLib);
+        //Libraries/Plugins 
+        //Frameworks/Plugins 
+        // //遍历文件
+
+        List<string> listFileLibA = new List<string>();
+        ScanLibAFiles(dirLib, listFileLibA);
+        foreach (string fullpath in listFileLibA)
+        {
+            Debug.Log("liba fullpath=" + fullpath);
+            int idx = BuildPlayer.dirRootProject.Length;
+            string addfilepath = fullpath.Substring(idx + 1);
+            Debug.Log("liba addfilepath=" + addfilepath);
+            AddFileToProject(projPath, inst, targetGuid, addfilepath);
+        }
+
+
+        List<string> listFileFramework = new List<string>();
+        ScanFrameworkFiles(dirLib, listFileFramework);
+        foreach (string fullpath in listFileFramework)
+        {
+            Debug.Log("Framework fullpath=" + fullpath);
+            int idx = BuildPlayer.dirRootProject.Length;
+            string addfilepath = fullpath.Substring(idx + 1);
+            Debug.Log("Framework addfilepath=" + addfilepath);
+            AddFileToProject(projPath, inst, targetGuid, addfilepath);
+        }
     }
 
     static void EditProj(string pathToBuiltProject)
@@ -93,17 +172,15 @@ public static class BuildiOSPlayer
         //pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile("usr/lib/libsqlite3.dylib", "Frameworks/libsqlite3.dylib", PBXSourceTree.Sdk));
         //pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile("usr/lib/libz.dylib", "Frameworks/libz.dylib", PBXSourceTree.Sdk));
 
-
+        Debug.Log("isOldUnity=" + isOldUnity);
         if (!isOldUnity)
         {
             //unity 2019.3 bug
-            //需要手动添加 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
-            pbxProj.SetBuildProperty(targetGuid, "FRAMEWORK_SEARCH_PATHS", "$(SRCROOT)/Frameworks");
-            pbxProj.AddBuildProperty(targetGuid, "FRAMEWORK_SEARCH_PATHS", "$(inherited)");
-            pbxProj.SetBuildProperty(unityFrameworkTargetGuid, "FRAMEWORK_SEARCH_PATHS", "$(SRCROOT)/Frameworks");
-            pbxProj.AddBuildProperty(unityFrameworkTargetGuid, "FRAMEWORK_SEARCH_PATHS", "$(inherited)");
-            //unity 2019.3 bug
+            //需要手动添加第三方库 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
+            AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
+            AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
         }
+
 
 
 

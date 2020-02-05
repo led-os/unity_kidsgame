@@ -158,7 +158,7 @@ public class Device
 
 
     //camera
-    static public float offsetLeftWord//世界坐标
+    static public float offsetLeftWorld//世界坐标
     {
         get
         {
@@ -166,7 +166,7 @@ public class Device
         }
     }
 
-    static public float offsetRightWord//世界坐标
+    static public float offsetRightWorld//世界坐标
     {
         get
         {
@@ -175,7 +175,7 @@ public class Device
     }
 
 
-    static public float offsetTopWord//世界坐标
+    static public float offsetTopWorld//世界坐标
     {
         get
         {
@@ -184,7 +184,7 @@ public class Device
     }
 
 
-    static public float offsetBottomWord//世界坐标
+    static public float offsetBottomWorld//世界坐标
     {
         get
         {
@@ -193,11 +193,11 @@ public class Device
     }
 
 
-    static public float offsetBottomWithAdBannerWord//世界坐标
+    static public float offsetBottomWithAdBannerWorld//世界坐标
     {
         get
         {
-            return offsetBottomWord + GameManager.main.heightAdWorld * 1.1f;
+            return offsetBottomWorld + GameManager.main.heightAdWorld * 1.1f;
         }
     }
 

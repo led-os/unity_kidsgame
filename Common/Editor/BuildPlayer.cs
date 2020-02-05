@@ -15,7 +15,28 @@ public class BuildPlayer
     //得到工程中所有场景名称
     static string[] SCENES = FindEnabledEditorScenes();
     //一系列批量build的操作
+    static public string dirRootProject;
 
+    [MenuItem("Tool/TestCompressFiles")]
+    static void CompressFiles()
+    {
+        string[] fileName = new string[] {
+            Application.dataPath + @"/ZipTest/zip01.txt",
+            Application.dataPath + @"/ZipTest/zip02.txt"
+        };
+        string outputFilePath = Application.dataPath + @"/ZipTest/ZipTest.zip";
+        ZipTool.TestZipFile(fileName, outputFilePath, 9);
+        AssetDatabase.Refresh();
+    }
+
+    [MenuItem("Tool/TestUnCompressFiles")]
+    static void UnCompressFiles()
+    {
+        string zipPath = Application.dataPath + @"/ZipTest/ZipTest.zip";
+        string outPath = Application.dataPath + @"/ZipTest/UncCompress/";
+        ZipTool.TestUnZipFile(zipPath, outPath);
+        AssetDatabase.Refresh();
+    }
 
     [MenuItem("Custom/Build Android")]
     static void PerformAndroidBuild()
@@ -59,21 +80,21 @@ public class BuildPlayer
             target_name = PlayerSettings.productName + "_device" + "_" + Common.appType + "_" + Common.appKeyName;// "iOS";
             targetGroup = BuildTargetGroup.iOS;
             buildTarget = BuildTarget.iOS;
-        }
 
+        }
+        dirRootProject = target_dir + "/" + target_name;
         //每次build删除之前的残留
-        if (Directory.Exists(target_dir))
+        if (Directory.Exists(dirRootProject))
         {
-            if (File.Exists(target_name))
-            {
-                File.Delete(target_name);
-            }
+            Directory.Delete(dirRootProject, true);
         }
         else
         {
+            // Directory.Delete(path);           //这种删除如果当目录内的内容不为空时会报错
+            //Directory.Delete(path,true);      //第二个参数代表如果内容不为空是否也要删除，这样就不会报错了
+
             Directory.CreateDirectory(target_dir);
         }
-
         //==================这里是比较重要的东西=======================
 
         //PlayerSettings.applicationIdentifier = "com.moonma.kidsgame";
