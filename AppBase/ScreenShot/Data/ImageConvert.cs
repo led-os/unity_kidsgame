@@ -82,7 +82,7 @@ public class ImageConvert
             info.w = listsize[i];
             info.h = info.w;
             info.srcPath = GetIconFile(ishd);
-            info.dstPath = GetRootDir(ishd) + "/ios/icon_" + info.w + ".png";
+            info.dstPath = GetRootDirSaveIcon(ishd) + "/ios/icon_" + info.w + ".png";
             listItem.Add(info);
         }
     }
@@ -94,8 +94,8 @@ public class ImageConvert
             IconInfo info = new IconInfo();
             info.w = listsize[i];
             info.h = info.w;
-            info.srcPath = GetRootDir(ishd) + "/icon_android.png";
-            info.dstPath = GetRootDir(ishd) + "/android/" + resAndroid[i] + "/ic_launcher.png";
+            info.srcPath = GetRootDirSaveIcon(ishd) + "/icon_android.png";
+            info.dstPath = GetRootDirSaveIcon(ishd) + "/android/" + resAndroid[i] + "/ic_launcher.png";
             listItem.Add(info);
         }
     }
@@ -108,8 +108,8 @@ public class ImageConvert
             IconInfo info = new IconInfo();
             info.w = listsize[i];
             info.h = info.w;
-            info.srcPath = GetRootDir(ishd) + "/icon_android.png";
-            info.dstPath = GetRootDir(ishd) + "/microsoft/" + resMicrosoft[i] + ".png";
+            info.srcPath = GetRootDirSaveIcon(ishd) + "/icon_android.png";
+            info.dstPath = GetRootDirSaveIcon(ishd) + "/microsoft/" + resMicrosoft[i] + ".png";
             listItem.Add(info);
         }
     }
@@ -123,15 +123,15 @@ public class ImageConvert
                 info.w = listsize[i];
                 info.h = info.w;
                 info.srcPath = GetIconFile(ishd);
-                info.dstPath = GetRootDir(ishd) + "/" + dir + "/icon_" + info.w + ".png";
+                info.dstPath = GetRootDirSaveIcon(ishd) + "/" + dir + "/icon_" + info.w + ".png";
                 listItem.Add(info);
             }
             {
                 IconInfo info = new IconInfo();
                 info.w = listsize[i];
                 info.h = info.w;
-                info.srcPath = GetRootDir(ishd) + "/icon_android.png";
-                info.dstPath = GetRootDir(ishd) + "/" + dir + "/icon_android_" + info.w + ".png";
+                info.srcPath = GetRootDirSaveIcon(ishd) + "/icon_android.png";
+                info.dstPath = GetRootDirSaveIcon(ishd) + "/" + dir + "/icon_android_" + info.w + ".png";
                 listItem.Add(info);
             }
 
@@ -142,10 +142,10 @@ public class ImageConvert
 
     string GetIconFile(bool ishd)
     {
-        string icon_path = GetRootDir(ishd) + "/icon.jpg";//png
+        string icon_path = GetRootDirIconSrc(ishd) + "/icon.jpg";//png
         if (!FileUtil.FileIsExist(icon_path))
         {
-            icon_path = GetRootDir(ishd) + "/icon.png";
+            icon_path = GetRootDirIconSrc(ishd) + "/icon.png";
         }
         return icon_path;
     }
@@ -155,7 +155,7 @@ public class ImageConvert
     {
         string icon_path = GetIconFile(ishd);//png 
         Debug.Log("ImageConvert icon_path=" + icon_path);
-        string icon_path_android = GetRootDir(ishd) + "/icon_android.png";
+        string icon_path_android = GetRootDirSaveIcon(ishd) + "/icon_android.png";
         Texture2D texIcon = LoadTexture.LoadFromFile(icon_path);
         //保存圆角的android  icon 
         {
@@ -168,18 +168,18 @@ public class ImageConvert
         //512 android
         {
             Texture2D tex512 = TextureUtil.ConvertSize(texIconAndroid, 512, 512);
-            string filepath = GetRootDir(ishd) + "/icon_android_512.png";
+            string filepath = GetRootDirSaveIcon(ishd) + "/icon_android_512.png";
             TextureUtil.SaveTextureToFile(tex512, filepath);
-            filepath = GetRootDir(ishd) + "/icon_android_512.jpg";
+            filepath = GetRootDirSaveIcon(ishd) + "/icon_android_512.jpg";
             TextureUtil.SaveTextureToFile(tex512, filepath);
         }
 
         //512 ios
         {
             Texture2D tex512 = TextureUtil.ConvertSize(texIcon, 512, 512);
-            string filepath = GetRootDir(ishd) + "/icon_512.png";
+            string filepath = GetRootDirSaveIcon(ishd) + "/icon_512.png";
             TextureUtil.SaveTextureToFile(tex512, filepath);
-            filepath = GetRootDir(ishd) + "/icon_512.jpg";
+            filepath = GetRootDirSaveIcon(ishd) + "/icon_512.jpg";
             TextureUtil.SaveTextureToFile(tex512, filepath);
         }
 
@@ -187,14 +187,14 @@ public class ImageConvert
         //1024 ios
         {
             Texture2D tex = TextureUtil.ConvertSize(texIcon, 1024, 1024);
-            string filepath = GetRootDir(ishd) + "/icon_1024.jpg";
+            string filepath = GetRootDirSaveIcon(ishd) + "/icon_1024.jpg";
             TextureUtil.SaveTextureToFile(tex, filepath);
         }
 
         //1024 android
         {
             Texture2D tex = TextureUtil.ConvertSize(texIconAndroid, 1024, 1024);
-            string filepath = GetRootDir(ishd) + "/icon_android_1024.jpg";
+            string filepath = GetRootDirSaveIcon(ishd) + "/icon_android_1024.jpg";
             TextureUtil.SaveTextureToFile(tex, filepath);
         }
     }
@@ -217,13 +217,18 @@ public class ImageConvert
         Texture2D texRet = TextureUtil.RenderTexture2Texture2D(rt);
         return texRet;
     }
-    string GetRootDir(bool ishd)
+    string GetRootDirIconSrc(bool ishd)
     {
         string name = ishd ? "iconhd" : "icon";
         string ret = UIScreenShotController.GetRootDirIcon() + "/" + name;
         return ret;
     }
-
+    string GetRootDirSaveIcon(bool ishd)
+    {
+        string name = ishd ? "iconhd" : "icon";
+        string ret = UIScreenShotController.GetRootDirOutPut() + "/" + name;
+        return ret;
+    }
     string GetRootDirResourceData()
     {
         string ret = AppsConfig.ROOT_DIR_PC + "/ResourceData/" + Common.appType + "/" + Common.appKeyName;

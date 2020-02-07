@@ -15,7 +15,7 @@ public static class BuildiOSPlayer
     ////该属性是在build完成后，被调用的callback
 
 #if UNITY_2019_2_0
-    [PostProcessBuild]//PostProcessBuildAttribute
+    [PostProcessBuildAttribute]// PostProcessBuild PostProcessBuildAttribute
 #else
     [PostProcessBuildAttribute]
 #endif

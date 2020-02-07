@@ -38,7 +38,7 @@ public class BuildPlayer
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Custom/Build Android")]
+    [MenuItem("Build/Export Android")]
     static void PerformAndroidBuild()
     {
         Debug.Log("PerformAndroidBuild start");
@@ -49,7 +49,7 @@ public class BuildPlayer
 
 
 
-    [MenuItem("Custom/Build iPhone")]
+    [MenuItem("Build/Export iPhone")]
     static void PerformiPhoneQQBuild()
     {
         BulidTarget("QQ", "IOS");
@@ -142,6 +142,10 @@ public class BuildPlayer
         if (summary.result == BuildResult.Succeeded)
         {
             Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                RunShell.RunProcessCommand("explorer.exe", dirRootProject);
+            }
         }
 
         if (summary.result == BuildResult.Failed)
