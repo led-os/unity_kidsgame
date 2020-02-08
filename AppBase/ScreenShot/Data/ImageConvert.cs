@@ -270,11 +270,19 @@ public class ImageConvert
     {
 
         List<string> listImage = new List<string>();
-        string pic = GetRootDirResourceData() + "/GameData/startup.jpg";
-        listImage.Add(pic);
-
-        string dirBg = GetRootDirBg();
-
+        string pic;
+        //startup
+        string file_startup = "/GameData/startup.jpg";
+        {
+            pic = GetRootDirResourceData() + file_startup;
+            listImage.Add(pic);
+        }
+        {
+            pic = Application.streamingAssetsPath + file_startup;
+            listImage.Add(pic);
+        }
+        //string dirBg = GetRootDirBg();
+        string dirBg = Application.dataPath + "/Resources/App/UI/Bg";
         // C#遍历指定文件夹中的所有文件 
         DirectoryInfo TheFolder = new DirectoryInfo(dirBg); ;
         // //遍历文件
@@ -288,6 +296,10 @@ public class ImageConvert
             }
 
         }
+
+        //
+
+
 
         for (int i = 0; i < listImage.Count; i++)
         {

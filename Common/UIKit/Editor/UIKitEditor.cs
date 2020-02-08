@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class UIKitEditor : Editor
 {
-    public const string KEY_MENU_GameObject_UI = "GameObject/Moonma";
+    public const string KEY_MENU_GameObject_UI = "Moonma/UI";
     void Awake()
     {
 

@@ -53,9 +53,10 @@ public class AnimateButton : UIBehaviour, IPointerClickHandler
     /// <param name="eventData">The data associated to the pointer event.</param>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("AnimateButton OnPointerClick");
+        Debug.Log("AnimateButton OnPointerClick blockInput=" + blockInput);
         if (eventData.button != PointerEventData.InputButton.Left || !interactable)
         {
+            Debug.Log("AnimateButton OnPointerClick fail");
             return;
         }
 
@@ -92,6 +93,7 @@ public class AnimateButton : UIBehaviour, IPointerClickHandler
     private IEnumerator InvokeOnClickAction()
     {
         yield return new WaitForSeconds(0.2f);
+        blockInput = false;
         m_onClick.Invoke();
     }
 

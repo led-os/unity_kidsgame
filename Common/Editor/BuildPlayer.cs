@@ -12,12 +12,13 @@ using UnityEditor.Build.Reporting;
 //http://www.xuanyusong.com/archives/2418
 public class BuildPlayer
 {
+    public const string KEY_MENU_ROOT = "Moonma/Build";
     //得到工程中所有场景名称
     static string[] SCENES = FindEnabledEditorScenes();
     //一系列批量build的操作
     static public string dirRootProject;
 
-    [MenuItem("Tool/TestCompressFiles")]
+    [MenuItem(KEY_MENU_ROOT + "/Tool/TestCompressFiles")]
     static void CompressFiles()
     {
         string[] fileName = new string[] {
@@ -29,7 +30,7 @@ public class BuildPlayer
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tool/TestUnCompressFiles")]
+    [MenuItem(KEY_MENU_ROOT + "/Tool/TestUnCompressFiles")]
     static void UnCompressFiles()
     {
         string zipPath = Application.dataPath + @"/ZipTest/ZipTest.zip";
@@ -38,7 +39,7 @@ public class BuildPlayer
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Build/Export Android")]
+    [MenuItem(KEY_MENU_ROOT + "/Export Android")]
     static void PerformAndroidBuild()
     {
         Debug.Log("PerformAndroidBuild start");
@@ -46,10 +47,7 @@ public class BuildPlayer
         Debug.Log("PerformAndroidBuild end");
     }
 
-
-
-
-    [MenuItem("Build/Export iPhone")]
+    [MenuItem(KEY_MENU_ROOT + "/Export iPhone")]
     static void PerformiPhoneQQBuild()
     {
         BulidTarget("QQ", "IOS");
