@@ -177,8 +177,8 @@ public static class BuildiOSPlayer
         {
             //unity 2019.3 bug
             //需要手动添加第三方库 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
-            AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
-            AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
+           // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
+           // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
         }
 
 

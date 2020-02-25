@@ -48,7 +48,7 @@ public class BuildPlayer
     }
 
     [MenuItem(KEY_MENU_ROOT + "/Export iPhone")]
-    static void PerformiPhoneQQBuild()
+    static void PerformiPhoneBuild()
     {
         BulidTarget("QQ", "IOS");
     }

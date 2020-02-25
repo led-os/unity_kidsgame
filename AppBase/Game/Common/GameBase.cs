@@ -41,6 +41,7 @@ public class GameBase : UIView
     }
     public void OnGameFail()
     {
+         Debug.Log("OnGameFail");
         if (iDelegate != null)
         {
             iDelegate.OnGameDidFail(this);
