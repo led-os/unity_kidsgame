@@ -53,9 +53,20 @@ public class BuildPlayer
         BulidTarget("QQ", "IOS");
     }
 
+    static void ConverIcon()
+    {
+
+        if (Directory.Exists(ImageConvert.main.GetRootDirSaveIcon(false)))
+        {
+            return;
+        }
+        ImageConvert.main.OnConvertIcon();
+    }
+
     //这里封装了一个简单的通用方法。
     static void BulidTarget(string name, string target)
     {
+        ConverIcon();
         string app_name = name;
         string target_dir = Application.dataPath + "/OutPut";
         string target_name = name + ".apk";

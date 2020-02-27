@@ -154,8 +154,11 @@ public class ImageConvert
     void ConvertMainIcon(bool ishd)
     {
         string icon_path = GetIconFile(ishd);//png 
+        string dirsave = GetRootDirSaveIcon(ishd);
+        FileUtil.CreateDir(dirsave);
         Debug.Log("ImageConvert icon_path=" + icon_path);
-        string icon_path_android = GetRootDirSaveIcon(ishd) + "/icon_android.png";
+
+        string icon_path_android = dirsave + "/icon_android.png";
         Texture2D texIcon = LoadTexture.LoadFromFile(icon_path);
         //保存圆角的android  icon 
         {
@@ -223,7 +226,7 @@ public class ImageConvert
         string ret = UIScreenShotController.GetRootDirIcon() + "/" + name;
         return ret;
     }
-    string GetRootDirSaveIcon(bool ishd)
+    public string GetRootDirSaveIcon(bool ishd)
     {
         string name = ishd ? "iconhd" : "icon";
         string ret = UIScreenShotController.GetRootDirOutPut() + "/" + name;

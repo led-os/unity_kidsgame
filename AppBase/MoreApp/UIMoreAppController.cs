@@ -131,18 +131,67 @@ public class UIMoreAppController : UIView, ITableViewDataSource
         }
     }
 
+    public void ShowParentGate(int idx)
+    {
+        Debug.Log("ShowParentGate idx=" + idx);
+        ParentGateViewController.main.index = idx;
+        ParentGateViewController.main.Show(null, null);
+        ParentGateViewController.main.ui.callbackClose = OnUIParentGateDidCloseAppCenter;
 
+    }
+
+    public void OnUIParentGateDidCloseAppCenter(UIParentGate ui, bool isLongPress)
+    {
+        if (isLongPress)
+        {
+            Debug.Log("OnUIParentGateDidCloseAppCenter");
+            GotoAppUrl(ParentGateViewController.main.index);
+        }
+    }
     public void OnCellItemDidClick(UICellItemBase item)
     {
-        ItemInfo info = listItem[item.index] as ItemInfo;
-        string strAppUrl = info.url;
-        if (Common.BlankString(strAppUrl))
+        if (Config.main.APP_FOR_KIDS)
+        {
+            ShowParentGate(item.index);
+        }
+        else
+        {
+            GotoAppUrl(item.index);
+        }
+    }
+    void GotoAppUrl(int idx)
+    {
+        if (listItem == null)
         {
             return;
         }
-        Application.OpenURL(strAppUrl);
-    }
+        ItemInfo info = listItem[idx] as ItemInfo;
+        string appstorePackage = "";
+        string appstore = Source.APPSTORE;
+        if (Common.isAndroid)
+        {
+            if (Config.main.channel == Source.TAPTAP)
+            {
+                appstore = Source.TAPTAP;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_TAPTAP;
+            }
 
+            if (Config.main.channel == Source.XIAOMI)
+            {
+                appstore = Source.XIAOMI;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_XIAOMI;
+            }
+            if (Config.main.channel == Source.HUAWEI)
+            {
+                appstore = Source.HUAWEI;
+                appstorePackage = AppVersion.PACKAGE_APPSTORE_HUAWEI;
+            }
+
+        }
+        AppVersion.main.GotoToAppstoreApp(appstore, info.id, appstorePackage, info.url);
+
+
+    }
 
     #region ITableViewDataSource
 

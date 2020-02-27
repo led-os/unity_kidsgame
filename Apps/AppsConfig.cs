@@ -14,6 +14,11 @@ public class AppsConfig
             {
                 ret = ROOT_DIR_PC_WIN;
             }
+
+            ret = Application.dataPath;//assets
+            ret = FileUtil.GetLastDir(ret);
+            ret = FileUtil.GetLastDir(ret);
+            Debug.Log("ROOT_DIR_PC=" + ret);
             return ret;
         }
     }

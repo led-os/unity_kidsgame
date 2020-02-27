@@ -311,7 +311,7 @@ public class UIHomeAppCenter : UIView
 
     public void DoClickBtnAppIcon(int idx)
     {
-        if (Config.main.APP_FOR_KIDS && (!AppVersion.appCheckHasFinished))
+        if (Config.main.APP_FOR_KIDS)
         {
             ShowParentGate(idx);
         }

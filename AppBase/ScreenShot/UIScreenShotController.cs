@@ -224,7 +224,8 @@ public class UIScreenShotController : UIView
 
     public static string GetRootDirIcon()
     {
-        string ret = AppsConfig.ROOT_DIR_PC + "/ProjectIcon/" + Common.appType + "/" + Common.appKeyName;
+        //ResourceData ProjectIcon
+        string ret = AppsConfig.ROOT_DIR_PC + "/ResourceData/" + Common.appType + "/" + Common.appKeyName;
         return ret;
     }
     public static string GetRootDirOutPut()

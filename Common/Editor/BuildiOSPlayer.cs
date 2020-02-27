@@ -14,11 +14,11 @@ public static class BuildiOSPlayer
 {
     ////该属性是在build完成后，被调用的callback
 
-#if UNITY_2019_2_0
+// #if UNITY_2019_2_0
     [PostProcessBuildAttribute]// PostProcessBuild PostProcessBuildAttribute
-#else
-    [PostProcessBuildAttribute]
-#endif
+// #else
+    // [PostProcessBuildAttribute]
+// #endif
     // 
     static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
@@ -121,6 +121,17 @@ public static class BuildiOSPlayer
         }
     }
 
+  static bool isOldEditor( )
+    {
+        bool ret = false;
+
+#if UNITY_2019_2_0 || UNITY_2019_2_21
+            ret = true;
+#endif 
+
+        return ret;
+    }
+
     static void EditProj(string pathToBuiltProject)
     {
         string projPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
@@ -132,9 +143,10 @@ public static class BuildiOSPlayer
         string projectGuid = pbxProj.ProjectGuid();
         string targetGuid = "", unityFrameworkTargetGuid = "";
         bool isOldUnity = false;
+ 
 
+#if UNITY_2019_2_0 || UNITY_2019_2_21
 
-#if UNITY_2019_2_0
         isOldUnity = true;
         {
             targetGuid = pbxProj.TargetGuidByName("Unity-iPhone");
@@ -198,7 +210,7 @@ public static class BuildiOSPlayer
         //teamid 
         pbxProj.SetTeamId(targetGuid, "Y9ZUK2WTEE");
 
-        #region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
+#region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
         // string frameworksPath = Application.dataPath + "/Frameworks";
         // string[] directories = Directory.GetDirectories(frameworksPath, "*", SearchOption.TopDirectoryOnly);
         // for (int i = 0; i < directories.Length; i++)
@@ -217,7 +229,7 @@ public static class BuildiOSPlayer
         //     foreach (string file in Directory.GetFiles(destDirName, "*.*", SearchOption.AllDirectories))
         //         pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile(file, file.Replace(pathToBuiltProject + "/", ""), PBXSourceTree.Source));
         // }
-        #endregion
+#endregion
 
         pbxProj.WriteToFile(projPath);
     }
