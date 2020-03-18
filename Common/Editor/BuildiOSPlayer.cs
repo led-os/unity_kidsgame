@@ -14,12 +14,12 @@ public static class BuildiOSPlayer
 {
     ////该属性是在build完成后，被调用的callback
 
-// #if UNITY_2019_2_0
+    // #if UNITY_2019_2_0
     [PostProcessBuildAttribute]// PostProcessBuild PostProcessBuildAttribute
-// #else
-    // [PostProcessBuildAttribute]
-// #endif
-    // 
+                               // #else
+                               // [PostProcessBuildAttribute]
+                               // #endif
+                               // 
     static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
         Debug.Log("BuildiOSPlayer:" + pathToBuiltProject);
@@ -121,7 +121,7 @@ public static class BuildiOSPlayer
         }
     }
 
-  static bool isOldEditor( )
+    static bool isOldEditor()
     {
         bool ret = false;
 
@@ -143,7 +143,7 @@ public static class BuildiOSPlayer
         string projectGuid = pbxProj.ProjectGuid();
         string targetGuid = "", unityFrameworkTargetGuid = "";
         bool isOldUnity = false;
- 
+
 
 #if UNITY_2019_2_0 || UNITY_2019_2_21
 
@@ -189,8 +189,8 @@ public static class BuildiOSPlayer
         {
             //unity 2019.3 bug
             //需要手动添加第三方库 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
-           // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
-           // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
+            // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
+            // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
         }
 
 
@@ -199,18 +199,25 @@ public static class BuildiOSPlayer
         // 添加flag
         pbxProj.AddBuildProperty(targetGuid, "OTHER_LDFLAGS", "-ObjC");
 
+
+        //Unity采用XCode11编译后，在iOS 12.0机器上Crash问题 https://zhuanlan.zhihu.com/p/103076213
+        //pbxProj.AddBuildProperty(targetGuid, "OTHER_CFLAGS", "-mno-outline");
+
+
         // 打开选项
-        pbxProj.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
+        pbxProj.SetBuildProperty(targetGuid, "ENABLE_BITCBITCODE", "NO");
         pbxProj.SetBuildProperty(projectGuid, "ENABLE_BITCODE", "NO");
 
         pbxProj.SetBuildProperty(targetGuid, "CLANG_ENABLE_MODULES", "YES");
         pbxProj.SetBuildProperty(projectGuid, "CLANG_ENABLE_MODULES", "YES");
 
 
+
+
         //teamid 
         pbxProj.SetTeamId(targetGuid, "Y9ZUK2WTEE");
 
-#region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
+        #region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
         // string frameworksPath = Application.dataPath + "/Frameworks";
         // string[] directories = Directory.GetDirectories(frameworksPath, "*", SearchOption.TopDirectoryOnly);
         // for (int i = 0; i < directories.Length; i++)
@@ -229,7 +236,7 @@ public static class BuildiOSPlayer
         //     foreach (string file in Directory.GetFiles(destDirName, "*.*", SearchOption.AllDirectories))
         //         pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile(file, file.Replace(pathToBuiltProject + "/", ""), PBXSourceTree.Source));
         // }
-#endregion
+        #endregion
 
         pbxProj.WriteToFile(projPath);
     }

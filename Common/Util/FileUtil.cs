@@ -326,7 +326,7 @@ public class FileUtil : MonoBehaviour
         return ret;
     }
 
-    //文件后缀
+    //文件后缀 不如 png jpg ext 没有.
     static public string GetFileExt(string filepath)
     {
         string ret = "";
@@ -435,6 +435,43 @@ public class FileUtil : MonoBehaviour
             //删除空文件夹
 
             Directory.Delete(dir);
+
+        }
+    }
+
+    static public void DeleteMetaFiles(string dir)
+    {
+
+        //去除文件夹和子文件的只读属性
+        //去除文件夹的只读属性
+        System.IO.DirectoryInfo fileInfo = new DirectoryInfo(dir);
+        fileInfo.Attributes = FileAttributes.Normal & FileAttributes.Directory;
+
+        //去除文件的只读属性
+        System.IO.File.SetAttributes(dir, System.IO.FileAttributes.Normal);
+
+        //判断文件夹是否还存在
+        if (Directory.Exists(dir))
+        {
+
+            foreach (string f in Directory.GetFileSystemEntries(dir))
+            {
+
+                if (File.Exists(f))
+                {
+                    string ext = GetFileExt(f);
+                    if (ext == "meta")
+                    {
+                        File.Delete(f);
+                    }
+                }
+                else
+                {
+                    //循环递归删除子文件夹
+                    DeleteMetaFiles(f);
+                }
+
+            }
 
         }
 

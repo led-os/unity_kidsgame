@@ -89,22 +89,22 @@ public class LevelParseBase
         {
             JsonData item = items[i];
             ItemInfo info = new ItemInfo();
-            info.id = JsonUtil.JsonGetString(item, "id", "");
+            info.id = JsonUtil.GetString(item, "id", "");
             string filepath = Common.GAME_RES_DIR + "/place/image/" + info.id;
             info.pic = filepath + ".png";
             if (!FileUtil.FileIsExistAsset(info.pic))
             {
                 info.pic = filepath + ".jpg";
             }
-            info.gameType = JsonUtil.JsonGetString(item, "game", JsonUtil.JsonGetString(item, "game_type", ""));
-            info.type = JsonUtil.JsonGetString(item, "type", PLACE_ITEM_TYPE_NONE);
-            info.title = JsonUtil.JsonGetString(item, "title", "STR_PLACE_" + info.id);
+            info.gameType = JsonUtil.GetString(item, "game", JsonUtil.GetString(item, "game_type", ""));
+            info.type = JsonUtil.GetString(item, "type", PLACE_ITEM_TYPE_NONE);
+            info.title = JsonUtil.GetString(item, "title", "STR_PLACE_" + info.id);
             info.icon = info.pic;
-            info.language = JsonUtil.JsonGetString(item, "language", "language");
+            info.language = JsonUtil.GetString(item, "language", "language");
             // info.tag = PlaceScene.PLACE_ITEM_TYPE_GAME;
             info.index = i;
 
-            GameManager.main.pathGamePrefab = JsonUtil.JsonGetString(item, "prefab", "");
+            GameManager.main.pathGamePrefab = JsonUtil.GetString(item, "prefab", "");
 
             info.isAd = false;
             if (AppVersion.appCheckHasFinished && (!Common.noad))

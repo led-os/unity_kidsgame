@@ -7,6 +7,16 @@ using UnityEngine;
 public class JsonUtil : MonoBehaviour
 {
 
+    static public string GetString(JsonData data, string key, string strdefault)
+    {
+        return JsonGetString(data, key, strdefault);
+    }
+    static public bool GetBool(JsonData data, string key, bool _default)
+    {
+        return JsonGetBool(data, key, _default);
+    }
+
+
     static public string JsonGetString(JsonData data, string key, string strdefault)
     {
         string ret = strdefault;
@@ -23,6 +33,16 @@ public class JsonUtil : MonoBehaviour
         if (ContainsKey(data, key))
         {
             ret = (bool)data[key];
+        }
+        return ret;
+    }
+
+    static public int GetInt(JsonData data, string key, int _default)
+    {
+        int ret = _default;
+        if (ContainsKey(data, key))
+        {
+            ret = (int)data[key];
         }
         return ret;
     }
@@ -46,7 +66,7 @@ public class JsonUtil : MonoBehaviour
         return result;
     }
 
-    
+
 
 
 

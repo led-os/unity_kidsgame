@@ -51,7 +51,7 @@ public class ImageRes
     //cc.Vec4 (left,right,top,bottom)
     public Vector4 GetImageBoard(string key)
     {
-        var str = JsonUtil.JsonGetString(rootJson, GetBoardKey(key), "");
+        var str = JsonUtil.GetString(rootJson, GetBoardKey(key), "");
         return String2Vec4(str);
     }
 
@@ -62,6 +62,6 @@ public class ImageRes
     }
     public string GetImage(string key)
     {
-        return JsonUtil.JsonGetString(rootJson, key, "");
+        return JsonUtil.GetString(rootJson, key, "");
     }
 }

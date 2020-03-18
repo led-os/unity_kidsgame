@@ -10,10 +10,10 @@ public class AppsConfig
         get
         {
             string ret = ROOT_DIR_PC_MAC;
-            if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
-            {
-                ret = ROOT_DIR_PC_WIN;
-            }
+            // if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
+            // {
+            //     ret = ROOT_DIR_PC_WIN;
+            // }
 
             ret = Application.dataPath;//assets
             ret = FileUtil.GetLastDir(ret);

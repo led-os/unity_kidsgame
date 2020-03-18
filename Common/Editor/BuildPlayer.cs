@@ -153,7 +153,13 @@ public class BuildPlayer
             Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
-                RunShell.RunProcessCommand("explorer.exe", dirRootProject);
+                if (build_target == BuildTarget.iOS)
+                {
+                    FileUtil.DeleteMetaFiles(dirRootProject+"/Frameworks/Plugins");
+                    FileUtil.DeleteMetaFiles(dirRootProject+"/Libraries/Plugins");
+                    //RunShell阿里云上异常
+                    RunShell.RunProcessCommand("explorer.exe", dirRootProject);
+                }
             }
         }
 
