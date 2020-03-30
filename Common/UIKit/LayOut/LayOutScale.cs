@@ -58,6 +58,7 @@ public class LayOutScale : LayOutBase
     {
         MIN = 0,
         MAX,
+        SCREEN_MAX,//按屏幕 最大化
     }
 
     void Awake()
@@ -100,6 +101,25 @@ public class LayOutScale : LayOutBase
                     this.ScaleObj(this.gameObject, true);
                 }
                 break;
+            case Type.SCREEN_MAX:
+                {
+                    Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+                    {
+                        RectTransform rectTransform = this.GetComponent<RectTransform>();
+                        float w_image = rectTransform.rect.width;
+                        float h_image = rectTransform.rect.height;
+                        print(rectTransform.rect);
+                        float scalex = sizeCanvas.x / w_image;
+                        float scaley = sizeCanvas.y / h_image;
+                        float scale = Mathf.Max(scalex, scaley);
+                        this.transform.localScale = new Vector3(scale, scale, 1.0f);
+                        //屏幕坐标 现在在屏幕中央
+                        this.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+
+                    }
+                }
+                break;
+
 
         }
     }

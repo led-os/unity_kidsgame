@@ -11,7 +11,10 @@ public interface IUIWordContentBaseDelegate
 
     //提示
     void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word);
+    //
+    void UIWordContentBaseDidAdd(UIWordContentBase ui, string word);
 
+    void UIWordContentBaseDidGameFinish(UIWordContentBase ui, bool isFail);
 }
 
 public class UIWordContentBase : UIView

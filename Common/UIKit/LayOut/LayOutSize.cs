@@ -80,8 +80,8 @@ public class LayOutSize : LayOutBase
         MATCH_CONTENT = 0,//按内容设置
         MATCH_PARENT,//与父窗口等大或者按比例 
         MATCH_TARGET,//与目标等大或者按比例 
-        MATCH_PARENT_MIN,
-        MATCH_PARENT_MAX,
+        MATCH_PARENT_MIN,//父窗口width 和 height 的 min
+        MATCH_PARENT_MAX,//父窗口width 和 height 的 max
     }
     void Awake()
     {

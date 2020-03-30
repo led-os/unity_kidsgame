@@ -203,13 +203,23 @@ public class UIHowToPlayPage1 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
         }
     }
 
-   public void UIWordContentBaseDidBackWord(UIWordContentBase ui, string word)
+    public void UIWordContentBaseDidBackWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.BackWord(word);
     }
     public void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.HideWord(word);
+    }
+
+    public void UIWordContentBaseDidAdd(UIWordContentBase ui, string word)
+    {
+
+    }
+
+    public void UIWordContentBaseDidGameFinish(UIWordContentBase ui, bool isFail)
+    {
+
     }
     public override void OnPageExit()
     {

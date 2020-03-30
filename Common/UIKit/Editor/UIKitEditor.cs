@@ -167,4 +167,26 @@ public class UIKitEditor : Editor
         }
 
     }
+
+     [MenuItem(KEY_MENU_GameObject_UI + "/UISegment", false, 4)]
+    static void CreateUISegment()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UISegment/UISegment");
+            if (obj != null)
+            {
+                UISegment uiPrefab = obj.GetComponent<UISegment>();
+                UISegment ui = (UISegment)GameObject.Instantiate(uiPrefab);
+                ui.name = "UISegment";
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = ui.GetComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
 }

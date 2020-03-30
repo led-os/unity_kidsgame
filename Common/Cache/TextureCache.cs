@@ -69,6 +69,10 @@ public class TextureCache
     }
     public Texture2D Load(string filepath)
     {
+        if (Common.isBlankString(filepath))
+        {
+            return null;
+        }
         Texture2D tex = null;
         string key = filepath;
         if (dicItem.ContainsKey(key))

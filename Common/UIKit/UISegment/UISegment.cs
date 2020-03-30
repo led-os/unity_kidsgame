@@ -10,7 +10,7 @@ public class UISegment : UIView, ISegmentItemDelegate
     public GameObject objContent;
     public SegmentItem segmentItem;
     public int numRows;
-
+    public int indexSelect;
 
     Color colorSel = Color.red;
     Color colorUnSel = Color.white;
@@ -113,7 +113,7 @@ public class UISegment : UIView, ISegmentItemDelegate
 
     public void UpdateList()
     {
-        Select(0);
+        Select(0, true);
         //totalItem = listItem.Count;
         numRows = totalItem;
         // tableView.ReloadData();
@@ -133,6 +133,7 @@ public class UISegment : UIView, ISegmentItemDelegate
     }
     public void Select(int idx, bool isClick = false)
     {
+        indexSelect = idx;
         foreach (SegmentItem item in listItem)
         {
             if (idx == item.index)

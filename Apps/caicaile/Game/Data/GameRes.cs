@@ -12,6 +12,8 @@ public class GameRes
     public const string GAME_Guess = "Guess";
     public const string GAME_RIDDLE = "Riddle";
     public const string GAME_IdiomConnect = "IdiomConnect";
+    public const string GAME_IdiomFlower = "IdiomFlower";
+
     //type 
     public const string GAME_TYPE_IMAGE = "Image";
     public const string GAME_TYPE_TEXT = "Text";

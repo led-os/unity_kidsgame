@@ -26,6 +26,10 @@ public class EditorIdiomFlower : Editor
     static List<FlowerEditorJsonItemInfo> listJson = new List<FlowerEditorJsonItemInfo>();
     static public FlowerEditorItemInfo infoSeed;
     static public List<FlowerEditorItemInfo> listItemSel;//选中 
+
+    static public List<object> listAllIdiom;
+
+    //生成成语相邻位置的数据
     [MenuItem("CaiCaiLe/MakeIdiomFlowerData")]
     static void OnMakeIdiomFlowerData()
     {
@@ -50,6 +54,116 @@ public class EditorIdiomFlower : Editor
 
     }
 
+
+    //生成成语关卡数据：不出现重复的字
+    [MenuItem("CaiCaiLe/MakeIdiomFlowerGuankaData")]
+    static void OnMakeIdiomFlowerGuankaData()
+    {
+        GetAllIdiom();
+        LevelParseIdiomFlower.main.ParseCategory();
+        int count = LevelParseIdiomFlower.main.listCategory.Count;
+        for (int i = 0; i < count; i++)
+        {
+            CaiCaiLeItemInfo info = LevelParseIdiomFlower.main.listCategory[i] as CaiCaiLeItemInfo;
+            LevelParseIdiomFlower.main.categoryTitle = info.title;
+
+            List<object> listsort = LevelParseIdiomFlower.main.ParseSort(info.title);
+
+            for (int j = 0; j < listsort.Count; j++)
+            {
+                CaiCaiLeItemInfo infoSort = listsort[j] as CaiCaiLeItemInfo;
+                LevelParseIdiomFlower.main.sortTitle = infoSort.title;
+                LevelParseIdiomFlower.main.CleanGuankaList();
+                // LevelParseIdiomFlower.main.ParseGuanka();
+
+                {
+
+                    string filepath = Common.GAME_RES_DIR + "/guanka/" + LevelParseIdiomFlower.main.categoryTitle + "/" + LevelParseIdiomFlower.main.sortTitle + ".json";
+                    //FILE_PATH
+                    string json = FileUtil.ReadStringAsset(filepath);
+                    JsonData root = JsonMapper.ToObject(json);
+                    JsonData items = root["items"];
+                    for (int k = 0; k < items.Count; k++)
+                    {
+
+                        JsonData item = items[k];
+                        string title = JsonUtil.GetString(item, "title", "");
+                        if (title.Length != 4)
+                        {
+                            continue;
+                        }
+                        List<object> listother = GetOtherIdiomList(title);
+                        int[] indexOther = Common.RandomIndex(listother.Count, 3);
+                        CaiCaiLeItemInfo info0 = listother[indexOther[0]] as CaiCaiLeItemInfo;
+                        item["other0"] = info0.title;
+                        CaiCaiLeItemInfo info1 = listother[indexOther[1]] as CaiCaiLeItemInfo;
+                        item["other1"] = info1.title;
+                        CaiCaiLeItemInfo info2 = listother[indexOther[2]] as CaiCaiLeItemInfo;
+                        item["other2"] = info2.title;
+                    }
+
+                    //save json 
+                    string strJson = JsonMapper.ToJson(root);
+                    filepath =Application.streamingAssetsPath + "/" + Common.GAME_RES_DIR + "/guanka/" + LevelParseIdiomFlower.main.categoryTitle + "/" + LevelParseIdiomFlower.main.sortTitle + ".json";
+                    byte[] bytes = Encoding.UTF8.GetBytes(strJson);
+                    System.IO.File.WriteAllBytes(filepath, bytes);
+
+                }
+            }
+        }
+    }
+    static void GetAllIdiom()
+    {
+        listAllIdiom = new List<object>();
+        LevelParseIdiomFlower.main.ParseCategory();
+        int count = LevelParseIdiomFlower.main.listCategory.Count;
+        for (int i = 0; i < count; i++)
+        {
+            CaiCaiLeItemInfo info = LevelParseIdiomFlower.main.listCategory[i] as CaiCaiLeItemInfo;
+            LevelParseIdiomFlower.main.categoryTitle = info.title;
+
+            List<object> listsort = LevelParseIdiomFlower.main.ParseSort(info.title);
+
+            for (int j = 0; j < listsort.Count; j++)
+            {
+                CaiCaiLeItemInfo infoSort = listsort[j] as CaiCaiLeItemInfo;
+                LevelParseIdiomFlower.main.sortTitle = infoSort.title;
+                LevelParseIdiomFlower.main.CleanGuankaList();
+                LevelParseIdiomFlower.main.ParseGuanka();
+                listAllIdiom.AddRange(LevelParseIdiomFlower.main.listGuanka);
+            }
+        }
+
+        Debug.Log("listAllIdiom Count=" + listAllIdiom.Count);
+    }
+    static List<object> GetOtherIdiomList(string idiom)
+    {
+        List<object> listother = new List<object>();
+        foreach (object obj in listAllIdiom)
+        {
+            CaiCaiLeItemInfo info = obj as CaiCaiLeItemInfo;
+            if (!IsWordCross(idiom, info.title))
+            {
+                listother.Add(obj);
+            }
+        }
+        return listother;
+    }
+
+    //判断两个string是否有重复的字
+    static bool IsWordCross(string word1, string word2)
+    {
+        bool ret = false;
+        for (int i = 0; i < word1.Length; i++)
+        {
+            if (word2.Contains(word1.Substring(i, 1)))
+            {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
+    }
     static void AddJson()
     {
         //save guanka json 

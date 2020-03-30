@@ -38,6 +38,10 @@ public class UIImage : UIView
 
     public void UpdateImage(string pic)
     {
+        if(Common.isBlankString(pic))
+        {
+            return;
+        }
         bool isBoard = ImageRes.main.IsHasBoard(keyImage);
         Vector4 board = Vector4.zero;
         if (isBoard)

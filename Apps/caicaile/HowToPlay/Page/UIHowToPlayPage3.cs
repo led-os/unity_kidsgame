@@ -210,7 +210,14 @@ public class UIHowToPlayPage3 : UIHowToPlayPage, IUIWordBoardDelegate, IUIWordCo
     {
         uiWordBoard.HideWord(word);
     }
+    public void UIWordContentBaseDidGameFinish(UIWordContentBase ui, bool isFail)
+    {
 
+    }
+    public void UIWordContentBaseDidAdd(UIWordContentBase ui, string word)
+    {
+
+    }
     public override void OnPageExit()
     {
         StopAnimate();

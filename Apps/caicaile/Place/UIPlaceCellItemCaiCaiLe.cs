@@ -33,9 +33,14 @@ public class UIPlaceCellItemCaiCaiLe : UICellItemBase
             LanguageManager.main.UpdateLanguagePlace();
             textTitle.text = LanguageManager.main.languagePlace.GetString("STR_PLACE_" + info.id);
         }
+
+        if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+        {
+            textTitle.gameObject.SetActive(true);
+            textTitle.text = info.title;
+        }
         TextureUtil.UpdateRawImageTexture(imageBg, pic, true);
         imageIcon.gameObject.SetActive(info.isAd);
-        // textTitle.color = GameRes.main.colorTitle;
         LayOut();
     }
     public override bool IsLock()

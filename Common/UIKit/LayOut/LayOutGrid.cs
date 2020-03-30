@@ -118,6 +118,16 @@ public class LayOutGrid : LayOutBase
 
         float x_left = 0, y_bottom = 0;
 
+        if (childForceExpandWidth)
+        {
+            space.x = (w - item_w * col) / (col + 1);
+        }
+
+        if (childForceExpandHeight)
+        {
+            space.y = (h - item_h * row) / (row + 1);
+        }
+
         float w_total = item_w * col + (space.x * (col - 1));
         float h_total = item_h * row + (space.y * (row - 1));
 
@@ -142,8 +152,12 @@ public class LayOutGrid : LayOutBase
 
         }
 
-        x = x_left + item_w * c + item_w / 2 + space.x * c;
 
+        x = x_left + item_w * c + item_w / 2 + space.x * c;
+        if (childForceExpandWidth)
+        {
+            x += space.x;
+        }
 
         if (childForceExpandHeight)
         {
@@ -165,7 +179,10 @@ public class LayOutGrid : LayOutBase
             }
         }
         y = y_bottom + item_h * r + item_h / 2 + space.y * r;
-
+        if (childForceExpandHeight)
+        {
+            y += space.y;
+        }
         return new Vector2(x, y);
 
     }

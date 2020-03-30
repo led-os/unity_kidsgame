@@ -101,6 +101,32 @@ public class LayOutRelation : LayOutBase
                     {
                         y = -h_parent / 2 + h / 2 + this.offset.y;
                     }
+
+
+
+                    if (this.align == LayOutBase.Align.UP_LEFT)
+                    {
+                        x = -w_parent / 2 + w / 2 + this.offset.x;
+                        y = h_parent / 2 - h / 2 - this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.UP_RIGHT)
+                    {
+                        x = w_parent / 2 - w / 2 - this.offset.x;
+                        y = h_parent / 2 - h / 2 - this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.DOWN_LEFT)
+                    {
+                        x = -w_parent / 2 + w / 2 + this.offset.x;
+                        y = -h_parent / 2 + h / 2 + this.offset.y;
+                    }
+
+                    if (this.align == LayOutBase.Align.DOWN_RIGHT)
+                    {
+                        x = w_parent / 2 - w / 2 - this.offset.x;
+                        y = -h_parent / 2 + h / 2 + this.offset.y;
+                    }
+
+
                 }
                 break;
             case Type.TARGET:
@@ -136,6 +162,28 @@ public class LayOutRelation : LayOutBase
                     {
                         x = ptTarget.x;
                         y = ptTarget.y;
+                    }
+
+                    if (this.align == LayOutBase.Align.UP_LEFT)
+                    {
+                        x = ptTarget.x - rctranTarget.rect.width / 2 - w / 2 - this.offset.x;
+                        y = ptTarget.y + rctranTarget.rect.height / 2 + h / 2 + this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.UP_RIGHT)
+                    {
+                        x = ptTarget.x + rctranTarget.rect.width / 2 + w / 2 + this.offset.x;
+                        y = ptTarget.y + rctranTarget.rect.height / 2 + h / 2 + this.offset.y;
+                    }
+                    if (this.align == LayOutBase.Align.DOWN_LEFT)
+                    {
+                        x = ptTarget.x - rctranTarget.rect.width / 2 - w / 2 - this.offset.x;
+                        y = ptTarget.y - rctranTarget.rect.height / 2 - h / 2 - this.offset.y;
+                    }
+
+                    if (this.align == LayOutBase.Align.DOWN_RIGHT)
+                    {
+                        x = ptTarget.x + rctranTarget.rect.width / 2 + w / 2 + this.offset.x;
+                        y = ptTarget.y - rctranTarget.rect.height / 2 - h / 2 - this.offset.y;
                     }
                 }
                 break;

@@ -139,6 +139,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     // Use this for initialization
     void Start()
     {
+        LayOut();
         UpdateGuankaLevel(LevelManager.main.gameLevel);
         //OnGameWinFinish(uiWordBar, false);
     }
@@ -183,6 +184,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             case GameRes.GAME_TYPE_FLOWER:
                 {
                     uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordFlowerPrefab);
+                    uiWordBoard.gameObject.SetActive(false);
+                    uiWordBar.gameObject.SetActive(false);
+                    objLayouBtn.SetActive(false);
                 }
                 break;
 
@@ -231,7 +235,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         }
 
         {
-            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Game/UIWordFlower");
+            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Game/Flower/UIWordFlower");
             if (obj != null)
             {
                 uiWordFlowerPrefab = obj.GetComponent<UIWordFlower>();
@@ -249,6 +253,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
     public override void LayOut()
     {
+        base.LayOut();
         float x = 0, y = 0, w = 0, h = 0;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
@@ -264,6 +269,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
             //屏幕坐标 现在在屏幕中央
             imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        }
+
+        if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+        {
+            return;
         }
 
         float ratio = 1f;
@@ -571,10 +581,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
             ViewAlertManager.main.ShowFull(title, msg, yes, no, false, STR_KEYNAME_VIEWALERT_GOLD, OnUIViewAlertFinished);
         }
-
     }
-
-
 
     public void UIWordBoardDidClick(UIWordBoard bd, UIWordItem item)
     {
@@ -654,6 +661,11 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
                         strPrefab = "App/Prefab/Game/UIGameWinIdiomConnect";
                     }
                     break;
+                case GameRes.GAME_IdiomFlower:
+                    {
+                        strPrefab = "App/Prefab/Game/UIGameWinIdiomFlower";
+                    }
+                    break;
 
                 default:
                     {
@@ -710,6 +722,15 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public void UIWordContentBaseDidTipsWord(UIWordContentBase ui, string word)
     {
         uiWordBoard.HideWord(word);
+    }
+    public void UIWordContentBaseDidAdd(UIWordContentBase ui, string word)
+    {
+        Debug.Log("UIWordContentBaseDidAdd ");
+
+    }
+    public void UIWordContentBaseDidGameFinish(UIWordContentBase ui, bool isFail)
+    {
+        OnGameWinFinish(uiWordBar, isFail);
     }
 
     public void UIWordBarDidBackWord(UIWordBar ui, string word)

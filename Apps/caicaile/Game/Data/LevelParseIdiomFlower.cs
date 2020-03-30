@@ -20,6 +20,11 @@ public class RowColInfo
 public class LevelParseIdiomFlower : GameLevelParseBase
 {
     public List<object> listPosition;
+    public List<object> listCategory;
+
+    public string categoryTitle;
+    public string sortTitle;
+
     static private LevelParseIdiomFlower _main = null;
     public static LevelParseIdiomFlower main
     {
@@ -48,7 +53,8 @@ public class LevelParseIdiomFlower : GameLevelParseBase
 
         ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
 
-        string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
+        string filepath = Common.GAME_RES_DIR + "/guanka/" + categoryTitle + "/" + sortTitle + ".json";
+        // Debug.Log("ParseGuanka filepath=" + filepath);
         //string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
         //
         //FILE_PATH
@@ -64,6 +70,10 @@ public class LevelParseIdiomFlower : GameLevelParseBase
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
             info.id = JsonUtil.GetString(item, "id", "");
             info.title = JsonUtil.GetString(item, "title", "");
+            if (info.title.Length != 4)
+            {
+                continue;
+            }
             info.pinyin = JsonUtil.GetString(item, "pronunciation", "");
             info.translation = JsonUtil.GetString(item, "translation", "");
             info.album = JsonUtil.GetString(item, "album", "");
@@ -74,13 +84,21 @@ public class LevelParseIdiomFlower : GameLevelParseBase
                 info.icon = info.pic;
             }
             info.gameType = GameRes.GAME_TYPE_FLOWER;
+            info.listIdiom = new List<string>();
+
+            info.listIdiom.Add(info.title);
+            info.listIdiom.Add(JsonUtil.GetString(item, "other0", ""));
+            info.listIdiom.Add(JsonUtil.GetString(item, "other1", ""));
+            info.listIdiom.Add(JsonUtil.GetString(item, "other2", ""));
+
+
             listGuanka.Add(info);
         }
         count = listGuanka.Count;
 
-        Debug.Log("ParseGuankaIdiomConnect count=" + count + " filepath=" + filepath);
+        // Debug.Log("ParseGuankaIdiomConnect count=" + count + " filepath=" + filepath);
         //每4个一组合
-        count = count / 4;
+        //  count = count / 4;
 
         return count;
     }
@@ -94,7 +112,49 @@ public class LevelParseIdiomFlower : GameLevelParseBase
         info.pinyin = idiom.pronunciation;
 
     }
+    public List<object> ParseCategory()
+    {
+        int count = 1;
+        if ((listCategory != null) && (listCategory.Count != 0))
+        {
+            return listCategory;
+        }
+        listCategory = new List<object>();
+        string filepath = Common.GAME_RES_DIR + "/guanka/category.json";
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        JsonData items = root["items"];
+        count = items.Count;
+        for (int i = 0; i < count; i++)
+        {
+            JsonData item = items[i];
+            CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
+            info.title = JsonUtil.GetString(item, "title", "");
+            listCategory.Add(info);
+        }
+        return listCategory;
+    }
 
+    public List<object> ParseSort(string category)
+    {
+        int count = 1;
+        List<object> listSort = new List<object>();
+        string filepath = Common.GAME_RES_DIR + "/guanka/" + category + "/sort.json";
+        //FILE_PATH
+        string json = FileUtil.ReadStringAsset(filepath);
+        JsonData root = JsonMapper.ToObject(json);
+        JsonData items = root["items"];
+        count = items.Count;
+        for (int i = 0; i < count; i++)
+        {
+            JsonData item = items[i];
+            CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
+            info.title = JsonUtil.GetString(item, "title", "");
+            listSort.Add(info);
+        }
+        return listSort;
+    }
 
     // "rowcol": "2-0,3-0,3-1,2-1,3-2,2-2,3-3,2-3,0-3,0-2,1-3,1-2,0-0,1-1,1-0,0-1"
     public List<RowColInfo> ParseRowColInfo(string rowcol)

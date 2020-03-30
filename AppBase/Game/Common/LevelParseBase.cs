@@ -11,7 +11,7 @@ public class LevelParseBase
     public const string PLACE_ITEM_TYPE_VIDEO = "video";
     public const string PLACE_ITEM_TYPE_LOCK = "lock";
 
-    public List<object> listGuanka;
+     public List<object> listGuanka;
     private List<object> _listPlace = null;
 
     public List<object> listGuankaItemId;//image id

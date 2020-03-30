@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 0
 --- !u!196 &4
@@ -131,7 +132,6 @@ GameObject:
   - component: {fileID: 286916024}
   - component: {fileID: 286916023}
   - component: {fileID: 286916022}
-  - component: {fileID: 286916021}
   - component: {fileID: 286916020}
   - component: {fileID: 286916025}
   m_Layer: 0
@@ -143,14 +143,6 @@ GameObject:
   m_IsActive: 1
 --- !u!81 &286916020
 AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286916019}
-  m_Enabled: 1
---- !u!92 &286916021
-Behaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -381,6 +373,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -455,6 +448,7 @@ MonoBehaviour:
   tickUpdateCur: 0
   tickUpdateStep: 0
   imageBg: {fileID: 0}
+  listPopup: []
   canvasMain: {fileID: 398236267}
   lightMain: {fileID: 0}
   canvasCamera: {fileID: 0}

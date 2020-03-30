@@ -276,6 +276,10 @@ public class UIHomeCaiCaiLe : UIHomeBase
         {
             NaviViewController navi = this.controller.naviController;
             int total = LevelManager.main.placeTotal;
+            if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+            {
+                total = 2;
+            }
             if (total > 1)
             {
                 navi.Push(PlaceViewController.main);

@@ -261,7 +261,7 @@ public class UIScreenShotController : UIView
         }
         else if (deviceInfoNow.name == ScreenDeviceInfo.DEVICE_NAME_ICON)
         {
-            ret = rootDir + "/" + info.name;
+            ret = GetRootDirIcon() + "/" + info.name;
             if (info.isIconHd)
             {
                 ret += "hd";
@@ -615,7 +615,12 @@ public class UIScreenShotController : UIView
         indexDevice = FindDeviceByName(ScreenDeviceInfo.DEVICE_NAME_ICON);
         GotoDevice(indexDevice);
     }
-
+    public void OnClickBtnAdHome()
+    {
+        isClickNextPreDevice = true;
+        indexDevice = FindDeviceByName(ScreenDeviceInfo.DEVICE_NAME_AD);
+        GotoDevice(indexDevice);
+    }
     public void OnClickBtnCopyRight()
     {
         indexScreenShot = 0;
