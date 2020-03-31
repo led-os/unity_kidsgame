@@ -38,7 +38,7 @@ public class UIImage : UIView
 
     public void UpdateImage(string pic)
     {
-        if(Common.isBlankString(pic))
+        if (Common.isBlankString(pic))
         {
             return;
         }
@@ -51,7 +51,7 @@ public class UIImage : UIView
         RectTransform rctranOrigin = this.GetComponent<RectTransform>();
         Vector2 offsetMin = rctranOrigin.offsetMin;
         Vector2 offsetMax = rctranOrigin.offsetMax;
-
+        Debug.Log("UpdateImage pic=" + pic);
         Texture2D tex = TextureCache.main.Load(pic);
         TextureUtil.UpdateImageTexture(image, tex, true, board);
         RectTransform rctan = this.GetComponent<RectTransform>();

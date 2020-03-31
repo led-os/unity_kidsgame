@@ -47,28 +47,18 @@ public class UIItemFlower : UIView
             _status = value;
             // imageSel.gameObject.SetActive(false);
 
-            if (_status == Status.SELECT)
+            if (_status == Status.NORMAL)
             {
                 imageBg.UpdateImageByKey("LetterBgNormal");
-                // imageBg.gameObject.SetActive(true);
-                // TextureUtil.UpdateImageTexture(imageBg, GameRes.IMAGE_LetterBgLock, true);
-                // textTitle.gameObject.SetActive(false);
-                // imageIcon.gameObject.SetActive(false);
-                // imageSel.gameObject.SetActive(true);
 
 
             }
 
 
-            if (_status == Status.NORMAL)
+            if (_status == Status.SELECT)
             {
                 imageBg.UpdateImageByKey("LetterBgSel");
 
-                // textTitle.color = Color.black;
-                // imageBg.gameObject.SetActive(true);
-                // TextureUtil.UpdateImageTexture(imageBg, GameRes.IMAGE_LetterBgNormal, true);
-                // textTitle.gameObject.SetActive(true);
-                // imageIcon.gameObject.SetActive(false);
             }
 
         }
@@ -78,7 +68,7 @@ public class UIItemFlower : UIView
     /// </summary>
     void Awake()
     {
-     
+
         status = Status.NORMAL;
         LayOut();
     }
@@ -88,7 +78,10 @@ public class UIItemFlower : UIView
     {
         base.LayOut();
     }
-
+    public void SetFontSize(int size)
+    {
+        textTitle.fontSize = size;
+    }
 
     public void UpdateItem(string letter)
     {

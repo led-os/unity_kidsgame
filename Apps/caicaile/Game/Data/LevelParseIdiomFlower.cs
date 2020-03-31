@@ -34,6 +34,14 @@ public class LevelParseIdiomFlower : GameLevelParseBase
             {
                 _main = new LevelParseIdiomFlower();
                 _main.ParsePosition();
+                _main.ParseCategory();
+                CaiCaiLeItemInfo info = _main.listCategory[0] as CaiCaiLeItemInfo;
+                _main.categoryTitle = info.title;
+                List<object> listSort = _main.ParseSort(_main.categoryTitle);
+
+                info = listSort[0] as CaiCaiLeItemInfo;
+                _main.sortTitle = info.title;
+
             }
             return _main;
         }
@@ -58,6 +66,10 @@ public class LevelParseIdiomFlower : GameLevelParseBase
         //string filepath = Common.GAME_RES_DIR + "/guanka/first.json";
         //
         //FILE_PATH
+        if (!FileUtil.FileIsExistAsset(filepath))
+        {
+            return count;
+        }
         string json = FileUtil.ReadStringAsset(filepath);
         JsonData root = JsonMapper.ToObject(json);
 

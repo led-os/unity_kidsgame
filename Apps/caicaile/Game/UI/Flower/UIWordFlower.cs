@@ -20,7 +20,7 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
     public GameObject objBtnBar;
     public UIAnswer uiAnswer;
 
-    public UIItemFlower UIItemFlowerPrefab;
+    public UIItemFlower uiItemFlowerPrefab;
     public int row = 7;
     public int col = 7;
     public List<UIItemFlower> listItem;
@@ -69,19 +69,21 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
     {
         base.LayOut();
         float x, y, w, h;
-        RectTransform rctranRoot = this.GetComponent<RectTransform>();
+        RectTransform rctranRoot = objWord.GetComponent<RectTransform>();
         Debug.Log("rctranRoot w=" + rctranRoot.rect.width + " h=" + rctranRoot.rect.height);
 
         if (lygrid != null)
         {
-            lygrid.LayOut();
+            //lygrid.LayOut();
             foreach (UIItemFlower item in listItem)
             {
-                Vector2 pos = lygrid.GetItemPostion(item.gameObject, item.indexRow, item.indexCol);
+
                 RectTransform rctran = item.GetComponent<RectTransform>();
-                w = (rctranRoot.rect.width - (lygrid.space.x) * (col - 1)) / col;
+                w = (rctranRoot.rect.width - (lygrid.space.x) * (col + 1)) / col;
                 h = w;
                 rctran.sizeDelta = new Vector2(w, h);
+                item.SetFontSize((int)(w * 0.7f));
+                Vector2 pos = lygrid.GetItemPostion(item.gameObject, item.indexRow, item.indexCol);
                 rctran.anchoredPosition = pos;
                 item.LayOut();
             }
@@ -115,10 +117,10 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
             string strIdiom = info.listIdiom[i];
             for (int j = 0; j < strIdiom.Length; j++)
             {
-                UIItemFlower ui = (UIItemFlower)GameObject.Instantiate(UIItemFlowerPrefab);
+                UIItemFlower ui = (UIItemFlower)GameObject.Instantiate(uiItemFlowerPrefab);
                 ui.transform.SetParent(objWord.transform);
                 ui.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                UIViewController.ClonePrefabRectTransform(UIItemFlowerPrefab.gameObject, ui.gameObject);
+                UIViewController.ClonePrefabRectTransform(uiItemFlowerPrefab.gameObject, ui.gameObject);
                 ui.iDelegate = this;
                 RowColInfo infoRowCol = infoPos.listRowCol[idx];
                 ui.indexRow = infoRowCol.row;
