@@ -4,9 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 public class LayOutSize : LayOutBase
 {
+
+    public enum SideType
+    {
+        LEFT = 0,// 
+        RIGHT,
+        UP,
+        DOWN,
+    }
     public float ratioW = 1f;
     public float ratioH = 1f;
     public GameObject target;
+    public GameObject target2;
+
+
+    public SideType sideType;
 
     //左下角偏移量
     public Vector2 _offsetMin;
@@ -82,6 +94,10 @@ public class LayOutSize : LayOutBase
         MATCH_TARGET,//与目标等大或者按比例 
         MATCH_PARENT_MIN,//父窗口width 和 height 的 min
         MATCH_PARENT_MAX,//父窗口width 和 height 的 max
+        MATCH_WIDTH,//width 和 height 相等
+        MATCH_HEIGHT,//width 和 height相等
+        BETWEEN_SIDE_TARGET,//夹在边界和target之间
+        BETWEEN_TWO_TARGET,//夹在两个target之间
     }
     void Awake()
     {
@@ -96,6 +112,11 @@ public class LayOutSize : LayOutBase
     {
         base.LayOut();
         UpdateSize();
+        if ((this.typeX == Type.MATCH_HEIGHT) || (this.typeY == Type.MATCH_WIDTH))
+        {
+            UpdateSize();
+        }
+
     }
 
 
@@ -152,9 +173,29 @@ public class LayOutSize : LayOutBase
 
                 }
                 break;
+            case Type.MATCH_HEIGHT:
+                {
+                    w = rctran.rect.height;
+                }
+                break;
 
+            case Type.BETWEEN_SIDE_TARGET:
+                {
+
+                    if ((this.sideType == SideType.LEFT) || (this.sideType == SideType.RIGHT))
+                    {
+                        w = LayoutUtil.main.GetBetweenSideAndTargetSize(this.target, this.sideType);
+                    }
+
+                }
+                break;
+            case Type.BETWEEN_TWO_TARGET:
+                {
+                    w = LayoutUtil.main.GetBetweenTwoTargetSize(this.target, this.target2, false);
+
+                }
+                break;
         }
-
 
         switch (this.typeY)
         {
@@ -192,6 +233,28 @@ public class LayOutSize : LayOutBase
                         h = rctranTarget.rect.height * ratioH;
                         y = rctran.anchoredPosition.y;
                     }
+
+                }
+                break;
+            case Type.MATCH_WIDTH:
+                {
+                    h = rctran.rect.width;
+                }
+                break;
+
+            case Type.BETWEEN_SIDE_TARGET:
+                {
+
+                    if ((this.sideType == SideType.UP) || (this.sideType == SideType.DOWN))
+                    {
+                        h = LayoutUtil.main.GetBetweenSideAndTargetSize(this.target, this.sideType);
+                    }
+
+                }
+                break;
+            case Type.BETWEEN_TWO_TARGET:
+                {
+                    h = LayoutUtil.main.GetBetweenTwoTargetSize(this.target, this.target2, true);
 
                 }
                 break;

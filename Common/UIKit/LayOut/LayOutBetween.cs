@@ -79,10 +79,7 @@ public class LayOutBetween : LayOutBase
         x = pt.x;
         y = pt.y;
 
-
-
-
-
+ 
 
         switch (this.type)
         {

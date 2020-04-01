@@ -16,6 +16,90 @@ public class LayoutUtil
         }
     }
 
+    //两个对象之间的宽度或者高度
+    public float GetBetweenTwoTargetSize(GameObject obj1, GameObject obj2, bool isHeight)
+    {
+        GameObject objDown, objUp;
+        RectTransform rctran1 = obj1.GetComponent<RectTransform>();
+        RectTransform rctran2 = obj2.GetComponent<RectTransform>();
+        if (rctran1.anchoredPosition.y < rctran2.anchoredPosition.y)
+        {
+            objDown = obj1;
+            objUp = obj2;
+        }
+        else
+        {
+            objDown = obj2;
+            objUp = obj1;
+        }
+        RectTransform rctran = objDown.GetComponent<RectTransform>();
+        float y1 = rctran.anchoredPosition.y + rctran.rect.height / 2;
+        float x1 = rctran.anchoredPosition.x + rctran.rect.width / 2;
+        rctran = objUp.GetComponent<RectTransform>();
+        float y2 = rctran.anchoredPosition.y - rctran.rect.height / 2;
+        float x2 = rctran.anchoredPosition.x - rctran.rect.width / 2;
+
+        float ret = 0;
+        if (isHeight)
+        {
+            ret = Mathf.Abs(y1 - y2);
+        }
+        else
+        {
+            ret = Mathf.Abs(x1 - x2);
+        }
+
+        return ret;
+    }
+
+
+    //边界和对象之间的宽度或者高度
+    public float GetBetweenSideAndTargetSize(GameObject obj, LayOutSize.SideType type)
+    {
+        float v1 = 0, v2 = 0;
+        RectTransform rctranParent = obj.transform.parent as RectTransform;
+        float w_parent = rctranParent.rect.width;
+        float h_parent = rctranParent.rect.height;
+        RectTransform rctran = obj.GetComponent<RectTransform>();
+        switch (type)
+        {
+            case LayOutSize.SideType.LEFT:
+                {
+                    //左边界
+                    v1 = -w_parent / 2;
+                    v2 = rctran.anchoredPosition.x - rctran.rect.width / 2;
+                }
+                break;
+            case LayOutSize.SideType.RIGHT:
+                {
+                    //右边界
+                    v1 = w_parent / 2;
+                    v2 = rctran.anchoredPosition.x + rctran.rect.width / 2;
+                }
+                break;
+            case LayOutSize.SideType.UP:
+                {
+                    //上边界
+                    v1 = h_parent / 2;
+                    v2 = rctran.anchoredPosition.y + rctran.rect.height / 2;
+                }
+                break;
+            case LayOutSize.SideType.DOWN:
+                {
+                    //下边界
+                    v1 = -h_parent / 2;
+                    v2 = rctran.anchoredPosition.y - rctran.rect.height / 2;
+                }
+                break;
+        }
+
+        float ret = 0;
+
+        ret = Mathf.Abs(v1 - v2);
+
+        return ret;
+    }
+
     //两个node之间的中心位置x
     public float GetBetweenCenterX(GameObject obj1, GameObject obj2)
     {

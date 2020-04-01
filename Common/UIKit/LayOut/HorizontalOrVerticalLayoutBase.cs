@@ -36,7 +36,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
 
         if (childControlWidth)
         {
-            item_w = (w - (space.x * (col - 1))) / col;
+            item_w = (w - (space.x * (col + 1))) / col;
             rctranItem.sizeDelta = new Vector2(item_w, rctranItem.sizeDelta.y);
         }
         else
@@ -46,7 +46,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
 
         if (childControlHeight)
         {
-            item_h = (h - (space.y * (row - 1))) / row;
+            item_h = (h - (space.y * (row + 1))) / row;
             rctranItem.sizeDelta = new Vector2(rctranItem.sizeDelta.x, item_h);
         }
         else
@@ -58,8 +58,8 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
 
         float x_left = 0, y_bottom = 0;
 
-        float w_total = item_w * col + (space.x * (col - 1));
-        float h_total = item_h * row + (space.y * (row - 1));
+        float w_total = item_w * col + (space.x * (col + 1));
+        float h_total = item_h * row + (space.y * (row + 1));
 
         x_left = -w_total / 2;
         if (childForceExpandWidth)
@@ -83,7 +83,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
 
         }
 
-        x = x_left + item_w * c + item_w / 2 + space.x * c;
+        x = x_left + item_w * c + item_w / 2 + space.x * (c + 1);
 
         y_bottom = -h_total / 2;
         if (childForceExpandHeight)
@@ -105,7 +105,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
                 y_bottom = -h_total / 2;
             }
         }
-        y = y_bottom + item_h * r + item_h / 2 + space.y * r;
+        y = y_bottom + item_h * r + item_h / 2 + space.y * (r + 1);
 
         return new Vector2(x, y);
 
@@ -118,6 +118,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
         {
             return;
         }
+        base.LayOut();
         /* 
         foreach (Transform child in objMainWorld.transform)这种方式遍历子元素会漏掉部分子元素
         */

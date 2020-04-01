@@ -17,7 +17,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     public RawImage imageBg;
     public GameObject objLayouBtn;
     public Text textTitle;
-
+    public Image imageTitle;
 
     public UIWordFillBox uiWordFillBoxPrefab;
     public UIWordFlower uiWordFlowerPrefab;
@@ -235,7 +235,12 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         }
 
         {
-            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Game/Flower/UIWordFlower");
+            string strPrefab = "AppCommon/Prefab/Game/Flower/UIWordFlower";
+            if (Device.isLandscape)
+            {
+                strPrefab = "AppCommon/Prefab/Game/Flower/UIWordFlower_heng";
+            }
+            GameObject obj = PrefabCache.main.Load(strPrefab);
             if (obj != null)
             {
                 uiWordFlowerPrefab = obj.GetComponent<UIWordFlower>();
@@ -515,7 +520,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
 
     }
 
-    void UpdateGold()
+    public void UpdateGold()
     {
 
         string str = Language.main.GetString("STR_GOLD") + ":" + Common.gold.ToString();
@@ -532,6 +537,14 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
     {
         int idx = LevelManager.main.gameLevel + 1;
         textTitle.text = idx.ToString();
+        if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+        {
+            if (Device.isLandscape)
+            {
+                imageTitle.gameObject.SetActive(false);
+                textTitle.gameObject.SetActive(false);
+            }
+        }
     }
 
 
@@ -550,7 +563,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         uiWordBar.UpadteItem(info);
     }
 
-    void ShowShop()
+    public void ShowShop()
     {
         ShopViewController.main.Show(null, this);
     }

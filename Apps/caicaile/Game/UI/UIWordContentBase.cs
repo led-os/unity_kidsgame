@@ -19,6 +19,7 @@ public interface IUIWordContentBaseDelegate
 
 public class UIWordContentBase : UIView
 {
+    public const string STR_KEYNAME_VIEWALERT_GOLD = "keyname_viewalert_gold";
     public ItemInfo infoItem;
 
     private IUIWordContentBaseDelegate _delegate;
@@ -28,7 +29,18 @@ public class UIWordContentBase : UIView
         get { return _delegate; }
         set { _delegate = value; }
     }
-
+    public void ShowShop()
+    {
+        //  ShopViewController.main.Show(null, this);
+        UIGameCaiCaiLe game = GameViewController.main.gameBase as UIGameCaiCaiLe;
+        game.ShowShop();
+    }
+    public void UpdateGold()
+    {
+        //  ShopViewController.main.Show(null, this);
+        UIGameCaiCaiLe game = GameViewController.main.gameBase as UIGameCaiCaiLe;
+        game.UpdateGold();
+    }
     public virtual void UpdateGuankaLevel(int level)
     {
     }

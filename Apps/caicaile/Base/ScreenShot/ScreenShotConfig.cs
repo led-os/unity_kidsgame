@@ -34,6 +34,10 @@ public class ScreenShotConfig
             {
                 case 0:
                     int total = LevelManager.main.placeTotal;
+                    if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+                    {
+                        total = 2;
+                    }
                     if (total > 1)
                     {
                         controller = PlaceViewController.main;
@@ -43,6 +47,8 @@ public class ScreenShotConfig
                         LevelManager.main.gameLevel = 0;
                         controller = GameViewController.main;
                     }
+
+                    //    controller = HomeViewController.main;
 
                     break;
                 case 1:
@@ -56,8 +62,19 @@ public class ScreenShotConfig
                     controller = HomeViewController.main;
                     break;
                 case 4:
-                    LevelManager.main.gameLevel = 2;
-                    controller = GameViewController.main;
+
+                    if (Common.appKeyName == GameRes.GAME_IdiomFlower)
+                    {
+                        controller = HowPlayFlowerViewController.main;
+
+                    }
+                    else
+                    {
+                        LevelManager.main.gameLevel = 2;
+                        controller = GameViewController.main;
+
+                    }
+
                     break;
 
                 default:

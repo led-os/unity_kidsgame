@@ -19,7 +19,7 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
     public GameObject objWord;
     public GameObject objBtnBar;
     public UIAnswer uiAnswer;
-
+    public Button btnShare;
     public UIItemFlower uiItemFlowerPrefab;
     public int row = 7;
     public int col = 7;
@@ -38,7 +38,10 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
         lygrid = objWord.GetComponent<LayOutGrid>();
         listItem = new List<UIItemFlower>();
         listItemSel = new List<UIItemFlower>();
-
+        if (btnShare != null)
+        {
+            btnShare.gameObject.SetActive(Config.main.isHaveShare);
+        }
         row = 4;
         col = 4;
         lygrid.row = row;
@@ -299,57 +302,13 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
 
     public override void OnTips()
     {
-        // CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
-        // int idx = GetFirstUnFinishAnswer();
-        // if (idx >= 0)
-        // {
-        //     indexAnswer = idx;
-        //     if (indexAnswer < info.listWordAnswer.Count)
-        //     {
-        //         indexFillWord = info.listWordAnswer[indexAnswer];
-        //         string strword = info.listWord[indexFillWord];
-        //         OnAddWord(strword);
-        //         if (iDelegate != null)
-        //         {
-        //             iDelegate.UIWordContentBaseDidTipsWord(this, strword);
-        //         }
-        //     }
-
-        // }
         uiAnswer.OnTips();
 
     }
 
     public override void OnReset()
     {
-        // int idx = 0;
-        // indexAnswer = 0;
-        // CaiCaiLeItemInfo info = infoItem as CaiCaiLeItemInfo;
-        // indexFillWord = info.listWordAnswer[indexAnswer];
-        // foreach (UIItemFlower item in listItem)
-        // {
-        //     if (item.isAnswerItem)
-        //     {
-        //         if (IsItemRightAnswer(item) || (item.GetStatus() == UIItemFlower.Status.ERROR_ANSWER))
-        //         {
-        //             if (idx == 0)
-        //             {
-        //                 item.SetStatus(UIItemFlower.Status.LOCK_SEL);
-        //             }
-        //             else
-        //             {
 
-        //                 item.SetStatus(UIItemFlower.Status.LOCK_UNSEL);
-        //             }
-        //             idx++;
-        //         }
-
-        //     }
-        //     else
-        //     {
-        //         item.SetStatus(UIItemFlower.Status.NORMAL);
-        //     }
-        // }
     }
 
     public void OnUIItemFlowerTouchDown(UIItemFlower ui)
@@ -403,6 +362,32 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
         }
 
     }
+    void OnUIViewAlertFinished(UIViewAlert alert, bool isYes)
+    {
+
+        if (STR_KEYNAME_VIEWALERT_GOLD == alert.keyName)
+        {
+            if (isYes)
+            {
+                ShowShop();
+            }
+        }
+
+
+
+    }
+
+    public void OnNotEnoughGold()
+    {
+
+        string title = Language.main.GetString(AppString.STR_UIVIEWALERT_TITLE_NOT_ENOUGH_GOLD);
+        string msg = Language.main.GetString(AppString.STR_UIVIEWALERT_MSG_NOT_ENOUGH_GOLD);
+        string yes = Language.main.GetString(AppString.STR_UIVIEWALERT_YES_NOT_ENOUGH_GOLD);
+        string no = Language.main.GetString(AppString.STR_UIVIEWALERT_NO_NOT_ENOUGH_GOLD);
+
+        ViewAlertManager.main.ShowFull(title, msg, yes, no, false, STR_KEYNAME_VIEWALERT_GOLD, OnUIViewAlertFinished);
+
+    }
 
     public void OnClickBtnHowPlay()
     {
@@ -412,10 +397,25 @@ public class UIWordFlower : UIWordContentBase, IUIItemFlowerDelegate
     {
         GameInfoViewController.main.Show(null, null);
     }
+
     public void OnClickBtnTips()
     {
+
+        if (Common.gold <= 0)
+        {
+            OnNotEnoughGold();
+            return;
+        }
+        Common.gold--;
+        if (Common.gold < 0)
+        {
+            Common.gold = 0;
+        }
+        UpdateGold();
         OnTips();
+
     }
+
     public void OnClickBtnRetry()
     {
         GameManager.main.GotoPlayAgain();

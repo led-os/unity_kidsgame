@@ -32,7 +32,7 @@ public class UIShop : UIView, ITableViewDataSource
     //public GameObject objTopBar;
     //public GameObject objTableViewTemplate;
     public Image imageBg;
-    public Image imageBar;
+    public UIImage imageBar;
     public UIText textTitle;
     public Text textAd;
 

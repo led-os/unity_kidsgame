@@ -7,7 +7,7 @@ public class LayOutHorizontal : HorizontalOrVerticalLayoutBase
     void Awake()
     {
         row = 1;
-        col = GetChildCount();
+        col = GetChildCount(enableHide);
     }
     void Start()
     {
@@ -17,7 +17,7 @@ public class LayOutHorizontal : HorizontalOrVerticalLayoutBase
 
     public override void LayOut()
     {
-        col = GetChildCount();
+        col = GetChildCount(enableHide);
         base.LayOut();
     }
 }
