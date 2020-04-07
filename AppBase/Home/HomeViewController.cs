@@ -112,6 +112,10 @@ public class HomeViewController : UIViewController
 
     void ShowAdInsert()
     {
+        if (Config.main.channel == Source.HUAWEI)
+        {
+            return;
+        }
         string source = Source.GDT;
         AdInsert.InitAd(source);
         AdKitCommon.main.ShowAdInsert(100);
