@@ -56,7 +56,7 @@ public class UIGuankaController : UIGuankaBase, ITableViewDataSource
             }
         }
         //bg
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
+       // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
         string strlan = Common.GAME_RES_DIR + "/place/language/language.csv";
         if (Common.isWeb)
         {

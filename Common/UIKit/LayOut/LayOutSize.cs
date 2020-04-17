@@ -87,6 +87,24 @@ public class LayOutSize : LayOutBase
 
     }
 
+    public TypeWidthHeightScale _typeWidthHeightScale;
+    public TypeWidthHeightScale typeWidthHeightScale
+    {
+        get
+        {
+            return _typeWidthHeightScale;
+        }
+
+        set
+        {
+            _typeWidthHeightScale = value;
+            LayOut();
+        }
+
+    }
+
+
+
     public enum Type
     {
         MATCH_CONTENT = 0,//按内容设置
@@ -99,6 +117,14 @@ public class LayOutSize : LayOutBase
         BETWEEN_SIDE_TARGET,//夹在边界和target之间
         BETWEEN_TWO_TARGET,//夹在两个target之间
     }
+
+    public enum TypeWidthHeightScale// 保持 w=h
+    {
+        NONE = 0,
+        MIN,// 
+        MAX,
+    }
+
     void Awake()
     {
         this.LayOut();
@@ -263,6 +289,28 @@ public class LayOutSize : LayOutBase
 
         w -= (this.offsetMin.x + this.offsetMax.x);
         h -= (this.offsetMin.y + this.offsetMax.y);
+        if(enableOffsetAdBanner){
+            h-=GameManager.main.heightAdCanvas;
+        }
+
+        switch (this.typeWidthHeightScale)
+        {
+            case TypeWidthHeightScale.MIN:
+                {
+                    w = Mathf.Min(w, h);
+                    h = w;
+                }
+                break;
+
+            case TypeWidthHeightScale.MAX:
+                {
+                    w = Mathf.Max(w, h);
+                    h = w;
+                }
+                break;
+
+        }
+
         rctran.sizeDelta = new Vector2(w, h);
         //rctran.anchoredPosition = new Vector2(x, y);
     }

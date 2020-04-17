@@ -256,10 +256,10 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
         if (btn != null)
         {
             UIImage imageBg = btn.gameObject.GetComponent<UIButton>().imageBg;
-            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"));
+            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"),imageBg.keyImage);
 
             UIImage imageIcon = btn.gameObject.GetComponent<UIButton>().imageIcon;
-            imageIcon.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnMusicIcon") : ImageRes.main.GetImage("IMAGE_BtnMusicIcon"));
+            imageIcon.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnMusicIcon") : ImageRes.main.GetImage("IMAGE_BtnMusicIcon"),imageBg.keyImage);
 
         }
     }
@@ -270,12 +270,12 @@ public class UIHomeBase : UIView, IPopViewControllerDelegate
         if (btn != null)
         {
             UIImage imageBg = btn.gameObject.GetComponent<UIButton>().imageBg;
-            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"));
+            imageBg.UpdateImage(ret ? ImageRes.main.GetImage("IMAGE_BtnBg") : ImageRes.main.GetImage("IMAGE_BtnBgGrey"),imageBg.keyImage);
 
             string pic = ret ? ImageRes.main.GetImage("IMAGE_BtnSoundIcon") : ImageRes.main.GetImage("IMAGE_BtnSoundIcon");
             Debug.Log(" UIHomeBase UpdateBtnSound  imageIcon.UpdateImage pic=" + pic);
             UIImage imageIcon = btn.gameObject.GetComponent<UIButton>().imageIcon;
-            imageIcon.UpdateImage(pic);
+            imageIcon.UpdateImage(pic,imageBg.keyImage);
         }
         else
         {

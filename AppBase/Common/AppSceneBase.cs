@@ -436,4 +436,26 @@ public class AppSceneBase : ScriptBase
         }
     }
 
+
+    //android callback
+    public void OnAndroidGlobalLayout(string str)
+    {
+        Debug.Log("OnAndroidGlobalLayout::str=" + str);
+        if (rootViewController != null)
+        {
+            UIView ui = rootViewController.view;
+            if (ui != null)
+            {
+                ui.LayOut();
+            }
+
+        }
+        int len = AppSceneBase.main.listPopup.Count;
+        for (int i = 0; i < len; i++)
+        {
+            UIViewPop ui = AppSceneBase.main.listPopup[i];
+            ui.LayOut();
+        }
+    }
+
 }

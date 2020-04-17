@@ -12,7 +12,7 @@ public class UIHomeDefault : UIHomeBase
     void Awake()
     {
         base.Awake();
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+       // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         string appname = Common.GetAppNameDisplay();
         TextName.text = appname;
         timeAction = 0.3f;

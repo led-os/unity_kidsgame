@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class UIGuankaCellItem : UICellItemBase
 {
 
-    public Text textTitle;
-    public RawImage imageBg;
-    public Image imageSel;
-    public Image imageIconLock;
+    public UIText textTitle;
+    public UIImage imageBg;//RawImage
+    public UIImage imageSel;
+    public UIImage imageIconLock;
 
     public override void UpdateItem(List<object> list)
     {
@@ -23,19 +23,18 @@ public class UIGuankaCellItem : UICellItemBase
             // if (!Application.isEditor)
             {
                 textTitle.gameObject.SetActive(false);
-                TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_CELL_ITEM_BG_LOCK, true);
+                imageBg.UpdateImageByKey("IMAGE_GUANKA_CELL_ITEM_BG_LOCK"); 
             }
 
         }
         else if (index == idx_play)
         {
             textTitle.gameObject.SetActive(false);
-            TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_CELL_ITEM_BG_PLAY, true);
+            imageBg.UpdateImageByKey("IMAGE_GUANKA_CELL_ITEM_BG_PLAY"); 
         }
         else
-        {
-
-            TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK, true);
+        { 
+            imageBg.UpdateImageByKey("IMAGE_GUANKA_CELL_ITEM_BG_UNLOCK"); 
         }
         LayOut();
     }
@@ -50,6 +49,7 @@ public class UIGuankaCellItem : UICellItemBase
 
     public override void LayOut()
     {
+        base.LayOut();
         RectTransform rctran = imageBg.GetComponent<RectTransform>();
         float ratio = 0.9f;
         if (Common.appType == AppType.SHAPECOLOR)
@@ -57,7 +57,7 @@ public class UIGuankaCellItem : UICellItemBase
             ratio = 0.9f;
         }
         float scale = Common.GetBestFitScale(rctran.rect.width, rctran.rect.height, width, height) * ratio;
-        imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
+      //  imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
 
     }
 }

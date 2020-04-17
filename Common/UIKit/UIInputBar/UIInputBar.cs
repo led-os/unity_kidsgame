@@ -163,6 +163,7 @@ public class UIInputBar : UIView
 
     public void OnInputFieldValueChanged()
     {
+        Debug.Log("OnInputFieldValueChanged text=" + this.text);
         if (iDelegate != null)
         {
             iDelegate.OnUIInputBarValueChanged(this);
@@ -171,6 +172,7 @@ public class UIInputBar : UIView
 
     public void OnInputFieldEnd()
     {
+        Debug.Log("OnInputFieldEnd text=" + this.text);
         if (iDelegate != null)
         {
             iDelegate.OnUIInputBarEnd(this);

@@ -29,7 +29,7 @@ public class UITabBarItem : UIView
     {
         textTitle.text = info.title;
         textTitle.color = GetColorOfKey("TabBarTitle");
-        imageBg.UpdateImage(info.pic);
+        imageBg.UpdateImage(info.pic,imageBg.keyImage);
         this.LayOut();
     }
 

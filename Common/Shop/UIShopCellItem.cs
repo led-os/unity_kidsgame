@@ -6,22 +6,22 @@ using UnityEngine.UI;
 public class UIShopCellItem : UICellItemBase
 {
 
-    public Image imageBg;
-    public Text textTitle;
-    public Button btnBuy;
+    public UIImage imageBg;
+    public UIText textTitle;
+    public UIButton btnBuy;
     public bool isDisable = false;//显示灰色 
     Color colorDisable = new Color(102 / 255.0f, 102 / 255.0f, 102 / 255.0f, 1f);
-    string[] strImageBg = { AppRes.IMAGE_CELL_BG_BLUE, AppRes.IMAGE_CELL_BG_ORINGE, AppRes.IMAGE_CELL_BG_YELLOW };
-
+    static public string[] strImageBg = { "IMAGE_CELL_BG_BLUE", "IMAGE_CELL_BG_ORINGE", "IMAGE_CELL_BG_YELLOW" };
 
     public override void UpdateItem(List<object> list)
     {
         ShopItemInfo info = list[index] as ShopItemInfo;
         textTitle.text = info.title;
-        Vector4 border = AppRes.borderCellSettingBg;
-        TextureUtil.UpdateImageTexture(imageBg, strImageBg[index % 3], false, border);
-
-        Common.SetButtonText(btnBuy, info.artist, 0);
+        // Vector4 border = AppRes.borderCellSettingBg;
+        //  TextureUtil.UpdateImageTexture(imageBg, strImageBg[index % 3], false, border);
+        imageBg.UpdateImageByKey(strImageBg[index % 3]);
+        // Common.SetButtonText(btnBuy, info.artist, 0);
+        btnBuy.textTitle.text = info.artist;
         if (info.isIAP)
         {
             btnBuy.gameObject.SetActive(true);
@@ -30,8 +30,12 @@ public class UIShopCellItem : UICellItemBase
         else
         {
             btnBuy.gameObject.SetActive(false);
-            // offsetMax.x = -16;
+
         }
+
+        //btnBuy.gameObject.SetActive(true);
+        LayOut();
+        Invoke("LayOut", 0.2F);
     }
     public override bool IsLock()
     {

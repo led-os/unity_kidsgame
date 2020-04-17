@@ -11,9 +11,12 @@ public class UIButton : UIView
 
     public enum Type
     {
-        IMAGE = 0,
+        IMAGE = 0,//一张背景  
         IMAGE_TEXT,
         IMAGE_ICON,//一张背景 一张Icon 叠加
+
+        IMAGE_SWITCH,//一张背景
+        IMAGE_ICON_SWITCH,//一张背景 一张Icon 叠加
 
     }
 
@@ -21,6 +24,7 @@ public class UIButton : UIView
     public UIImage imageIcon;
     public UIText textTitle;
 
+    bool isSwicthSelect;
     public Type _type;
 
     public Type type
@@ -37,6 +41,7 @@ public class UIButton : UIView
             switch (_type)
             {
                 case Type.IMAGE:
+                case Type.IMAGE_SWITCH:
                     {
                         imageIcon.gameObject.SetActive(false);
                         textTitle.gameObject.SetActive(false);
@@ -49,6 +54,7 @@ public class UIButton : UIView
                     }
                     break;
                 case Type.IMAGE_ICON:
+                case Type.IMAGE_ICON_SWITCH:
                     {
                         imageIcon.gameObject.SetActive(true);
                         textTitle.gameObject.SetActive(false);
@@ -106,6 +112,19 @@ public class UIButton : UIView
 
 
     }
-
+    public void UpdateSwitch(bool isSel)
+    {
+        isSwicthSelect = isSel;
+        if (isSwicthSelect)
+        {
+            imageBg.UpdateImageByKey(imageBg.keyImage);
+            imageIcon.UpdateImageByKey(imageIcon.keyImage);
+        }
+        else
+        {
+            imageBg.UpdateImageByKey(imageBg.keyImage2);
+            imageIcon.UpdateImageByKey(imageIcon.keyImage2);
+        }
+    }
 
 }

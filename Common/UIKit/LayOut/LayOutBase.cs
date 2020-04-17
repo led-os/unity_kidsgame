@@ -39,6 +39,9 @@ public class LayOutBase : MonoBehaviour
     public DispLayHorizontal dispLayHorizontal;
     public bool enableLayout = true;
     public bool enableHide = true;//是否过虑Hide
+
+    public bool enableOffsetAdBanner=false;
+    public bool enableOffsetScreen=false;//全面屏 四周的偏移
     public Vector2 space = Vector2.zero;
 
     protected TextAnchor childAlignment;

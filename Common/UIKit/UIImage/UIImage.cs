@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class UIImage : UIView
 {
     public Image image;
+    public string keyImage2;
+
 
 
     /// Awake is called when the script instance is being loaded.
@@ -32,26 +34,29 @@ public class UIImage : UIView
 
         if (!Common.isBlankString(pic))
         {
-            UpdateImage(pic);
+            UpdateImage(pic,key);
         }
     }
 
-    public void UpdateImage(string pic)
+    public void UpdateImage(string pic,string key)
     {
         if (Common.isBlankString(pic))
         {
             return;
         }
-        bool isBoard = ImageRes.main.IsHasBoard(keyImage);
+        bool isBoard = ImageRes.main.IsHasBoard(key);
         Vector4 board = Vector4.zero;
         if (isBoard)
         {
-            board = ImageRes.main.GetImageBoard(keyImage);
+            board = ImageRes.main.GetImageBoard(key);
+        }
+        if(board!=Vector4.zero){
+          //  image.imagety
         }
         RectTransform rctranOrigin = this.GetComponent<RectTransform>();
         Vector2 offsetMin = rctranOrigin.offsetMin;
         Vector2 offsetMax = rctranOrigin.offsetMax;
-        Debug.Log("UpdateImage pic=" + pic);
+        Debug.Log("UpdateImage pic=" + pic+"isBoard="+isBoard+" keyImage="+key);
         Texture2D tex = TextureCache.main.Load(pic);
         TextureUtil.UpdateImageTexture(image, tex, true, board);
         RectTransform rctan = this.GetComponent<RectTransform>();

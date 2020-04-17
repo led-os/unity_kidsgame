@@ -151,12 +151,17 @@ public class BuildPlayer
         if (summary.result == BuildResult.Succeeded)
         {
             Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+#if UNITY_IOS
+            {
+                BuildiOSPlayer.EditProj(target_dir);
+            }
+#endif
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
                 if (build_target == BuildTarget.iOS)
                 {
-                    FileUtil.DeleteMetaFiles(dirRootProject+"/Frameworks/Plugins");
-                    FileUtil.DeleteMetaFiles(dirRootProject+"/Libraries/Plugins");
+                    FileUtil.DeleteMetaFiles(dirRootProject + "/Frameworks/Plugins");
+                    FileUtil.DeleteMetaFiles(dirRootProject + "/Libraries/Plugins");
                     //RunShell阿里云上异常
                     RunShell.RunProcessCommand("explorer.exe", dirRootProject);
                 }

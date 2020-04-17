@@ -136,6 +136,7 @@ public class UIKitEditor : Editor
             {
                 UIInputBar uiPrefab = obj.GetComponent<UIInputBar>();
                 UIInputBar ui = (UIInputBar)GameObject.Instantiate(uiPrefab);
+                ui.name = "UIInputBar";
                 ui.transform.SetParent(selectedObj.transform);
                 Selection.activeGameObject = ui.gameObject;
                 ui.transform.localScale = new Vector3(1f, 1f, 1f);

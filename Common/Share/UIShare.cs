@@ -53,7 +53,7 @@ public class UIShare : UIView, ITableViewDataSource
         LoadPrefab();
         Share.main.SetObjectInfo(this.gameObject.name);
         //bg 
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
+       // TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
 
 
         rctranTableviewNoarml = objTableViewTemplate.GetComponent<RectTransform>();

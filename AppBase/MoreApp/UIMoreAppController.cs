@@ -39,7 +39,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
     {
         listItem = new List<object>();
         //bg
-        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
+       // TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_MOREAPP_BG, true);
         StartParse();
         LoadPrefab();
         heightCell = 512;
@@ -96,7 +96,7 @@ public class UIMoreAppController : UIView, ITableViewDataSource
             cellPrefab = obj.GetComponent<UICellBase>();
         }
         {
-            GameObject obj = PrefabCache.main.Load(AppRes.PREFAB_MOREAPP_CELL_ITEM);
+            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/MoreApp/UIMoreAppCellItem");
             if (obj == null)
             {
                 obj = PrefabCache.main.Load(AppCommon.PREFAB_MOREAPP_CELL_ITEM);

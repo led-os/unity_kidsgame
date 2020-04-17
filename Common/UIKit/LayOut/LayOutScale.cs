@@ -181,8 +181,6 @@ public class LayOutScale : LayOutBase
         w_parent -= (this.offsetMin.x + this.offsetMax.x);
         h_parent -= (this.offsetMin.y + this.offsetMax.y);
 
-
-
         float scale = 1f;
         if (w != 0 && h != 0)
         {
@@ -195,6 +193,8 @@ public class LayOutScale : LayOutBase
                 scale = Common.GetBestFitScale(w, h, w_parent, h_parent) * ratio;
             }
         }
+
+
 
         Debug.Log("LayOutScale scale=" + scale + " w_parent=" + w_parent + " h_parent=" + h_parent);
         obj.transform.localScale = new Vector3(scale, scale, 1f);

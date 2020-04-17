@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UIShareCellItem : UICellItemBase
 {
-    public Image imageItem;
-    public Text textItem;
+    public UIImage imageItem;
+    public UIText textItem;
 
-    string[] strImageBg = { AppRes.IMAGE_CELL_BG_BLUE, AppRes.IMAGE_CELL_BG_ORINGE, AppRes.IMAGE_CELL_BG_YELLOW };
-
+      static public string[] strImageBg = { "IMAGE_CELL_BG_BLUE" , "IMAGE_CELL_BG_ORINGE", "IMAGE_CELL_BG_YELLOW" };
     // Use this for initialization
     void Start()
     {
@@ -20,11 +19,11 @@ public class UIShareCellItem : UICellItemBase
         ItemInfo info = list[index] as ItemInfo;
         textItem.text = info.title;
         textItem.color = AppRes.colorTitle; 
-        TextureUtil.UpdateImageTexture(imageItem, info.pic, true);
+        TextureUtil.UpdateImageTexture(imageItem.image, info.pic, true);
 
         RectTransform rctran = imageItem.GetComponent<RectTransform>();
-        float w = imageItem.sprite.texture.width;//rectTransform.rect.width;
-        float h = imageItem.sprite.texture.height;//rectTransform.rect.height;
+        float w = imageItem.image.sprite.texture.width;//rectTransform.rect.width;
+        float h = imageItem.image.sprite.texture.height;//rectTransform.rect.height;
 
         RectTransform rctranText = textItem.GetComponent<RectTransform>();
         RectTransform rctranContent = objContent.GetComponent<RectTransform>();

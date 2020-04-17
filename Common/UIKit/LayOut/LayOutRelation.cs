@@ -83,6 +83,10 @@ public class LayOutRelation : LayOutBase
                 {
 
                     RectTransform rctranParent = this.transform.parent as RectTransform;
+                    if (rctranParent == null)
+                    {
+                        break;
+                    }
                     float w_parent = rctranParent.rect.width;
                     float h_parent = rctranParent.rect.height;
                     if (this.align == LayOutBase.Align.LEFT)
@@ -189,7 +193,10 @@ public class LayOutRelation : LayOutBase
                 break;
 
         }
-
+        if (enableOffsetAdBanner)
+        {
+            y += GameManager.main.heightAdCanvas;
+        }
         //this.node.setPosition(x, y);
         rctran.anchoredPosition = new Vector2(x, y);
     }

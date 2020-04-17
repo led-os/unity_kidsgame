@@ -24,13 +24,7 @@ public class UICellItemBase : UIView
     {
 
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    } 
 
     public virtual int GetCellHeight()
     {

@@ -6,18 +6,7 @@ using System;
 
 public class DBToolSqliteKit 
 {
-    private SQLiteDB db = null;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    private SQLiteDB db = null; 
 
 
     public void OpenDB(string dbfile)

@@ -64,7 +64,7 @@ public class UIShop : UIView, ITableViewDataSource
 
         InitAd();
         //bg 
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
+       // TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_SETTING_BG, true);
 
         textAd.text = Language.main.GetString("STR_SHOP_TIP_AD");
         textAd.gameObject.SetActive(false);

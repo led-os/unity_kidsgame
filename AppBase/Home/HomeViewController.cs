@@ -114,7 +114,7 @@ public class HomeViewController : UIViewController
     {
         if (Config.main.channel == Source.HUAWEI)
         {
-            return;
+           // return;
         }
         string source = Source.GDT;
         AdInsert.InitAd(source);
