@@ -152,6 +152,13 @@ public class NaviViewController : UIViewController
             uiNaviBar.ShowTitle(isShow);
         }
     }
+    public void UpdateTitle(string title)
+    {
+        if (uiNaviBar)
+        {
+            uiNaviBar.UpdateTitle(title);
+        }
+    }
     public void OnUINaviBarClickBack(UINaviBar bar)
     {
         Pop();

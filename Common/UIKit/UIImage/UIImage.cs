@@ -38,17 +38,22 @@ public class UIImage : UIView
         }
     }
 
-    public void UpdateImage(string pic,string key)
+    public void UpdateImage(string pic,string key="")
     {
+        string strKey = key;
+         if (Common.isBlankString(key))
+        {
+            strKey = this.keyImage;
+        }
         if (Common.isBlankString(pic))
         {
             return;
         }
-        bool isBoard = ImageRes.main.IsHasBoard(key);
+        bool isBoard = ImageRes.main.IsHasBoard(strKey);
         Vector4 board = Vector4.zero;
         if (isBoard)
         {
-            board = ImageRes.main.GetImageBoard(key);
+            board = ImageRes.main.GetImageBoard(strKey);
         }
         if(board!=Vector4.zero){
           //  image.imagety
@@ -56,7 +61,7 @@ public class UIImage : UIView
         RectTransform rctranOrigin = this.GetComponent<RectTransform>();
         Vector2 offsetMin = rctranOrigin.offsetMin;
         Vector2 offsetMax = rctranOrigin.offsetMax;
-        Debug.Log("UpdateImage pic=" + pic+"isBoard="+isBoard+" keyImage="+key);
+        Debug.Log("UpdateImage pic=" + pic+"isBoard="+isBoard+" keyImage="+strKey);
         Texture2D tex = TextureCache.main.Load(pic);
         TextureUtil.UpdateImageTexture(image, tex, true, board);
         RectTransform rctan = this.GetComponent<RectTransform>();

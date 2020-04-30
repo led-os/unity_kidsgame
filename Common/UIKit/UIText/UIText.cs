@@ -122,4 +122,11 @@ public class UIText : UIView
         }
         LayOut();
     }
+ 
+    public void UpdateTextByKey(string key)
+    {
+        this.text = GetTextOfKey(key);
+        LayOut();
+    }
+
 }
