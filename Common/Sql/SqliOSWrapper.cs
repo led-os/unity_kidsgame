@@ -10,13 +10,7 @@ using System.Collections;
 		[DllImport ("__Internal")]
 		public static extern void TTS_speekText(string text);
 
-	 
-
-		public override void Speak(string text)
-		 {
- 
-		 }	
-		 
+	  
 		 
 	}
 

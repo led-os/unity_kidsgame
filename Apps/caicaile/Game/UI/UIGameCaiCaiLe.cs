@@ -180,6 +180,9 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             case GameRes.GAME_TYPE_PLACE:
                 {
                     uiWordContent = (UIWordContentBase)GameObject.Instantiate(uiWordPlacePoemPrefab);
+                    uiWordBoard.gameObject.SetActive(false);
+                    uiWordBar.gameObject.SetActive(false);
+                    objLayouBtn.SetActive(false);
                 }
                 break;
             case GameRes.GAME_TYPE_IMAGE:
@@ -280,7 +283,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
         float x = 0, y = 0, w = 0, h = 0;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         CaiCaiLeItemInfo info = GameLevelParse.main.GetItemInfo();
-            if ((info.gameType == GameRes.GAME_TYPE_PLACE)||(info.gameType == GameRes.GAME_TYPE_FLOWER))
+        if ((info.gameType == GameRes.GAME_TYPE_PLACE) || (info.gameType == GameRes.GAME_TYPE_FLOWER))
         {
             if (uiWordContent != null)
             {
@@ -288,7 +291,7 @@ public class UIGameCaiCaiLe : UIGameBase, IPopViewControllerDelegate, IUIWordBoa
             }
             return;
         }
- 
+
         float ratio = 1f;
         float topbarHeightCanvas = 160;
 

@@ -1,33 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public class SqlInfo
+{
+    public string sql;
+#if UNITY_ANDROID && !UNITY_EDITOR
+	public	AndroidJavaObject obj; 
+#endif
+    public SQLiteQuery sq;
+
+}
 public class Sql
 {
-    static private Sql _main = null;
-    public static Sql main
-    {
-        get
-        {
-            if (_main == null)
-            {
-                _main = new Sql();
-                _main.Init();
-            }
-            return _main;
-        }
-    }
+    // static private Sql _main = null;
+    // public static Sql main
+    // {
+    //     get
+    //     {
+    //         if (_main == null)
+    //         {
+    //             _main = new Sql();
+    //             _main.Init();
+    //         }
+    //         return _main;
+    //     }
+    // }
 
+    private SqlBasePlatformWrapper _platform = null;
     public SqlBasePlatformWrapper platform
     {
         get
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-				return new SqlAndroidWrapper();
-#elif UNITY_IPHONE && !UNITY_EDITOR
-				return new SqliOSWrapper();
-#else
-            return new SqlBasePlatformWrapper();
-#endif
+
+             if (_platform == null)
+            { 
+                #if UNITY_ANDROID && !UNITY_EDITOR
+				_platform = new SqlAndroidWrapper();
+                #elif UNITY_IPHONE && !UNITY_EDITOR
+				_platform = new SqliOSWrapper();
+                #else
+                _platform = new SqlBasePlatformWrapper();
+                #endif
+            }
+            return _platform;
+
+
         }
     }
 
@@ -36,29 +53,55 @@ public class Sql
 
     }
 
-    public void OpenDB(string dbfile)
+    public void Open(string dbfile)
     {
-        this.platform.OpenDB(dbfile);
+        this.platform.Open(dbfile);
     }
 
-    public void CloseDB()//关闭数据库连接
+    public void Close()//关闭数据库连接
 
     {
-        this.platform.CloseDB();
+        this.platform.Close();
     }
 
     //执行查询
-    public void Query(string sql)
+    public SqlInfo Query(string sql)
     {
+         Debug.Log("Sql:Query sql="+sql);
+        SqlInfo info = null;
+#if UNITY_ANDROID && !UNITY_EDITOR
+			   info = this.platform.Query(sql);
+#elif UNITY_IPHONE && !UNITY_EDITOR
+			  info = this.platform.Query(sql);
+#else
         this.platform.Query(sql);
+#endif
+        return info;
+
     }
 
 
+    public bool MoveToFirst(SqlInfo info)
+    {
+        return this.platform.MoveToFirst(info); 
+    }
+    public bool MoveToNext(SqlInfo info)
+    {
+        return this.platform.MoveToNext(info); ;
+    }
+    public string GetString(SqlInfo info, string key)
+    {
+        return this.platform.GetString(info, key);
+    }
+    public int GetCount(SqlInfo info)
+    {
+        return this.platform.GetCount(info);
+    }
 
     public void ReadFullTable(string tableName)//读取整个表
 
     {
- this.platform.ReadFullTable(tableName);
+        this.platform.ReadFullTable(tableName);
     }
 
 
@@ -66,8 +109,7 @@ public class Sql
     public void Insert(string tableName, string[] values)//在表中插入数据
 
     {
-this.platform.Insert(tableName,values);
-
+        this.platform.Insert(tableName, values);
     }
 
 
@@ -84,7 +126,7 @@ this.platform.Insert(tableName,values);
     public void Delete(string tableName, string[] cols, string[] colsvalues)//删除表中数据
 
     {
-// this.platform.Delete(tableName,values);
+        // this.platform.Delete(tableName,values);
 
     }
 
@@ -94,7 +136,7 @@ this.platform.Insert(tableName,values);
     public void DeleteTable(string tableName)//删除表
 
     {
-      this.platform.DeleteTable(tableName);
+        this.platform.DeleteTable(tableName);
 
     }
 
@@ -104,24 +146,7 @@ this.platform.Insert(tableName,values);
     public bool IsExitTable(string name)//创建表
 
     {
-        bool ret = false;
-        // //string query = "select count(*)  from sqlite_master where type='table' and name = '" + name + "'";
-        // string query = "select * from sqlite_master where type='table' and name = '" + name + "'";
-        // SQLiteQuery rd = Query(query);
-        // //int count = rd.GetCount();//rd.GetInteger("0");
-        // int count = 0;
-        // while (rd.Step())
-        // {
-        //     count++;
-        // }
-
-        // Debug.Log("IsExitTable:count=" + count);
-        // if (count > 0)
-        // {
-        //     ret = true;
-        // }
-        // rd.Release();
-        return ret;
+        return this.platform.IsExitTable(name);
     }
     public void CreateTable(string name, string[] col, string[] colType)//创建表
 

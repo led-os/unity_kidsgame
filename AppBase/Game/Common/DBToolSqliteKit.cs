@@ -4,12 +4,10 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class DBToolSqliteKit 
+public class DBToolSqliteKit : DBToolBase
 {
-    private SQLiteDB db = null; 
-
-
-    public void OpenDB(string dbfile)
+    private SQLiteDB db = null;
+    public override void OpenDB(string dbfile)
 
     {
         string connectionString = "Data Source=" + dbfile;
@@ -42,7 +40,7 @@ public class DBToolSqliteKit
 
 
 
-    public void CloseDB()//关闭数据库连接
+    public override void CloseDB()//关闭数据库连接
 
     {
         if (db != null)
@@ -51,11 +49,27 @@ public class DBToolSqliteKit
         }
     }
 
+    public override string GetString(SqlInfo info, string key)
+    {
+        return info.sq.GetString(key);
+    }
+    public override int GetCount(SqlInfo info)
+    {
+        return info.sq.GetCount();
+    }
+    public override bool MoveToFirst(SqlInfo info)
+    {
+        return false;
+    }
+    public override bool MoveToNext(SqlInfo info)
+    {
+        return info.sq.Step(); ;
+    }
 
-    public SQLiteQuery ExecuteQuery(string sqlQuery,bool isStep)//执行查询
+    public override SqlInfo ExecuteQuery(string sqlQuery, bool isStep)//执行查询
 
     {
-         Debug.Log("ExecuteQuery::" + sqlQuery);
+        Debug.Log("ExecuteQuery::" + sqlQuery);
         // dbCommand = dbConnection.CreateCommand();
 
         // dbCommand.CommandText = sqlQuery;
@@ -63,33 +77,34 @@ public class DBToolSqliteKit
         // dbReader = dbCommand.ExecuteReader();
 
         // return dbReader;
-
+        SqlInfo info = new SqlInfo();
         SQLiteQuery qr = new SQLiteQuery(db, sqlQuery);
-        if(isStep){
-             qr.Step();
+        if (isStep)
+        {
+            qr.Step();
         }
-       
+        info.sq = qr;
         //qr.Release();
-        return qr;
-       
+        return info;
+
 
     }
 
 
 
-    public SQLiteQuery ReadFullTable(string tableName)//读取整个表
+    public override SqlInfo ReadFullTable(string tableName)//读取整个表
 
     {
 
         string query = "SELECT * FROM " + tableName + ";";
 
-        return ExecuteQuery(query,false);
+        return ExecuteQuery(query, false);
 
     }
 
 
 
-    public SQLiteQuery InsertInto(string tableName, string[] values)//在表中插入数据
+    public override SqlInfo InsertInto(string tableName, string[] values)//在表中插入数据
 
     {
 
@@ -105,13 +120,13 @@ public class DBToolSqliteKit
 
         query += "')";
 
-        return ExecuteQuery(query,true);
+        return ExecuteQuery(query, true);
 
     }
 
 
 
-    public SQLiteQuery UpdateInto(string tableName, string[] cols, string colsValues, string selectKey, string selectValue)//替换表中数据
+    public override SqlInfo UpdateInto(string tableName, string[] cols, string colsValues, string selectKey, string selectValue)//替换表中数据
 
     {
 
@@ -133,13 +148,13 @@ public class DBToolSqliteKit
 
         query += " WHERE " + selectKey + " = " + selectValue + " ";
 
-        return ExecuteQuery(query,true);
+        return ExecuteQuery(query, true);
 
     }
 
 
 
-    public SQLiteQuery Delete(string tableName, string[] cols, string[] colsvalues)//删除表中数据
+    public override SqlInfo Delete(string tableName, string[] cols, string[] colsvalues)//删除表中数据
 
     {
 
@@ -157,13 +172,13 @@ public class DBToolSqliteKit
 
         }
 
-        return ExecuteQuery(query,true);
+        return ExecuteQuery(query, true);
 
     }
 
 
 
-    // public SqliteDataReader InsertIntoSpecific(string tableName, string[] cols, string[] values)//插入特定值
+    // public override SqliteDataReader InsertIntoSpecific(string tableName, string[] cols, string[] values)//插入特定值
 
     // {
 
@@ -224,41 +239,42 @@ public class DBToolSqliteKit
 
 
 
-    public SQLiteQuery DeleteContents(string tableName)//删除表
+    public override SqlInfo DeleteContents(string tableName)//删除表
 
     {
 
         string query = "DELETE FROM " + tableName;
- 
-        return ExecuteQuery(query,true);
+
+        return ExecuteQuery(query, true);
 
     }
 
 
 
     //select count(*)  from sqlite_master where type='table' and name = 'yourtablename';
-    public bool IsExitTable(string name)//创建表
+    public override bool IsExitTable(string name)//创建表
 
     {
         bool ret = false;
         //string query = "select count(*)  from sqlite_master where type='table' and name = '" + name + "'";
         string query = "select * from sqlite_master where type='table' and name = '" + name + "'";
-        SQLiteQuery rd = ExecuteQuery(query,false);
+        SqlInfo info = ExecuteQuery(query, false);
         //int count = rd.GetCount();//rd.GetInteger("0");
         int count = 0;
-        while(rd.Step())
+        while (info.sq.Step())
         {
             count++;
         }
-        
-        Debug.Log("IsExitTable:count="+count);
-        if(count>0){
+
+        Debug.Log("IsExitTable:count=" + count);
+        if (count > 0)
+        {
             ret = true;
         }
-        rd.Release();
+        info.sq.Release();
         return ret;
     }
-    public SQLiteQuery CreateTable(string name, string[] col, string[] colType)//创建表
+    public override SqlInfo CreateTable(string name, string[] col, string[] colType)//创建表
 
     {
 
@@ -294,7 +310,7 @@ public class DBToolSqliteKit
 
 
 
-        return ExecuteQuery(query,true);
+        return ExecuteQuery(query, true);
 
 
 
@@ -302,7 +318,7 @@ public class DBToolSqliteKit
 
 
 
-    public SQLiteQuery SelectWhere(string tableName, string[] items, string[] col, string[] operation, string[] values)//集成所有操作后执行
+    public override SqlInfo SelectWhere(string tableName, string[] items, string[] col, string[] operation, string[] values)//集成所有操作后执行
 
     {
 
@@ -349,7 +365,7 @@ public class DBToolSqliteKit
 
 
 
-        return ExecuteQuery(query,false);
+        return ExecuteQuery(query, false);
 
 
 

@@ -55,6 +55,9 @@ public class CaiCaiLeItemInfo : ItemInfo
     //PoemFlower
     public string content0;
     public string content1;
+
+    //
+    public bool isLock;
 }
 public class GameLevelParse : LevelParseBase
 {

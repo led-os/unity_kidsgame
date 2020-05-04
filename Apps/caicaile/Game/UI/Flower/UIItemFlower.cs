@@ -19,6 +19,7 @@ public class UIItemFlower : UIView
     {
         NORMAL = 0,
         SELECT,
+        LOCK,
     }
     public UIImage imageBg;
     public UIText textTitle;
@@ -26,6 +27,7 @@ public class UIItemFlower : UIView
     public int indexCol;
     public int index;
     public bool isAnswerItem;
+     public bool isHavePlaced;
     public string word;
 
 
@@ -61,6 +63,12 @@ public class UIItemFlower : UIView
 
             }
 
+            if (_status == Status.LOCK)
+            {
+                imageBg.UpdateImageByKey("LetterBgLock");
+                textTitle.color = Color.gray;
+
+            }
         }
     }
     /// <summary>

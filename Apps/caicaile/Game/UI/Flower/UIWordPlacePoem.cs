@@ -15,7 +15,7 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
     public UIText textTitle;
     public GameObject objTopBar;
     public GameObject objWord;
-    public GameObject objBtnBar; 
+    public GameObject objBtnBar;
     public Button btnShare;
     public UIItemFlower uiItemFlowerPrefab;
     public int row = 7;
@@ -27,8 +27,11 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
     int indexFillWord;
     int indexAnswer;
     bool isTouchSel;
-    UIItemFlower itemTouchSel;
+    UIItemFlower itemTouchSel0;
+    UIItemFlower itemTouchSel1;
     UIItemFlower itemTouchSelPre;
+
+    string strAnswer;
     void Awake()
     {
         base.Awake();
@@ -50,6 +53,10 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
         UITouchEventWithMove ev = objWord.AddComponent<UITouchEventWithMove>();
         ev.callBackTouch = OnItemTouchEvent;
         objWord.transform.SetAsLastSibling();
+
+        itemTouchSel0 = null;
+        itemTouchSel1 = null;
+        itemTouchSelPre = null;
     }
 
     // Use this for initialization
@@ -106,61 +113,226 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
         //     iDelegate.UIWordContentBaseDidGameFinish(this, false);
         // }
     }
+
+    public UIItemFlower GetUnLockPlaceItem(int idx)
+    {
+        UIItemFlower ret = null;
+        List<UIItemFlower> listOther = new List<UIItemFlower>();
+        foreach (UIItemFlower item in listItem)
+        {
+            if ((!item.isHavePlaced) && (idx != item.index) && (item.status != UIItemFlower.Status.LOCK))
+            {
+                listOther.Add(item);
+            }
+        }
+        if (listOther.Count > 0)
+        {
+            int rdm = Random.Range(0, listOther.Count);
+            ret = listOther[rdm];
+        }
+        return ret;
+    }
+
+    public List<UIItemFlower> GetAllUnLock()
+    {
+        List<UIItemFlower> listOther = new List<UIItemFlower>();
+        foreach (UIItemFlower item in listItem)
+        {
+            if (item.status != UIItemFlower.Status.LOCK)
+            {
+                listOther.Add(item);
+            }
+        }
+        return listOther;
+    }
+
+    //交换位置
+    public void SwapItem(UIItemFlower item0, UIItemFlower item1)
+    {
+        int row0 = item0.indexRow;
+        int row1 = item1.indexRow;
+        int col0 = item0.indexCol;
+        int col1 = item1.indexCol;
+        item0.indexRow = row1;
+        item0.indexCol = col1;
+
+        item1.indexRow = row0;
+        item1.indexCol = col0;
+
+    }
+
+    // 随机排列
+    public void RandomPlace()
+    {
+        List<UIItemFlower> listUnlock = GetAllUnLock();
+        int[] indexList = Common.RandomIndex(listUnlock.Count, listUnlock.Count);
+        int idx = 0;
+        foreach (UIItemFlower item in listItem)
+        {
+            if ((!item.isHavePlaced) && (item.status != UIItemFlower.Status.LOCK))
+            {
+                UIItemFlower itemother = GetUnLockPlaceItem(item.index);
+                if (itemother != null)
+                {
+                    SwapItem(item, itemother);
+                    item.isHavePlaced = true; 
+                }
+
+                idx++;
+            }
+        }
+ 
+    }
+  
     public void UpdateItem()
     {
         int level = LevelManager.main.gameLevel;
         CaiCaiLeItemInfo info = GameLevelParse.main.listGuanka[level] as CaiCaiLeItemInfo;
-   
-
+        string strIdiom = info.listIdiom[0];
+        row = info.listIdiom.Count;
+        col = strIdiom.Length;
         lygrid.row = row;
         lygrid.col = col;
 
         int idx = 0;
+        strAnswer = "";
+        int max = row * col / 2 - 2;
+        int min = 2;
+        int lockcount = max - min;// 
+        int numlock = (max - level % lockcount) * 2;//Random.Range(min, max);
+        int[] indexLock = Common.RandomIndex(row * col, numlock);
+
+
+        int[] indexRow = Common.RandomIndex(info.listIdiom.Count, info.listIdiom.Count);
+
         for (int i = 0; i < info.listIdiom.Count; i++)
         {
-            string strIdiom = info.listIdiom[i];
+            strIdiom = info.listIdiom[i];
+            Debug.Log("conent i=:"+i+":"+strIdiom);
+            strAnswer += strIdiom;
             for (int j = 0; j < strIdiom.Length; j++)
             {
                 UIItemFlower ui = (UIItemFlower)GameObject.Instantiate(uiItemFlowerPrefab);
                 ui.transform.SetParent(objWord.transform);
                 ui.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 UIViewController.ClonePrefabRectTransform(uiItemFlowerPrefab.gameObject, ui.gameObject);
-                ui.iDelegate = this; 
-                ui.indexRow = i;
+                ui.iDelegate = this;
+                ui.indexRow = row - 1 - i;
                 ui.indexCol = j;
                 ui.index = idx;
                 ui.isAnswerItem = false;
-                ui.status = UIItemFlower.Status.NORMAL;
-                ui.UpdateItem(strIdiom.Substring(j, 1));
+
+                bool islock = false;
+                foreach (int idxlock in indexLock)
+                {
+                    if (idx == idxlock)
+                    {
+                        islock = true;
+                    }
+                }
+                int rdm = j;
+                if (islock)
+                {
+                    ui.status = UIItemFlower.Status.LOCK;
+                    ui.isHavePlaced = true; 
+                }
+                else
+                {
+                    ui.status = UIItemFlower.Status.NORMAL;
+                    ui.isHavePlaced = false;
+                }
+
+                    ui.UpdateItem(strIdiom.Substring(j, 1));
+
                 listItem.Add(ui);
                 idx++;
             }
 
-        } 
+        }
 
+        RandomPlace();
         LayOut();
 
     }
 
-    //是否相邻
-    bool IsSideItem()
+    //是否
+    bool IsFirstSelect()
     {
         bool ret = false;
-        if (itemTouchSelPre == null)
-        {
-            return true;
-        }
-
-        if (!itemTouchSel.gameObject.activeSelf)
+        if (itemTouchSel0 == null)
         {
             return false;
         }
-
-        if ((Mathf.Abs(itemTouchSel.indexRow - itemTouchSelPre.indexRow) <= 1) && (Mathf.Abs(itemTouchSel.indexCol - itemTouchSelPre.indexCol) <= 1))
+        if (itemTouchSel0.status == UIItemFlower.Status.SELECT)
         {
             return true;
         }
         return ret;
+    }
+    bool IsBothSelect()
+    {
+        bool ret = false;
+        if ((itemTouchSel0 == null) || (itemTouchSel1 == null))
+        {
+            return false;
+        }
+        if ((itemTouchSel0.status == UIItemFlower.Status.SELECT) && (itemTouchSel1.status == UIItemFlower.Status.SELECT))
+        {
+            return true;
+        }
+        return ret;
+    }
+
+    void RunSelectMoveAnimate()
+    {
+        Debug.Log("RunSelectMoveAnimate");
+        float duration = 1f;
+        Vector2 pos0 = itemTouchSel0.transform.position;
+        Vector2 pos1 = itemTouchSel1.transform.position;
+        itemTouchSel0.transform.DOMove(pos1, duration).OnComplete(() =>
+                          {
+
+                          });
+
+        itemTouchSel1.transform.DOMove(pos0, duration).OnComplete(() =>
+      {
+          CheckSelect();
+      });
+    }
+    void CheckSelect()
+    {
+        // itemTouchSel0.status = UIItemFlower.Status.NORMAL;
+        // itemTouchSel1.status = UIItemFlower.Status.NORMAL; 
+        SwapItem(itemTouchSel0, itemTouchSel1);
+
+
+        string answer0 = GetAnswerOfItem(itemTouchSel0);
+        string answer1 = GetAnswerOfItem(itemTouchSel1);
+        if (answer0 == itemTouchSel0.word)
+        {
+            itemTouchSel0.status = UIItemFlower.Status.LOCK;
+        }
+        else
+        {
+            itemTouchSel0.status = UIItemFlower.Status.NORMAL;
+        }
+        if (answer1 == itemTouchSel1.word)
+        {
+            itemTouchSel1.status = UIItemFlower.Status.LOCK;
+        }
+        else
+        {
+            itemTouchSel1.status = UIItemFlower.Status.NORMAL;
+        }
+
+        CheckAllAnswerFinish();
+
+    }
+
+    string GetAnswerOfItem(UIItemFlower item)
+    {
+        int idx = (row - 1 - item.indexRow) * col + item.indexCol;
+        return strAnswer.Substring(idx, 1);
     }
 
 
@@ -170,65 +342,62 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
         float x, y, w, h;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         Vector2 posScreen = eventData.position;
-        //Debug.Log("OnItemTouchEvent status=" + status);
+        Debug.Log("OnItemTouchEvent status=" + st);
         if (st == UITouchEvent.STATUS_TOUCH_DOWN)
         {
-            itemTouchSel = null;
-            itemTouchSelPre = null;
+
             listItemSel.Clear();
             //清空
             textTitle.text = "";
-
         }
         if (st == UITouchEvent.STATUS_TOUCH_MOVE)
         {
-
-            //position 当gameObject为canvas元素时为屏幕坐标而非世界坐标
-
+        }
+        if (st == UITouchEvent.STATUS_TOUCH_UP)
+        {
 
             foreach (UIItemFlower item in listItem)
             {
                 RectTransform rctran = item.GetComponent<RectTransform>();
-                float ratio = 0.8f;
-
+                float ratio = 1.0f;
                 //屏幕坐标
                 w = Common.CanvasToScreenWidth(sizeCanvas, rctran.rect.width * ratio);
                 h = Common.CanvasToScreenWidth(sizeCanvas, rctran.rect.height * ratio);
                 x = item.transform.position.x;
                 y = item.transform.position.y;
-
                 // Vector2 posTouch = mainCam.ScreenToWorldPoint(Common.GetInputPosition());
                 Rect rc = new Rect(x - w / 2, y - h / 2, w, h);
                 if (rc.Contains(posScreen) && item.gameObject.activeSelf)
                 {
-                    //选中
-                    if (item.status != UIItemFlower.Status.SELECT)
+                    Debug.Log("OnUIItemFlowerTouchUp item.status=" + item.status);
+                    //选中  
+                    if (item.status != UIItemFlower.Status.LOCK)
                     {
-                        isTouchSel = true;
-                        itemTouchSel = item;
-                        if (IsSideItem())
+                        item.status = UIItemFlower.Status.SELECT;
+                        if (IsFirstSelect())
                         {
-                            item.status = UIItemFlower.Status.SELECT;
-                            item.transform.SetAsLastSibling();
-                            //  AudioPlay.main.PlayFile(AppRes.AUDIO_LETTER_DRAG_1); 
-                            OnUIItemFlowerTouchMove(item);
-                            itemTouchSelPre = item;
+                            Debug.Log("OnUIItemFlowerTouchUp itemTouchSel1");
+                            itemTouchSel1 = item;
+                            //执行交换
+                            RunSelectMoveAnimate();
                         }
+                        else if (!IsBothSelect())
+                        {
+                            Debug.Log("OnUIItemFlowerTouchUp itemTouchSel0");
+                            itemTouchSel0 = item;
+                        }
+                        else
+                        {
+                            itemTouchSel0.status = UIItemFlower.Status.NORMAL;
+                            itemTouchSel1.status = UIItemFlower.Status.NORMAL;
+                        }
+
+                        item.transform.SetAsLastSibling();
+                        OnUIItemFlowerTouchDown(item);
+                        itemTouchSelPre = item;
+                        break;
                     }
-
-                    // isClickDown = true;
                 }
-            }
-
-            // status = Status.SELECT;
-        }
-        if (st == UITouchEvent.STATUS_TOUCH_UP)
-        {
-            Debug.Log("OnUIItemFlowerTouchUp isTouchSel=" + isTouchSel);
-            if (isTouchSel)
-            {
-                isTouchSel = false;
-                OnUIItemFlowerTouchUp(itemTouchSel);
             }
 
         }
@@ -272,11 +441,13 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
 
         foreach (UIItemFlower item in listItem)
         {
-            if (item.gameObject.activeSelf)
+            if (item.status != UIItemFlower.Status.LOCK)
             {
                 isAllAnswer = false;
             }
         }
+
+        Debug.Log("CheckAllAnswerFinish isAllAnswer=" + isAllAnswer);
 
         if (isAllAnswer)
         {
@@ -303,7 +474,7 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
 
     public override void OnTips()
     {
-    
+
 
     }
 
@@ -318,19 +489,13 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
     public void OnUIItemFlowerTouchMove(UIItemFlower ui)
     {
         Debug.Log("OnUIItemFlowerTouchMove ui.word=" + ui.word + " textTitle=" + textTitle.text);
-        listItemSel.Add(ui);
-        textTitle.text = textTitle.text + ui.word;
 
-        if (iDelegate != null)
-        {
-            iDelegate.UIWordContentBaseDidAdd(this, ui.word);
-        }
 
     }
     public void OnUIItemFlowerTouchUp(UIItemFlower ui)
     {
 
-        
+
         {
             textTitle.text = "";
             foreach (UIItemFlower item in listItemSel)
