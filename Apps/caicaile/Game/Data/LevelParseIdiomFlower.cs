@@ -125,11 +125,11 @@ public class LevelParseIdiomFlower : GameLevelParseBase
 
         if (Common.BlankString(info.id))
         {
-            idiom = IdiomDB.main.GetItemByTitle(info.title);
+            idiom = DBIdiom.main.GetItemByTitle(info.title);
         }
         else
         {
-            idiom = IdiomDB.main.GetItemById(info.id);
+            idiom = DBIdiom.main.GetItemById(info.id);
         }
 
         if (Common.BlankString(info.pinyin))

@@ -377,7 +377,7 @@ public class UIGameWin : UIGameWinBase, ISegmentDelegate
     {
         CaiCaiLeItemInfo infoItem = GameLevelParse.main.GetItemInfo();
         string strBtn = "";
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
             strBtn = Language.main.GetString("STR_IdiomDetail_DELETE_LOVE");
         }
@@ -410,13 +410,13 @@ public class UIGameWin : UIGameWinBase, ISegmentDelegate
     public void OnClickBtnAddLove()
     {
         CaiCaiLeItemInfo infoItem = GameLevelParse.main.GetItemInfo();
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
-            LoveDB.main.DeleteItem(infoItem);
+            DBLove.main.DeleteItem(infoItem.infoIdiom);
         }
         else
         {
-            LoveDB.main.AddItem(infoItem);
+            DBLove.main.AddItem(infoItem.infoIdiom);
         }
         UpdateLoveStatus();
     }

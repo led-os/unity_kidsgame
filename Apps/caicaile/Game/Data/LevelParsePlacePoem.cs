@@ -39,7 +39,7 @@ public class LevelParsePlacePoem : GameLevelParseBase
         int idx = LevelManager.main.placeLevel;
 
         ItemInfo infoPlace = LevelManager.main.GetPlaceItemInfo(LevelManager.main.placeLevel);
-        string filepath = Common.GAME_RES_DIR + "/guanka/item_" + infoPlace.id + ".json";
+        string filepath = Common.GAME_RES_DIR + "/guanka/" + infoPlace.id + ".json";
         Debug.Log("ParseGuanka filepath=" + filepath);
         //
         //FILE_PATH
@@ -53,12 +53,18 @@ public class LevelParsePlacePoem : GameLevelParseBase
         {
             JsonData item = items[i];
             CaiCaiLeItemInfo info = new CaiCaiLeItemInfo();
-            info.id = JsonUtil.GetString(item, "id", "");
-            info.content0 = JsonUtil.GetString(item, "content0", "");
-            info.content1 = JsonUtil.GetString(item, "content1", "");
-            info.listIdiom = new List<string>();
-            info.listIdiom.Add(info.content0);
-            info.listIdiom.Add(info.content1);
+            info.title = JsonUtil.GetString(item, "title", "");
+            JsonData arrayContent = item["content"];
+            info.listPoemContent = new List<PoemContentInfo>();
+            if(arrayContent.Count>8){
+                continue;
+            }
+            for (int j = 0; j < arrayContent.Count; j++)
+            {
+                PoemContentInfo infoPoem = new PoemContentInfo();
+                infoPoem.content = (string)arrayContent[j];
+                info.listPoemContent.Add(infoPoem);
+            } 
             info.gameType = infoPlace.gameType;
 
             listGuanka.Add(info);
@@ -74,40 +80,8 @@ public class LevelParsePlacePoem : GameLevelParseBase
 
     public override void ParseItem(CaiCaiLeItemInfo info)
     {
-        string filepath = Common.GAME_RES_DIR + "/guanka/poem/" + info.id + ".json";
-        Debug.Log("ParsePoemItem filepath=" + filepath);
-        if (!FileUtil.FileIsExistAsset(filepath))
-        {
-            Debug.Log("ParsePoemItem not exist filepath=" + filepath);
-            return;
-        }
-        //
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(filepath);
-        JsonData root = JsonMapper.ToObject(json);
-        info.title = (string)root["title"];
-        info.author = (string)root["author"];
-        info.year = (string)root["year"];
-        info.style = (string)root["style"];
-        info.album = (string)root["album"];
-        info.url = (string)root["url"];
-        info.intro = (string)root["intro"];
-        info.translation = (string)root["translation"];
-        info.appreciation = (string)root["appreciation"];
-
-        JsonData itemPoem = root["poem"];
-        info.listPoemContent = new List<PoemContentInfo>();
-        for (int i = 0; i < itemPoem.Count; i++)
-        {
-            JsonData item = itemPoem[i];
-            PoemContentInfo infoPoem = new PoemContentInfo();
-            infoPoem.content = (string)item["content"];
-            infoPoem.pinyin = (string)item["pinyin"];
-            bool isSkip = JsonUtil.GetBool(item, "skip", false);
-            if (!isSkip)
-            {
-                info.listPoemContent.Add(infoPoem);
-            }
+        if(info.infoIdiom==null){
+        info.infoIdiom = DBPoem.main.GetItemByTitle(info.title);
         }
     }
 

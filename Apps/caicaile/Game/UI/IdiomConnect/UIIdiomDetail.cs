@@ -206,7 +206,7 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
     public void UpdateLoveStatus()
     {
         string strBtn = "";
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
             strBtn = Language.main.GetString("STR_IdiomDetail_DELETE_LOVE");
         }
@@ -257,13 +257,13 @@ public class UIIdiomDetail : UIViewPop, ISegmentDelegate
     public void OnClickBtnAdd()
     {
         // Close();
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
-            LoveDB.main.DeleteItem(infoItem);
+            DBLove.main.DeleteItem(infoItem.infoIdiom);
         }
         else
         {
-            LoveDB.main.AddItem(infoItem);
+            DBLove.main.AddItem(infoItem.infoIdiom);
         }
         UpdateLoveStatus();
     }

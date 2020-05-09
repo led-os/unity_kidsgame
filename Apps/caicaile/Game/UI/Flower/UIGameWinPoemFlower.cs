@@ -219,7 +219,7 @@ public class UIGameWinPoemFlower : UIGameWinBase, ISegmentDelegate
     public void UpdateLoveStatus()
     {
         string strkey = "";
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
             strkey = "STR_IdiomDetail_DELETE_LOVE";
         }
@@ -333,13 +333,13 @@ public class UIGameWinPoemFlower : UIGameWinBase, ISegmentDelegate
     public void OnClickBtnAdd()
     {
         // Close();
-        if (LoveDB.main.IsItemExist(infoItem))
+        if (DBLove.main.IsItemExist(infoItem.infoIdiom))
         {
-            LoveDB.main.DeleteItem(infoItem);
+            DBLove.main.DeleteItem(infoItem.infoIdiom);
         }
         else
         {
-            LoveDB.main.AddItem(infoItem);
+            DBLove.main.AddItem(infoItem.infoIdiom);
         }
         UpdateLoveStatus();
     }

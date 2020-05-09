@@ -63,12 +63,10 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
     void Start()
     {
         LayOut();
-        //    if (iDelegate != null)
-        //     {
-        //         iDelegate.UIWordContentBaseDidGameFinish(this, false);
-        //     }
-
-
+        // if (iDelegate != null)
+        // {
+        //     iDelegate.UIWordContentBaseDidGameFinish(this, false);
+        // }
     }
 
 
@@ -175,21 +173,22 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
                 if (itemother != null)
                 {
                     SwapItem(item, itemother);
-                    item.isHavePlaced = true; 
+                    item.isHavePlaced = true;
                 }
 
                 idx++;
             }
         }
- 
+
     }
-  
+
     public void UpdateItem()
     {
         int level = LevelManager.main.gameLevel;
         CaiCaiLeItemInfo info = GameLevelParse.main.listGuanka[level] as CaiCaiLeItemInfo;
-        string strIdiom = info.listIdiom[0];
-        row = info.listIdiom.Count;
+        PoemContentInfo infoPoem = info.listPoemContent[0];
+        string strIdiom = infoPoem.content;
+        row = info.listPoemContent.Count;
         col = strIdiom.Length;
         lygrid.row = row;
         lygrid.col = col;
@@ -203,12 +202,13 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
         int[] indexLock = Common.RandomIndex(row * col, numlock);
 
 
-        int[] indexRow = Common.RandomIndex(info.listIdiom.Count, info.listIdiom.Count);
+        int[] indexRow = Common.RandomIndex(info.listPoemContent.Count, info.listPoemContent.Count);
 
-        for (int i = 0; i < info.listIdiom.Count; i++)
+        for (int i = 0; i < info.listPoemContent.Count; i++)
         {
-            strIdiom = info.listIdiom[i];
-            Debug.Log("conent i=:"+i+":"+strIdiom);
+            infoPoem = info.listPoemContent[i];
+            strIdiom = infoPoem.content;
+            Debug.Log("conent i=:" + i + ":" + strIdiom);
             strAnswer += strIdiom;
             for (int j = 0; j < strIdiom.Length; j++)
             {
@@ -234,7 +234,7 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
                 if (islock)
                 {
                     ui.status = UIItemFlower.Status.LOCK;
-                    ui.isHavePlaced = true; 
+                    ui.isHavePlaced = true;
                 }
                 else
                 {
@@ -242,7 +242,7 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
                     ui.isHavePlaced = false;
                 }
 
-                    ui.UpdateItem(strIdiom.Substring(j, 1));
+                ui.UpdateItem(strIdiom.Substring(j, 1));
 
                 listItem.Add(ui);
                 idx++;
@@ -472,6 +472,7 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
 
     }
 
+    //提示答案需要先选中一个位置
     public override void OnTips()
     {
 
@@ -564,6 +565,20 @@ public class UIWordPlacePoem : UIWordContentBase, IUIItemFlowerDelegate
 
     }
 
+    public void OnClickBtnTitle()
+    {
+
+    }
+    public void OnClickBtnTranslation()
+    {
+
+    }
+
+    //观看视频看原文
+    public void OnClickBtnVideo()
+    {
+        AdKitCommon.main.ShowAdVideo();
+    }
     public void OnClickBtnRetry()
     {
         GameManager.main.GotoPlayAgain();

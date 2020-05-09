@@ -101,7 +101,7 @@ public class LevelParseIdiomConnect : GameLevelParseBase
 
     public override void ParseItem(CaiCaiLeItemInfo info)
     {
-        IdiomItemInfo idiom = IdiomDB.main.GetItemByTitle(info.title);
+        IdiomItemInfo idiom = DBIdiom.main.GetItemByTitle(info.title);
         info.title = idiom.title;
         info.album = idiom.album;
         info.translation = idiom.translation;

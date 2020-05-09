@@ -58,6 +58,8 @@ public class CaiCaiLeItemInfo : ItemInfo
 
     //
     public bool isLock;
+
+    public IdiomItemInfo infoIdiom;
 }
 public class GameLevelParse : LevelParseBase
 {

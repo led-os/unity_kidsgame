@@ -1,6 +1,6 @@
 ﻿ 
 @set filepath = %~dp0 
-php CreateIdiomDB.php
+php CreateDBIdiom.php
 @Pause
 
  

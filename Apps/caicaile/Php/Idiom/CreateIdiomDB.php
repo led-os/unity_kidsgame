@@ -3,7 +3,7 @@ header("Content-type: text/html; charset=utf-8");
 
 include('ParseIdiomItem.php');
 include_once('IdiomItemInfo.php');
-include_once('IdiomDB.php');
+include_once('DBIdiom.php');
 include_once('../Common/FirstLetter.php');
 include_once('../Common/Common.php');
 

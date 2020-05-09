@@ -5,10 +5,12 @@ using UnityEngine;
 using System.IO;
 
 
-public class DBIdiom:DBBase
+public class DBIdiom : DBBase
 {
     // public const string TABLE_NAME = "TableIdiom"; 
-
+    public string[] item_col = new string[] { KEY_id, KEY_title, KEY_pinyin, KEY_album, KEY_translation, KEY_year, KEY_usage,  KEY_common_use, KEY_emotional, KEY_structure,
+        KEY_near_synonym, KEY_antonym, KEY_example, KEY_correct_pronunciation
+ };
     static DBIdiom _main = null;
     static bool isInited = false;
     public static DBIdiom main
@@ -20,12 +22,9 @@ public class DBIdiom:DBBase
                 isInited = true;
                 _main = new DBIdiom();
                 Debug.Log("DBIdiom main init");
-                _main.TABLE_NAME = "TableIdiom"; 
+                _main.TABLE_NAME = "TableIdiom";
                 _main.dbFileName = "Idiom.db";
-                if(Application.isEditor){
-                    _main.CopyDbFileFromResource();
-                }
-                _main.CreateDb();
+                _main.Init();
             }
             return _main;
         }
@@ -43,22 +42,20 @@ public class DBIdiom:DBBase
         //     return _main;
         // }
     }
- 
-  
-    //2017.1.10 to 1.10
-    static public string getDateDisplay(string date)
+    public void Init()
     {
-        int idx = date.IndexOf(".");
-        if (idx >= 0)
+        isNeedCopyFromAsset = true;
+        if (Application.isEditor)
         {
-            string str = date.Substring(idx + 1);
-            return str;
+            CopyDbFileFromResource();
         }
-        return date;
+        CreateDb();
+        CreateTable(item_col);
     }
 
+
     //{ "id", "intro", "album", "translation", "author", "year", "style", "pinyin", "appreciation", "head", "end", "tips", "date", "addtime" };
-    public void AddItem(IdiomItemInfo info)
+    public override void AddItem(IdiomItemInfo info)
     {
         OpenDB();
         int lengh = item_col.Length;
@@ -103,39 +100,10 @@ public class DBIdiom:DBBase
     }
 
 
-    public void DeleteItem(IdiomItemInfo info)
-    {
-        OpenDB();
-        // string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = "" + info.id + "'" + " and addtime = "" + info.addtime + "'";
-        string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
-        dbTool.ExecuteQuery(strsql, true);
-        CloseDB();
-    }
 
 
-    public bool IsItemExist(IdiomItemInfo info)
-    {
-        bool ret = false;
-        OpenDB();
-        //string strsql = "SELECT count(*) FROM " + TABLE_NAME + " WHERE id = "" + info.id + "'";
-        string strsql = "SELECT * FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
-        SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        int count = 0;//qr.GetCount();
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
-        {
-            count++;
-        }
-        // qr.Release();
-        Debug.Log("IsItemExist count=" + count);
-        CloseDB();
-        if (count > 0)
-        {
-            ret = true;
-        }
-        return ret;
-    }
 
-    void ReadInfo(IdiomItemInfo info, SqlInfo infosql)
+    public override void ReadInfo(IdiomItemInfo info, SqlInfo infosql)
     {
 
         info.id = dbTool.GetString(infosql, KEY_id);
@@ -163,77 +131,6 @@ public class DBIdiom:DBBase
         // info.date = rd.GetString(KEY_date);
     }
 
-
-    public List<IdiomItemInfo> GetAllItem()
-    {
-        // Distinct 去掉重复
-        //desc 降序 asc 升序 
-        string strsql = "select DISTINCT id from " + TABLE_NAME + " order by addtime desc";
-
-        List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
-        OpenDB();
-        //SqliteDataReader reader = dbTool.ReadFullTable(TABLE_NAME);//
-        SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        Debug.Log("GetAllItem start read");
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
-        {
-            Debug.Log("GetAllItem reading");
-            IdiomItemInfo info = new IdiomItemInfo();
-            ReadInfo(info, infosql);
-            listRet.Add(info);
-        }
-
-        // reader.Release();
-
-        CloseDB();
-        Debug.Log("GetAllItem:" + listRet.Count);
-        return listRet;
-    }
-
-    public List<IdiomItemInfo> GetAllDate()
-    {
-        // Distinct 去掉重复
-        //desc 降序 asc 升序 
-        string strsql = "select DISTINCT date from " + TABLE_NAME + " order by addtime desc";
-
-        List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
-        OpenDB();
-        SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
-        {
-            IdiomItemInfo info = new IdiomItemInfo();
-            info.date = dbTool.GetString(infosql, "date");
-            listRet.Add(info);
-        }
-
-        // reader.Release();
-
-        CloseDB();
-        return listRet;
-    }
-
-    public List<IdiomItemInfo> GetItemByDate(string date)
-    {
-        string strsql = "select * from " + TABLE_NAME + " where date = '" + date + "'" + "order by addtime desc";
-        List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
-        OpenDB();
-
-        SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
-        {
-            IdiomItemInfo info = new IdiomItemInfo();
-            ReadInfo(info, infosql);
-            listRet.Add(info);
-        }
-
-        // reader.Release();
-
-        CloseDB();
-        return listRet;
-    }
 
 
     public List<IdiomItemInfo> GetItemListById(string id)
@@ -281,27 +178,6 @@ public class DBIdiom:DBBase
         return info;
     }
 
-    public IdiomItemInfo GetItemById(string id)
-    {
-        string strsql = "select * from " + TABLE_NAME + " where id = '" + id + "'";
-        //List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
-        IdiomItemInfo info = new IdiomItemInfo();
-        OpenDB();
-        //"select * from %s where keyZi = \"%s\" order by addtime desc"
-        SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
-        {
-            ReadInfo(info, infosql);
-            break;
-            //listRet.Add(info);
-        }
-
-        //  reader.Release();
-
-        CloseDB();
-        return info;
-    }
     public List<object> Search(string word)
     {
         List<object> listRet = new List<object>();
@@ -318,12 +194,16 @@ public class DBIdiom:DBBase
 
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
         dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+        while (true)// 循环遍历数据 
         {
             IdiomItemInfo info = new IdiomItemInfo();
             ReadInfo(info, infosql);
             listRet.Add(info);
-        } 
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
+        }
         //   reader.Release();
 
         CloseDB();

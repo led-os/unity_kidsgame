@@ -8,18 +8,31 @@ internal class SqlAndroidWrapper : SqlBasePlatformWrapper
 	public const string JAVA_CLASS = "com.moonma.common.DBInterfaceUnity";
 
     AndroidJavaClass javaClass;
+     public	AndroidJavaObject objDb; 
 
-	public override void Open(string dbfile)
-    {   
-      
-        if(javaClass==null)
+public  void Init( ) 
+    {
+             if(javaClass==null)
 		{ 
 		    javaClass = new AndroidJavaClass(JAVA_CLASS);
 		}
+    }
+
+    public override void CopyFromAsset(string dbfile) 
+    {
+       Init();
+         if(javaClass!=null)
+		{ 
+		    javaClass.CallStatic("CopyFromAsset",dbfile);
+		}
+    }
+	public override void Open(string dbfile)
+    {   
+       Init();
 
 		if(javaClass!=null)
 		{ 
-		    javaClass.CallStatic("OpenDB",dbfile);
+		   objDb = javaClass.CallStatic<AndroidJavaObject>("OpenDB",dbfile);
 		}
 
     }
@@ -60,7 +73,10 @@ internal class SqlAndroidWrapper : SqlBasePlatformWrapper
         }
         return  info.obj.Call<bool>("moveToNext");   
     }
-
+ public override void ExecSQL(string sql)
+    {
+             javaClass.CallStatic("ExecSQL",objDb,sql);
+    }
    public override SqlInfo Query(string sql)
     {
         //   if(javaClass==null)
@@ -71,7 +87,7 @@ internal class SqlAndroidWrapper : SqlBasePlatformWrapper
         SqlInfo info = new SqlInfo(); 
 				{  
 					//return Cursor
-				   AndroidJavaObject obj = javaClass.CallStatic<AndroidJavaObject>("Query",sql);
+				   AndroidJavaObject obj = javaClass.CallStatic<AndroidJavaObject>("Query",objDb,sql);
 
                     string strtest = javaClass.CallStatic<string>("QueryTest",sql); 
                     Debug.Log("Query AndroidJavaObject strtest="+strtest);

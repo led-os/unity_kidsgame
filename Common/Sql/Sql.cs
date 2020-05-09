@@ -6,6 +6,7 @@ public class SqlInfo
     public string sql;
 #if UNITY_ANDROID && !UNITY_EDITOR
 	public	AndroidJavaObject obj; 
+   
 #endif
     public SQLiteQuery sq;
 
@@ -32,15 +33,15 @@ public class Sql
         get
         {
 
-             if (_platform == null)
-            { 
-                #if UNITY_ANDROID && !UNITY_EDITOR
+            if (_platform == null)
+            {
+#if UNITY_ANDROID && !UNITY_EDITOR
 				_platform = new SqlAndroidWrapper();
-                #elif UNITY_IPHONE && !UNITY_EDITOR
+#elif UNITY_IPHONE && !UNITY_EDITOR
 				_platform = new SqliOSWrapper();
-                #else
+#else
                 _platform = new SqlBasePlatformWrapper();
-                #endif
+#endif
             }
             return _platform;
 
@@ -52,7 +53,10 @@ public class Sql
     {
 
     }
-
+    public void CopyFromAsset(string dbfile)
+    {
+        this.platform.CopyFromAsset(dbfile);
+    }
     public void Open(string dbfile)
     {
         this.platform.Open(dbfile);
@@ -67,7 +71,7 @@ public class Sql
     //执行查询
     public SqlInfo Query(string sql)
     {
-         Debug.Log("Sql:Query sql="+sql);
+        Debug.Log("Sql:Query sql=" + sql);
         SqlInfo info = null;
 #if UNITY_ANDROID && !UNITY_EDITOR
 			   info = this.platform.Query(sql);
@@ -80,10 +84,23 @@ public class Sql
 
     }
 
+    public void ExecSQL(string sql)
+    {
+        Debug.Log("Sql:ExecSQL sql=" + sql);
+#if UNITY_ANDROID && !UNITY_EDITOR
+			     this.platform.ExecSQL(sql);
+#elif UNITY_IPHONE && !UNITY_EDITOR
+			   this.platform.ExecSQL(sql);
+#else
+        this.platform.ExecSQL(sql);
+#endif 
+
+    }
+
 
     public bool MoveToFirst(SqlInfo info)
     {
-        return this.platform.MoveToFirst(info); 
+        return this.platform.MoveToFirst(info);
     }
     public bool MoveToNext(SqlInfo info)
     {

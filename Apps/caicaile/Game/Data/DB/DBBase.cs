@@ -25,13 +25,20 @@ public class IdiomItemInfo
 
     public string date;
 
+    public string author;
+    public string content;
+    public string content_pinyin;
+    public string authorDetail;
+    public string appreciation;//赏析
+
 }
 
 public class DBBase
 {
     public string TABLE_NAME = "table_items";
-   public DBToolBase dbTool;
+    public DBToolBase dbTool;
     public string dbFileName;
+    public bool isNeedCopyFromAsset = false;
 
 
     public const string KEY_id = "id";
@@ -55,13 +62,11 @@ public class DBBase
     public const string KEY_antonym = "antonym"; //反义词  
     public const string KEY_example = "example";
     public const string KEY_correct_pronunciation = "correct_pronunciation"; //成语正音：别，不能读作“biè”
-
+    public const string KEY_appreciation = "appreciation";
 
     public const string KEY_text = "text";
 
-    public string[] item_col = new string[] { KEY_id, KEY_title, KEY_pinyin, KEY_album, KEY_translation, KEY_year, KEY_usage,  KEY_common_use, KEY_emotional, KEY_structure,
-        KEY_near_synonym, KEY_antonym, KEY_example, KEY_correct_pronunciation
- };
+    int colLength;
 
     static public string strSaveWordShotDir//字截图保存目录
     {
@@ -77,7 +82,8 @@ public class DBBase
         {
             string appDBPath = Application.temporaryCachePath + "/" + dbFileName;
             Debug.Log("appDBPath=" + appDBPath);
-            if(Common.isAndroid){
+            if (Common.isAndroid)
+            {
                 appDBPath = dbFileName;
             }
             return appDBPath;
@@ -95,6 +101,28 @@ public class DBBase
         {
             dbTool = new DBToolSqliteKit();
         }
+
+        if (Common.isAndroid)
+        {
+            if (isNeedCopyFromAsset)
+            {
+                dbTool.CopyFromAsset(dbFilePath);
+            }
+            dbTool.OpenDB(dbFilePath);
+        }
+        else
+        {
+            OpenDB();
+        }
+
+
+        CloseDB();
+    }
+
+
+    public void CreateTable(string[] item_col)
+    {
+        colLength = item_col.Length;
         OpenDB();
         string[] item_coltype = new string[item_col.Length];
         for (int i = 0; i < item_coltype.Length; i++)
@@ -116,6 +144,11 @@ public class DBBase
 
     public void OpenDB()
     {
+        if (Common.isAndroid)
+        {
+            return;
+        }
+
         dbTool.OpenDB(dbFilePath);
         //   string[] item_col = new string[] { "id,filesave,date,addtime" };
         //   string[] item_coltype = new string[] { "string,string,string,string" };
@@ -142,8 +175,12 @@ public class DBBase
         return ret;
     }
 
-   public void CloseDB()
+    public void CloseDB()
     {
+        if (Common.isAndroid)
+        {
+            return;
+        }
         dbTool.CloseDB();
     }
 
@@ -169,7 +206,7 @@ public class DBBase
 
     public void CopyDbFileFromResource()
     {
-        string src = Common.GAME_RES_DIR + "/Idiom.db";
+        string src = Common.GAME_RES_DIR +"/"+ dbFileName;
         string dst = dbFilePath;
         if (!FileUtil.FileIsExist(dst))
         {
@@ -192,10 +229,10 @@ public class DBBase
     }
 
     //{ "id", "intro", "album", "translation", "author", "year", "style", "pinyin", "appreciation", "head", "end", "tips", "date", "addtime" };
-    public void AddItem(IdiomItemInfo info)
+    public virtual void AddItem(IdiomItemInfo info)
     {
         OpenDB();
-        int lengh = item_col.Length;
+        int lengh = colLength;
         string[] values = new string[lengh];
         //id,filesave,date,addtime 
 
@@ -247,7 +284,7 @@ public class DBBase
         OpenDB();
         // string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'" + " and addtime = '" + info.addtime + "'";
         string strsql = "DELETE FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
-        dbTool.ExecuteQuery(strsql, true);
+        dbTool.ExecSQL(strsql);
         CloseDB();
     }
 
@@ -260,10 +297,21 @@ public class DBBase
         string strsql = "SELECT * FROM " + TABLE_NAME + " WHERE id = '" + info.id + "'";
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
         int count = 0;//qr.GetCount();
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+
+        ret = dbTool.MoveToFirst(infosql);
+        if (ret == false)
+        {
+            return false;
+        }
+        while (true)// 循环遍历数据 
         {
             count++;
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
         }
+
         // qr.Release();
         Debug.Log("IsItemExist count=" + count);
         CloseDB();
@@ -274,7 +322,7 @@ public class DBBase
         return ret;
     }
 
-    void ReadInfo(IdiomItemInfo info, SqlInfo infosql)
+    public virtual void ReadInfo(IdiomItemInfo info, SqlInfo infosql)
     {
         info.id = dbTool.GetString(infosql, KEY_id);
         // info.pinyin = rd.GetString(KEY_pinyin);
@@ -302,6 +350,7 @@ public class DBBase
     {
         // Distinct 去掉重复
         //desc 降序 asc 升序 
+        // string strsql = "select DISTINCT id from " + TABLE_NAME + " order by addtime desc";
         string strsql = "select DISTINCT id from " + TABLE_NAME + " order by addtime desc";
 
         List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
@@ -309,13 +358,21 @@ public class DBBase
         //SqliteDataReader reader = dbTool.ReadFullTable(TABLE_NAME);//
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
         Debug.Log("GetAllItem start read");
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+        bool ret = dbTool.MoveToFirst(infosql);
+        if (ret == false)
+        {
+            return listRet;
+        }
+        while (true)// 循环遍历数据 
         {
             Debug.Log("GetAllItem reading");
             IdiomItemInfo info = new IdiomItemInfo();
             ReadInfo(info, infosql);
             listRet.Add(info);
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
         }
 
         // reader.Release();
@@ -334,12 +391,20 @@ public class DBBase
         List<IdiomItemInfo> listRet = new List<IdiomItemInfo>();
         OpenDB();
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+        bool ret = dbTool.MoveToFirst(infosql);
+        if (ret == false)
+        {
+            return listRet;
+        }
+        while (true)// 循环遍历数据 
         {
             IdiomItemInfo info = new IdiomItemInfo();
             info.date = dbTool.GetString(infosql, "date");
             listRet.Add(info);
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
         }
 
         // reader.Release();
@@ -356,12 +421,20 @@ public class DBBase
         OpenDB();
 
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+        bool ret = dbTool.MoveToFirst(infosql);
+        if (ret == false)
+        {
+            return listRet;
+        }
+        while (true)// 循环遍历数据 
         {
             IdiomItemInfo info = new IdiomItemInfo();
             ReadInfo(info, infosql);
             listRet.Add(info);
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
         }
 
         // reader.Release();
@@ -380,10 +453,18 @@ public class DBBase
         OpenDB();
         //"select * from %s where keyZi = \"%s\" order by addtime desc"
         SqlInfo infosql = dbTool.ExecuteQuery(strsql, false);
-        dbTool.MoveToFirst(infosql);
-        while (dbTool.MoveToNext(infosql))// 循环遍历数据 
+        bool ret = dbTool.MoveToFirst(infosql);
+        if (ret == false)
+        {
+            return info;
+        }
+        while (true)// 循环遍历数据 
         {
             ReadInfo(info, infosql);
+            if (!dbTool.MoveToNext(infosql))
+            {
+                break;
+            }
             break;
             //listRet.Add(info);
         }

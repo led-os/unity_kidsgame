@@ -112,17 +112,23 @@ public class UILoveController : UIView, ITableViewDataSource
     }
     void UpdateList()
     {
-        List<CaiCaiLeItemInfo> ls = LoveDB.main.GetAllItem();
+        List<IdiomItemInfo> ls = DBLove.main.GetAllItem();
         listItem.Clear();
-        listItem.AddRange(ls);
+        foreach(IdiomItemInfo info in ls)
+        {
+            CaiCaiLeItemInfo infocaicaile = new CaiCaiLeItemInfo();
+            infocaicaile.infoIdiom = info;
+            listItem.Add(infocaicaile);
+        }
+        // listItem.AddRange(ls);
         totalItem = listItem.Count;
         numRows = totalItem / oneCellNum;
         if (totalItem % oneCellNum != 0)
         {
             numRows++;
         }
-        textDetail.gameObject.SetActive(LoveDB.main.DBEmpty());
-        btnDeleteAll.gameObject.SetActive(!LoveDB.main.DBEmpty());
+        textDetail.gameObject.SetActive(DBLove.main.DBEmpty());
+        btnDeleteAll.gameObject.SetActive(!DBLove.main.DBEmpty());
         tableView.ReloadData();
     }
 
@@ -137,7 +143,7 @@ public class UILoveController : UIView, ITableViewDataSource
 
     public void OnBtnClickDeleteAll()
     {
-        LoveDB.main.ClearDB();
+        DBLove.main.ClearDB();
         UpdateList();
     }
 
@@ -165,7 +171,7 @@ public class UILoveController : UIView, ITableViewDataSource
         CaiCaiLeItemInfo info = listItem[ui.index] as CaiCaiLeItemInfo;
         if (info != null)
         {
-            LoveDB.main.DeleteItem(info);
+            DBLove.main.DeleteItem(info.infoIdiom);
         }
         UpdateList();
     }

@@ -15,10 +15,19 @@ public class SqlBasePlatformWrapper
     {
 
     }
+
+      public virtual void CopyFromAsset(string dbfile) 
+    {
+    }
     public virtual SqlInfo Query(string sql)
     {
         return null;
     }
+  public virtual void ExecSQL(string sql)
+    {
+         
+    }
+    
     public virtual string GetString(SqlInfo info, string key)
     {
         return "";
