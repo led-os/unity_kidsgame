@@ -82,6 +82,11 @@ public class LayOutScale : LayOutBase
 
     public override void LayOut()
     {
+        if (!Enable())
+        {
+            return;
+        }
+        base.LayOut();
         UpdateType(scaleType);
     }
 

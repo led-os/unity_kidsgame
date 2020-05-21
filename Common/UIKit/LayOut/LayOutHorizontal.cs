@@ -17,6 +17,10 @@ public class LayOutHorizontal : HorizontalOrVerticalLayoutBase
 
     public override void LayOut()
     {
+        if (!Enable())
+        {
+            return;
+        }
         col = GetChildCount(enableHide);
         base.LayOut();
     }

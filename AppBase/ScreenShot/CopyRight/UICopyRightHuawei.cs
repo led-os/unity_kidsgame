@@ -34,7 +34,13 @@ public class UICopyRightHuawei : UIView
         string appname = Common.GetAppName();
         if (Application.isEditor || Common.isPC)
         {
-            appname = Config.main.GetAppNameJson(copyright.deviceInfo.isIconHd);
+            // appname = Config.main.GetAppNameJson(copyright.deviceInfo.isIconHd);
+            Language.main.SetLanguage(SystemLanguage.Chinese);
+            appname = Language.main.GetString("APP_NAME");
+            if(ishd){
+                appname = Language.main.GetString("APP_NAME_HD");
+            }
+
         }
         textName.text = appname;
 

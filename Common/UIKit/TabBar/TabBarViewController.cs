@@ -63,7 +63,7 @@ public class TabBarViewController : UIViewController
         CreateContent();
 
         string strPrefab = "Common/Prefab/TabBar/UITabBar";
-        GameObject obj = (GameObject)Resources.Load(strPrefab);
+        GameObject obj = PrefabCache.main.Load(strPrefab); 
         uiTabBarPrefab = obj.GetComponent<UITabBar>();
 
         uiTabBar = (UITabBar)GameObject.Instantiate(uiTabBarPrefab);
@@ -96,7 +96,10 @@ public class TabBarViewController : UIViewController
         TabBarItemInfo info = listItem[idx];
         return info;
     }
-
+    public void ShowImageBg(bool isShow)
+    {
+        uiTabBar.imageBg.gameObject.SetActive(isShow);
+    }
     public void DestroyController()
     {
         if (objController == null)

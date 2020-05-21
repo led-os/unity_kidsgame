@@ -31,7 +31,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     public UIText textTitle;
     public UIImage imageBar;
     public UIButton btnBack;
-    public Image imageBg;
+    // public Image imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
 
@@ -79,6 +79,8 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
             }
         }
         LayOut();
+
+        OnUIDidFinish(0.5f);
     }
 
     // Update is called once per frame
@@ -99,19 +101,20 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
 
     public override void LayOut()
     {
+        base.LayOut();
         //Vector2 sizeCanvas = ViewControllerManager.sizeCanvas;
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
-        {
-            RectTransform rctran = imageBg.GetComponent<RectTransform>();
-            float w_image = rctran.rect.width;
-            float h_image = rctran.rect.height;
-            float scalex = sizeCanvas.x / w_image;
-            float scaley = sizeCanvas.y / h_image;
-            float scale = Mathf.Max(scalex, scaley);
-            imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
-            //屏幕坐标 现在在屏幕中央
-            imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
-        }
+        // {
+        //     RectTransform rctran = imageBg.GetComponent<RectTransform>();
+        //     float w_image = rctran.rect.width;
+        //     float h_image = rctran.rect.height;
+        //     float scalex = sizeCanvas.x / w_image;
+        //     float scaley = sizeCanvas.y / h_image;
+        //     float scale = Mathf.Max(scalex, scaley);
+        //     imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
+        //     //屏幕坐标 现在在屏幕中央
+        //     imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        // }
 
 
     }
@@ -142,19 +145,23 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
     {
         if (isShow)
         {
-            // LanguageViewController lan = LanguageViewController.main;
-            // lan.Show(null, null);
-            // lan.ui.callbackClose = OnUILanguageDidClose;
-
-            PopUpManager.main.Show<UILanguage>("Common/Prefab/Setting/UILanguage", popup =>
+            string strPrefabApp = "App/Prefab/Setting/UILanguage";
+            string strPrefabDefault = "Common/Prefab/Setting/UILanguage";
+            string strPrefab = strPrefabApp;
+            GameObject obj = PrefabCache.main.Load(strPrefabApp);
+            if (obj == null)
+            {
+                strPrefab = strPrefabDefault;
+            }
+            PopUpManager.main.Show<UIViewPop>(strPrefab, popup =>
          {
              Debug.Log("UIViewAlert Open ");
 
-             popup.callbackClose = OnUILanguageDidClose;
+            //  popup.callbackClose = OnUILanguageDidClose;
 
          }, popup =>
          {
-
+                OnUILanguageDidClose();
 
          });
 
@@ -167,7 +174,7 @@ public class UISettingControllerBase : UIView, ITableViewDataSource
 
     }
 
-    public void OnUILanguageDidClose(UILanguage language)
+    public void OnUILanguageDidClose()
     {
         int tag = PlayerPrefs.GetInt(AppString.STR_KEY_LANGUAGE);
         SystemLanguage lan = (SystemLanguage)tag;

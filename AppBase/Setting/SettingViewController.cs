@@ -30,7 +30,7 @@ public class SettingViewController : PopViewController
     void Init()
     {
         {
-            GameObject obj = PrefabCache.main.Load("AppCommon/Prefab/Setting/UISettingController");
+            GameObject obj = PrefabCache.main.Load("App/Prefab/Setting/UISettingController");
             if (obj == null)
             {
                 obj = PrefabCache.main.Load(AppCommon.PREFAB_SETTING);

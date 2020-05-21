@@ -87,7 +87,16 @@ public class UIShop : UIView, ITableViewDataSource
             info.id = ID_GOLD_VIDEO;//Common.GetAppPackage() + ".gold0";
             info.isIAP = false;
             listItem.Add(info);
+        } 
+        bool isHave = true; 
+        if (Common.isAndroid)
+        { 
+            if (Config.main.channel == Source.HUAWEI)
+            {
+               isHave = false; 
+            }
         }
+        if(isHave)
         {
             ShopItemInfo info = new ShopItemInfo();
             info.gold = GOLD_COMMENT;

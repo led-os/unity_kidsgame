@@ -82,6 +82,29 @@ public class UIKitEditor : Editor
 
     }
 
+    [MenuItem(KEY_MENU_GameObject_UI + "/UIImageText", false, 4)]
+    static void CreateUIImageText()
+    {
+        var selectedObj = Selection.activeObject as GameObject;
+        if (selectedObj != null)
+        {
+            GameObject obj = PrefabCache.main.Load("Common/Prefab/UIKit/UIImage/UIImageText");
+            if (obj != null)
+            {
+                UIImageText uiPrefab = obj.GetComponent<UIImageText>();
+                UIImageText ui = (UIImageText)GameObject.Instantiate(uiPrefab);
+                ui.name = "UIImageText";
+                ui.transform.SetParent(selectedObj.transform);
+                Selection.activeGameObject = ui.gameObject;
+                ui.transform.localScale = new Vector3(1f, 1f, 1f);
+                RectTransform rctran = ui.GetComponent<RectTransform>();
+                rctran.anchoredPosition = Vector2.zero;
+            }
+        }
+
+    }
+
+
     [MenuItem(KEY_MENU_GameObject_UI + "/UIRawImage", false, 4)]
     static void CreateUIRawImage()
     {
@@ -169,7 +192,7 @@ public class UIKitEditor : Editor
 
     }
 
-     [MenuItem(KEY_MENU_GameObject_UI + "/UISegment", false, 4)]
+    [MenuItem(KEY_MENU_GameObject_UI + "/UISegment", false, 4)]
     static void CreateUISegment()
     {
         var selectedObj = Selection.activeObject as GameObject;
@@ -190,4 +213,6 @@ public class UIKitEditor : Editor
         }
 
     }
+
+ 
 }

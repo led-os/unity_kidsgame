@@ -28,8 +28,11 @@ public class UITabBarItem : UIView
     public void UpdateItem(TabBarItemInfo info)
     {
         textTitle.text = info.title;
-        textTitle.color = GetColorOfKey("TabBarTitle");
-        imageBg.UpdateImage(info.pic,imageBg.keyImage);
+        // textTitle.color = GetColorOfKey("TabBarTitle");
+        if (!Common.isBlankString(info.pic))
+        {
+            imageBg.UpdateImage(info.pic, imageBg.keyImage);
+        }
         this.LayOut();
     }
 

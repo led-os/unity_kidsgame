@@ -119,9 +119,10 @@ MonoBehaviour:
   keyImage: 
   tableView: {fileID: 0}
   objContent: {fileID: 7649848292743229918}
-  segmentItem: {fileID: 114209966710573208, guid: 90728aeb53ca74216b082e85ff55e3b0,
+  segmentItem: {fileID: 114209966710573208, guid: d9972aacafd4147f8955ae3d6998bb78,
     type: 3}
   numRows: 0
+  indexSelect: 0
 --- !u!114 &4801895717551516550
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class LayOutRelation : LayOutBase
 {
     public GameObject target;
+    public bool isOutSide = false;
     public Vector2 _offset;
     public Vector2 offset
     {
@@ -19,7 +20,7 @@ public class LayOutRelation : LayOutBase
         }
     }
 
-    public Type _type;
+    public Type _type = Type.PARENT;
     public Type type
     {
         get
@@ -53,6 +54,10 @@ public class LayOutRelation : LayOutBase
 
     public override void LayOut()
     {
+        if (!Enable())
+        {
+            return;
+        }
         base.LayOut();
 
         float x, y, w, h;
@@ -68,6 +73,11 @@ public class LayOutRelation : LayOutBase
         y = pt.y;
         w = rctran.rect.width;
         h = rctran.rect.height;
+        if (isOutSide)
+        {
+            w = 0;
+            h = 0;
+        }
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
 
         switch (this.type)

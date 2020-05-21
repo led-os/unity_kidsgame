@@ -61,6 +61,10 @@ public class LayOutBetween : LayOutBase
 
     public override void LayOut()
     {
+        if (!Enable())
+        {
+            return;
+        }
         base.LayOut();
         float x, y, w, h;
 
@@ -79,7 +83,7 @@ public class LayOutBetween : LayOutBase
         x = pt.x;
         y = pt.y;
 
- 
+
 
         switch (this.type)
         {
@@ -99,7 +103,7 @@ public class LayOutBetween : LayOutBase
                     }
                     if ((this.align == LayOutBase.Align.UP) || (this.align == LayOutBase.Align.DOWN))
                     {
-                        y = LayoutUtil.main.GetBetweenParentCenter(this.targetMain, this.align) + this.offset.y;
+                        y = LayoutUtil.main.GetBetweenParentCenter(this.targetMain, this.align, true) + this.offset.y;
                     }
                 }
                 break;

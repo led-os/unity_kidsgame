@@ -7,15 +7,16 @@ public class UIImageText : UIView
     public enum Type
     {
         NONE = 0,
+        IMAGE_TEXT,//Image 背景 
         IMAGE_UP_TEXT_DOWN,//Image在上面 Text在下面
         IMAGE_ONLY,
         TEXT_ONLY
     }
 
-    public Image imageBg;
-    public Text textTitle;
+    public UIImage imageBg;
+    public UIText textTitle;
 
-    Type _type = Type.NONE;
+    public Type _type = Type.NONE;
     public Type type
     {
         set
@@ -29,20 +30,25 @@ public class UIImageText : UIView
         }
     }
 
-
+     void Start()
+    { 
+        LayOut();
+    }
     public void UpdateTitle(string title)
     {
         textTitle.text = title;
         LayOut();
     }
-    public void UpdateImagePic(string pic)
+    public void UpdateImageByKey(string pic)
     {
-        TextureUtil.UpdateImageTexture(imageBg, pic, true);
+        // TextureUtil.UpdateImageTexture(imageBg, pic, true);
+        imageBg.UpdateImageByKey(pic);
     }
 
 
     public override void LayOut()
     {
+        base.LayOut();
         RectTransform rctran = this.GetComponent<RectTransform>();
         RectTransform rctranText = textTitle.GetComponent<RectTransform>();
         RectTransform rctranImage = imageBg.GetComponent<RectTransform>();
@@ -64,10 +70,10 @@ public class UIImageText : UIView
                     {
                         w = rctran.rect.width;
                         h = rctran.rect.height;
-                        if ((imageBg.sprite.texture != null) && (imageBg.sprite.texture.width != 0) && (imageBg.sprite.texture.height != 0))
+                        if ((imageBg.image.sprite.texture != null) && (imageBg.image.sprite.texture.width != 0) && (imageBg.image.sprite.texture.height != 0))
                         {
-                            scalex = w / imageBg.sprite.texture.width;
-                            scaley = h / imageBg.sprite.texture.height;
+                            scalex = w / imageBg.image.sprite.texture.width;
+                            scaley = h / imageBg.image.sprite.texture.height;
                             scale = Mathf.Min(scalex, scaley);
                             imageBg.transform.localScale = new Vector3(scale, scale, 1f);
                         }
@@ -121,10 +127,10 @@ public class UIImageText : UIView
                     {
                         w = rctran.rect.width;
                         h = rctran.rect.height - rctranText.rect.height;
-                        if ((imageBg.sprite.texture != null) && (imageBg.sprite.texture.width != 0) && (imageBg.sprite.texture.height != 0))
+                        if ((imageBg.image.sprite.texture != null) && (imageBg.image.sprite.texture.width != 0) && (imageBg.image.sprite.texture.height != 0))
                         {
-                            scalex = w / imageBg.sprite.texture.width;
-                            scaley = h / imageBg.sprite.texture.height;
+                            scalex = w / imageBg.image.sprite.texture.width;
+                            scaley = h / imageBg.image.sprite.texture.height;
                             scale = Mathf.Min(scalex, scaley);
                             imageBg.transform.localScale = new Vector3(scale, scale, 1f);
                         }
@@ -139,6 +145,49 @@ public class UIImageText : UIView
 
                 }
                 break;
+
+
+                  case Type.IMAGE_TEXT:
+                {
+                    //text
+                    {
+                        if (Common.BlankString(textTitle.text))
+                        {
+                            w = rctran.rect.width;
+                        }
+                        else
+                        {
+                            w = Common.GetStringLength(textTitle.text, AppString.STR_FONT_NAME, textTitle.fontSize);
+                        }
+                        h = rctran.rect.height;
+                        rctranText.sizeDelta = new Vector2(w, h);
+                        x = 0;
+                        y = 0;
+                        rctranText.anchoredPosition = new Vector2(x, y);
+                    }
+                    //image
+                    {
+                        w = rctran.rect.width;
+                        h = rctran.rect.height;
+                        // if ((imageBg.image.sprite.texture != null) && (imageBg.image.sprite.texture.width != 0) && (imageBg.image.sprite.texture.height != 0))
+                        // {
+                        //     scalex = w / imageBg.image.sprite.texture.width;
+                        //     scaley = h / imageBg.image.sprite.texture.height;
+                        //     scale = Mathf.Min(scalex, scaley);
+                        //     imageBg.transform.localScale = new Vector3(scale, scale, 1f);
+                        // }
+
+                         rctranImage.sizeDelta = new Vector2(w, h);
+
+                        x = 0;
+                        y = 0;
+                        rctranImage.anchoredPosition = new Vector2(x, y);
+                    }
+
+
+                }
+                break;
+
         }
     }
 }

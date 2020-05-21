@@ -40,8 +40,12 @@ public class LayOutBase : MonoBehaviour
     public bool enableLayout = true;
     public bool enableHide = true;//是否过虑Hide
 
-    public bool enableOffsetAdBanner=false;
-    public bool enableOffsetScreen=false;//全面屏 四周的偏移
+    public bool enableOffsetAdBanner = false;
+    public bool enableOffsetScreen = false;//全面屏 四周的偏移
+    public bool isOnlyForLandscape = false;
+    public bool isOnlyForPortrait = false;
+
+
     public Vector2 space = Vector2.zero;
 
     protected TextAnchor childAlignment;
@@ -51,6 +55,31 @@ public class LayOutBase : MonoBehaviour
     public virtual void LayOut()
     {
 
+    }
+
+    public bool Enable()
+    {
+        bool ret = true;
+        if (!enableLayout)
+        {
+            ret = false;
+        }
+        if (isOnlyForLandscape)
+        {
+            if (!Device.isLandscape)
+            {
+                ret = false;
+            }
+        }
+        if (isOnlyForPortrait)
+        {
+            if (Device.isLandscape)
+            {
+                ret = false;
+            }
+        }
+
+        return ret;
     }
 
     public int GetChildCount(bool includeHide = true)

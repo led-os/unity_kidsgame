@@ -52,7 +52,7 @@ public class PopUpManager : MonoBehaviour
         var panel = new GameObject("Panel");
         var panelImage = panel.AddComponent<Image>();
         var color = Color.black;
-        color.a = 0;
+        color.a = 0.5f;
         panelImage.color = color;
         var panelTransform = panel.GetComponent<RectTransform>();
         panelTransform.anchorMin = new Vector2(0, 0);

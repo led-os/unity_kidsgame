@@ -111,6 +111,14 @@ public class UISegment : UIView, ISegmentItemDelegate
 
     }
 
+       public void ShowItemImageBg(bool isShow)
+    {
+         foreach (SegmentItem item in listItem)
+        {
+            item.ShowImageBg(isShow);
+        }
+    }
+
     public void UpdateList()
     {
         Select(0, true);

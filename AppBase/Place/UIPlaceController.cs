@@ -14,7 +14,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     UICellBase cellPrefab;//GuankaItemCell GameObject 
     public TableView tableView;
     public UIImage imageBar;
-    public RawImage imageBg;
+    // public RawImage imageBg;
     public int numRows;
     private int numInstancesCreated = 0;
 
@@ -102,7 +102,7 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     void Start()
     {
         LayOut();
-        OnUIDidFinish();
+        OnUIDidFinish(0.2f);
     }
 
     // Update is called once per frame
@@ -134,17 +134,17 @@ public class UIPlaceController : UIPlaceBase, ITableViewDataSource
     {
         base.LayOut();
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
-        {
-            RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
-            float w_image = rectTransform.rect.width;
-            float h_image = rectTransform.rect.height;
-            float scalex = sizeCanvas.x / w_image;
-            float scaley = sizeCanvas.y / h_image;
-            float scale = Mathf.Max(scalex, scaley);
-            imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
-            //屏幕坐标 现在在屏幕中央
-            imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
-        }
+        // {
+        //     RectTransform rectTransform = imageBg.GetComponent<RectTransform>();
+        //     float w_image = rectTransform.rect.width;
+        //     float h_image = rectTransform.rect.height;
+        //     float scalex = sizeCanvas.x / w_image;
+        //     float scaley = sizeCanvas.y / h_image;
+        //     float scale = Mathf.Max(scalex, scaley);
+        //     imageBg.transform.localScale = new Vector3(scale, scale, 1.0f);
+        //     //屏幕坐标 现在在屏幕中央
+        //     imageBg.transform.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        // }
 
         // {
         //     string str = textTitle.text; 

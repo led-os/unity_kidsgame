@@ -71,6 +71,9 @@ public class Config
             if (Common.JsonDataContainsKey(rootJsonAppname, key))
             {
                 appname = (string)rootJsonAppname[key];
+            }else{
+
+                
             }
         }
 

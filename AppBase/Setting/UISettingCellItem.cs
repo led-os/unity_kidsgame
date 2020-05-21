@@ -13,9 +13,13 @@ public class UISettingCellItem : UICellItemBase
     public UIText textTitle;
     public UIImage imageBg;
     public UIImage imageArrow;
-    public UIButton btnSwitch;  
-   static public string[] strImageBg = { "IMAGE_CELL_BG_BLUE" , "IMAGE_CELL_BG_ORINGE", "IMAGE_CELL_BG_YELLOW" };
-
+    public UIButton btnSwitch;
+    static public string[] strImageBg = { "IMAGE_CELL_BG_BLUE", "IMAGE_CELL_BG_ORINGE", "IMAGE_CELL_BG_YELLOW" };
+    void Start()
+    {
+        this.LayOut();
+        Invoke("LayOut", 0.1f);
+    }
     public override void UpdateItem(List<object> list)
     {
         if (index < list.Count)
@@ -35,8 +39,9 @@ public class UISettingCellItem : UICellItemBase
                 UpdateBtnSwitch(ret);
             }
             imageBg.UpdateImageByKey(strImageBg[index % 3]);
-  
+
         }
+        this.LayOut();
     }
     bool IsShowSwitchButton(ItemInfo info)
     {
@@ -95,10 +100,14 @@ public class UISettingCellItem : UICellItemBase
             bool ret = Common.GetBool(AppString.KEY_ENABLE_PLAYSOUND);
             bool value = !ret;
             Common.SetBool(AppString.KEY_ENABLE_PLAYSOUND, value);
-            UpdateBtnSwitch(value); 
+            UpdateBtnSwitch(value);
         }
 
     }
 
+    public override void LayOut()
+    {
+        base.LayOut();
+    }
 }
 

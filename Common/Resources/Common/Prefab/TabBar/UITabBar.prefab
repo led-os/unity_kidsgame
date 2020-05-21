@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_SizeDelta: {x: 0, y: 160}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &114068629318214994
 MonoBehaviour:
@@ -70,6 +70,8 @@ MonoBehaviour:
   dispLayHorizontal: 0
   enableLayout: 1
   enableHide: 1
+  enableOffsetAdBanner: 0
+  enableOffsetScreen: 0
   space: {x: 16, y: 16}
   align: 4
   childControlHeight: 0
@@ -135,6 +137,7 @@ MonoBehaviour:
   keyColor: 
   keyImage: IMAGE_TabBarBg
   image: {fileID: 5654503076039839622}
+  keyImage2: 
 --- !u!114 &2885049949341686768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,15 +167,20 @@ MonoBehaviour:
   dispLayHorizontal: 0
   enableLayout: 1
   enableHide: 1
+  enableOffsetAdBanner: 0
+  enableOffsetScreen: 0
   space: {x: 0, y: 0}
   align: 4
   ratioW: 1
   ratioH: 1
   target: {fileID: 0}
+  target2: {fileID: 0}
+  sideType: 0
   _offsetMin: {x: 0, y: 0}
   _offsetMax: {x: 0, y: 0}
   _typeX: 1
   _typeY: 1
+  _typeWidthHeightScale: 0
 --- !u!1 &4548207280393114896
 GameObject:
   m_ObjectHideFlags: 0

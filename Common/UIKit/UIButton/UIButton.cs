@@ -84,11 +84,12 @@ public class UIButton : UIView
     public override void LayOut()
     {
         base.LayOut();
-
+        float w, h;
         if (type == Type.IMAGE_TEXT)
         {
             if (textTitle.isFitFontWidth)
             {
+                textTitle.LayOut();
                 //自动适配大小
                 RectTransform rctranOrigin = this.GetComponent<RectTransform>();
                 Vector2 offsetMin = rctranOrigin.offsetMin;
@@ -109,7 +110,37 @@ public class UIButton : UIView
 
             }
         }
+        if (type == Type.IMAGE)
+        {
+            //自动适配大小
+            RectTransform rctranOrigin = this.GetComponent<RectTransform>();
+            Vector2 offsetMin = rctranOrigin.offsetMin;
+            Vector2 offsetMax = rctranOrigin.offsetMax;
+            RectTransform rctran = this.transform as RectTransform;
+            Vector2 sizeDelta = rctran.sizeDelta;
+            w = rctran.rect.width;
+            h = rctran.rect.height;
+            if (imageBg.image.sprite != null)
+            {
 
+                if ((imageBg.image.sprite.texture != null) && (imageBg.image.sprite.texture.width != 0) && (imageBg.image.sprite.texture.height != 0))
+                {
+                    w = imageBg.image.sprite.texture.width;
+                    h = imageBg.image.sprite.texture.height;
+                }
+            }
+            rctran.sizeDelta = new Vector2(w, h);
+            if ((rctran.anchorMin == new Vector2(0.5f, 0.5f)) && (rctran.anchorMax == new Vector2(0.5f, 0.5f)))
+            {
+            }
+            else
+            {
+                //sizeDelta 会自动修改offsetMin和offsetMax 所以需要还原
+                rctran.offsetMin = offsetMin;
+                rctran.offsetMax = offsetMax;
+            }
+
+        }
 
     }
     public void UpdateSwitch(bool isSel)

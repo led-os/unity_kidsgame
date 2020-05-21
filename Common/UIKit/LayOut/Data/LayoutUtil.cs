@@ -190,7 +190,7 @@ public class LayoutUtil
         return (v1 + v2) / 2;
     }
 
-    public float GetBetweenParentCenter(GameObject obj, LayOutBase.Align align)
+    public float GetBetweenParentCenter(GameObject obj, LayOutBase.Align align, bool enableOffsetAdBanner = false)
     {
         float v1 = 0, v2 = 0;
 
@@ -225,7 +225,12 @@ public class LayoutUtil
                 {
                     //下边界
                     v1 = -h_parent / 2;
+                    if (enableOffsetAdBanner)
+                    {
+                        v1 += GameManager.main.heightAdCanvas;
+                    }
                     v2 = rctran.anchoredPosition.y - rctran.rect.height / 2;
+
                 }
                 break;
         }

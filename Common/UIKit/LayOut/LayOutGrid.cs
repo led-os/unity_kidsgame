@@ -191,7 +191,7 @@ public class LayOutGrid : LayOutBase
     {
         int idx = 0;
         int r = 0, c = 0;
-        if (!enableLayout)
+        if (!Enable())
         {
             return;
         }

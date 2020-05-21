@@ -326,7 +326,7 @@ public class FileUtil : MonoBehaviour
         return ret;
     }
 
-    //文件后缀 不如 png jpg ext 没有.
+    //文件后缀 如 png jpg ext 没有.
     static public string GetFileExt(string filepath)
     {
         string ret = "";

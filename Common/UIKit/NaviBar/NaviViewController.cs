@@ -62,8 +62,13 @@ public class NaviViewController : UIViewController
     }
     public void CreateBar()
     {
-        string strPrefab = "Common/Prefab/NaviBar/UINaviBar";
-        GameObject obj = (GameObject)Resources.Load(strPrefab);
+        string strPrefabCommon = "Common/Prefab/NaviBar/UINaviBar";
+        string strPrefabApp = "App/Prefab/NaviBar/UINaviBar";
+        GameObject obj = (GameObject)PrefabCache.main.Load(strPrefabApp);
+        if (obj == null)
+        {
+            obj = (GameObject)PrefabCache.main.Load(strPrefabCommon);
+        }
         uiNaviBarPrefab = obj.GetComponent<UINaviBar>();
 
         //Debug.Log("rctranPrefab.offsetMin=" + rctranPrefab.offsetMin + " rctranPrefab.offsetMax=" + rctranPrefab.offsetMax);

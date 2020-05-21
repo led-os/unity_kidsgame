@@ -136,6 +136,10 @@ public class LayOutSize : LayOutBase
 
     public override void LayOut()
     {
+        if (!Enable())
+        {
+            return;
+        }
         base.LayOut();
         UpdateSize();
         if ((this.typeX == Type.MATCH_HEIGHT) || (this.typeY == Type.MATCH_WIDTH))
@@ -289,8 +293,9 @@ public class LayOutSize : LayOutBase
 
         w -= (this.offsetMin.x + this.offsetMax.x);
         h -= (this.offsetMin.y + this.offsetMax.y);
-        if(enableOffsetAdBanner){
-            h-=GameManager.main.heightAdCanvas;
+        if (enableOffsetAdBanner)
+        {
+            h -= GameManager.main.heightAdCanvas;
         }
 
         switch (this.typeWidthHeightScale)

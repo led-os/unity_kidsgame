@@ -209,9 +209,13 @@ public class UIView : MonoBehaviour
         }
         return ret;
     }
-    public void OnUIDidFinish()
+    public void OnUIDidFinish(float delay=0)
     {
-        DoUIFinish();
+        float time = delay;
+        if(time<=0){
+            time = 0.1f;
+        }
+        Invoke("DoUIFinish", time);
     }
 
     void DoUIFinish()

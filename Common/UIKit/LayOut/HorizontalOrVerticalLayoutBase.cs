@@ -106,15 +106,16 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
             }
         }
         y = y_bottom + item_h * r + item_h / 2 + space.y * (r + 1);
-
-        return new Vector2(x, y);
+        Vector2 pt = new Vector2(x, y);
+        Debug.Log("GetItemPostion:item_w="+item_w+" item_h="+item_h + " r=" + r + " c=" + c + " pt=" + pt+" w="+w+" h="+h);
+        return pt;
 
     }
     public override void LayOut()
     {
         int idx = 0;
         int r = 0, c = 0;
-        if (!enableLayout)
+        if (!Enable())
         {
             return;
         }
@@ -191,7 +192,7 @@ public class HorizontalOrVerticalLayoutBase : LayOutBase
             if (rctran != null)
             {
                 rctran.anchoredPosition = pt;
-                Debug.Log("GetItemPostion:idx=" + idx + " r=" + r + " c=" + c + " pt=" + pt);
+                // Debug.Log("GetItemPostion:idx=" + idx + " r=" + r + " c=" + c + " pt=" + pt);
             }
             idx++;
         }

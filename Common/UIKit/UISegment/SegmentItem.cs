@@ -57,4 +57,9 @@ public class SegmentItem : UIView
             _delegate.SegmentItemDidClick(this);
         }
     }
+
+      public void ShowImageBg(bool isShow)
+    {
+        imageSel.gameObject.SetActive(isShow);
+    }
 }

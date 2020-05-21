@@ -78,6 +78,7 @@ public class UIText : UIView
     public void Start()
     {
         base.Start();
+        LayOut();
     }
 
     public void SetFontSize(int sz)
@@ -122,7 +123,7 @@ public class UIText : UIView
         }
         LayOut();
     }
- 
+
     public void UpdateTextByKey(string key)
     {
         this.text = GetTextOfKey(key);
