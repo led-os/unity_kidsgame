@@ -295,7 +295,7 @@ public class LayOutSize : LayOutBase
         h -= (this.offsetMin.y + this.offsetMax.y);
         if (enableOffsetAdBanner)
         {
-            h -= GameManager.main.heightAdCanvas;
+            h -= AdKitCommon.main.heightAdCanvas;
         }
 
         switch (this.typeWidthHeightScale)

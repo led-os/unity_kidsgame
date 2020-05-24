@@ -227,7 +227,7 @@ public class LayoutUtil
                     v1 = -h_parent / 2;
                     if (enableOffsetAdBanner)
                     {
-                        v1 += GameManager.main.heightAdCanvas;
+                        v1 += AdKitCommon.main.heightAdCanvas;
                     }
                     v2 = rctran.anchoredPosition.y - rctran.rect.height / 2;
 

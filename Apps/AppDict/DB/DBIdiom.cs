@@ -45,7 +45,7 @@ public class DBIdiom : DBBase
     public void Init()
     {
         isNeedCopyFromAsset = true;
-        if (Application.isEditor)
+        if (Application.isEditor||Common.isiOS)
         {
             CopyDbFileFromResource();
         }

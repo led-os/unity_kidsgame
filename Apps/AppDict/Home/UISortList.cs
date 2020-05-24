@@ -94,6 +94,7 @@ public class UISortList : UIView, ITableViewDataSource
     public override void LayOut()
     {
         base.LayOut();
+        // tableView.ReloadData();
     }
     void UpdateTitle()
     {

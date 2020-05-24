@@ -24,7 +24,7 @@ public class AppsConfig
                 ret = ROOT_DIR_PC_MAC;
             }
 
-            Debug.Log("ROOT_DIR_PC=" + ret);
+            // Debug.Log("ROOT_DIR_PC=" + ret);
             return ret;
         }
     }

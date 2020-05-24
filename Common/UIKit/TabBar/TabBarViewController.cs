@@ -150,4 +150,12 @@ public class TabBarViewController : UIViewController
     {
         SelectItem(item.index);
     }
+      public float GetBarHeight()
+    { 
+        float h = 0;
+        if(uiTabBar!=null){
+            h = uiTabBar.GetBarHeight();
+        }
+        return h;
+    }
 }

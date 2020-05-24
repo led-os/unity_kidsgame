@@ -27,6 +27,7 @@ public class UIAdBanner : UIView
     bool isDownloadBg;
     bool isDownloadIcon;
     int indexAd;
+    public float offsetY=0;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -40,8 +41,13 @@ public class UIAdBanner : UIView
         TextureUtil.UpdateRawImageTexture(imageAd, "Common/UI/Home/AdBannerIconAd", true);
 
         StartParseAd();
+        LayOut();
     }
 
+    void Start()
+    {
+        LayOut();
+    }
     public void OnUpdateTime()
     {
         UpdateItem();
@@ -77,6 +83,7 @@ public class UIAdBanner : UIView
 
     public override void LayOut()
     {
+        base.LayOut();
         float x, y, w, h, oft;
         RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
         RectTransform rctranBg = imageBg.GetComponent<RectTransform>();
@@ -95,8 +102,11 @@ public class UIAdBanner : UIView
         Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
         x = 0;
         y = Common.ScreenToCanvasHeigt(sizeCanvas, Device.heightSystemHomeBar);
-        rctran.anchoredPosition = new Vector2(x, y);
-
+        // rctran.anchoredPosition = new Vector2(x, y);
+        if (imageBg.texture == null)
+        {
+            return;
+        }
 
         {
             w = imageBg.texture.width;
@@ -108,6 +118,10 @@ public class UIAdBanner : UIView
             if (scalex * w > rctran.rect.width)
             {
                 scalex = rctran.rect.width / w;
+            }
+            LayOutRelation ly = this.GetComponent<LayOutRelation>();
+            if(ly!=null){
+                ly.offset = new Vector2(0,offsetY); 
             }
 
             //scalex = scalex/2;

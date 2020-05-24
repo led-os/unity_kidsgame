@@ -205,7 +205,7 @@ public class LayOutRelation : LayOutBase
         }
         if (enableOffsetAdBanner)
         {
-            y += GameManager.main.heightAdCanvas;
+            y += AdKitCommon.main.heightAdCanvas;
         }
         //this.node.setPosition(x, y);
         rctran.anchoredPosition = new Vector2(x, y);

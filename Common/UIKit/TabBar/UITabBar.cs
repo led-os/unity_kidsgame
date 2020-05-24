@@ -64,4 +64,9 @@ public class UITabBar : UIView
             callbackClick(this, ui);
         }
     }
+      public float GetBarHeight()
+    { 
+         RectTransform rctran = this.transform.GetComponent<RectTransform>();
+         return rctran.rect.size.y;
+    }
 }

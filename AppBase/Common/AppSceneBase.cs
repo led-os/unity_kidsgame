@@ -348,6 +348,22 @@ public class AppSceneBase : ScriptBase
             }
 
         }
+
+        if (rootViewController != null)
+        {
+            UIView ui = rootViewController.view;
+            if (ui != null)
+            {
+                ui.LayOut();
+            }
+
+        }
+        int len = AppSceneBase.main.listPopup.Count;
+        for (int i = 0; i < len; i++)
+        {
+            UIViewPop ui = AppSceneBase.main.listPopup[i];
+            ui.LayOut();
+        }
     }
     void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
     {
@@ -441,21 +457,7 @@ public class AppSceneBase : ScriptBase
     public void OnAndroidGlobalLayout(string str)
     {
         Debug.Log("OnAndroidGlobalLayout::str=" + str);
-        if (rootViewController != null)
-        {
-            UIView ui = rootViewController.view;
-            if (ui != null)
-            {
-                ui.LayOut();
-            }
-
-        }
-        int len = AppSceneBase.main.listPopup.Count;
-        for (int i = 0; i < len; i++)
-        {
-            UIViewPop ui = AppSceneBase.main.listPopup[i];
-            ui.LayOut();
-        }
+        LayoutChild();
     }
 
 }

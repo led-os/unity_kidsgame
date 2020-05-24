@@ -28,6 +28,10 @@ public class AdKitCommon : MonoBehaviour
     public static AdKitCommon main;
     public bool enableBanner = true;
     bool isAdVideoFinish;
+       public float heightAdWorld;
+    public float heightAdScreen;
+    public float heightAdCanvas;
+
     public OnAdKitFinishDelegate callbackFinish { get; set; }
     public OnAdKitFinishDelegate callbackAdVideoFinish { get; set; }
 
@@ -248,6 +252,11 @@ public class AdKitCommon : MonoBehaviour
         string strH = str.Substring(idx + 1);
         int.TryParse(strH, out h);
         Debug.Log("AdBannerDidReceiveAd::w=" + w + " h=" + h);
+
+        Vector2 sizeCanvas = AppSceneBase.main.sizeCanvas;
+        AdKitCommon.main.heightAdScreen = h + Device.heightSystemHomeBar;
+        AdKitCommon.main.heightAdWorld = Common.ScreenToWorldHeight(AppSceneBase.main.mainCamera, h);
+        AdKitCommon.main.heightAdCanvas = Common.ScreenToCanvasHeigt(sizeCanvas, h);
         // if (gameBaseRun != null)
         // {
         //     gameBaseRun.AdBannerDidReceiveAd(w, h);
@@ -256,6 +265,7 @@ public class AdKitCommon : MonoBehaviour
         {
             callbackFinish(AdType.BANNER, AdStatus.SUCCESFULL, str);
         }
+        AppSceneBase.main.LayoutChild();
 
     }
     public void AdBannerDidReceiveAdFail(string adsource)

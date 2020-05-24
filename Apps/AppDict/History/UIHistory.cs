@@ -140,10 +140,10 @@ public class UIHistory : UIView, ITableViewDataSource
             return;
         }
         IdiomItemInfo info = listItem[item.index] as IdiomItemInfo;
-        if (!DBHistory.main.IsItemExist(info))
-        {
-            DBHistory.main.AddItem(info);
-        }
+        // if (!DBHistory.main.IsItemExist(info))
+        // {
+        //     DBHistory.main.AddItem(info);
+        // }
         PopUpManager.main.Show<UIItemDetail>("App/Prefab/Item/UIItemDetail", popup =>
            {
                Debug.Log("UIItemDetail Open ");

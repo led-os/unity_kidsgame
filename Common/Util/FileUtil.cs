@@ -101,7 +101,11 @@ public class FileUtil : MonoBehaviour
         string str = Encoding.UTF8.GetString(data);
         return str;
     }
-
+    static public void WriteStringToFile(string filePath, string strcontent)
+    { 
+        byte[] bytes = System.Text.Encoding.Default.GetBytes (strcontent);
+        System.IO.File.WriteAllBytes(filePath, bytes);
+    }
     //http://blog.csdn.net/ynnmnm/article/details/52253674
     /*
         我们常用的是以下四个路径：

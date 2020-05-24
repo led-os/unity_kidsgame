@@ -197,7 +197,7 @@ public class Device
     {
         get
         {
-            return offsetBottomWorld + GameManager.main.heightAdWorld * 1.1f;
+            return offsetBottomWorld + AdKitCommon.main.heightAdWorld * 1.1f;
         }
     }
 

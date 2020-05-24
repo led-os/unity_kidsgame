@@ -34,13 +34,14 @@ public class UIHome : UIView, IUIInputBarDelegate, ISegmentDelegate
         UpdateSegment();
         LayOut();
         Common.UnityStartUpFinish(); 
-
+        HomeViewControllerDict.main.SetAdBannerTop();
         OnUIDidFinish(0.5f);
     }
 
     public override void LayOut()
     {
         base.LayOut();
+        HomeViewControllerDict.main.UpdateAdBanner();
     }
 
     public void UpdateSegment()
@@ -86,6 +87,10 @@ public class UIHome : UIView, IUIInputBarDelegate, ISegmentDelegate
 
     public void OnUIInputBarEnd(UIInputBar ui)
     {
+        if(Common.BlankString(ui.text))
+        {
+            return;
+        }
         List<object> ls = DBIdiom.main.Search(ui.text);
         // ui.text = "T";
         Debug.Log("OnUIInputBarEnd text=" + ui.text + " count=" + ls.Count);

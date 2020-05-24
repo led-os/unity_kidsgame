@@ -24,7 +24,7 @@ public static class BuildiOSPlayer
     {
         Debug.Log("BuildiOSPlayer:" + pathToBuiltProject);
 
-      //  EditProj(pathToBuiltProject); 
+        //  EditProj(pathToBuiltProject); 
     }
 
     //添加lib方法
@@ -130,11 +130,16 @@ public static class BuildiOSPlayer
         return ret;
     }
 
-   public static void EditProj(string pathToBuiltProject)
+//  ProvisioningStyle = Manual;  Automatic
+    public static void EditProj(string pathToBuiltProject)
     {
+        Debug.Log("BuildiOSPlayer EditProj start:" + pathToBuiltProject);
         string projPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
-        Debug.Log("EditProj:" + pathToBuiltProject);
-  
+        Debug.Log("BuildiOSPlayer EditProj:" + pathToBuiltProject);
+        string strFile = FileUtil.ReadStringFromFile(projPath);
+        strFile = strFile.Replace("ProvisioningStyle = Manual","ProvisioningStyle = Automatic");
+        FileUtil.WriteStringToFile(projPath,strFile);
+        
         PBXProject pbxProj = new PBXProject();
         pbxProj.ReadFromFile(projPath);
         string unityVersion = Application.unityVersion;
@@ -155,6 +160,7 @@ public static class BuildiOSPlayer
         {
             targetGuid = pbxProj.GetUnityMainTargetGuid();
             unityFrameworkTargetGuid = pbxProj.GetUnityFrameworkTargetGuid();
+            AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libxml2.tbd");
         }
 #endif
 
@@ -216,7 +222,7 @@ public static class BuildiOSPlayer
         //teamid 
         pbxProj.SetTeamId(targetGuid, "Y9ZUK2WTEE");
 
-#region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
+        #region 添加资源文件(中文路径 会导致 project.pbxproj 解析失败)
         // string frameworksPath = Application.dataPath + "/Frameworks";
         // string[] directories = Directory.GetDirectories(frameworksPath, "*", SearchOption.TopDirectoryOnly);
         // for (int i = 0; i < directories.Length; i++)
@@ -235,7 +241,7 @@ public static class BuildiOSPlayer
         //     foreach (string file in Directory.GetFiles(destDirName, "*.*", SearchOption.AllDirectories))
         //         pbxProj.AddFileToBuild(targetGuid, pbxProj.AddFile(file, file.Replace(pathToBuiltProject + "/", ""), PBXSourceTree.Source));
         // }
-#endregion
+        #endregion
 
         pbxProj.WriteToFile(projPath);
     }

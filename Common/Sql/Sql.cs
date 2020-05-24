@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class SqlInfo
 {
@@ -8,6 +9,8 @@ public class SqlInfo
 	public	AndroidJavaObject obj; 
    
 #endif
+    public IntPtr dataBase;
+    public IntPtr sqlite3_stmt;
     public SQLiteQuery sq;
 
 }

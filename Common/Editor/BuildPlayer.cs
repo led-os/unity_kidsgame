@@ -50,7 +50,13 @@ public class BuildPlayer
     [MenuItem(KEY_MENU_ROOT + "/Export iPhone")]
     static void PerformiPhoneBuild()
     {
-        BulidTarget("QQ", "IOS");
+        Debug.Log("PerformiPhoneBuild start");
+        #if UNITY_IOS 
+        Debug.Log("UNITY_IOS PerformiPhoneBuild start");       
+        #endif
+
+          BulidTarget("QQ", "IOS");
+           Debug.Log("PerformiPhoneBuild end");
     }
 
     static void ConverIcon()
@@ -151,11 +157,11 @@ public class BuildPlayer
         if (summary.result == BuildResult.Succeeded)
         {
             Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
-#if UNITY_IOS
-            {
-                BuildiOSPlayer.EditProj(target_dir);
-            }
-#endif
+            #if UNITY_IOS 
+                Debug.Log("BuildiOSPlayer start ");
+                BuildiOSPlayer.EditProj(target_dir); 
+                Debug.Log("BuildiOSPlayer end ");
+            #endif
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
                 if (build_target == BuildTarget.iOS)

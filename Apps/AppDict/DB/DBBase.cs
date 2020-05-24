@@ -87,7 +87,7 @@ public class DBBase
 
     public void CreateDb()
     {
-        if (Common.isAndroid)
+        if (Common.isAndroid || Common.isiOS)
         {
             dbTool = new DBToolSystem();
         }
@@ -102,6 +102,10 @@ public class DBBase
             {
                 dbTool.CopyFromAsset(dbFilePath);
             }
+            dbTool.OpenDB(dbFilePath);
+        }
+        else if (Common.isiOS)
+        {
             dbTool.OpenDB(dbFilePath);
         }
         else
@@ -142,6 +146,10 @@ public class DBBase
         {
             return;
         }
+        if (Common.isiOS)
+        {
+            return;
+        }
 
         dbTool.OpenDB(dbFilePath);
         //   string[] item_col = new string[] { "id,filesave,date,addtime" };
@@ -175,6 +183,10 @@ public class DBBase
         {
             return;
         }
+        if (Common.isiOS)
+        {
+            return;
+        }
         dbTool.CloseDB();
     }
 
@@ -200,7 +212,7 @@ public class DBBase
 
     public void CopyDbFileFromResource()
     {
-        string src = Common.GAME_RES_DIR + "/Idiom.db";
+        string src = Common.GAME_RES_DIR + "/" + dbFileName;
         string dst = dbFilePath;
         if (!FileUtil.FileIsExist(dst))
         {

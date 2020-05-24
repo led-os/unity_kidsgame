@@ -54,7 +54,10 @@ public class UISearch : UIView, IUIInputBarDelegate
 
     public void OnUIInputBarEnd(UIInputBar ui)
     {
-
+        if (Common.BlankString(ui.text))
+        {
+            return;
+        }
         List<object> ls = DBIdiom.main.Search(ui.text);
         uiItemList.SetList(ls);
         // ui.text = "T";
