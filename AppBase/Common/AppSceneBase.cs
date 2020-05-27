@@ -132,7 +132,7 @@ public class AppSceneBase : ScriptBase
         }
     }
 
-    void OnResize()
+   public void OnResize()
     {
         //InitScalerMatch 和 InitUiScaler 异步执行
         InitUiScaler();

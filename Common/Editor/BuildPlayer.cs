@@ -51,12 +51,12 @@ public class BuildPlayer
     static void PerformiPhoneBuild()
     {
         Debug.Log("PerformiPhoneBuild start");
-        #if UNITY_IOS 
+#if UNITY_IOS
         Debug.Log("UNITY_IOS PerformiPhoneBuild start");       
-        #endif
+#endif
 
-          BulidTarget("QQ", "IOS");
-           Debug.Log("PerformiPhoneBuild end");
+        BulidTarget("QQ", "IOS");
+        Debug.Log("PerformiPhoneBuild end");
     }
 
     static void ConverIcon()
@@ -156,12 +156,17 @@ public class BuildPlayer
         BuildSummary summary = report.summary;
         if (summary.result == BuildResult.Succeeded)
         {
-            Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
-            #if UNITY_IOS 
+            Debug.Log("Build succeeded: " + summary.totalSize + " bytes build_target="+build_target);
+            if (build_target == BuildTarget.iOS)
+            {
+                // #if UNITY_IOS
                 Debug.Log("BuildiOSPlayer start ");
-                BuildiOSPlayer.EditProj(target_dir); 
+                BuildiOSPlayer.EditProj(target_dir);
                 Debug.Log("BuildiOSPlayer end ");
-            #endif
+                // #endif
+            }
+
+
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
                 if (build_target == BuildTarget.iOS)

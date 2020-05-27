@@ -65,7 +65,20 @@ public class UIButton : UIView
         }
 
     }
+    public string text
+    {
+        get
+        {
+            return textTitle.text;
+        }
 
+        set
+        {
+            textTitle.text = value;
+            LayOut();
+        }
+
+    }
     public void Awake()
     {
         base.Awake();

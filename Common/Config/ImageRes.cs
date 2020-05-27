@@ -9,6 +9,9 @@ public class ImageRes
     //color
     //f88816 248,136,22
     JsonData rootJson;
+
+    ImageResInternal imageResApp;
+    ImageResInternal imageResCommon;
     static private ImageRes _main = null;
     public static ImageRes main
     {
@@ -17,51 +20,60 @@ public class ImageRes
             if (_main == null)
             {
                 _main = new ImageRes();
-                string filePath = Common.RES_CONFIG_DATA + "/Image/ImageRes.json";
-                _main.Init(filePath);
+
+                _main.imageResCommon = new ImageResInternal();
+                _main.imageResCommon.Init(Common.RES_CONFIG_DATA_COMMON + "/Image/ImageRes.json");
+
+                _main.imageResApp = new ImageResInternal();
+                _main.imageResApp.Init(Common.RES_CONFIG_DATA + "/Image/ImageRes.json");
+
             }
             return _main;
         }
     }
 
-    void Init(string filePath)
-    {
-        string json = FileUtil.ReadStringAuto(filePath);
-        rootJson = JsonMapper.ToObject(json);
-    }
-
-    // 255,100,200,255 to color return Vector4 47,47,47,255
-    //Vector4 (left,right,top,bottom)
-    Vector4 String2Vec4(string str)
-    {
-        float x, y, z, w;
-        string[] rgb = str.Split(',');
-        x = Common.String2Int(rgb[0]);
-        y = Common.String2Int(rgb[1]);
-        z = Common.String2Int(rgb[2]);
-        w = Common.String2Int(rgb[3]);
-        return new Vector4(x, y, z, w);
-    }
-    string GetBoardKey(string key)
-    {
-        return key + "_BOARD";
-    }
-
-    //9宫格图片边框参数 (left,right,top,bottom)
-    //cc.Vec4 (left,right,top,bottom)
-    public Vector4 GetImageBoard(string key)
-    {
-        var str = JsonUtil.GetString(rootJson, GetBoardKey(key), "");
-        return String2Vec4(str);
-    }
-
-
     public bool IsHasBoard(string key)
     {
-        return JsonUtil.ContainsKey(rootJson, GetBoardKey(key));
+        bool ret = false;
+        if (imageResApp.IsHasKey(key))
+        {
+            ret = imageResApp.IsHasBoard(key);
+        }
+        else
+        {
+            ret = imageResCommon.IsHasBoard(key);
+        }
+
+        return ret;
     }
     public string GetImage(string key)
     {
-        return JsonUtil.GetString(rootJson, key, "");
+        string ret = "";
+        if (imageResApp.IsHasKey(key))
+        {
+            ret = imageResApp.GetImage(key);
+        }
+        else
+        {
+            ret = imageResCommon.GetImage(key);
+        }
+        return ret;
+    }
+
+
+
+    public Vector4 GetImageBoard(string key)
+    {
+        Vector4 ret = Vector4.zero;
+        if (imageResApp.IsHasKey(key))
+        {
+            ret = imageResApp.GetImageBoard(key);
+        }
+        else
+        {
+            ret = imageResCommon.GetImageBoard(key);
+        }
+
+        return ret;
     }
 }

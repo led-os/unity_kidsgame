@@ -7,12 +7,12 @@ public delegate void OnUIViewAlertFinishedDelegate(UIViewAlert alert, bool isYes
 public class UIViewAlert : UIViewPop
 {
     public GameObject objContent;
-    public Image imageBg;
-    public Image imageBoard;
-    public Text textTitle;
-    public Text textMsg;
-    public Button btnYes;
-    public Button btnNo;
+    public UIImage imageBg;
+    public UIImage imageBoard;
+    public UIText textTitle;
+    public UIText textMsg;
+    public UIButton btnYes;
+    public UIButton btnNo;
     public string keyName;
     public OnUIViewAlertFinishedDelegate callback { get; set; }
 
@@ -23,25 +23,25 @@ public class UIViewAlert : UIViewPop
     {
         base.Awake();
         {
-            TextureUtil.UpdateImageTexture(imageBoard, AppRes.IMAGE_UIVIEWALERT_BG_BOARD, true, AppRes.borderUIViewAlertBgBoard);
-            RectTransform rctran = imageBoard.GetComponent<RectTransform>();
-            rctran.offsetMin = Vector2.zero;
-            rctran.offsetMax = Vector2.zero;
+            // TextureUtil.UpdateImageTexture(imageBoard, AppRes.IMAGE_UIVIEWALERT_BG_BOARD, true, AppRes.borderUIViewAlertBgBoard);
+            // RectTransform rctran = imageBoard.GetComponent<RectTransform>();
+            // rctran.offsetMin = Vector2.zero;
+            // rctran.offsetMax = Vector2.zero;
         }
         {
-            RectTransform rctran = btnYes.GetComponent<RectTransform>();
-            Vector2 size = rctran.sizeDelta;
-            TextureUtil.UpdateImageTexture(btnYes.GetComponent<Image>(), AppRes.IMAGE_UIVIEWALERT_BG_BTN, true, AppRes.borderUIViewAlertBgBtn);
-            //恢复初始大小
-            rctran.sizeDelta = size;
+            // RectTransform rctran = btnYes.GetComponent<RectTransform>();
+            // Vector2 size = rctran.sizeDelta;
+            // TextureUtil.UpdateImageTexture(btnYes.GetComponent<Image>(), AppRes.IMAGE_UIVIEWALERT_BG_BTN, true, AppRes.borderUIViewAlertBgBtn);
+            // //恢复初始大小
+            // rctran.sizeDelta = size;
         }
 
         {
-            RectTransform rctran = btnNo.GetComponent<RectTransform>();
-            Vector2 size = rctran.sizeDelta;
-            TextureUtil.UpdateImageTexture(btnNo.GetComponent<Image>(), AppRes.IMAGE_UIVIEWALERT_BG_BTN, true, AppRes.borderUIViewAlertBgBtn);
-            //恢复初始大小
-            rctran.sizeDelta = size;
+            // RectTransform rctran = btnNo.GetComponent<RectTransform>();
+            // Vector2 size = rctran.sizeDelta;
+            // TextureUtil.UpdateImageTexture(btnNo.GetComponent<Image>(), AppRes.IMAGE_UIVIEWALERT_BG_BTN, true, AppRes.borderUIViewAlertBgBtn);
+            // //恢复初始大小
+            // rctran.sizeDelta = size;
         }
     }
     // Use this for initialization
@@ -55,10 +55,11 @@ public class UIViewAlert : UIViewPop
     // Update is called once per frame
     void Update()
     {
-
+        LayOut();
     }
     public override void LayOut()
     {
+        base.LayOut();
         float w, h;
         Debug.Log("UIViewAlert:frame=" + this.frame);
         // {
@@ -82,18 +83,18 @@ public class UIViewAlert : UIViewPop
         {
             RectTransform rctran = objContent.GetComponent<RectTransform>();
             w = Mathf.Min(this.frame.width, this.frame.height) * 0.8f;
-            h = w / 2;
+            h = w;
             rctran.sizeDelta = new Vector2(w, h);
-
+            base.LayOut();
         }
     }
 
 
     void Remove()
     {
-       // DestroyImmediate(this.gameObject);
-       Close();
- 
+        // DestroyImmediate(this.gameObject);
+        Close();
+
     }
 
     public void Hide()
@@ -104,19 +105,21 @@ public class UIViewAlert : UIViewPop
     {
         textTitle.text = title;
         textMsg.text = msg;
+        btnYes.text = yes;
+        btnNo.text = no;
 
-        {
-            string strYes = yes;
-            string strNo = no;
-            Text btnText = Common.GetButtonText(btnYes);
-            float strWYes = Common.GetButtonTextWidth(btnYes, strYes);
-            float strWNo = Common.GetButtonTextWidth(btnNo, strNo);
-            float oft = btnText.fontSize;
-            float strW = Mathf.Max(strWYes, strWNo) + oft;
-            Common.SetButtonTextWidth(btnYes, strYes, strW);
-            Common.SetButtonTextWidth(btnNo, strNo, strW);
-        }
-
+        // {
+        //     string strYes = yes;
+        //     string strNo = no;
+        //     Text btnText = Common.GetButtonText(btnYes);
+        //     float strWYes = Common.GetButtonTextWidth(btnYes, strYes);
+        //     float strWNo = Common.GetButtonTextWidth(btnNo, strNo);
+        //     float oft = btnText.fontSize;
+        //     float strW = Mathf.Max(strWYes, strWNo) + oft;
+        //     Common.SetButtonTextWidth(btnYes, strYes, strW);
+        //     Common.SetButtonTextWidth(btnNo, strNo, strW);
+        // }
+        LayOut();
     }
     public void ShowBtnNo(bool isShow)
     {

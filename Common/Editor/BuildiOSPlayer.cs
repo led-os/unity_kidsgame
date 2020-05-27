@@ -1,4 +1,4 @@
-﻿#if UNITY_IOS
+﻿// #if UNITY_IOS
 
 using UnityEngine;
 
@@ -35,6 +35,12 @@ public static class BuildiOSPlayer
     }
 
     static void AddFileToProject(string projPath, PBXProject inst, string targetGuid, string filepath)
+    {
+        string fileGuid = inst.AddFile(filepath, filepath, PBXSourceTree.Source);
+        inst.AddFileToBuild(targetGuid, fileGuid);
+    }
+
+    static void AddThirdLibAToProject(string projPath, PBXProject inst, string targetGuid, string filepath)
     {
         string fileGuid = inst.AddFile(filepath, filepath, PBXSourceTree.Source);
         inst.AddFileToBuild(targetGuid, fileGuid);
@@ -103,20 +109,20 @@ public static class BuildiOSPlayer
             int idx = BuildPlayer.dirRootProject.Length;
             string addfilepath = fullpath.Substring(idx + 1);
             Debug.Log("liba addfilepath=" + addfilepath);
-            AddFileToProject(projPath, inst, targetGuid, addfilepath);
+            AddThirdLibAToProject(projPath, inst, targetGuid, addfilepath);
         }
 
 
-        List<string> listFileFramework = new List<string>();
-        ScanFrameworkFiles(dirLib, listFileFramework);
-        foreach (string fullpath in listFileFramework)
-        {
-            Debug.Log("Framework fullpath=" + fullpath);
-            int idx = BuildPlayer.dirRootProject.Length;
-            string addfilepath = fullpath.Substring(idx + 1);
-            Debug.Log("Framework addfilepath=" + addfilepath);
-            AddFileToProject(projPath, inst, targetGuid, addfilepath);
-        }
+        // List<string> listFileFramework = new List<string>();
+        // ScanFrameworkFiles(dirLib, listFileFramework);
+        // foreach (string fullpath in listFileFramework)
+        // {
+        //     Debug.Log("Framework fullpath=" + fullpath);
+        //     int idx = BuildPlayer.dirRootProject.Length;
+        //     string addfilepath = fullpath.Substring(idx + 1);
+        //     Debug.Log("Framework addfilepath=" + addfilepath);
+        //     AddFileToProject(projPath, inst, targetGuid, addfilepath);
+        // }
     }
 
     static bool isOldEditor()
@@ -130,16 +136,16 @@ public static class BuildiOSPlayer
         return ret;
     }
 
-//  ProvisioningStyle = Manual;  Automatic
+    //  ProvisioningStyle = Manual;  Automatic
     public static void EditProj(string pathToBuiltProject)
     {
         Debug.Log("BuildiOSPlayer EditProj start:" + pathToBuiltProject);
         string projPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
         Debug.Log("BuildiOSPlayer EditProj:" + pathToBuiltProject);
         string strFile = FileUtil.ReadStringFromFile(projPath);
-        strFile = strFile.Replace("ProvisioningStyle = Manual","ProvisioningStyle = Automatic");
-        FileUtil.WriteStringToFile(projPath,strFile);
-        
+        strFile = strFile.Replace("ProvisioningStyle = Manual", "ProvisioningStyle = Automatic");
+        FileUtil.WriteStringToFile(projPath, strFile);
+
         PBXProject pbxProj = new PBXProject();
         pbxProj.ReadFromFile(projPath);
         string unityVersion = Application.unityVersion;
@@ -161,6 +167,9 @@ public static class BuildiOSPlayer
             targetGuid = pbxProj.GetUnityMainTargetGuid();
             unityFrameworkTargetGuid = pbxProj.GetUnityFrameworkTargetGuid();
             AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libxml2.tbd");
+
+            AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/AdmobBtnClose.png");
+            AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/Plugins/iOS/UnifiedNativeAdView.xib");
         }
 #endif
 
@@ -195,7 +204,12 @@ public static class BuildiOSPlayer
             //unity 2019.3 bug
             //需要手动添加第三方库 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
             // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
-            // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
+
+            
+            pbxProj.SetBuildProperty(targetGuid, "LIBRARY_SEARCH_PATHS", "$(inherited)");
+            AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
+            // AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/Plugins/iOS/ThirdParty/gdt/lib/libGDTMobSDK.a");
+            pbxProj.AddBuildProperty(targetGuid, "LIBRARY_SEARCH_PATHS", "$(PROJECT_DIR)/Libraries/Plugins/iOS/ThirdParty/gdt/lib");
         }
 
 
@@ -338,4 +352,4 @@ public static class BuildiOSPlayer
     }
 }
 
-#endif
+// #endif

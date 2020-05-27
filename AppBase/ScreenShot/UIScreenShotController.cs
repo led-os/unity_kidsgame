@@ -96,18 +96,22 @@ public class UIScreenShotController : UIView
                 // SceneManager.LoadScene("ScreenShotScene");
             }
             UpdateTitle();
-            LayOutChild();
+
+            AppSceneBase.main.OnResize();
+            LayOut();
         }
+        //  LayOut();
     }
     public void InitShowShot()
     {
         LoadShot();
         UpdateTitle();
-        LayOutChild();
+        LayOut();
     }
 
-    void LayOutChild()
+    public override void LayOut()
     {
+        base.LayOut();
         screenDisplayWordWidth = Common.ScreenToWorldWidth(mainCam, deviceInfoNow.width);
         screenDisplayWordHeight = Common.ScreenToWorldHeight(mainCam, deviceInfoNow.height);
 
@@ -121,6 +125,15 @@ public class UIScreenShotController : UIView
         //     objSpriteBg.transform.localScale = new Vector3(scalex, scaley, 1f);
 
         // }
+        ShotItemInfo info = screenShotConfig.GetPage(deviceInfoNow, indexScreenShot);
+        if (info != null)
+        {
+            if (info.controller != null)
+            {
+                info.controller.LayOutView();
+            }
+        }
+
     }
 
 
@@ -516,6 +529,9 @@ public class UIScreenShotController : UIView
 
     public void OnClickScreenShotNext()
     {
+        // LayOut();
+        // return;
+
         indexScreenShot++;
         if (indexScreenShot >= totalScreenShot)
         {

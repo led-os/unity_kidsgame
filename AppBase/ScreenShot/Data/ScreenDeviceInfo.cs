@@ -106,33 +106,36 @@ public class ScreenDeviceInfo
         listDevice = new List<ShotDeviceInfo>();
 
 
-        {
-            // //ipadpro
-            CreateDevice(DEVICE_NAME_IPADPRO, SCREEN_WIDTH_IPADPRO, SCREEN_HEIGHT_IPADPRO, true
-            , true);
+        // {
 
-            //iphone
-            CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
+        // //ipadpro
+        CreateDevice(DEVICE_NAME_IPADPRO, SCREEN_WIDTH_IPADPRO, SCREEN_HEIGHT_IPADPRO, true
+        , true);
 
-            //iphone_6_5
-            CreateDevice(DEVICE_NAME_IPHONE_6_5, SCREEN_WIDTH_IPHONE_6_5, SCREEN_HEIGHT_IPHONE_6_5, true, true);
-
-            //  ipad
-            CreateDevice(DEVICE_NAME_IPAD, SCREEN_WIDTH_IPAD, SCREEN_HEIGHT_IPAD, true, false);
-
-            //  1080p
-            CreateDevice(DEVICE_NAME_1080P, SCREEN_WIDTH_1080P, SCREEN_HEIGHT_1080P, true, false);
-            //  480p
-            CreateDevice(DEVICE_NAME_480P, SCREEN_WIDTH_480P, SCREEN_HEIGHT_480P, true, true);
+        //iphone_6_5
+        CreateDevice(DEVICE_NAME_IPHONE_6_5, SCREEN_WIDTH_IPHONE_6_5, SCREEN_HEIGHT_IPHONE_6_5, true, true);
 
 
-            //   weibo
-            CreateDevice(DEVICE_NAME_WEIBO, SCREEN_WIDTH_WEIBO, SCREEN_HEIGHT_WEIBO, false, true);
+        //iphone
+        CreateDevice(DEVICE_NAME_IPHONE, SCREEN_WIDTH_IPHONE, SCREEN_HEIGHT_IPHONE, true, true);
 
-            //   copy right huawei
-            CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
 
-        }
+        //  ipad
+        CreateDevice(DEVICE_NAME_IPAD, SCREEN_WIDTH_IPAD, SCREEN_HEIGHT_IPAD, true, false);
+
+        //  1080p
+        CreateDevice(DEVICE_NAME_1080P, SCREEN_WIDTH_1080P, SCREEN_HEIGHT_1080P, true, false);
+        //  480p
+        CreateDevice(DEVICE_NAME_480P, SCREEN_WIDTH_480P, SCREEN_HEIGHT_480P, true, true);
+
+
+        //   weibo
+        CreateDevice(DEVICE_NAME_WEIBO, SCREEN_WIDTH_WEIBO, SCREEN_HEIGHT_WEIBO, false, true);
+
+        //   copy right huawei
+        CreateDevice(DEVICE_NAME_COPY_RIGHT_HUAWEI, SCREEN_WIDTH_COPY_RIGHT_HUAWEI, SCREEN_HEIGHT_COPY_RIGHT_HUAWEI, false, true);
+
+        // }
 
         {
             // //ICON
@@ -142,7 +145,10 @@ public class ScreenDeviceInfo
 
             CreateDevice(DEVICE_NAME_AD, 1080, 480, false, true);
 
+
         }
+
+
         deviceInfoNow = listDevice[0];
 
     }

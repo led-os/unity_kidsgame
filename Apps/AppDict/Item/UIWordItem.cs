@@ -45,7 +45,7 @@ public class UIWordItem : UIView
     public void UpdateItem(string word,string pinyin)
     {
         textTitle.text = word;
-        textPinyin.text = pinyin;
+        // textPinyin.text = pinyin;
         this.LayOut();
 
     }

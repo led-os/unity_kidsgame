@@ -34,10 +34,6 @@ public class AppRes
 
   
 
-    public const string IMAGE_UIVIEWALERT_BG_BOARD = "AppCommon/UI/Setting/SettingCellBgBlue";
-    static public Vector4 borderUIViewAlertBgBoard = new Vector4(18f, 18f, 18f, 18f);
-    public const string IMAGE_UIVIEWALERT_BG_BTN = "AppCommon/UI/Setting/SettingCellBgOringe";
-    static public Vector4 borderUIViewAlertBgBtn = new Vector4(18f, 18f, 18f, 18);
     
 
 
