@@ -205,7 +205,7 @@ public static class BuildiOSPlayer
             //需要手动添加第三方库 1,所有的framework到Unity-iPhone和UnityFramework 2,libSocialQQ.a 到Unity-iPhone
             // AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Frameworks/Plugins");
 
-            
+            //gdt 启动闪退问题
             pbxProj.SetBuildProperty(targetGuid, "LIBRARY_SEARCH_PATHS", "$(inherited)");
             AddThirdPartyLibToProject(projPath, pbxProj, targetGuid, pathToBuiltProject + "/Libraries/Plugins");
             // AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/Plugins/iOS/ThirdParty/gdt/lib/libGDTMobSDK.a");

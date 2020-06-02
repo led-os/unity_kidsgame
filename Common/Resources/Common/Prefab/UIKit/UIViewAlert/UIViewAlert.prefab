@@ -113,7 +113,7 @@ MonoBehaviour:
   dispLayVertical: 0
   dispLayHorizontal: 0
   enableLayout: 1
-  enableHide: 1
+  enableHide: 0
   enableOffsetAdBanner: 0
   enableOffsetScreen: 0
   isOnlyForLandscape: 0
