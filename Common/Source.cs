@@ -37,4 +37,6 @@ public class Source
     public const string MOBVISTA = "mobvista";
     public const string VUNGLE = "vungle";
     public const string MOONMA = "moonma";
+    public const string BAIDU = "baidu";
+    public const string CHSJ = "chsj";//穿山甲
 }

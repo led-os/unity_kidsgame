@@ -116,7 +116,7 @@ public class HomeViewController : UIViewController
         {
            // return;
         }
-        string source = Source.GDT;
+        string source = Source.CHSJ;//GDT
         AdInsert.InitAd(source);
         AdKitCommon.main.ShowAdInsert(100);
     }

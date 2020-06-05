@@ -144,6 +144,9 @@ public static class BuildiOSPlayer
         Debug.Log("BuildiOSPlayer EditProj:" + pathToBuiltProject);
         string strFile = FileUtil.ReadStringFromFile(projPath);
         strFile = strFile.Replace("ProvisioningStyle = Manual", "ProvisioningStyle = Automatic");
+        strFile = strFile.Replace("iPhone Distribution", "iPhone Developer");
+
+
         FileUtil.WriteStringToFile(projPath, strFile);
 
         PBXProject pbxProj = new PBXProject();
@@ -166,7 +169,7 @@ public static class BuildiOSPlayer
         {
             targetGuid = pbxProj.GetUnityMainTargetGuid();
             unityFrameworkTargetGuid = pbxProj.GetUnityFrameworkTargetGuid();
-            AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libxml2.tbd");
+            // AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libxml2.tbd");
 
             AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/AdmobBtnClose.png");
             AddFileToProject(projPath, pbxProj, targetGuid, "Libraries/Plugins/iOS/UnifiedNativeAdView.xib");
@@ -181,15 +184,43 @@ public static class BuildiOSPlayer
         //pbxProj.SetBuildPropertyForConfig(debugConfig, "GCC_ENABLE_OBJC_EXCEPTIONS", "YES");
         //pbxProj.SetBuildPropertyForConfig(releaseConfig, "GCC_ENABLE_OBJC_EXCEPTIONS", "YES");
 
-        pbxProj.AddFrameworkToProject(targetGuid, "AdSupport.framework", false);
-        pbxProj.AddFrameworkToProject(targetGuid, "StoreKit.framework", false);
-        pbxProj.AddFrameworkToProject(targetGuid, "CoreLocation.framework", false);
-        pbxProj.AddFrameworkToProject(targetGuid, "CoreTelephony.framework", false);
-        pbxProj.AddFrameworkToProject(targetGuid, "WebKit.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "AdSupport.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "StoreKit.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "CoreLocation.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "CoreTelephony.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "WebKit.framework", false);
+
+        //chsj
+        // pbxProj.AddFrameworkToProject(targetGuid, "StoreKit.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "MobileCoreServices.framework", false);
+        // pbxProj.AddFrameworkToProject(targetGuid, "WebKit.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "MediaPlayer.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "CoreMedia.framework", false);
+        // pbxProj.AddFrameworkToProject(targetGuid, "CoreLocation.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "AVFoundation.framework", false);
+        // pbxProj.AddFrameworkToProject(targetGuid, "CoreTelephony.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "SystemConfiguration.framework", false);
+        // pbxProj.AddFrameworkToProject(targetGuid, "AdSupport.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "CoreMotion.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "Accelerate.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "SystemConfiguration.framework", false);
+        pbxProj.AddFrameworkToProject(unityFrameworkTargetGuid, "ImageIO.framework", false);
+        AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libresolv.9.tbd");
+        AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libc++.tbd");
+        // AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libz.tbd");
+        AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libsqlite3.tbd");
+        if (!isOldUnity)
+        {
+            AddFileToProject(projPath, pbxProj, targetGuid, "Frameworks/Plugins/iOS/ThirdParty/chsj/BUAdSDK.bundle");
+        }
+
+        //chsj
+
 
         //添加lib
-        AddLibToProject(pbxProj, targetGuid, "libz.tbd");
+        AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libz.tbd");
         AddLibToProject(pbxProj, targetGuid, "libxml2.tbd");
+        AddLibToProject(pbxProj, unityFrameworkTargetGuid, "libxml2.tbd");
 
         //多国语言
         AddFileToProject(projPath, pbxProj, targetGuid, "appname/en.lproj/InfoPlist.strings");

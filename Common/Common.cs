@@ -706,7 +706,7 @@ public class Common
         string appname = Common.GetAppName();
         if (Application.isEditor || Common.isPC)
         {
-            appname = Config.main.GetAppNameJson(Device.isLandscape);
+            // appname = Config.main.GetAppNameJson(Device.isLandscape);
         }
         appname = Language.main.GetString(Device.isLandscape ? AppString.APP_NAME_HD : AppString.APP_NAME);
 
