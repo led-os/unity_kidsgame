@@ -72,6 +72,9 @@ public class HomeViewController : UIViewController
 
         }
         runCount++;
+
+        AppVersionHuawei app = new AppVersionHuawei();
+        app.StartParseVersion();
     }
 
     public override void ViewDidUnLoad()
@@ -114,9 +117,13 @@ public class HomeViewController : UIViewController
     {
         if (Config.main.channel == Source.HUAWEI)
         {
-           // return;
+            // return;
         }
-        string source = Source.CHSJ;//GDT
+        string source = Source.GDT;//GDT
+        if (Common.isiOS)
+        {
+            source = Source.CHSJ;
+        }
         AdInsert.InitAd(source);
         AdKitCommon.main.ShowAdInsert(100);
     }

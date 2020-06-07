@@ -37,7 +37,7 @@ public class HttpRequest
         // Debug.Log("HttpRequest Get");
         string filePath = GetCatchFilePathOfUrl(url);
         strUrl = url;
-        isReadFromCatch = false; 
+        isReadFromCatch = false;
         if (EnableReadFromCache())
         {
             bool isExist = File.Exists(filePath);
@@ -70,7 +70,7 @@ public class HttpRequest
         reqHttp = new HTTPRequest(new Uri(url), HTTPMethods.Get, OnRequestFinished);
         //ios6 ua
         //该ua会导致小米网址无法获取版本号
-        // req.AddHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25");
+        // reqHttp.AddHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25");
         reqHttp.Send();
     }
     void OnRequestFinished(HTTPRequest req, HTTPResponse response)

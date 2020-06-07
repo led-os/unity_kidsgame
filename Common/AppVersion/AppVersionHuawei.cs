@@ -6,11 +6,13 @@ using LitJson;
 public class AppVersionHuawei : AppVersionBase
 {
     //http://appstore.huawei.com/app/C100270155
+    //new:https://appgallery1.huawei.com/#/app/C100270155
     public override void StartParseVersion()
     {
         string strappid = Config.main.GetAppIdOfStore(Source.HUAWEI);
-
-        string url = "http://appstore.huawei.com/app/C" + strappid;
+        // strappid = "100270155";
+        string url = "https://appgallery1.huawei.com/#/app/C" + strappid;
+        Debug.Log("version huawei url=" + url);
         strUrlAppstore = url;
         strUrlComment = url;
         HttpRequest http = new HttpRequest(OnHttpRequestFinished);
@@ -28,12 +30,15 @@ public class AppVersionHuawei : AppVersionBase
          */
 
         //<span itemprop="softwareVersion" class="info-item-content">1.0.5</span>
-        // string ptmpversion = "softwareVersion";
-        string ptmpversion_start = "版本： ";
-        string ptmpversion_mid = "<span>";
-        string ptmpversion_end = "</span>";
+        // string ptmpversion = "softwareVersion"; 
+        // <div data-v-684c8842="" class="info_val">2.1.7</div>
+        string ptmpversion_start = "版本"; //版本 Version
+        string ptmpversion_mid = "info_val\">";
+        string ptmpversion_end = "</div>";
+
 
         int idx = strData.IndexOf(ptmpversion_start);
+        Debug.Log("version huawei strData=" + strData);
         if (idx >= 0)
         {
             string ptmp = strData.Substring(idx);
@@ -51,7 +56,7 @@ public class AppVersionHuawei : AppVersionBase
             }
 
         }
-
+        Debug.Log("version huawei =" + strVersionStore);
 
 
         ParseFinished(this);
